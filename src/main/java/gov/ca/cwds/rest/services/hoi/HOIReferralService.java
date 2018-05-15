@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -25,6 +27,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
@@ -37,6 +40,8 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  */
 public class HOIReferralService
     extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferralService.class);
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
@@ -99,8 +104,7 @@ public class HOIReferralService
 
   private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
     authorizeClients(clientIds);
-    ReferralClient[] referralClients = referralClientDao.findByClientIds(clientIds);
-    return Arrays.asList(referralClients);
+    return Arrays.asList(referralClientDao.findByClientIds(clientIds));
   }
 
   /**
@@ -121,7 +125,8 @@ public class HOIReferralService
       try {
         authorizeClient(clientId);
       } catch (Exception e) {
-        // TODO: handle exception
+        final String msg = String.format("Not authorized to view client id %s", clientId);
+        RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER);
       }
     }
   }
@@ -146,9 +151,9 @@ public class HOIReferralService
   }
 
   private Map<Allegation, List<Client>> fetchForAllegation(Referral referral) {
-    Set<Allegation> allegations = referral.getAllegations();
+    final Set<Allegation> allegations = referral.getAllegations();
+    final Set<String> allegationsClientsIds = new LinkedHashSet<>();
 
-    Set<String> allegationsClientsIds = new HashSet<>();
     for (Allegation allegation : allegations) {
       if (allegation.getVictimClientId() != null) {
         allegationsClientsIds.add(allegation.getVictimClientId());
@@ -157,11 +162,12 @@ public class HOIReferralService
         allegationsClientsIds.add(allegation.getPerpetratorClientId());
       }
     }
-    Map<String, Client> clientMap = clientDao.findClientsByIds(allegationsClientsIds);
 
-    Map<Allegation, List<Client>> allegationMap = new HashMap<>();
+    final Map<String, Client> clientMap = clientDao.findClientsByIds(allegationsClientsIds);
+    final Map<Allegation, List<Client>> allegationMap = new HashMap<>();
+
     for (Allegation allegation : allegations) {
-      List<Client> allegationClients = new ArrayList<>();
+      final List<Client> allegationClients = new ArrayList<>();
       if (allegation.getVictimClientId() != null) {
         allegationClients.add(clientMap.get(allegation.getVictimClientId()));
       }

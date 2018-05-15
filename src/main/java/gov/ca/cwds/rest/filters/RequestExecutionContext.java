@@ -2,6 +2,8 @@ package gov.ca.cwds.rest.filters;
 
 import java.util.Date;
 
+import gov.ca.cwds.rest.messages.MessageBuilder;
+
 /**
  * Request execution context. Binds the current HTTP/REST request to the current thread and exposes
  * common information to all services on that thread without polluting method parameters.
@@ -14,7 +16,23 @@ public interface RequestExecutionContext {
    * Known request execution parameters.
    */
   public enum Parameter {
-    USER_IDENTITY, REQUEST_START_TIME, SEQUENCE_EXTERNAL_TABLE
+
+    /**
+     * Current user's user id or staff id.
+     */
+    USER_IDENTITY,
+
+    /**
+     * The request's start time.
+     */
+    REQUEST_START_TIME,
+
+    SEQUENCE_EXTERNAL_TABLE,
+
+    /**
+     * Default error/warning message builder.
+     */
+    MESSAGE_BUILDER
   }
 
   /**
@@ -55,7 +73,14 @@ public interface RequestExecutionContext {
   Date getRequestStartTime();
 
   /**
-   * Get instance of RequestExecutionContext from registry
+   * Get the message builder for warnings and errors for this request.
+   * 
+   * @return message builder for warnings and errors
+   */
+  MessageBuilder getMessageBuilder();
+
+  /**
+   * Get instance of RequestExecutionContext from registry.
    * 
    * @return RequestExecutionContext instance
    */

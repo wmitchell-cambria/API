@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 
 /**
@@ -47,6 +48,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.REQUEST_START_TIME, new Date());
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
+    put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
   }
 
   /**
@@ -107,6 +109,11 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
       staffId = userIdentity.getStaffId();
     }
     return staffId;
+  }
+
+  @Override
+  public MessageBuilder getMessageBuilder() {
+    return (MessageBuilder) contextParameters.get(Parameter.MESSAGE_BUILDER);
   }
 
   /**

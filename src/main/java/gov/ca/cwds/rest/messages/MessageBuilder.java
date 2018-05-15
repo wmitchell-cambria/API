@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.messages;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,14 +15,19 @@ import gov.ca.cwds.rest.exception.IssueDetailsCreator;
 import gov.ca.cwds.rest.exception.IssueType;
 
 /**
- * Facility to relay errors in persistence and service layers back to a domain response.
+ * Facility to relay errors from persistence and service layers back to a domain response.
+ * 
+ * <p>
+ * This implementation is <strong>NOT thread safe!</strong> Construct an instance as needed per
+ * request.
+ * </p>
  * 
  * @author CWDS API Team
  */
 public class MessageBuilder {
 
-  private ArrayList<ErrorMessage> messages = new ArrayList<>();
-  private HashSet<IssueDetails> issues = new HashSet<>();
+  private List<ErrorMessage> messages = new ArrayList<>();
+  private Set<IssueDetails> issues = new LinkedHashSet<>();
 
   /**
    * messageBuilder - messageBuilder
