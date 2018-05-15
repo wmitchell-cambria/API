@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  * 
  * @author CWDS API Team
  */
-public class TransformScreening {
+public class ScreeningTransformer {
 
   public ScreeningToReferral transform(Screening screening, String loggedInStaffId,
       String loggedInStaffCounty, Map<String, IntakeLov> nsLovMap,
@@ -41,7 +41,7 @@ public class TransformScreening {
       String loggedInStaffCounty, Map<String, IntakeLov> nsCodeToNsLovMap,
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
     Set<Allegation> allegations =
-        new TransformAllegations().transform(s.getAllegations(), nsCodeToNsLovMap);
+        new AllegationsTransformer().transform(s.getAllegations(), nsCodeToNsLovMap);
     Long id = (long) Integer.parseInt(s.getId());
     String legacySourceTable = null;
     String referralId = s.getReferralId();
@@ -79,11 +79,11 @@ public class TransformScreening {
     String limitedAccessDescription = s.getRestrictionsRationale();
     String limitedAccessAgency = loggedInStaffCounty;
     Date limitedAccessDate = new Date();// dateToday
-    Address address = new TransformAddress().transform(s.getIncidentAddress(), nsCodeToNsLovMap);
+    Address address = new AddressTransformer().transform(s.getIncidentAddress(), nsCodeToNsLovMap);
     Set<Participant> participants =
-        new TransformParticipants().transform(s.getParticipantIntakeApis(), nsCodeToNsLovMap);
+        new ParticipantsTransformer().transform(s.getParticipantIntakeApis(), nsCodeToNsLovMap);
 
-    Set<CrossReport> crossReports = new TransformCrossReports().transform(s.getCrossReports(),
+    Set<CrossReport> crossReports = new CrossReportsTransformer().transform(s.getCrossReports(),
         nsCodeToNsLovMap, cmsSysIdToNsLovMap);
 
     Set<String> alerts = new HashSet<>(); // Need to map this field
