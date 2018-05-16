@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -104,17 +105,26 @@ public class ESPersonTest {
 
   @Test
   public void makeESPerson_A$SearchHit() throws Exception {
-    SearchHit hit = mock(SearchHit.class);
-    ESPerson actual = ESPerson.makeESPerson(hit);
+    final String firstName = "Rumplestilskin";
+    final Map<String, Object> m = new HashMap<String, Object>();
+    m.put(ESColumn.FIRST_NAME.getCol(), firstName);
+
+    final SearchHit hit = mock(SearchHit.class);
+    when(hit.getSource()).thenReturn(m);
+
+    final ESPerson actual = ESPerson.makeESPerson(hit);
     assertThat(actual, is(notNullValue()));
   }
 
   @Test
   public void pullCol_A$Map$Object() throws Exception {
+    final String firstName = "Rumplestilskin";
     final Map<String, Object> m = new HashMap<String, Object>();
+    m.put(ESColumn.FIRST_NAME.getCol(), "Rumplestilskin");
+
     final ESColumn f = ESColumn.FIRST_NAME;
-    Object actual = ESPerson.pullCol(m, f);
-    Object expected = "";
+    final Object actual = ESPerson.pullCol(m, f);
+    final Object expected = firstName;
     assertThat(actual, is(equalTo(expected)));
   }
 

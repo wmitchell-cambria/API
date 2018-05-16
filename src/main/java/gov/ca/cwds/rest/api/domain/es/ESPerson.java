@@ -290,10 +290,12 @@ public class ESPerson extends Person {
    * {@code Class.forName("some.nested.class", false, Thread.currentThread().getContextClassLoader())}
    * </blockquote>
    * 
+   * @deprecated no longer in use, superseded by People Summary index
    * @param hit search result
    * @return populated domain-level ES object
    * @see #pullCol(Map, ESColumn)
    */
+  @Deprecated
   public static ESPerson makeESPerson(SearchHit hit) {
     final Map<String, Object> m = hit.getSource();
     ESPerson ret = new ESPerson(ESPerson.<String>pullCol(m, ESColumn.ID),
@@ -308,7 +310,6 @@ public class ESPerson extends Person {
 
     if (!StringUtils.isBlank(ret.getSourceType()) && !StringUtils.isBlank(ret.getSourceJson())) {
       try {
-
         // STORY #137216799:
         // Tech debt: reverse compatibility with existing ElasticSearch documents.
         if (ret.getSourceType().startsWith("gov.ca.cwds.rest.api.")) {
