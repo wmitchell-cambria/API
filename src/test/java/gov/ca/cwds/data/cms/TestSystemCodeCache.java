@@ -198,7 +198,10 @@ public class TestSystemCodeCache implements SystemCodeCache {
 
   @Override
   public Short getSystemCodeId(String arg0, String arg1) {
-    // TODO Auto-generated method stub
+    if (SystemCodeCategoryId.APPROVAL_STATUS_TYPE.equals(arg1)
+        && "Request Not Submitted".equals(arg0)) {
+      return 118;
+    }
     return null;
   }
 }

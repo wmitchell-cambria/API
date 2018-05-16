@@ -54,7 +54,9 @@ public class ScreeningSubmitService implements CrudsService {
 
   public Response submit(Serializable id) {
     Screening screening = screeningService.getScreening((String) id);
-
+    if (screening == null) {
+      return null;
+    }
     String staffId = RequestExecutionContext.instance().getStaffId();
     String userCountyCode =
         staffPersonService.find(RequestExecutionContext.instance().getStaffId()).getCountyCode();
@@ -76,8 +78,8 @@ public class ScreeningSubmitService implements CrudsService {
       }
     }
 
-    ScreeningToReferral screeningToReferral = new ScreeningTransformer().transform(screening, staffId,
-        userCountyCode, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    ScreeningToReferral screeningToReferral = new ScreeningTransformer().transform(screening,
+        staffId, userCountyCode, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
 
     ScreeningToReferral str =
         (ScreeningToReferral) screeningToReferralService.create(screeningToReferral);

@@ -29,7 +29,7 @@ import gov.ca.cwds.rest.api.domain.GovernmentAgency;
  *
  */
 @SuppressWarnings("javadoc")
-public class TransformCrossReportsTest {
+public class CrossReportsTransformerTest {
 
   private Map<String, IntakeLov> nsCodeToNsLovMap;
   private Map<String, IntakeLov> cmsSysIdToNsLovMap;

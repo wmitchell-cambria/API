@@ -25,7 +25,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
  *
  */
 @SuppressWarnings("javadoc")
-public class TransformAddressTest {
+public class AddressTransformerTest {
 
   private Map<String, IntakeLov> nsCodeToNsLovMap;
 
