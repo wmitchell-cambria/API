@@ -461,7 +461,8 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     perp.setId("2345678ABC");
 
     final Set<Allegation> allegations = new HashSet<>();
-    final Allegation validPersistent = new AllegationEntityBuilder().build();
+    final Allegation validPersistent = new AllegationEntityBuilder().setVictimClientId("1234567ABC")
+        .setPerpetratorClientId("2345678ABC").build();
     final gov.ca.cwds.data.persistence.cms.Allegation allegation =
         new gov.ca.cwds.data.persistence.cms.Allegation("86XV1bG06k",
             validPersistent.getAbuseEndDate(), validPersistent.getAbuseStartDate(),
