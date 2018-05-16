@@ -25,7 +25,6 @@ public class ScreeningRelationshipTest {
     Date anHourAgo = new Date(System.currentTimeMillis() - 3600 * 1000);
     Date now = new Date();
     relationship = new ScreeningRelationship("123", "PersonLegacyId", "RelationLegacydId",
-        RELATIONSHIP_TYPE);
     assertEquals(relationship.getId(), "123");
     assertEquals(relationship.getClientId(), "PersonLegacyId");
     assertEquals(relationship.getRelativeId(), "RelationLegacydId");

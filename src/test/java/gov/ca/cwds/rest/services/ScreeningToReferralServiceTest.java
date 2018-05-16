@@ -390,9 +390,9 @@ public class ScreeningToReferralServiceTest {
   public void testScreeningToReferralMultipleCrossReportsSuccess() throws Exception {
     Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports = new HashSet<>();
     gov.ca.cwds.rest.api.domain.CrossReport sheriffCrossReport = new CrossReportResourceBuilder()
-        .setCountyId("1101").setInformDate("2017-03-15").createCrossReport();
+        .setCountyId("1101").setInformDate("1992-03-05T05:45:34.987Z").createCrossReport();
     gov.ca.cwds.rest.api.domain.CrossReport daCrossReport = new CrossReportResourceBuilder()
-        .setFiledOutOfState(true).setInformDate("2017-04-15").createCrossReport();
+        .setFiledOutOfState(true).setInformDate("1992-03-05T05:45:34.987Z").createCrossReport();
     crossReports.add(sheriffCrossReport);
     crossReports.add(daCrossReport);
 

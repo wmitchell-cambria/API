@@ -17,7 +17,7 @@ public class CrossReportResourceBuilder {
   String legacyId = "";
   boolean filedOutOfState = false;
   Integer method = 2095; // "electronic report"
-  String informDate = "2017-03-15";
+  String informDate = "1992-03-05T05:45:34.987Z";
   String countyId = "1101";
   Set<GovernmentAgency> agencies;
 
