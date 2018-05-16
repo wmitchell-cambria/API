@@ -3,12 +3,11 @@ package gov.ca.cwds.rest.api.domain;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-
-import gov.ca.cwds.rest.util.FerbDateUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +27,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.util.FerbDateUtils;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
@@ -98,7 +98,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @JsonProperty("languages")
   @ApiModelProperty(required = false, readOnly = false, dataType = "java.util.List", value = "",
       example = "American Sign Language", notes = "The Participant's Languages")
-  private Set<String> languages;
+  private List<String> languages;
 
   @JsonProperty("legacy_id")
   @ApiModelProperty(required = true, readOnly = false, value = "Legacy Client Id",
@@ -192,20 +192,12 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param sensitive true if sensitive
    */
   @SuppressWarnings("squid:S00107")
-  public ParticipantIntakeApi(String id,
-      String legacySourceTable,
-      String clientId,
-      LegacyDescriptor legacyDescriptor,
-      String firstName, String middleName,
-      String lastName, String nameSuffix,
-      String gender, String approximateAge,
-      String approximateAgeUnits,
-      String ssn, Date dateOfBirth,
-      Set<String> languages,
-      String screeningId, Set<String> roles,
-      Set<AddressIntakeApi> addresses,
-      Set<PhoneNumber> phoneNumbers,
-      Boolean sealed, Boolean sensitive) {
+  public ParticipantIntakeApi(String id, String legacySourceTable, String clientId,
+      LegacyDescriptor legacyDescriptor, String firstName, String middleName, String lastName,
+      String nameSuffix, String gender, String approximateAge, String approximateAgeUnits,
+      String ssn, Date dateOfBirth, List<String> languages, String screeningId, Set<String> roles,
+      Set<AddressIntakeApi> addresses, Set<PhoneNumber> phoneNumbers, Boolean sealed,
+      Boolean sensitive) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -248,7 +240,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.approximateAge = participantEntity.getApproximateAge();
     this.approximateAgeUnits = participantEntity.getApproximateAgeUnits();
     this.roles = new HashSet<>(Arrays.asList(participantEntity.getRoles()));
-    this.languages = new HashSet<>(Arrays.asList(participantEntity.getLanguages()));
+    this.languages = new LinkedList<>(Arrays.asList(participantEntity.getLanguages()));
     this.legacyId = participantEntity.getLegacyId();
     this.legacySourceTable = participantEntity.getLegacySourceTable();
     this.races = participantEntity.getRaces();
@@ -395,7 +387,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.approximateAgeUnits = approximateAgeUnits;
   }
 
-  public void setLanguages(Set<String> languages) {
+  public void setLanguages(List<String> languages) {
     this.languages = languages;
   }
 
@@ -476,9 +468,9 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   /**
    * @return the languages
    */
-  public Set<String> getLanguages() {
+  public List<String> getLanguages() {
     if (languages == null) {
-      languages = new HashSet<>();
+      languages = new LinkedList<>();
     }
     return languages;
   }
