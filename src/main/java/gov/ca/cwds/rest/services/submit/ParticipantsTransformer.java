@@ -33,7 +33,7 @@ public class ParticipantsTransformer {
 
     Boolean clientStaffPersonAdded = false;
     Boolean reporterConfidentialWaiver = false;
-    String reporterEmployerName = "";
+    String reporterEmployerName = "Employer Name";
 
     for (ParticipantIntakeApi p : participantsIntake) {
       Set<Address> addresses = new HashSet<>();
@@ -52,16 +52,16 @@ public class ParticipantsTransformer {
           new RaceAndEthnicityTransformer().transform(p, nsCodeToNsLovMap);
       String dob = DomainChef.cookDate(p.getDateOfBirth());
       String ssn = StringUtils.isNotBlank(p.getSsn()) ? p.getSsn().replaceAll("-", "") : "";
-      Short farsi = 1254;
+      Short russian = 1271;
       Short english = 1253;
 
 
       Participant participant = new Participant(pid, p.getLegacySourceTable(), p.getLegacyId(),
           p.getLegacyDescriptor(), p.getFirstName(), p.getMiddleName(), p.getLastName(),
-          p.getNameSuffix(), gender, ssn, dob, english, farsi, Integer.parseInt(p.getScreeningId()),
-          reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-          sensitivityIndicator, p.getApproximateAge(), p.getApproximateAgeUnits(), p.getRoles(),
-          addresses, raceAndEthnicity);
+          p.getNameSuffix(), gender, ssn, dob, english, russian,
+          Integer.parseInt(p.getScreeningId()), reporterConfidentialWaiver, reporterEmployerName,
+          clientStaffPersonAdded, sensitivityIndicator, p.getApproximateAge(),
+          p.getApproximateAgeUnits(), p.getRoles(), addresses, raceAndEthnicity);
       participants.add(participant);
     }
     return participants;

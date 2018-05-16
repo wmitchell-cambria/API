@@ -83,15 +83,20 @@ public class RaceAndEthnicityTransformer {
     ObjectMapper mapper = new ObjectMapper();
     if (participantsIntake != null) {
       try {
-        intakeRace = mapper.readValue(participantsIntake.getRaces(),
-            new TypeReference<List<IntakeRace>>() {});
-        intakeEthnicity =
-            mapper.readValue(participantsIntake.getEthnicity(), IntakeEthnicity.class);
+        intakeRace = StringUtils.isNotBlank(participantsIntake.getRaces()) ? mapper.readValue(
+            participantsIntake.getRaces(), new TypeReference<List<IntakeRace>>() {}) : intakeRace;
+        intakeEthnicity = StringUtils.isNotBlank(participantsIntake.getEthnicity())
+            ? mapper.readValue(participantsIntake.getEthnicity(), IntakeEthnicity.class)
+            : intakeEthnicity;
       } catch (IOException e) {
         LOGGER.error("Unable to parse the race and Ethnicity {}", e);
       }
-      buildRace(nsCodeToNsLovMap, intakeRace, raceAndEthnicity, raceCodes);
-      buildEthnicity(nsCodeToNsLovMap, intakeEthnicity, raceAndEthnicity, hispanicCodes);
+      if (intakeRace != null) {
+        buildRace(nsCodeToNsLovMap, intakeRace, raceAndEthnicity, raceCodes);
+      }
+      if (intakeEthnicity != null) {
+        buildEthnicity(nsCodeToNsLovMap, intakeEthnicity, raceAndEthnicity, hispanicCodes);
+      }
 
     }
     return raceAndEthnicity;
