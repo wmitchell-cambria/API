@@ -52,6 +52,7 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ScreeningDashboardResource;
 import gov.ca.cwds.rest.resources.ScreeningIntakeResource;
+import gov.ca.cwds.rest.resources.ScreeningRelationshipResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
@@ -81,6 +82,7 @@ import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
@@ -147,6 +149,7 @@ public class ResourcesModule extends AbstractModule {
     bind(CmsDocumentResource.class);
     bind(CmsNSReferralResource.class);
     bind(ScreeningToReferralResource.class);
+    bind(ScreeningRelationshipResource.class);
     bind(ClientCollateralResource.class);
     bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
     bind(DeliveredServiceResource.class);
@@ -203,6 +206,12 @@ public class ResourcesModule extends AbstractModule {
   @ScreeningServiceBackedResource
   public ResourceDelegate screeningServiceBackedResource(Injector injector) {
     return new ServiceBackedResourceDelegate(injector.getInstance(ScreeningService.class));
+  }
+
+  @Provides
+  @ScreeningRelationshipServiceBackedResource
+  public ResourceDelegate screeningRelationshipServiceBackedResource(Injector injector) {
+    return new ServiceBackedResourceDelegate(injector.getInstance(ScreeningRelationshipService.class));
   }
 
   @Provides
