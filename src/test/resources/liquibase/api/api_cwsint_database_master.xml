@@ -25,4 +25,7 @@
     <include file="liquibase/dml/cws_referral_data.xml"/>
     <include file="liquibase/dml/cws_reporter_data.xml"/>
     <include file="liquibase/dml/cws_allegation_data.xml"/>
+    <include file="liquibase/dml/cws_address_data.xml"/>
+    <include file="liquibase/dml/cws_drms_document_data.xml"/>
+    <include file="liquibase/dml/cws_law_enforcement_data.xml"/>
 </databaseChangeLog>

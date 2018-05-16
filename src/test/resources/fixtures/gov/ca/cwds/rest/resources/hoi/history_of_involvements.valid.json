@@ -1,0 +1,644 @@
+{
+  "id": "714",
+  "cases": [
+    {
+      "id": "IdQImWo0DW",
+      "start_date": "1997-12-18",
+      "county": {
+        "id": "1094",
+        "description": "Monterey"
+      },
+      "service_component": {
+        "id": "1692",
+        "description": "Emergency Response"
+      },
+      "focus_child": {
+        "id": "SFpVhtC0DW",
+        "first_name": "Jane",
+        "last_name": "Blatcher",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "SFpVhtC0DW",
+          "legacy_ui_id": "1604-9097-3885-0000838",
+          "legacy_last_updated": "1998-12-18T10:51:21.286-0800",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        }
+      },
+      "assigned_social_worker": {
+        "id": "0DW",
+        "first_name": "wsm",
+        "last_name": "cs",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0DW",
+          "legacy_ui_id": "0DW",
+          "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "access_limitation": {
+        "limited_access_code": "NONE",
+        "limited_access_government_entity": {}
+      },
+      "parents": [
+        {
+          "id": "FzOAUde0DW",
+          "first_name": "Jacquline",
+          "last_name": "Spancock",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "FzOAUde0DW",
+            "legacy_ui_id": "0908-2447-6963-4000838",
+            "legacy_last_updated": "1998-12-21T13:34:26.438-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "196",
+            "description": "Daughter/Mother (Birth)"
+          },
+          "limited_access_code": "NONE"
+        },
+        {
+          "id": "TdylgTC0DW",
+          "first_name": "John",
+          "last_name": "Turfrey",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "TdylgTC0DW",
+            "legacy_ui_id": "1683-8339-5721-8000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "205",
+            "description": "Father/Daughter (Birth)"
+          },
+          "limited_access_code": "NONE"
+        },
+        {
+          "id": "J8KIcQE0DW",
+          "first_name": "Mom",
+          "last_name": "Hall",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "J8KIcQE0DW",
+            "legacy_ui_id": "1086-8335-0307-4000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "249",
+            "description": "Mother/Daughter (Step)"
+          },
+          "limited_access_code": "NONE"
+        }
+      ],
+      "legacy_descriptor": {
+        "legacy_id": "IdQImWo0DW",
+        "legacy_ui_id": "1058-5220-8214-6000838",
+        "legacy_last_updated": "1999-09-14T23:36:11.128-0700",
+        "legacy_table_name": "CASE_T",
+        "legacy_table_description": "Case"
+      }
+    },
+    {
+      "id": "Co8uaDi0DW",
+      "start_date": "1997-12-18",
+      "county": {
+        "id": "1094",
+        "description": "Monterey"
+      },
+      "service_component": {
+        "id": "1692",
+        "description": "Emergency Response"
+      },
+      "focus_child": {
+        "id": "IxTqtHO0DW",
+        "first_name": "Johnny",
+        "last_name": "Ricci",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "IxTqtHO0DW",
+          "legacy_ui_id": "1076-8971-9689-8000838",
+          "legacy_last_updated": "1999-10-11T14:30:03.229-0700",
+          "legacy_table_name": "CLIENT_T",
+          "legacy_table_description": "Client"
+        }
+      },
+      "assigned_social_worker": {
+        "id": "0DW",
+        "first_name": "wsm",
+        "last_name": "cs",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0DW",
+          "legacy_ui_id": "0DW",
+          "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "access_limitation": {
+        "limited_access_code": "NONE",
+        "limited_access_government_entity": {}
+      },
+      "parents": [
+        {
+          "id": "J8KIcQE0DW",
+          "first_name": "Mom",
+          "last_name": "Hall",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "J8KIcQE0DW",
+            "legacy_ui_id": "1086-8335-0307-4000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "291",
+            "description": "Son/Mother (Birth)"
+          },
+          "limited_access_code": "NONE"
+        },
+        {
+          "id": "TdylgTC0DW",
+          "first_name": "John",
+          "last_name": "Turfrey",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "TdylgTC0DW",
+            "legacy_ui_id": "1683-8339-5721-8000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "288",
+            "description": "Son/Father (Step)"
+          },
+          "limited_access_code": "NONE"
+        },
+        {
+          "id": "5DK5THO0DW",
+          "first_name": "Jonathan",
+          "last_name": "O Drought",
+          "name_suffix": "",
+          "legacy_descriptor": {
+            "legacy_id": "5DK5THO0DW",
+            "legacy_ui_id": "0296-2077-3565-0000838",
+            "legacy_last_updated": "1998-12-21T13:34:26.438-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          },
+          "relationship": {
+            "id": "210",
+            "description": "Father/Son (Alleged)"
+          },
+          "limited_access_code": "NONE"
+        }
+      ],
+      "legacy_descriptor": {
+        "legacy_id": "Co8uaDi0DW",
+        "legacy_ui_id": "0727-5411-6489-8000838",
+        "legacy_last_updated": "1999-09-14T23:30:46.041-0700",
+        "legacy_table_name": "CASE_T",
+        "legacy_table_description": "Case"
+      }
+    }
+  ],
+  "referrals": [
+    {
+      "id": "MYsSPHW0DW",
+      "start_date": "1997-12-18",
+      "end_date": "1998-12-18",
+      "county": {
+        "id": "1094",
+        "description": "Monterey"
+      },
+      "response_time": {
+        "id": "1520",
+        "description": "Immediate"
+      },
+      "reporter": {
+        "id": "MYsSPHW0DW",
+        "first_name": "Social",
+        "last_name": "Worker",
+        "name_suffix": "",
+        "role": "MANDATED_REPORTER",
+        "legacy_descriptor": {
+          "legacy_id": "MYsSPHW0DW",
+          "legacy_ui_id": "1281-5583-9165-0000838",
+          "legacy_last_updated": "1998-12-18T10:23:43.309-0800",
+          "legacy_table_name": "REPTR_T",
+          "legacy_table_description": "Reporter"
+        }
+      },
+      "assigned_social_worker": {
+        "id": "0DW",
+        "first_name": "wsm",
+        "last_name": "cs",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0DW",
+          "legacy_ui_id": "0DW",
+          "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "access_limitation": {
+        "limited_access_code": "NONE",
+        "limited_access_government_entity": {}
+      },
+      "allegations": [
+        {
+          "id": "H74wp7K0DW",
+          "type": {
+            "id": "2169",
+            "description": "Caretaker Absence/Incapacity"
+          },
+          "disposition": {
+            "id": "45",
+            "description": "Substantiated"
+          },
+          "victim": {
+            "id": "IxTqtHO0DW",
+            "first_name": "Johnny",
+            "last_name": "Ricci",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "IxTqtHO0DW",
+              "legacy_ui_id": "1076-8971-9689-8000838",
+              "legacy_last_updated": "1999-10-11T14:30:03.229-0700",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "perpetrator": {
+            "id": "TdylgTC0DW",
+            "first_name": "John",
+            "last_name": "Turfrey",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "TdylgTC0DW",
+              "legacy_ui_id": "1683-8339-5721-8000838",
+              "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "legacy_descriptor": {
+            "legacy_id": "H74wp7K0DW",
+            "legacy_ui_id": "0972-0900-5961-8000838",
+            "legacy_last_updated": "1998-12-18T10:23:43.309-0800",
+            "legacy_table_name": "ALLGTN_T",
+            "legacy_table_description": "Allegation"
+          }
+        }
+      ],
+      "legacy_descriptor": {
+        "legacy_id": "MYsSPHW0DW",
+        "legacy_ui_id": "1281-5583-9165-0000838",
+        "legacy_last_updated": "1998-12-18T10:31:18.639-0800",
+        "legacy_table_name": "REFERL_T",
+        "legacy_table_description": "Referral"
+      }
+    },
+    {
+      "id": "9OQhOAE0DW",
+      "start_date": "1997-12-18",
+      "end_date": "1998-12-18",
+      "county": {
+        "id": "1094",
+        "description": "Monterey"
+      },
+      "response_time": {
+        "id": "1520",
+        "description": "Immediate"
+      },
+      "reporter": {
+        "id": "9OQhOAE0DW",
+        "first_name": "Avril",
+        "last_name": "Hariman",
+        "name_suffix": "",
+        "role": "MANDATED_REPORTER",
+        "legacy_descriptor": {
+          "legacy_id": "9OQhOAE0DW",
+          "legacy_ui_id": "0533-5838-3395-4000838",
+          "legacy_last_updated": "1998-12-18T10:23:43.309-0800",
+          "legacy_table_name": "REPTR_T",
+          "legacy_table_description": "Reporter"
+        }
+      },
+      "assigned_social_worker": {
+        "id": "0DW",
+        "first_name": "wsm",
+        "last_name": "cs",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0DW",
+          "legacy_ui_id": "0DW",
+          "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "access_limitation": {
+        "limited_access_code": "NONE",
+        "limited_access_government_entity": {}
+      },
+      "allegations": [
+        {
+          "id": "MW8hjOs0DW",
+          "type": {
+            "id": "2169",
+            "description": "Caretaker Absence/Incapacity"
+          },
+          "disposition": {
+            "id": "45",
+            "description": "Substantiated"
+          },
+          "victim": {
+            "id": "SFpVhtC0DW",
+            "first_name": "Jane",
+            "last_name": "Blatcher",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "SFpVhtC0DW",
+              "legacy_ui_id": "1604-9097-3885-0000838",
+              "legacy_last_updated": "1998-12-18T10:51:21.286-0800",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "perpetrator": {
+            "id": "TdylgTC0DW",
+            "first_name": "John",
+            "last_name": "Turfrey",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "TdylgTC0DW",
+              "legacy_ui_id": "1683-8339-5721-8000838",
+              "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "legacy_descriptor": {
+            "legacy_id": "MW8hjOs0DW",
+            "legacy_ui_id": "1279-0500-6678-6000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "ALLGTN_T",
+            "legacy_table_description": "Allegation"
+          }
+        },
+        {
+          "id": "SagSZN40DW",
+          "type": {
+            "id": "2169",
+            "description": "Caretaker Absence/Incapacity"
+          },
+          "disposition": {
+            "id": "45",
+            "description": "Substantiated"
+          },
+          "victim": {
+            "id": "IxTqtHO0DW",
+            "first_name": "Johnny",
+            "last_name": "Ricci",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "IxTqtHO0DW",
+              "legacy_ui_id": "1076-8971-9689-8000838",
+              "legacy_last_updated": "1999-10-11T14:30:03.229-0700",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "perpetrator": {
+            "id": "TdylgTC0DW",
+            "first_name": "John",
+            "last_name": "Turfrey",
+            "name_suffix": "",
+            "legacy_descriptor": {
+              "legacy_id": "TdylgTC0DW",
+              "legacy_ui_id": "1683-8339-5721-8000838",
+              "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+              "legacy_table_name": "CLIENT_T",
+              "legacy_table_description": "Client"
+            }
+          },
+          "legacy_descriptor": {
+            "legacy_id": "SagSZN40DW",
+            "legacy_ui_id": "1624-0147-9357-0000838",
+            "legacy_last_updated": "1998-12-18T10:08:55.357-0800",
+            "legacy_table_name": "ALLGTN_T",
+            "legacy_table_description": "Allegation"
+          }
+        }
+      ],
+      "legacy_descriptor": {
+        "legacy_id": "9OQhOAE0DW",
+        "legacy_ui_id": "0533-5838-3395-4000838",
+        "legacy_last_updated": "1998-12-18T10:23:43.309-0800",
+        "legacy_table_name": "REFERL_T",
+        "legacy_table_description": "Referral"
+      }
+    }
+  ],
+  "screenings": [
+    {
+      "id": "885",
+      "name": "Training Two XX",
+      "start_date": "2018-04-30",
+      "end_date": "2018-04-30",
+      "decision": "promote_to_referral",
+      "decision_detail": "3_days",
+      "reporter": {
+        "id": "900",
+        "first_name": "victor",
+        "last_name": "vista",
+        "name_suffix": "jr",
+        "role": "MANDATED_REPORTER",
+        "legacy_descriptor": {}
+      },
+      "assigned_social_worker": {
+        "id": "0X5",
+        "first_name": "Testing",
+        "last_name": "CWDS",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0X5",
+          "legacy_ui_id": "0X5",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "all_people": [
+        {
+          "id": "901",
+          "first_name": "Jonathan",
+          "last_name": "O Drought",
+          "legacy_descriptor": {
+            "legacy_id": "5DK5THO0DW",
+            "legacy_ui_id": "0296-2077-3565-0000838",
+            "legacy_last_updated": "1998-12-21T13:32:37.109-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        {
+          "id": "902",
+          "first_name": "Johnny",
+          "last_name": "Ricci",
+          "legacy_descriptor": {
+            "legacy_id": "IxTqtHO0DW",
+            "legacy_ui_id": "1076-8971-9689-8000838",
+            "legacy_last_updated": "1999-10-11T14:25:49.254-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        {
+          "id": "898",
+          "first_name": "Jill",
+          "last_name": "Jackhill",
+          "legacy_descriptor": {}
+        },
+        {
+          "id": "899",
+          "first_name": "Janice",
+          "last_name": "Jackhill",
+          "legacy_descriptor": {}
+        },
+        {
+          "id": "900",
+          "first_name": "victor",
+          "last_name": "vista",
+          "name_suffix": "jr",
+          "legacy_descriptor": {}
+        }
+      ]
+    },
+    {
+      "id": "862",
+      "name": "Screening - Training Two",
+      "start_date": "2018-04-26",
+      "decision": "promote_to_referral",
+      "decision_detail": "3_days",
+      "reporter": {
+        "id": "854",
+        "first_name": "Victor",
+        "last_name": "Vista",
+        "name_suffix": "jr",
+        "role": "MANDATED_REPORTER",
+        "legacy_descriptor": {}
+      },
+      "assigned_social_worker": {
+        "id": "0X5",
+        "first_name": "Testing",
+        "last_name": "CWDS",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0X5",
+          "legacy_ui_id": "0X5",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "all_people": [
+        {
+          "id": "852",
+          "first_name": "Jill",
+          "last_name": "Jackhill",
+          "legacy_descriptor": {}
+        },
+        {
+          "id": "853",
+          "first_name": "Janice",
+          "last_name": "Jackhill",
+          "legacy_descriptor": {}
+        },
+        {
+          "id": "854",
+          "first_name": "Victor",
+          "last_name": "Vista",
+          "name_suffix": "jr",
+          "legacy_descriptor": {}
+        },
+        {
+          "id": "855",
+          "first_name": "Jonathan",
+          "last_name": "O Drought",
+          "legacy_descriptor": {
+            "legacy_id": "5DK5THO0DW",
+            "legacy_ui_id": "0296-2077-3565-0000838",
+            "legacy_last_updated": "1998-12-21T13:32:37.109-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        {
+          "id": "856",
+          "first_name": "Johnny",
+          "last_name": "Ricci",
+          "legacy_descriptor": {
+            "legacy_id": "IxTqtHO0DW",
+            "legacy_ui_id": "1076-8971-9689-8000838",
+            "legacy_last_updated": "1999-10-11T14:25:49.254-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        }
+      ]
+    },
+    {
+      "id": "750",
+      "start_date": "2018-04-16",
+      "assigned_social_worker": {
+        "id": "0X5",
+        "first_name": "Testing",
+        "last_name": "CWDS",
+        "name_suffix": "",
+        "legacy_descriptor": {
+          "legacy_id": "0X5",
+          "legacy_ui_id": "0X5",
+          "legacy_table_name": "STFPERST",
+          "legacy_table_description": "Staff"
+        }
+      },
+      "all_people": [
+        {
+          "id": "755",
+          "first_name": "Jonathan",
+          "last_name": "O Drought",
+          "legacy_descriptor": {
+            "legacy_id": "5DK5THO0DW",
+            "legacy_ui_id": "0296-2077-3565-0000838",
+            "legacy_last_updated": "1998-12-21T13:32:37.109-0800",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        },
+        {
+          "id": "756",
+          "first_name": "Johnny",
+          "last_name": "Ricci",
+          "legacy_descriptor": {
+            "legacy_id": "IxTqtHO0DW",
+            "legacy_ui_id": "1076-8971-9689-8000838",
+            "legacy_last_updated": "1999-10-11T14:25:49.254-0700",
+            "legacy_table_name": "CLIENT_T",
+            "legacy_table_description": "Client"
+          }
+        }
+      ]
+    }
+  ]
+}
