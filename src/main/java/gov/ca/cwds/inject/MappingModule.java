@@ -6,6 +6,7 @@ import gov.ca.cwds.rest.services.mapper.AgencyMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationTypeMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
+import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import gov.ca.cwds.rest.services.mapper.LegacyDescriptorMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 
@@ -29,6 +30,8 @@ public class MappingModule extends AbstractModule {
     bind(LegacyDescriptorMapper.class).to(LegacyDescriptorMapper.INSTANCE.getClass())
         .asEagerSingleton();
     bind(ScreeningMapper.class).to(ScreeningMapper.INSTANCE.getClass())
+        .asEagerSingleton();
+    bind(CsecMapper.class).to(CsecMapper.INSTANCE.getClass())
         .asEagerSingleton();
   }
 }
