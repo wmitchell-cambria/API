@@ -34,13 +34,15 @@ public class InvolvementHistoryResourceFT extends IntakeBaseTest {
     String expectedResponse = fixture(VALID_HOI_JSON);
     JSONAssert.assertEquals(expectedResponse, actualJson, JSONCompareMode.NON_EXTENSIBLE);
 
-    InvolvementHistory actualInvolvementHistory = objectMapper.readValue(actualJson.getBytes(), InvolvementHistory.class);
+    InvolvementHistory actualInvolvementHistory = objectMapper
+        .readValue(actualJson.getBytes(), InvolvementHistory.class);
     assertHOICasesAreSorted(actualInvolvementHistory);
     assertHOIReferralsAreSorted(actualInvolvementHistory);
   }
 
   private String doGet(String id) throws IOException {
-    WebTarget target = clientTestRule.target(RESOURCE_SCREENINGS + "/" + id + "/history_of_involvements");
+    WebTarget target = clientTestRule
+        .target(RESOURCE_SCREENINGS + "/" + id + "/history_of_involvements");
     Response response = target.request(MediaType.APPLICATION_JSON).get();
     return IOUtils.toString((InputStream) response.getEntity(), StandardCharsets.UTF_8);
   }

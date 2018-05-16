@@ -32,7 +32,9 @@ public class HoiScreeningResourceFT extends IntakeBaseTest {
   public void testGet() throws Exception {
     String actualJson = doGet();
     List<HOIScreening> expectedHOIScreenings = getExpectedHOIScreenings();
-    List<HOIScreening> actualHOIScreenings = objectMapper.readValue(actualJson.getBytes(), new TypeReference<List<HOIScreening>>(){});
+    List<HOIScreening> actualHOIScreenings = objectMapper
+        .readValue(actualJson.getBytes(), new TypeReference<List<HOIScreening>>() {
+        });
     assertEquals(expectedHOIScreenings, actualHOIScreenings);
     assertHOIScreeningsAreSortedWithNullStartDateOnTop(actualHOIScreenings);
   }
@@ -46,17 +48,21 @@ public class HoiScreeningResourceFT extends IntakeBaseTest {
 
   private List<HOIScreening> getExpectedHOIScreenings() throws IOException {
     String hoiJSON = fixture(VALID_HOI_JSON);
-    InvolvementHistory involvementHistory = objectMapper.readValue(hoiJSON.getBytes(), InvolvementHistory.class);
+    InvolvementHistory involvementHistory = objectMapper
+        .readValue(hoiJSON.getBytes(), InvolvementHistory.class);
     List<HOIScreening> hoiScreenings = involvementHistory.getScreenings();
 
-    String hoiScreening714JSON = fixture("fixtures/gov/ca/cwds/rest/resources/hoi/hoi-screening-714.json");
-    HOIScreening hoiScreening714 = objectMapper.readValue(hoiScreening714JSON.getBytes(), HOIScreening.class);
+    String hoiScreening714JSON = fixture(
+        "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-screening-714.json");
+    HOIScreening hoiScreening714 = objectMapper
+        .readValue(hoiScreening714JSON.getBytes(), HOIScreening.class);
     hoiScreenings.add(hoiScreening714);
 
     return hoiScreenings;
   }
 
-  private void assertHOIScreeningsAreSortedWithNullStartDateOnTop(List<HOIScreening> actualHOIScreenings) {
+  private void assertHOIScreeningsAreSortedWithNullStartDateOnTop(
+      List<HOIScreening> actualHOIScreenings) {
     assertNull(actualHOIScreenings.get(0).getStartDate());
     assertEquals("885", actualHOIScreenings.get(1).getId());
     assertEquals("862", actualHOIScreenings.get(2).getId());
