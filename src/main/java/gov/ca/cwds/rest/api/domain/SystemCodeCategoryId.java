@@ -114,6 +114,11 @@ public final class SystemCodeCategoryId {
    */
   public static final String GENDER_EXPRESSION_TYPE = "CLNT_GEC";
 
+  /**
+   * Gender expression type
+   */
+  public static final String COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN = "CSEC_TPC";
+
 
   /**
    * Private constructor

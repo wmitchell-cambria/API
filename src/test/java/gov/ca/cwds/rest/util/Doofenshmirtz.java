@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -42,6 +44,7 @@ import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 import org.hibernate.type.StringType;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
@@ -50,9 +53,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
 
 /**
@@ -75,6 +81,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
+
+  private static Validator validator;
+  private static SystemCodeCache systemCodeCache;
 
   public SessionFactoryImplementor sessionFactoryImplementor;
   public org.hibernate.SessionFactory sessionFactory;
@@ -99,6 +108,12 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   PrincipalCollection principalCollection;
   RequestExecutionContext ctx;
 
+  @BeforeClass
+  public static void setupClass() {
+    systemCodeCache = new TestSystemCodeCache();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+  }
+
   @Before
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -106,13 +121,14 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // Authentication, authorization:
     mockSubject = mock(Subject.class);
     principalCollection = mock(PrincipalCollection.class);
+
     final List list = new ArrayList();
     list.add("msg");
-
     when(principalCollection.asList()).thenReturn(list);
     when(mockSubject.getPrincipals()).thenReturn(principalCollection);
     setSubject(mockSubject);
 
+    // Request context:
     RequestExecutionContextImplTest.startRequest();
     ctx = RequestExecutionContext.instance();
 
@@ -197,6 +213,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
+
+    new TestingRequestExecutionContext("02f");
+    SystemCodeCache.global().getAllSystemCodes();
   }
 
   /**
