@@ -73,9 +73,10 @@ public class HOIReferralService
     if (referralClientList.isEmpty()) {
       return new HOIReferralResponse();
     }
-    // eliminate rows with duplicate referral Id's from referralClientArrayList
-    ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
-    HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<>();
+
+    // Eliminate rows with duplicate referral Id's from referralClientArrayList
+    final List<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
+    final Map<String, ReferralClient> uniqueReferralIds = new HashMap<>();
     for (ReferralClient referralClient : referralClientArrayList) {
       uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
     }
@@ -85,7 +86,7 @@ public class HOIReferralService
       referralClientArrayList.add(uniqueReferral.getValue());
     }
 
-    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
+    final List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
     for (ReferralClient referralClient : referralClientArrayList) {
       hoiReferrals.add(createHOIReferral(referralClient));
     }
