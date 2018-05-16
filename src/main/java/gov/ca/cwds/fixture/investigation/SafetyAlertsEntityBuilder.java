@@ -10,13 +10,11 @@ public class SafetyAlertsEntityBuilder {
   private Set<String> alerts = new HashSet<>();
   private String alertInformation = "information about the safety alert on this referral";
 
-
   public SafetyAlerts build() {
     alerts.add("6401");
     alerts.add("6402");
 
     return new SafetyAlerts(alerts, alertInformation);
-
   }
 
   public SafetyAlertsEntityBuilder setAlerts(Set<String> alerts) {
