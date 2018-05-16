@@ -18,8 +18,6 @@ public class ScreeningRelationshipTest {
     assertEquals(relationship.getClientId(), "PersonLegacyId");
     assertEquals(relationship.getRelativeId(), "RelationLegacydId");
     assertEquals(relationship.getRelationshipType(), RELATIONSHIP_TYPE);
-    assertTrue(isCurrentDateTime(relationship.getCreatedAt()));
-    assertNull(relationship.getUpdatedAt());
   }
 
   @Test
@@ -27,13 +25,11 @@ public class ScreeningRelationshipTest {
     Date anHourAgo = new Date(System.currentTimeMillis() - 3600 * 1000);
     Date now = new Date();
     relationship = new ScreeningRelationship("123", "PersonLegacyId", "RelationLegacydId",
-        RELATIONSHIP_TYPE, anHourAgo, now);
+        RELATIONSHIP_TYPE);
     assertEquals(relationship.getId(), "123");
     assertEquals(relationship.getClientId(), "PersonLegacyId");
     assertEquals(relationship.getRelativeId(), "RelationLegacydId");
     assertEquals(relationship.getRelationshipType(), RELATIONSHIP_TYPE);
-    assertTrue(relationship.getCreatedAt().equals(anHourAgo));
-    assertTrue(relationship.getUpdatedAt().equals(now));
   }
 
   private boolean isCurrentDateTime(Date date){
