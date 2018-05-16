@@ -4,6 +4,7 @@ import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_L
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -48,7 +49,9 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
     query = "FROM ParticipantEntity WHERE screeningId = :screeningId)")
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
+public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
       "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";

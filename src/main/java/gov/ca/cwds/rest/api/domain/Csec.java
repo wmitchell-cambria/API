@@ -8,7 +8,7 @@ import java.time.LocalDate;
  */
 public class Csec {
   @JsonProperty("id")
-  private Integer id;
+  private String id;
 
   @JsonProperty("participant_id")
   private String participantId;
@@ -23,13 +23,14 @@ public class Csec {
   private LocalDate endDate;
 
   public Csec() {
+    // required by third party library
   }
 
-  public Integer getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(String id) {
     this.id = id;
   }
 

@@ -25,7 +25,7 @@ public class CsecEntity {
   private String participantId;
 
   @Column(name = "csec_code_id")
-  private String csecCodeId;
+  private Integer csecCodeId;
 
   @Column(name = "start_date")
   private LocalDate startDate;
@@ -34,6 +34,7 @@ public class CsecEntity {
   private LocalDate endDate;
 
   public CsecEntity() {
+    //required by third party library
   }
 
   public Integer getId() {
@@ -52,11 +53,11 @@ public class CsecEntity {
     this.participantId = participantId;
   }
 
-  public String getCsecCodeId() {
+  public Integer getCsecCodeId() {
     return csecCodeId;
   }
 
-  public void setCsecCodeId(String csecCodeId) {
+  public void setCsecCodeId(Integer csecCodeId) {
     this.csecCodeId = csecCodeId;
   }
 
@@ -78,13 +79,18 @@ public class CsecEntity {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
     CsecEntity that = (CsecEntity) o;
 
-    if (participantId != null ? !participantId.equals(that.participantId) : that.participantId != null)
+    if (participantId != null ? !participantId.equals(that.participantId) : that.participantId != null) {
       return false;
+    }
     return csecCodeId != null ? csecCodeId.equals(that.csecCodeId) : that.csecCodeId == null;
 
   }

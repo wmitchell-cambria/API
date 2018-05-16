@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import java.util.Properties;
 
 import javax.validation.Validation;
@@ -202,6 +203,7 @@ public class ServicesModule extends AbstractModule {
     bind(InvolvementHistoryService.class);
     bind(HOICaseService.class);
     bind(AuthorizationService.class);
+    bind(ScreeningRelationshipService.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
