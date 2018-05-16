@@ -31,6 +31,7 @@ import gov.ca.cwds.rest.services.ServiceException;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class ESPerson extends Person {
 
   // =========================

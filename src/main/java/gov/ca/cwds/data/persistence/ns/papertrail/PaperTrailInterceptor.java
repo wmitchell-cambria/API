@@ -71,7 +71,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       ThreadLocal.withInitial(HashMap::new);
 
   @Inject
-  private PaperTrailDao paperTrailDao;
+  private transient PaperTrailDao paperTrailDao;
 
   public PaperTrailInterceptor() {
     // Default ctor.

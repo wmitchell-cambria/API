@@ -18,6 +18,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class CrossReportService implements TypedCrudsService<String, CrossReport, Response> {
 
   private static CrossReport crossReportStub = new CrossReportEntityBuilder().build();
+
   private CrossReportDao crossReportDao;
 
   /**
@@ -52,6 +53,10 @@ public class CrossReportService implements TypedCrudsService<String, CrossReport
   @Override
   public Response update(String primaryKey, CrossReport request) {
     return crossReportStub;
+  }
+
+  public CrossReportDao getCrossReportDao() {
+    return crossReportDao;
   }
 
 }
