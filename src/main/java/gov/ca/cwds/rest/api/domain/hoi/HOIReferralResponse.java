@@ -10,22 +10,19 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.RequestContextAwareResponse;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 
 /**
- * A domain API {@link Request} for {@link HOIReferral}
+ * A domain API {@link Request} for {@link HOIReferral}.
  * 
  * @author CWDS API Team
  */
 @ApiModel
 @JsonSnakeCase
-public class HOIReferralResponse implements Response {
+public class HOIReferralResponse implements RequestContextAwareResponse {
 
-  /**
-   * Base serialization version. Increment by class version.
-   */
   private static final long serialVersionUID = 1L;
 
   @JsonUnwrapped
@@ -62,7 +59,7 @@ public class HOIReferralResponse implements Response {
   }
 
   /**
-   * Add the {@link HOIReferral} to the {@link List}
+   * Add the {@link HOIReferral} to the {@link List}.
    * 
    * @param hoiReferral - hoiReferral
    */

@@ -32,7 +32,6 @@ public final class Api {
    */
   public static final String RESOURCE_AUTHORIZE = "authorize";
 
-
   /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT_COLLATERALS} API..
    */

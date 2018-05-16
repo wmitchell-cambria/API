@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 
 /**
  * Used for unit tests only.
@@ -28,6 +29,7 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
     put(Parameter.REQUEST_START_TIME, new Date());
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, new Integer(0));
+    put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
 
     RequestExecutionContextRegistry.register(this);
   }
@@ -65,6 +67,11 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
       staffId = userIdentity.getUser();
     }
     return staffId;
+  }
+
+  @Override
+  public MessageBuilder getMessageBuilder() {
+    return (MessageBuilder) contextParameters.get(Parameter.MESSAGE_BUILDER);
   }
 
 }
