@@ -42,4 +42,66 @@
       <column name="describable_id" valueNumeric="32"/>
     </insert>
   </changeSet>
+  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1001"/>
+      <column name="legacy_id" value="5DK5THO0DW"/>
+      <column name="legacy_ui_id" value="0296-2077-3565-0000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1998-12-21T13:32:37.109-0800"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="755"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1003"/>
+      <column name="legacy_id" value="IxTqtHO0DW"/>
+      <column name="legacy_ui_id" value="1076-8971-9689-8000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1999-10-11T14:25:49.254-0700"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="756"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1121"/>
+      <column name="legacy_id" value="5DK5THO0DW"/>
+      <column name="legacy_ui_id" value="0296-2077-3565-0000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1998-12-21T13:32:37.109-0800"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="855"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1123"/>
+      <column name="legacy_id" value="IxTqtHO0DW"/>
+      <column name="legacy_ui_id" value="1076-8971-9689-8000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1999-10-11T14:25:49.254-0700"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="856"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1176"/>
+      <column name="legacy_id" value="5DK5THO0DW"/>
+      <column name="legacy_ui_id" value="0296-2077-3565-0000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1998-12-21T13:32:37.109-0800"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="901"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="1178"/>
+      <column name="legacy_id" value="IxTqtHO0DW"/>
+      <column name="legacy_ui_id" value="1076-8971-9689-8000838"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1999-10-11T14:25:49.254-0700"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="902"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>

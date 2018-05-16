@@ -28,4 +28,110 @@
       <column name="curr_loc_of_children" value="Home with father mother"/>
     </insert>
   </changeSet>
+  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
+    <insert tableName="screenings">
+      <column name="id" value="714"/>
+      <column name="reference" value="9A934Q"/>
+      <column name="ended_at"/>
+      <column name="incident_date"/>
+      <column name="location_type"/>
+      <column name="communication_method"/>
+      <column name="name"/>
+      <column name="started_at" valueDate="2018-04-10 23:01:49.080551"/>
+      <column name="screening_decision"/>
+      <column name="incident_county" value="99"/>
+      <column name="report_narrative"/>
+      <column name="assignee" value="Testing CWDS - State of California"/>
+      <column name="additional_information"/>
+      <column name="screening_decision_detail"/>
+      <column name="safety_information"/>
+      <column name="safety_alerts" value="{}"/>
+      <column name="referral_id"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="access_restrictions"/>
+      <column name="restrictions_rationale"/>
+      <column name="user_county_code"/>
+      <column name="restrictions_date"/>
+      <column name="indexable" valueBoolean="true"/>
+      <column name="curr_loc_of_children"/>
+    </insert>
+    <insert tableName="screenings">
+      <column name="id" value="750"/>
+      <column name="reference" value="1H2AFF"/>
+      <column name="ended_at"/>
+      <column name="incident_date"/>
+      <column name="location_type"/>
+      <column name="communication_method"/>
+      <column name="name"/>
+      <column name="started_at" valueDate="2018-04-16 14:43:50.855692"/>
+      <column name="screening_decision"/>
+      <column name="incident_county" value="99"/>
+      <column name="report_narrative"/>
+      <column name="assignee" value="Testing CWDS - State of California"/>
+      <column name="additional_information"/>
+      <column name="screening_decision_detail"/>
+      <column name="safety_information"/>
+      <column name="safety_alerts" value="{}"/>
+      <column name="referral_id"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="access_restrictions"/>
+      <column name="restrictions_rationale"/>
+      <column name="user_county_code"/>
+      <column name="restrictions_date"/>
+      <column name="indexable" valueBoolean="true"/>
+      <column name="curr_loc_of_children"/>
+    </insert>
+    <insert tableName="screenings">
+      <column name="id" value="862"/>
+      <column name="reference" value="6PPSZB"/>
+      <column name="ended_at"/>
+      <column name="incident_date" valueDate="2018-04-26"/>
+      <column name="location_type" value="School"/>
+      <column name="communication_method" value="phone"/>
+      <column name="name" value="Screening - Training Two"/>
+      <column name="started_at" valueDate="2018-04-26 20:49:37.102"/>
+      <column name="screening_decision" value="promote_to_referral"/>
+      <column name="incident_county" value="99"/>
+      <column name="report_narrative" value="enter report narrative"/>
+      <column name="assignee" value="Testing CWDS - State of California"/>
+      <column name="additional_information" value="additional information for decision"/>
+      <column name="screening_decision_detail" value="3_days"/>
+      <column name="safety_information" value="additional safety information"/>
+      <column name="safety_alerts" value="{&quot;Dangerous Animal on Premises&quot;}"/>
+      <column name="referral_id"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="access_restrictions"/>
+      <column name="restrictions_rationale"/>
+      <column name="user_county_code"/>
+      <column name="restrictions_date"/>
+      <column name="indexable"/>
+      <column name="curr_loc_of_children"/>
+    </insert>
+    <insert tableName="screenings">
+      <column name="id" value="885"/>
+      <column name="reference" value="EZAHLV"/>
+      <column name="ended_at" valueDate="2018-04-30 23:30:00.0"/>
+      <column name="incident_date" valueDate="2018-04-30"/>
+      <column name="location_type" value="School"/>
+      <column name="communication_method" value="phone"/>
+      <column name="name" value="Training Two XX"/>
+      <column name="started_at" valueDate="2018-04-30 23:23:29.106"/>
+      <column name="screening_decision" value="promote_to_referral"/>
+      <column name="incident_county" value="99"/>
+      <column name="report_narrative" value="blah blah"/>
+      <column name="assignee" value="Testing CWDS - State of California"/>
+      <column name="additional_information" value="blah blah blah"/>
+      <column name="screening_decision_detail" value="3_days"/>
+      <column name="safety_information" value="The child’s mom may be a hoarder and there may be multiple cats on living in the home"/>
+      <column name="safety_alerts" value="{&quot;Dangerous Environment&quot;}"/>
+      <column name="referral_id"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="access_restrictions"/>
+      <column name="restrictions_rationale"/>
+      <column name="user_county_code"/>
+      <column name="restrictions_date"/>
+      <column name="indexable"/>
+      <column name="curr_loc_of_children"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>
