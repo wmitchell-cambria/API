@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,9 +43,11 @@ import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
@@ -501,8 +504,14 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     request = new HOIRequest();
     request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
 
+    hoiService = new HOIReferralService(clientDao, referralClientDao, authorizationService);
     final HOIReferralService spyTarget = spy(hoiService);
     spyTarget.handleFind(request);
+
+    final List<ErrorMessage> errors =
+        RequestExecutionContext.instance().getMessageBuilder().getMessages();
+    System.out.println(errors);
+    assertThat("No authorization errors found", errors.size() > 0);
   }
 
 }

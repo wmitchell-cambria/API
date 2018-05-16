@@ -114,11 +114,11 @@ public class HOIReferralService
    * SNAP-49: HOI not shown for client.
    * 
    * <p>
-   * Sometimes Cases or Referrals link to clients that the current is user is not authorized to
-   * view, either due to sealed/sensitivity restriction, county access privileges, or a short-coming
-   * with an the authorization rule. The the client authorizer throws an UnauthorizedException, then
-   * skip that client and move on. Don't bomb all History of Involvement because the user is not
-   * authorized to view a client's half-sister's foster sibling. Really.
+   * Sometimes Cases or Referrals link to clients that the current user is not authorized to view
+   * due to sealed/sensitivity restriction, county access privileges, or a short-coming with an the
+   * authorization rule. The client authorizer throws an UnauthorizedException, then skip that
+   * client and move on. Don't bomb all History of Involvement because the user is not authorized to
+   * view a client's half-sister's foster sibling.
    * </p>
    * 
    * @param clientIds client keys to authorize
@@ -131,7 +131,7 @@ public class HOIReferralService
         authorizeClient(clientId);
         ret.add(clientId);
       } catch (Exception e) {
-        final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID %s", clientId);
+        final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID \"%s\"!", clientId);
         RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER,
             ErrorType.CLIENT_AUTHORIZATION_WARNING);
       }

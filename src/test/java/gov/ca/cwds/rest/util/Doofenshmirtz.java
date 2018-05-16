@@ -107,13 +107,14 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // Authentication, authorization:
     mockSubject = mock(Subject.class);
     principalCollection = mock(PrincipalCollection.class);
+
     final List list = new ArrayList();
     list.add("msg");
-
     when(principalCollection.asList()).thenReturn(list);
     when(mockSubject.getPrincipals()).thenReturn(principalCollection);
     setSubject(mockSubject);
 
+    // Request context:
     RequestExecutionContextImplTest.startRequest();
     ctx = RequestExecutionContext.instance();
 
