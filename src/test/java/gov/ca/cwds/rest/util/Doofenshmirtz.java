@@ -51,6 +51,7 @@ import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
@@ -197,6 +198,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
+
+    SystemCodeCache.global().getAllSystemCodes();
   }
 
   /**

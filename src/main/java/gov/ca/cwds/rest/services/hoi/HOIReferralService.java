@@ -107,8 +107,7 @@ public class HOIReferralService
   }
 
   private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
-    authorizeClients(clientIds);
-    return Arrays.asList(referralClientDao.findByClientIds(clientIds));
+    return Arrays.asList(referralClientDao.findByClientIds(authorizeClients(clientIds)));
   }
 
   /**
@@ -123,17 +122,22 @@ public class HOIReferralService
    * </p>
    * 
    * @param clientIds client keys to authorize
+   * @return list of client id's that the user is authorized to view
    */
-  private void authorizeClients(Collection<String> clientIds) {
+  private List<String> authorizeClients(Collection<String> clientIds) {
+    final List<String> ret = new ArrayList<>(clientIds.size());
     for (String clientId : clientIds) {
       try {
         authorizeClient(clientId);
+        ret.add(clientId);
       } catch (Exception e) {
         final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID %s", clientId);
         RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER,
             ErrorType.CLIENT_AUTHORIZATION_WARNING);
       }
     }
+
+    return ret;
   }
 
   private Role fetchForReporterRole(Referral referral, ReferralClient referralClient,
