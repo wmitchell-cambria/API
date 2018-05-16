@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,6 +18,9 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 
 /**
+ * Transforms the Intake race and ethnicity from the screening into a legacy supported values
+ * {@link RaceAndEthnicity} for an valid participants.
+ * 
  * @author CWDS API Team
  *
  */
@@ -23,10 +28,12 @@ public class RaceAndEthnicityTransformer {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityTransformer.class);
 
-  private static final short UNABLE_TO_DETERMINE = (short) 6351;
+  private static final short UNABLE_TO_DETERMINE = (short) 6351; // Intake calls as 'Abandoned'
 
-  class IntakeRace {
+  static class IntakeRace {
     private String race;
+
+    @JsonProperty("race_detail")
     private String raceDetail;
 
     public String getRace() {
@@ -38,17 +45,27 @@ public class RaceAndEthnicityTransformer {
     }
   }
 
-  class IntakeEthnicity {
+  static class IntakeEthnicity {
+    @JsonProperty("hispanic_latino_origin")
     private String hispanicLatinoOrigin;
-    private String ethnicityDetail;
+
+    @JsonProperty("ethnicity_detail")
+    private List<String> ethnicityDetail;
 
     public String getHispanicLatinoOrigin() {
       return hispanicLatinoOrigin;
     }
 
-    public String getEthnicityDetail() {
+    public List<String> getEthnicityDetail() {
       return ethnicityDetail;
     }
+  }
+
+  /**
+   * 
+   */
+  public RaceAndEthnicityTransformer() {
+    // no-opt
   }
 
   /**
@@ -59,7 +76,7 @@ public class RaceAndEthnicityTransformer {
   public RaceAndEthnicity transform(ParticipantIntakeApi participantsIntake,
       Map<String, IntakeLov> nsCodeToNsLovMap) {
     List<IntakeRace> intakeRace = null;
-    List<IntakeEthnicity> intakeEthnicities = null;
+    IntakeEthnicity intakeEthnicity = null;
     RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicity();
     List<Short> raceCodes = new ArrayList<>();
     List<Short> hispanicCodes = new ArrayList<>();
@@ -68,25 +85,54 @@ public class RaceAndEthnicityTransformer {
       try {
         intakeRace = mapper.readValue(participantsIntake.getRaces(),
             new TypeReference<List<IntakeRace>>() {});
+        intakeEthnicity =
+            mapper.readValue(participantsIntake.getEthnicity(), IntakeEthnicity.class);
       } catch (IOException e) {
-        LOGGER.error("Unable to parse the race and Ethnicity {}", e.getMessage());
+        LOGGER.error("Unable to parse the race and Ethnicity {}", e);
       }
-      for (IntakeRace detail : intakeRace) {
-        raceCodes.add(
-            Short.valueOf(nsCodeToNsLovMap.get(detail.getRaceDetail()).getLegacyLogicalCode()));
-      }
-      raceAndEthnicity.setRaceCode(raceCodes);
-      if (raceCodes.contains(UNABLE_TO_DETERMINE)) {
-        raceAndEthnicity.setUnableToDetermineCode("A");
-      }
+      buildRace(nsCodeToNsLovMap, intakeRace, raceAndEthnicity, raceCodes);
+      buildEthnicity(nsCodeToNsLovMap, intakeEthnicity, raceAndEthnicity, hispanicCodes);
 
-      String ethinicityCode = participantsIntake.getEthnicity().split("\"ethnicity_detail\":")[1]
-          .replaceAll("[", "").replaceAll("]", "");
-      hispanicCodes.add(Short.valueOf(nsCodeToNsLovMap.get(ethinicityCode).getLegacyLogicalCode()));
-      raceAndEthnicity.setHispanicCode(hispanicCodes);
     }
     return raceAndEthnicity;
+  }
 
+  private void buildRace(Map<String, IntakeLov> nsCodeToNsLovMap, List<IntakeRace> intakeRace,
+      RaceAndEthnicity raceAndEthnicity, List<Short> raceCodes) {
+    for (IntakeRace detail : intakeRace) {
+      if (StringUtils.isNotBlank(detail.getRaceDetail())) {
+        raceCodes
+            .add(nsCodeToNsLovMap.get(detail.getRaceDetail()).getLegacySystemCodeId().shortValue());
+      } else {
+        raceCodes.add(nsCodeToNsLovMap.get(detail.getRace()).getLegacySystemCodeId().shortValue());
+      }
+    }
+    raceAndEthnicity.setRaceCode(raceCodes);
+    if (raceCodes.contains(UNABLE_TO_DETERMINE)) {
+      raceAndEthnicity.setUnableToDetermineCode("A");
+    }
+  }
+
+  private void buildEthnicity(Map<String, IntakeLov> nsCodeToNsLovMap,
+      IntakeEthnicity intakeEthnicity, RaceAndEthnicity raceAndEthnicity,
+      List<Short> hispanicCodes) {
+    if (StringUtils.isBlank(intakeEthnicity.getHispanicLatinoOrigin())) {
+      raceAndEthnicity.setHispanicOriginCode("X");
+    } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Yes")) {
+      hispanicCodes.add(nsCodeToNsLovMap.get(intakeEthnicity.getEthnicityDetail().get(0))
+          .getLegacySystemCodeId().shortValue());
+      raceAndEthnicity.setHispanicCode(hispanicCodes);
+      raceAndEthnicity.setHispanicOriginCode("Y");
+    } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("No")) {
+      raceAndEthnicity.setHispanicOriginCode("N");
+    } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Unknown")) {
+      raceAndEthnicity.setHispanicOriginCode("U");
+    } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Abandoned")) {
+      raceAndEthnicity.setHispanicOriginCode("Z");
+      raceAndEthnicity.setHispanicUnableToDetermineCode("A");
+    } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Declined to answer")) {
+      raceAndEthnicity.setHispanicOriginCode("D");
+    }
   }
 
 }

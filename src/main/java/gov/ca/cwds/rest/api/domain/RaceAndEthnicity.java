@@ -154,6 +154,41 @@ public class RaceAndEthnicity extends ReportingDomain implements Request, Respon
   }
 
   /**
+   * @param raceCode - raceCode
+   */
+  public void setRaceCode(List<Short> raceCode) {
+    this.raceCode = raceCode;
+  }
+
+  /**
+   * @param unableToDetermineCode - unableToDetermineCode
+   */
+  public void setUnableToDetermineCode(String unableToDetermineCode) {
+    this.unableToDetermineCode = unableToDetermineCode;
+  }
+
+  /**
+   * @param hispanicCode - hispanicCode
+   */
+  public void setHispanicCode(List<Short> hispanicCode) {
+    this.hispanicCode = hispanicCode;
+  }
+
+  /**
+   * @param hispanicOriginCode - hispanicOriginCode
+   */
+  public void setHispanicOriginCode(String hispanicOriginCode) {
+    this.hispanicOriginCode = hispanicOriginCode;
+  }
+
+  /**
+   * @param hispanicUnableToDetermineCode - hispanicUnableToDetermineCode
+   */
+  public void setHispanicUnableToDetermineCode(String hispanicUnableToDetermineCode) {
+    this.hispanicUnableToDetermineCode = hispanicUnableToDetermineCode;
+  }
+
+  /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()

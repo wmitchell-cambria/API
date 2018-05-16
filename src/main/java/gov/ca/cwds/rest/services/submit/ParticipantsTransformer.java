@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.submit;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +21,11 @@ import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
  */
 public class ParticipantsTransformer {
 
+  /**
+   * @param participantsIntake - participantsIntake
+   * @param nsCodeToNsLovMap - nsCodeToNsLovMap
+   * @return the participants
+   */
   public Set<Participant> transform(Set<ParticipantIntakeApi> participantsIntake,
       Map<String, IntakeLov> nsCodeToNsLovMap) {
     Set<Participant> participants = new HashSet<>();
@@ -45,7 +49,7 @@ public class ParticipantsTransformer {
       p.getEthnicity();
       p.getRaces();
       RaceAndEthnicity raceAndEthnicity =
-          new RaceAndEthnicity(new ArrayList<Short>(), null, new ArrayList<Short>(), "X", "A");
+          new RaceAndEthnicityTransformer().transform(p, nsCodeToNsLovMap);
       String dob = DomainChef.cookDate(p.getDateOfBirth());
       String ssn = StringUtils.isNotBlank(p.getSsn()) ? p.getSsn().replaceAll("-", "") : "";
       Short farsi = 1254;
@@ -54,10 +58,10 @@ public class ParticipantsTransformer {
 
       Participant participant = new Participant(pid, p.getLegacySourceTable(), p.getLegacyId(),
           p.getLegacyDescriptor(), p.getFirstName(), p.getMiddleName(), p.getLastName(),
-          p.getNameSuffix(), gender, ssn, dob, english, farsi,
-          (long) Integer.parseInt(p.getScreeningId()), reporterConfidentialWaiver,
-          reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, p.getApproximateAge(),
-          p.getApproximateAgeUnits(), p.getRoles(), addresses, raceAndEthnicity);
+          p.getNameSuffix(), gender, ssn, dob, english, farsi, Integer.parseInt(p.getScreeningId()),
+          reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
+          sensitivityIndicator, p.getApproximateAge(), p.getApproximateAgeUnits(), p.getRoles(),
+          addresses, raceAndEthnicity);
       participants.add(participant);
     }
     return participants;
