@@ -23,6 +23,7 @@ public class ScreeningRelationshipTest {
   @Test
   public void shouldHaveAllFieldsWhenCreatingFullSimpleConstructor(){
     relationship = new ScreeningRelationship("123", "PersonLegacyId", "RelationLegacydId",
+        RELATIONSHIP_TYPE);
     assertEquals(relationship.getId(), "123");
     assertEquals(relationship.getClientId(), "PersonLegacyId");
     assertEquals(relationship.getRelativeId(), "RelationLegacydId");
