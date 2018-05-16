@@ -25,6 +25,8 @@ import gov.ca.cwds.rest.validation.ValidSystemCodeId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
+
 /**
  * {@link DomainObject} representing a CrossReport
  * 
@@ -270,9 +272,10 @@ public class CrossReport extends ReportingDomain implements Request, Response {
       gov.ca.cwds.rest.api.domain.CrossReport crossReport, String referralId, String staffId,
       String outStateLawEnforcementAddr, String lawEnforcementId, String countyId,
       Boolean outStateLawEnforcementIndicator, Boolean governmentOrgCrossRptIndicatorVar) {
+    Date informDateTime = DomainChef.uncookISO8601Timestamp(crossReport.getInformDate());
     return new CrossReport(id, crossReport.getMethod().shortValue(),
-        crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, "", "", DEFAULT_INT,
-        DEFAULT_LONG, crossReport.getInformDate(), "", "", referralId, lawEnforcementId, staffId,
+        crossReport.isFiledOutOfState(), governmentOrgCrossRptIndicatorVar, DomainChef.cookTime(informDateTime), "", DEFAULT_INT,
+        DEFAULT_LONG, DomainChef.cookDate(informDateTime), "", "", referralId, lawEnforcementId, staffId,
         "", "", outStateLawEnforcementAddr, countyId,
         StringUtils.isBlank(lawEnforcementId) ? Boolean.FALSE : Boolean.TRUE,
         outStateLawEnforcementIndicator, Boolean.FALSE);
