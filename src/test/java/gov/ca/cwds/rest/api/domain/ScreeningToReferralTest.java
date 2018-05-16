@@ -55,6 +55,7 @@ public class ScreeningToReferralTest {
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRALS + "/";;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   public static final String SACRAMENTO_COUNTY_CODE = "34";
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   private static final ScreeningToReferralResource mockedScreeningToReferralResource =
       mock(ScreeningToReferralResource.class);
@@ -75,8 +76,6 @@ public class ScreeningToReferralTest {
 
   Short communicationMethod = 409;
   String currentLocationOfChildren = "current location of children";
-
-  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   private Short responseTime = (short) 1520;
 
@@ -169,7 +168,7 @@ public class ScreeningToReferralTest {
         .createScreeningToReferral());
 
     String serialized = MAPPER.writeValueAsString(
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validWithSafetyAlert.json"),
+        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/validWithSafetyAlert.json"),
             ScreeningToReferral.class));
     assertThat(serialized, is(expected));  
   }
@@ -217,6 +216,18 @@ public class ScreeningToReferralTest {
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
 
+  @Test
+  public void shouldPassWithSafetyAlerts() throws Exception {
+    ScreeningToReferral screening = MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/validWithWorkerSafety.json"),  ScreeningToReferral.class);
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
+    messageBuilder.addDomainValidationError(validator.validate(screening));
+    List<ErrorMessage> validationErrors = messageBuilder.getMessages();
+    for (ErrorMessage message : validationErrors) {
+      System.out.println(message.getMessage());
+    }
+    assertThat(messageBuilder.getMessages().isEmpty(), is(true));
+    
+  }
   @Test
   public void shouldPassWithMissingSafetyAlerts() throws Exception {
     ScreeningToReferral toValidate =
