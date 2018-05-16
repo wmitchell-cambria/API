@@ -5,9 +5,11 @@ import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 
 import gov.ca.cwds.rest.util.FerbDateUtils;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -154,6 +156,9 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
   private LegacyDescriptor legacyDescriptor;
+
+  @JsonProperty("csec")
+  private List<Csec> csecs = new ArrayList<>();
 
   /**
    * empty constructor
@@ -555,6 +560,14 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   public Boolean isSensitive() {
     return sensitive;
+  }
+
+  public List<Csec> getCsecs() {
+    return csecs;
+  }
+
+  public void setCsecs(List<Csec> csecs) {
+    this.csecs = csecs;
   }
 
   /**
