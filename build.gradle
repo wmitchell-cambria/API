@@ -32,7 +32,7 @@ applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/works
 project.ext {
     apiVersion = '0.7.1'
     coreApiVersion = '1.6.4_758-RC'
-    cwdsModelVersion = '0.7.1_542-RC'
+    cwdsModelVersion = '0.7.1_551-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
     dropwizardFlywayVersion = '1.0.0-1'
@@ -270,9 +270,18 @@ run {
 
 jacocoTestReport {
   reports {
-      xml.enabled false
-      csv.enabled false
-      html.destination "${buildDir}/jacocoHtml"
+    xml.enabled false
+    csv.enabled false
+    html.destination "${buildDir}/jacocoHtml"
+    afterEvaluate {
+      classDirectories = files(classDirectories.files.collect {
+        fileTree(dir: it,
+          exclude: [
+            'gov/ca/cwds/rest/services/mapper/**'
+          ]
+        )
+      })
+    }
   }
 }
 
