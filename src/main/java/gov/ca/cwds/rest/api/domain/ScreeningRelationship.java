@@ -122,7 +122,7 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     builder.append("\tupdatedAt:");
     builder.append(updatedAt);
     builder.append(",\n");
-    builder.append("}");
+    builder.append('}');
     return builder.toString();
   }
 }
