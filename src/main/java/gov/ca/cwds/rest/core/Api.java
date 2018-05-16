@@ -123,6 +123,11 @@ public final class Api {
   public static final String RESOURCE_STAFF_PERSONS = "staffpersons";
 
   /**
+   * A {@code String} constant representing {@value #SCREENING_RELATIONSHIPS} API.
+   */
+  public static final String SCREENING_RELATIONSHIPS = "screening_relationships";
+
+  /**
    * Identifer for CMS DB2 datasources.
    */
   public static final String DATASOURCE_CMS = "cms";

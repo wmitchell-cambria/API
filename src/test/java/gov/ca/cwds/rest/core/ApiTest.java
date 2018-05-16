@@ -9,4 +9,8 @@ public class ApiTest {
     public void shouldContainResourceClientServiceEndPointName(){
         assertEquals(Api.RESOURCE_CLIENT, "clients");
     }
+  @Test
+  public void shouldContainScreeningRelationshipServiceEndPointName(){
+    assertEquals(Api.SCREENING_RELATIONSHIPS, "screening_relationships");
+  }
 }

@@ -191,10 +191,12 @@ public class CrossReportTest {
     Boolean outStateLawEnforcementIndicator = true;
     String countyId = "34";
 
-    String informDate = "informDate";
+    String informDateTime = "1992-03-05T05:45:34.987Z";
+    String informDate = "1992-03-05";
+    String informTime = "05:45:34";
     gov.ca.cwds.rest.api.domain.CrossReport nsCrossReport =
         new gov.ca.cwds.rest.api.domain.CrossReport(id, "legacy_source_table", "legacy_id",
-            filedOutOfStateIndicator, 2095, informDate, countyId, Sets.newHashSet());
+            filedOutOfStateIndicator, 2095, informDateTime, countyId, Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
         staffId, outStateLawEnforcementAddr, lawEnforcementId, countyId,
@@ -202,7 +204,9 @@ public class CrossReportTest {
     assertEquals("Expected id field to be initialized with values", id,
         cmsCrossReport.getThirdId());
     assertEquals("Expected InformDate field to be initialized with values",
-        nsCrossReport.getInformDate(), cmsCrossReport.getInformDate());
+            informDate, cmsCrossReport.getInformDate());
+    assertEquals("Expected InformDate field to be initialized with values",
+            informTime, cmsCrossReport.getInformTime());
     assertEquals("Expected referralId field to be initialized with values", referralId,
         cmsCrossReport.getReferralId());
     assertEquals("Expected staffId field to be initialized with values", staffId,
@@ -227,17 +231,18 @@ public class CrossReportTest {
     Boolean outStateLawEnforcementIndicator = true;
     String countyId = "1068";
 
-    String informDate = "informDate";
+    String informDateTime = "1992-03-05T05:45:34.987Z";
+    String informTime = "05:45:34";
     gov.ca.cwds.rest.api.domain.CrossReport nsCrossReport =
         new gov.ca.cwds.rest.api.domain.CrossReport(id, "legacy_source_table", "legacy_id",
-            filedOutOfStateIndicator, 2095, informDate, countyId, Sets.newHashSet());
+            filedOutOfStateIndicator, 2095, informDateTime, countyId, Sets.newHashSet());
 
     CrossReport cmsCrossReport = CrossReport.createWithDefaults(id, nsCrossReport, referralId,
         staffId, outStateLawEnforcementAddr, lawEnforcementId, countyId,
         outStateLawEnforcementIndicator, governmentOrgCrossRptIndicatorVar);
      assertEquals("Expected  field to be initialized with default values", false,
         cmsCrossReport.getGovernmentOrgCrossRptIndicatorVar());
-    assertEquals("Expected  field to be initialized with default values", "",
+    assertEquals("Expected  field to be initialized with default values", informTime,
         cmsCrossReport.getInformTime());
     assertEquals("Expected  field to be initialized with default values", "",
         cmsCrossReport.getRecipientBadgeNumber());
