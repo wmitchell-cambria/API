@@ -63,7 +63,7 @@
       <column name="location_type"/>
       <column name="communication_method"/>
       <column name="name"/>
-      <column name="started_at" valueDate="2018-04-16 14:43:50.855692"/>
+      <column name="started_at"/>
       <column name="screening_decision"/>
       <column name="incident_county" value="99"/>
       <column name="report_narrative"/>
