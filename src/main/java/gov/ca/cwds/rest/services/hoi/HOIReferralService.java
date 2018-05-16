@@ -107,7 +107,10 @@ public class HOIReferralService
   }
 
   private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
-    return Arrays.asList(referralClientDao.findByClientIds(authorizeClients(clientIds)));
+    final List<String> authorizedClientIds = authorizeClients(clientIds);
+    return authorizedClientIds != null && !authorizedClientIds.isEmpty()
+        ? Arrays.asList(referralClientDao.findByClientIds(authorizedClientIds))
+        : new ArrayList<>();
   }
 
   /**
