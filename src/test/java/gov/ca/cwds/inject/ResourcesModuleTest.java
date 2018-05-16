@@ -3,6 +3,7 @@ package gov.ca.cwds.inject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,6 +72,12 @@ public class ResourcesModuleTest {
   public void screeningServiceBackedResourceShouldRetrieveServiceFromInjector() {
     resourceModule.screeningServiceBackedResource(injector);
     verify(injector).getInstance(ScreeningService.class);
+  }
+
+  @Test
+  public void screeningRelationshipServiceBackedResourceShouldRetrieveServiceFromInjector() {
+    resourceModule.screeningRelationshipServiceBackedResource(injector);
+    verify(injector).getInstance(ScreeningRelationshipService.class);
   }
 
   @Test

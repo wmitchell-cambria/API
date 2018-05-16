@@ -64,7 +64,7 @@ public class CrossReport extends ReportingDomain implements Request, Response {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
   @Date
   @JsonProperty("inform_date")
-  @ApiModelProperty(required = true, value = "yyyy-MM-dd", example = "2001-09-13")
+  @ApiModelProperty(required = true, value = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", example = "2001-09-13T05:04:34.432Z")
   private String informDate;
 
   @JsonProperty("county_id")
