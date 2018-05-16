@@ -208,6 +208,7 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.Addresses.class,
       gov.ca.cwds.data.persistence.ns.Allegation.class,
       gov.ca.cwds.data.persistence.ns.AllegationEntity.class,
+      gov.ca.cwds.data.persistence.ns.CsecEntity.class,
       gov.ca.cwds.data.persistence.ns.CrossReportEntity.class,
       gov.ca.cwds.data.persistence.ns.GovernmentAgencyEntity.class,
       gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
