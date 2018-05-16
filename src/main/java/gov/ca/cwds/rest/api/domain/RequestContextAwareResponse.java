@@ -24,9 +24,7 @@ public interface RequestContextAwareResponse extends Response {
   static List<ErrorMessage> getRequestContextMessages() {
     final Optional<RequestExecutionContext> ctx =
         Optional.<RequestExecutionContext>ofNullable(RequestExecutionContext.instance());
-    final List<ErrorMessage> messages =
-        ctx.isPresent() ? ctx.get().getMessageBuilder().getMessages() : null;
-    return messages;
+    return ctx.isPresent() ? ctx.get().getMessageBuilder().getMessages() : null;
   }
 
   @Override
