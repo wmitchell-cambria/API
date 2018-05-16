@@ -511,7 +511,8 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     final List<ErrorMessage> errors =
         RequestExecutionContext.instance().getMessageBuilder().getMessages();
     System.out.println(errors);
-    assertThat("Expected authorization errors!!", response.hasMessages());
+    assertThat("Expected authorization errors!!",
+        response.hasMessages() && !response.getMessages().isEmpty());
   }
 
 }
