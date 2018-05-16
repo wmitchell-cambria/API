@@ -115,6 +115,14 @@
           "number": "9660007290"
         }
       ],
+      "csec": [
+        {
+          "id": 1,
+          "csec_code_id": "519",
+          "start_date": "2018-03-30",
+          "end_date": "2018-03-31"
+        }
+      ],
       "sealed": false,
       "sensitive": false,
       "legacy_descriptor": {

@@ -10,6 +10,7 @@ import gov.ca.cwds.data.ns.ParticipantPhoneNumbersDao;
 import gov.ca.cwds.data.ns.PhoneNumbersDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.Allegation;
+import gov.ca.cwds.data.persistence.ns.CsecEntity;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.data.persistence.ns.ParticipantAddresses;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
@@ -20,6 +21,7 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
+import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +59,8 @@ public class ParticipantIntakeApiService implements CrudsService {
   private PhoneNumbersDao phoneNumbersDao;
   @Inject
   private ParticipantPhoneNumbersDao participantPhoneNumbersDao;
+  @Inject
+  private CsecMapper csecMapper;
 
 
   /**
@@ -72,6 +76,8 @@ public class ParticipantIntakeApiService implements CrudsService {
       return null;
     }
     ParticipantIntakeApi participantIntakeApi = new ParticipantIntakeApi(participantEntity);
+
+    participantIntakeApi.setCsecs(csecMapper.toDomain(participantEntity.getCsecs()));
 
     //Get it's legacy descriptor
     LegacyDescriptorEntity legacyDescriptorEntity = legacyDescriptorDao
@@ -149,6 +155,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     ParticipantEntity participantEntityManaged = participantDao.create(
         new ParticipantEntity(participantIntakeApi));
 
+    linkCsecsToParticipants(participantIntakeApi, participantEntityManaged);
+
     //Create Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet = createParticipantAddresses(
         participantIntakeApi.getAddresses(),
@@ -162,6 +170,7 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantEntityManaged);
     participantIntakeApiPosted.addAddresses(addressIntakeApiSet);
     participantIntakeApiPosted.addPhoneNumbers(phoneNumberSet);
+    participantIntakeApiPosted.setCsecs(csecMapper.toDomain(participantEntityManaged.getCsecs()));
 
     //Save legacy descriptor entity
     if (participantIntakeApi.getLegacyDescriptor() != null) {
@@ -195,6 +204,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     participantEntityManaged = participantDao
         .update(participantEntityManaged.updateFrom(participantIntakeApi));
 
+    linkCsecsToParticipants(participantIntakeApi, participantEntityManaged);
+
     //Update Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet = updateParticipantAddresses(
         participantIntakeApi.getAddresses(),
@@ -208,6 +219,7 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantEntityManaged);
     participantIntakeApiPosted.addAddresses(addressIntakeApiSet);
     participantIntakeApiPosted.addPhoneNumbers(phoneNumberSet);
+    participantIntakeApiPosted.setCsecs(csecMapper.toDomain(participantEntityManaged.getCsecs()));
     return participantIntakeApiPosted;
   }
 
@@ -253,6 +265,15 @@ public class ParticipantIntakeApiService implements CrudsService {
         participantAddresses -> participantAddressesDao.delete(participantAddresses.getId()));
 
     return addressIntakeApiSetPosted;
+  }
+
+  private void linkCsecsToParticipants(ParticipantIntakeApi participantIntakeApi, ParticipantEntity participantEntityManaged) {
+    String participantId = participantEntityManaged.getId();
+    List<CsecEntity> csecs = csecMapper.toPersistence(participantIntakeApi.getCsecs());
+    for (CsecEntity csec : csecs) {
+      csec.setParticipantId(participantId);
+    }
+    participantEntityManaged.setCsecs(csecs);
   }
 
   public List<ParticipantEntity> getByScreeningId(String screeningId) {
@@ -359,4 +380,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     return phoneNumberSetPosted;
   }
 
+  void setCsecMapper(CsecMapper csecMapper) {
+    this.csecMapper = csecMapper;
+  }
 }

@@ -4,9 +4,12 @@ import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_L
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -122,6 +127,11 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   @Column(name = "approximate_age_units")
   private String approximateAgeUnits;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "participant_id")
+  @OrderBy("id")
+  private List<CsecEntity> csecs = new ArrayList<>();
 
   /**
    * Default constructor
@@ -313,6 +323,14 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
+  }
+
+  public List<CsecEntity> getCsecs() {
+    return csecs;
+  }
+
+  public void setCsecs(List<CsecEntity> csecs) {
+    this.csecs = csecs;
   }
 
   public void setRoles(String[] roles) {

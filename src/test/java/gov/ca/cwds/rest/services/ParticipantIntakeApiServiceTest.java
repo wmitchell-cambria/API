@@ -28,6 +28,7 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
+import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.junit.Before;
@@ -71,6 +72,8 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   @Before
   @Override
   public void setup() throws Exception {
+    participantIntakeApiService.setCsecMapper(CsecMapper.INSTANCE);
+
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 
     MockitoAnnotations.initMocks(this);
