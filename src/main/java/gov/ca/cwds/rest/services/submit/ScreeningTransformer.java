@@ -7,9 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.Allegation;
@@ -31,43 +28,42 @@ public class ScreeningTransformer {
       String loggedInStaffCounty, Map<String, IntakeLov> nsLovMap,
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
     screening.setAssigneeStaffId(loggedInStaffId);
-    ScreeningToReferral screeningToReferral = createScreeningToReferralWithDefaults(screening,
-        loggedInStaffCounty, nsLovMap, cmsSysIdToNsLovMap);
-    printScreeningToReferral(screeningToReferral);
-    return screeningToReferral;
+    return createScreeningToReferralWithDefaults(screening, loggedInStaffCounty, nsLovMap,
+        cmsSysIdToNsLovMap);
   }
 
-  private ScreeningToReferral createScreeningToReferralWithDefaults(Screening s,
+  private ScreeningToReferral createScreeningToReferralWithDefaults(Screening screening,
       String loggedInStaffCounty, Map<String, IntakeLov> nsCodeToNsLovMap,
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
     Set<Allegation> allegations =
-        new AllegationsTransformer().transform(s.getAllegations(), nsCodeToNsLovMap);
-    Long id = (long) Integer.parseInt(s.getId());
-    String legacySourceTable = null;
-    String referralId = s.getReferralId();
-    String endedAt = DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(s.getEndedAt()));
-    String incidentCounty = s.getIncidentCounty();
-    String incidentDate = s.getIncidentDate();
-    String locationType = s.getLocationType();
-    String communicationMethod = s.getCommunicationMethod();
+        new AllegationsTransformer().transform(screening.getAllegations(), nsCodeToNsLovMap);
+    Long id = (long) Integer.parseInt(screening.getId());
+    String legacySourceTable = "";
+    String referralId = screening.getReferralId();
+    String endedAt =
+        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt()));
+    String incidentCounty = screening.getIncidentCounty();
+    String incidentDate = screening.getIncidentDate();
+    String locationType = screening.getLocationType();
+    String communicationMethod = screening.getCommunicationMethod();
     Short communicationMethodSysId = StringUtils.isNotBlank(communicationMethod)
         ? nsCodeToNsLovMap.get(communicationMethod).getLegacySystemCodeId().shortValue()
         : null;
     String currentLocationOfChildren = null; // do not see in intake-api
-    String name = s.getName();
-    String reportNarrative = s.getReportNarrative();
-    String reference = s.getReference();
-    String responseTime = s.getScreeningDecisionDetail();
+    String name = screening.getName();
+    String reportNarrative = screening.getReportNarrative();
+    String reference = screening.getReference();
+    String responseTime = screening.getScreeningDecisionDetail();
     Short responseTimeSysId = StringUtils.isNotBlank(responseTime)
         ? nsCodeToNsLovMap.get(responseTime).getLegacySystemCodeId().shortValue()
         : null;
     String startedAt =
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(s.getStartedAt()));
-    String assignee = s.getAssignee();
-    String assigneeStaffId = s.getAssigneeStaffId();
-    String additionalInformation = s.getAdditionalInformation();
-    String screeningDecision = s.getScreeningDecision();
-    String screeningDecisionDetail = s.getScreeningDecisionDetail();
+        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt()));
+    String assignee = screening.getAssignee();
+    String assigneeStaffId = screening.getAssigneeStaffId();
+    String additionalInformation = screening.getAdditionalInformation();
+    String screeningDecision = screening.getScreeningDecision();
+    String screeningDecisionDetail = screening.getScreeningDecisionDetail();
     Short approvalStatus =
         SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
     // this is defaulted in intake-api,see referral_representer
@@ -75,16 +71,20 @@ public class ScreeningTransformer {
     Boolean filedWithLawEnforcement = false;
     // this is defaulted in intake-api, see referral_representer
     String responsibleAgency = "C"; // this is defaulted in intake-api, see referral_representer
-    String limitedAccessCode = setLimitedAccessCode(s.getAccessRestrictions());
-    String limitedAccessDescription = s.getRestrictionsRationale();
+    String limitedAccessCode = setLimitedAccessCode(screening.getAccessRestrictions());
+    String limitedAccessDescription = screening.getRestrictionsRationale();
     String limitedAccessAgency = loggedInStaffCounty;
-    Date limitedAccessDate = new Date();// dateToday
-    Address address = new AddressTransformer().transform(s.getIncidentAddress(), nsCodeToNsLovMap);
+    Date limitedAccessDate = null;// dateToday
+    Address address = (screening.getIncidentAddress() != null)
+        ? new AddressTransformer().transform(screening.getIncidentAddress(), nsCodeToNsLovMap)
+        : null;
     Set<Participant> participants =
-        new ParticipantsTransformer().transform(s.getParticipantIntakeApis(), nsCodeToNsLovMap);
+        (screening.getParticipantIntakeApis() != null) ? new ParticipantsTransformer()
+            .transform(screening.getParticipantIntakeApis(), nsCodeToNsLovMap) : null;
 
-    Set<CrossReport> crossReports = new CrossReportsTransformer().transform(s.getCrossReports(),
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    Set<CrossReport> crossReports =
+        (screening.getCrossReports() != null) ? new CrossReportsTransformer()
+            .transform(screening.getCrossReports(), nsCodeToNsLovMap, cmsSysIdToNsLovMap) : null;
 
     Set<String> alerts = new HashSet<>(); // Need to map this field
     String alertInformation = null; // Need to map this field
@@ -107,20 +107,6 @@ public class ScreeningTransformer {
       }
     }
     return "N";
-  }
-
-  private void printScreeningToReferral(ScreeningToReferral screeningToReferral) {
-    System.out.println("SCREENING TO REFERRAL");
-    String json;
-    try {
-      json = ObjectMapperUtils.createObjectMapper().writeValueAsString(screeningToReferral);
-      System.out.println(json);
-    } catch (JsonProcessingException e) {
-      System.out.println("no json created ");
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
   }
 
 }
