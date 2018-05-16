@@ -506,12 +506,12 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
 
     hoiService = new HOIReferralService(clientDao, referralClientDao, authorizationService);
     final HOIReferralService spyTarget = spy(hoiService);
-    spyTarget.handleFind(request);
+    final HOIReferralResponse response = spyTarget.handleFind(request);
 
     final List<ErrorMessage> errors =
         RequestExecutionContext.instance().getMessageBuilder().getMessages();
     System.out.println(errors);
-    assertThat("No authorization errors found", errors.size() > 0);
+    assertThat("Expected authorization errors!!", response.hasMessages());
   }
 
 }
