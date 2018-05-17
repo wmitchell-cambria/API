@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AllegationDao;
+import gov.ca.cwds.data.ns.CsecDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.ns.ParticipantAddressesDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
@@ -18,11 +19,13 @@ import gov.ca.cwds.data.persistence.ns.ParticipantPhoneNumbers;
 import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
+import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,6 +62,8 @@ public class ParticipantIntakeApiService implements CrudsService {
   private PhoneNumbersDao phoneNumbersDao;
   @Inject
   private ParticipantPhoneNumbersDao participantPhoneNumbersDao;
+  @Inject
+  private CsecDao csecDao;
   @Inject
   private CsecMapper csecMapper;
 
@@ -155,7 +160,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     ParticipantEntity participantEntityManaged = participantDao.create(
         new ParticipantEntity(participantIntakeApi));
 
-    linkCsecsToParticipants(participantIntakeApi, participantEntityManaged);
+    createOrUpdateCsecs(participantIntakeApi, participantEntityManaged);
 
     //Create Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet = createParticipantAddresses(
@@ -201,10 +206,11 @@ public class ParticipantIntakeApiService implements CrudsService {
       LOGGER.info("participant not found : {}", participantIntakeApi);
       throw new ServiceException(new EntityNotFoundException("Entity ParticipantEntity with id = [" + primaryKey + "] was not found."));
     }
+
+    createOrUpdateCsecs(participantIntakeApi, participantEntityManaged);
+
     participantEntityManaged = participantDao
         .update(participantEntityManaged.updateFrom(participantIntakeApi));
-
-    linkCsecsToParticipants(participantIntakeApi, participantEntityManaged);
 
     //Update Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet = updateParticipantAddresses(
@@ -267,13 +273,26 @@ public class ParticipantIntakeApiService implements CrudsService {
     return addressIntakeApiSetPosted;
   }
 
-  private void linkCsecsToParticipants(ParticipantIntakeApi participantIntakeApi, ParticipantEntity participantEntityManaged) {
-    String participantId = participantEntityManaged.getId();
-    List<CsecEntity> csecs = csecMapper.toPersistence(participantIntakeApi.getCsecs());
-    for (CsecEntity csec : csecs) {
-      csec.setParticipantId(participantId);
+  private void createOrUpdateCsecs(ParticipantIntakeApi participantIntakeApi, ParticipantEntity participantEntityManaged) {
+    List<CsecEntity> csecEnities = new ArrayList<>(participantIntakeApi.getCsecs().size());
+    for (Csec csec : participantIntakeApi.getCsecs()) {
+      String participantId = participantEntityManaged.getId();
+      CsecEntity csecEntity = csecMapper.map(csec);
+      csecEntity.setParticipantId(participantId);
+      if (csecEntity.getId() == null) {
+        CsecEntity createdCsecEntity = csecDao.create(csecEntity);
+        csec.setId(String.valueOf(createdCsecEntity.getId()));
+        csecEnities.add(createdCsecEntity);
+      } else {
+        CsecEntity managedCsecEntity = csecDao.find(csecEntity.getId());
+        if (managedCsecEntity == null) {
+          throw new ServiceException("Cannot update CSEC that doesn't exist. id = " + csecEntity.getId());
+        }
+        csecDao.getSessionFactory().getCurrentSession().detach(managedCsecEntity);
+        csecEnities.add(csecDao.update(csecEntity));
+      }
     }
-    participantEntityManaged.setCsecs(csecs);
+    participantEntityManaged.setCsecs(csecEnities);
   }
 
   public List<ParticipantEntity> getByScreeningId(String screeningId) {
