@@ -60,6 +60,7 @@ import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.dropwizard.hibernate.UnitOfWorkAspect;
@@ -193,6 +194,7 @@ public class ServicesModule extends AbstractModule {
     bind(ReferralService.class);
     bind(ReporterService.class);
     bind(ScreeningService.class);
+    bind(ScreeningSubmitService.class);
     bind(ScreeningToReferral.class);
     bind(StaffPersonIdRetriever.class);
     bind(StaffPersonService.class);

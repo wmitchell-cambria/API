@@ -77,6 +77,7 @@ import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
 import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
+import gov.ca.cwds.rest.resources.submit.ScreeningSubmitResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
@@ -119,6 +120,7 @@ import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
+import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 
 
 /**
@@ -143,6 +145,7 @@ public class ResourcesModule extends AbstractModule {
     bind(ParticipantIntakeApiResource.class);
     bind(PersonResource.class);
     bind(ScreeningResource.class);
+    bind(ScreeningSubmitResource.class);
     bind(ScreeningIntakeResource.class);
     bind(ScreeningDashboardResource.class);
     bind(CmsDocReferralClientResource.class);
@@ -211,7 +214,14 @@ public class ResourcesModule extends AbstractModule {
   @Provides
   @ScreeningRelationshipServiceBackedResource
   public ResourceDelegate screeningRelationshipServiceBackedResource(Injector injector) {
-    return new ServiceBackedResourceDelegate(injector.getInstance(ScreeningRelationshipService.class));
+    return new ServiceBackedResourceDelegate(
+        injector.getInstance(ScreeningRelationshipService.class));
+  }
+
+  @Provides
+  @ScreeningSubmitServiceBackedResource
+  public ResourceDelegate screeningSubmitServiceBackedResource(Injector injector) {
+    return new ServiceBackedResourceDelegate(injector.getInstance(ScreeningSubmitService.class));
   }
 
   @Provides
@@ -376,7 +386,8 @@ public class ResourcesModule extends AbstractModule {
   @Provides
   @ParticipantIntakeApiServiceBackedResource
   public ResourceDelegate participantIntakeApiServiceBackedResource(Injector injector) {
-    return new ServiceBackedResourceDelegate(injector.getInstance(ParticipantIntakeApiService.class));
+    return new ServiceBackedResourceDelegate(
+        injector.getInstance(ParticipantIntakeApiService.class));
   }
 
   @Provides
