@@ -49,7 +49,8 @@ public class ParticipantIntakeApiResourceBuilder {
   public ParticipantIntakeApi build() {
     return new ParticipantIntakeApi(id, legacySourceTable, clientId, legacyDescriptor, firstName,
         middleName, lastName, nameSuffix, gender, approximateAge, approximateAgeUnits, ssn,
-        dateOfBirth, languages, screeningId, roles, addresses, phoneNumbers, sealed, sensitive);
+        dateOfBirth, languages, races, ethnicity, screeningId, roles, addresses, phoneNumbers,
+        sealed, sensitive);
   }
 
   /**

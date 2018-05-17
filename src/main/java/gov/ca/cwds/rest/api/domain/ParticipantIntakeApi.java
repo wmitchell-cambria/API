@@ -185,6 +185,8 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
    * @param dateOfBirth date of birth
    * @param languages - languages spoken
    * @param ssn The social security number
+   * @param races the races
+   * @param ethnicity the ethnicity
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
    * @param phoneNumbers take a guess
@@ -195,9 +197,9 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   public ParticipantIntakeApi(String id, String legacySourceTable, String clientId,
       LegacyDescriptor legacyDescriptor, String firstName, String middleName, String lastName,
       String nameSuffix, String gender, String approximateAge, String approximateAgeUnits,
-      String ssn, Date dateOfBirth, List<String> languages, String screeningId, Set<String> roles,
-      Set<AddressIntakeApi> addresses, Set<PhoneNumber> phoneNumbers, Boolean sealed,
-      Boolean sensitive) {
+      String ssn, Date dateOfBirth, List<String> languages, String races, String ethnicity,
+      String screeningId, Set<String> roles, Set<AddressIntakeApi> addresses,
+      Set<PhoneNumber> phoneNumbers, Boolean sealed, Boolean sensitive) {
     super();
     this.id = id;
     this.firstName = firstName;
@@ -211,6 +213,8 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
     this.approximateAgeUnits = approximateAgeUnits;
     this.roles = roles;
     this.languages = languages;
+    this.races = races;
+    this.ethnicity = ethnicity;
     this.legacyId = clientId;
     this.legacySourceTable = legacySourceTable;
     this.legacyDescriptor = legacyDescriptor;

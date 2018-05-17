@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * Transforms the Intake race and ethnicity from the screening into a legacy supported values
@@ -83,13 +84,11 @@ public class RaceAndEthnicityTransformer {
     ObjectMapper mapper = new ObjectMapper();
     if (participantsIntake != null) {
       try {
-        intakeRace = StringUtils.isNotBlank(participantsIntake.getRaces()) ? mapper.readValue(
-            participantsIntake.getRaces(), new TypeReference<List<IntakeRace>>() {}) : intakeRace;
-        intakeEthnicity = StringUtils.isNotBlank(participantsIntake.getEthnicity())
-            ? mapper.readValue(participantsIntake.getEthnicity(), IntakeEthnicity.class)
-            : intakeEthnicity;
+        intakeRace = raceJsonBuilder(participantsIntake, intakeRace, mapper);
+        intakeEthnicity = ethnicityJsonBuilder(participantsIntake, intakeEthnicity, mapper);
       } catch (IOException e) {
-        LOGGER.error("Unable to parse the race and Ethnicity {}", e);
+        LOGGER.error("Unable to parse the race and Ethnicity", e);
+        throw new ServiceException(e);
       }
       if (intakeRace != null) {
         buildRace(nsCodeToNsLovMap, intakeRace, raceAndEthnicity, raceCodes);
@@ -97,9 +96,25 @@ public class RaceAndEthnicityTransformer {
       if (intakeEthnicity != null) {
         buildEthnicity(nsCodeToNsLovMap, intakeEthnicity, raceAndEthnicity, hispanicCodes);
       }
-
     }
     return raceAndEthnicity;
+  }
+
+  private List<IntakeRace> raceJsonBuilder(ParticipantIntakeApi participantsIntake,
+      List<IntakeRace> intakeRace, ObjectMapper mapper) throws IOException {
+    if (StringUtils.isNotBlank(participantsIntake.getRaces())) {
+      intakeRace =
+          mapper.readValue(participantsIntake.getRaces(), new TypeReference<List<IntakeRace>>() {});
+    }
+    return intakeRace;
+  }
+
+  private IntakeEthnicity ethnicityJsonBuilder(ParticipantIntakeApi participantsIntake,
+      IntakeEthnicity intakeEthnicity, ObjectMapper mapper) throws IOException {
+    if (StringUtils.isNotBlank(participantsIntake.getEthnicity())) {
+      intakeEthnicity = mapper.readValue(participantsIntake.getEthnicity(), IntakeEthnicity.class);
+    }
+    return intakeEthnicity;
   }
 
   private void buildRace(Map<String, IntakeLov> nsCodeToNsLovMap, List<IntakeRace> intakeRace,
