@@ -101,9 +101,9 @@ public class ScreeningTransformer {
 
   private String setLimitedAccessCode(String accessRestrictions) {
     if (accessRestrictions != null) {
-      if (accessRestrictions.equalsIgnoreCase("sensitive")) {
+      if (("sensitive").equalsIgnoreCase(accessRestrictions)) {
         return "S";
-      } else if (accessRestrictions.equalsIgnoreCase("sealed")) {
+      } else if (("sealed").equalsIgnoreCase(accessRestrictions)) {
         return "R";
       }
     }

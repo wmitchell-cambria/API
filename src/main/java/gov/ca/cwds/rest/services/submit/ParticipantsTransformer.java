@@ -46,19 +46,15 @@ public class ParticipantsTransformer {
       addresses = Collections.unmodifiableSet(addresses);
       String gender = getGender(p.getGender());
       Long pid = Long.valueOf(p.getId());
-      p.getRaces();
       p.getSensitive();
       p.getSealed();
       String sensitivityIndicator = "N";
-      p.getEthnicity();
-      p.getRaces();
       RaceAndEthnicity raceAndEthnicity =
           raceAndEthnicityTransformer.transform(p, nsCodeToNsLovMap);
       String dob = DomainChef.cookDate(p.getDateOfBirth());
       String ssn = StringUtils.isNotBlank(p.getSsn()) ? p.getSsn().replaceAll("-", "") : "";
       Short russian = 1271;
       Short english = 1253;
-
 
       Participant participant = new Participant(pid, p.getLegacySourceTable(), p.getLegacyId(),
           p.getLegacyDescriptor(), p.getFirstName(), p.getMiddleName(), p.getLastName(),
@@ -73,11 +69,11 @@ public class ParticipantsTransformer {
 
   private String getGender(String gender) {
     if (StringUtils.isNotBlank(gender)) {
-      if (gender.equalsIgnoreCase("male")) {
+      if (("male").equalsIgnoreCase(gender)) {
         return "M";
-      } else if (gender.equalsIgnoreCase("female")) {
+      } else if (("female").equalsIgnoreCase(gender)) {
         return "F";
-      } else if (gender.equalsIgnoreCase("intersex")) {
+      } else if (("intersex").equalsIgnoreCase(gender)) {
         return "I";
       }
       return "U";
