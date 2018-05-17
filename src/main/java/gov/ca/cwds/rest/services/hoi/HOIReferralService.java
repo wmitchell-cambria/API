@@ -40,6 +40,8 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 public class HOIReferralService extends
     SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> implements HOIBaseService {
 
+  private static final long serialVersionUID = 1L;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferralService.class);
 
   private ClientDao clientDao;

@@ -105,13 +105,13 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
     final List<String> authorizedClients = authorizeClients(clientIds);
     final HOICasesData hcd = new HOICasesData(authorizedClients);
-    loadRelationshipsByClients(clientIds, hcd);
+    loadRelationshipsByClients(authorizedClients, hcd);
     hcd.getAllClientIds().addAll(getClientIdsFromRelations(hcd));
     loadRelationshipsByClients(hcd.getAllClientIds(), hcd);
     loadClients(hcd);
     loadCmsCases(hcd);
 
-    List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
+    final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
     for (CmsCase cmsCase : hcd.getCmsCases().values()) {
       cases.add(constructHOICase(cmsCase, hcd));
     }

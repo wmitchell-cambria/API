@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -41,21 +41,27 @@ import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCaseEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
-import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
+import gov.ca.cwds.utils.JsonUtils;
 
 /**
  * @author CWDS API Team
  */
-public class HOICaseServiceTest {
+public class HOICaseServiceTest extends Doofenshmirtz<Client> {
 
   private CaseDao caseDao;
+  private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private StaffPersonDao staffPersonDao;
+
   private HOICaseService target;
+  private AuthorizationService authorizationService;
   private HOIRequest request;
 
   /**
@@ -71,15 +77,17 @@ public class HOICaseServiceTest {
    *
    * @throws Exception - Exception
    */
+  @Override
   @Before
-  public void setUp() {
-    new TestingRequestExecutionContext("02f");
-    SystemCodeCache.global().getAllSystemCodes();
+  public void setup() throws Exception {
+    super.setup();
+
     caseDao = mock(CaseDao.class);
+    clientDao = mock(ClientDao.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
+    staffPersonDao = mock(StaffPersonDao.class);
 
-    ClientDao clientDao = mock(ClientDao.class);
-
-    Map<String, Client> clientMap = new HashMap<>();
+    final Map<String, Client> clientMap = new HashMap<>();
     Client client1 = new ClientEntityBuilder().setId("FOCUS-CHILD-1").build();
     Client client2 = new ClientEntityBuilder().setId("FOCUS-CHILD-2").build();
     Client client123 = new ClientEntityBuilder().setId("CLIENT-123").build();
@@ -88,15 +96,11 @@ public class HOICaseServiceTest {
     clientMap.put(client123.getId(), client123);
     when(clientDao.findClientsByIds(any(Set.class))).thenReturn(clientMap);
 
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
-
-    StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
-    Map<String, StaffPerson> staffPersons = new HashMap<>();
+    final Map<String, StaffPerson> staffPersons = new HashMap<>();
     staffPersons.put("q1p", new StaffPersonEntityBuilder().build());
     when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersons);
 
-    AuthorizationService authorizationService = new AuthorizationService();
-
+    authorizationService = new AuthorizationService();
     target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, staffPersonDao,
         authorizationService);
     request = new HOIRequest();
@@ -261,11 +265,22 @@ public class HOICaseServiceTest {
     return target.handleFind(request);
   }
 
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedClient() {
-    HOICaseService spyTarget = spy(target);
-    doThrow(AuthorizationException.class).when(spyTarget).authorizeClient("CLIENT-123");
-    spyTarget.handleFind(request);
+  @Test
+  public void testUnAuthorizedClient() throws Exception {
+    authorizationService = mock(AuthorizationService.class);
+    doThrow(AuthorizationException.class).when(authorizationService)
+        .ensureClientAccessAuthorized(any(String.class));
+
+    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, staffPersonDao,
+        authorizationService);
+    final HOICaseService spyTarget = spy(target);
+    final HOICaseResponse response = spyTarget.handleFind(request);
+
+    final List<ErrorMessage> errors =
+        RequestExecutionContext.instance().getMessageBuilder().getMessages();
+    System.out.println(JsonUtils.to(errors));
+    assertThat("Expected authorization errors!!",
+        response.hasMessages() && !response.getMessages().isEmpty());
   }
 
 }

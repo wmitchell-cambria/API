@@ -17,8 +17,18 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  */
 public interface HOIBaseService extends SensitiveClientOverride {
 
+  /**
+   * Expose the authorization service for default interface methods
+   * 
+   * @return authorization service
+   */
   AuthorizationService getAuthorizationService();
 
+  /**
+   * Expose the logger for default interface methods
+   * 
+   * @return SLF4J logger
+   */
   Logger getLogger();
 
   /**
