@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.ns.CsecDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -378,6 +379,7 @@ public class DataAccessModule extends AbstractModule {
     // NS:
     bind(AddressDao.class);
     bind(AddressesDao.class);
+    bind(CsecDao.class);
     bind(XaNsAddressDao.class);
 
     bind(PersonDao.class);
