@@ -27,7 +27,7 @@ public class ScreeningRelationshipServiceTest {
     relationshipDao = mock(RelationshipDao.class);
     service = new ScreeningRelationshipService(relationshipDao);
     relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(), new Date());
-    relationship = new ScreeningRelationship("456", "XYZ", "SS2", 190, new Date(), new Date());
+    relationship = new ScreeningRelationship("456", "XYZ", "SS2", 190);
   }
 
   @Test
@@ -50,9 +50,11 @@ public class ScreeningRelationshipServiceTest {
   @Test
   public void shouldReturnSavedRelationWhenCreateIsCalled(){
     String newId = "123";
+    Date savedDate = new Date();
+    Date updatedDate = new Date();
     relationshipEntity = new Relationship(newId, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        relationship.getCreatedAt(), relationship.getUpdatedAt());
+        savedDate, updatedDate );
 
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
     ScreeningRelationship saved = (ScreeningRelationship)service.create(relationship);
@@ -61,19 +63,15 @@ public class ScreeningRelationshipServiceTest {
     assertEquals(relationshipEntity.getClientId(), saved.getClientId());
     assertEquals(relationshipEntity.getRelativeId(), saved.getRelativeId());
     assertEquals(relationshipEntity.getRelationshipType(), saved.getRelationshipType());
-    assertEquals(relationshipEntity.getCreatedAt(), saved.getCreatedAt());
-    assertEquals(relationshipEntity.getUpdatedAt(), saved.getUpdatedAt());
+    assertEquals(relationshipEntity.getCreatedAt(), savedDate);
+    assertEquals(relationshipEntity.getUpdatedAt(), updatedDate);
   }
 
   @Test
   public void shouldUpdateTimeStampsWhenCreateIsCalled(){
     Date beforeTestTime = new Date();
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
-    relationship.setCreatedAt(null);
-    relationship.setUpdatedAt(null);
     ScreeningRelationship saved = (ScreeningRelationship)service.create(relationship);
-    assertTrue(saved.getCreatedAt().getTime() >= beforeTestTime.getTime());
-    assertTrue(saved.getUpdatedAt().getTime() >= beforeTestTime.getTime());
   }
 
   @Test
