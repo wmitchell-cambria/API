@@ -4,7 +4,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.dao.investigation.SafetyAlertsDao;
 import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
@@ -19,15 +18,9 @@ public class SafetyAlertsService implements TypedCrudsService<String, SafetyAler
 
   private static SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
 
-  private SafetyAlertsDao safetyAlertsDao;
-
-  /**
-   * @param safetyAlertsDao - safety alert data access object
-   */
   @Inject
-  public SafetyAlertsService(SafetyAlertsDao safetyAlertsDao) {
+  public SafetyAlertsService() {
     super();
-    this.safetyAlertsDao = safetyAlertsDao;
   }
 
   /**
