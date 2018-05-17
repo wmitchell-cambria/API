@@ -126,14 +126,7 @@
         }
       ],
       "sealed": false,
-      "sensitive": false,
-      "legacy_descriptor": {
-        "legacy_id": "3FVrmIT00c",
-        "legacy_ui_id": "0184-6135-8268-9000038",
-        "legacy_last_updated": "1997-08-27T10:16:08.264-0700",
-        "legacy_table_name": "CLIENT_T",
-        "legacy_table_description": "Client"
-      }
+      "sensitive": false
     }
   ]
 }
