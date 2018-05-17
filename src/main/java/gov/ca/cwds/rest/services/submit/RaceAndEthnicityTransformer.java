@@ -26,12 +26,17 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  */
 public class RaceAndEthnicityTransformer {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityTransformer.class);
 
+  private static final String DECLINED_TO_ANSWER = "D";
+  private static final String UNKNOWN = "U";
+  private static final String NO = "N";
+  private static final String YES = "Y";
+  private static final String DEFAULT_VALUE = "X";
   private static final short UNABLE_TO_DETERMINE = (short) 6351; // Intake calls as 'Abandoned'
 
   static class IntakeRace {
+    @JsonProperty("race")
     private String race;
 
     @JsonProperty("race_detail")
@@ -137,21 +142,21 @@ public class RaceAndEthnicityTransformer {
       IntakeEthnicity intakeEthnicity, RaceAndEthnicity raceAndEthnicity,
       List<Short> hispanicCodes) {
     if (StringUtils.isBlank(intakeEthnicity.getHispanicLatinoOrigin())) {
-      raceAndEthnicity.setHispanicOriginCode("X");
+      raceAndEthnicity.setHispanicOriginCode(DEFAULT_VALUE);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Yes")) {
       hispanicCodes.add(nsCodeToNsLovMap.get(intakeEthnicity.getEthnicityDetail().get(0))
           .getLegacySystemCodeId().shortValue());
       raceAndEthnicity.setHispanicCode(hispanicCodes);
-      raceAndEthnicity.setHispanicOriginCode("Y");
+      raceAndEthnicity.setHispanicOriginCode(YES);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("No")) {
-      raceAndEthnicity.setHispanicOriginCode("N");
+      raceAndEthnicity.setHispanicOriginCode(NO);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Unknown")) {
-      raceAndEthnicity.setHispanicOriginCode("U");
+      raceAndEthnicity.setHispanicOriginCode(UNKNOWN);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Abandoned")) {
       raceAndEthnicity.setHispanicOriginCode("Z");
       raceAndEthnicity.setHispanicUnableToDetermineCode("A");
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Declined to answer")) {
-      raceAndEthnicity.setHispanicOriginCode("D");
+      raceAndEthnicity.setHispanicOriginCode(DECLINED_TO_ANSWER);
     }
   }
 

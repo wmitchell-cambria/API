@@ -67,8 +67,9 @@ public class ScreeningTransformer {
     Short approvalStatus =
         SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
     // this is defaulted in intake-api,see referral_representer
-    Boolean familyAwareness = false; // this is defaulted in intake-api, see referral_representer
-    Boolean filedWithLawEnforcement = false;
+    Boolean familyAwareness = Boolean.FALSE; // this is defaulted in intake-api, see
+                                             // referral_representer
+    Boolean filedWithLawEnforcement = Boolean.FALSE;
     // this is defaulted in intake-api, see referral_representer
     String responsibleAgency = "C"; // this is defaulted in intake-api, see referral_representer
     String limitedAccessCode = setLimitedAccessCode(screening.getAccessRestrictions());
