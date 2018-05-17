@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services.submit;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -31,17 +32,20 @@ public class ParticipantsTransformer {
     Set<Participant> participants = new HashSet<>();
 
 
-    Boolean clientStaffPersonAdded = false;
-    Boolean reporterConfidentialWaiver = false;
+    Boolean clientStaffPersonAdded = Boolean.FALSE;
+    Boolean reporterConfidentialWaiver = Boolean.FALSE;
     String reporterEmployerName = "Employer Name";
+    AddressTransformer addressTransformer = new AddressTransformer();
+    RaceAndEthnicityTransformer raceAndEthnicityTransformer = new RaceAndEthnicityTransformer();
 
     for (ParticipantIntakeApi p : participantsIntake) {
       Set<Address> addresses = new HashSet<>();
       for (AddressIntakeApi addressIntake : p.getAddresses()) {
-        addresses.add(new AddressTransformer().transform(addressIntake, nsCodeToNsLovMap));
+        addresses.add(addressTransformer.transform(addressIntake, nsCodeToNsLovMap));
       }
+      addresses = Collections.unmodifiableSet(addresses);
       String gender = getGender(p.getGender());
-      Long pid = Long.parseLong(p.getId());
+      Long pid = Long.valueOf(p.getId());
       p.getRaces();
       p.getSensitive();
       p.getSealed();
@@ -49,7 +53,7 @@ public class ParticipantsTransformer {
       p.getEthnicity();
       p.getRaces();
       RaceAndEthnicity raceAndEthnicity =
-          new RaceAndEthnicityTransformer().transform(p, nsCodeToNsLovMap);
+          raceAndEthnicityTransformer.transform(p, nsCodeToNsLovMap);
       String dob = DomainChef.cookDate(p.getDateOfBirth());
       String ssn = StringUtils.isNotBlank(p.getSsn()) ? p.getSsn().replaceAll("-", "") : "";
       Short russian = 1271;
