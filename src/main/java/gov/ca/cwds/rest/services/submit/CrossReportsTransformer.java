@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
+import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * Business layer object to transform NS {@link CrossReportIntake } to {@link CrossReport }
@@ -27,9 +28,11 @@ public class CrossReportsTransformer {
       String county = StringUtils.isNotBlank(nsCrossReport.getCountyId())
           ? cmsSysIdToNsLovMap.get(nsCrossReport.getCountyId()).getLegacyLogicalCode()
           : null;
+      String informDate = DomainChef
+          .cookISO8601Timestamp(DomainChef.uncookDateString(nsCrossReport.getInformDate()));
       crossReports.add(new CrossReport(nsCrossReport.getId(), nsCrossReport.getLegacySourceTable(),
-          nsCrossReport.getLegacyId(), nsCrossReport.isFiledOutOfState(), method,
-          nsCrossReport.getInformDate(), county, nsCrossReport.getAgencies()));
+          nsCrossReport.getLegacyId(), nsCrossReport.isFiledOutOfState(), method, informDate,
+          county, nsCrossReport.getAgencies()));
     }
     return crossReports;
 
