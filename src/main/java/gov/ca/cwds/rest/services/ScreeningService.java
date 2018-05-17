@@ -301,6 +301,7 @@ public class ScreeningService implements CrudsService {
     createOrUpdateAllegations(screening);
     createOrUpdateCrossReports(screening);
     createOrUpdateAddresses(screening);
+    createOrUpdateParticipants(screening);
 
     return screening;
   }

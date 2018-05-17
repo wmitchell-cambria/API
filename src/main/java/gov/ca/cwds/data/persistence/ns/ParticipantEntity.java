@@ -131,8 +131,8 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Column(name = "approximate_age_units")
   private String approximateAgeUnits;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "participant_id")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinColumn(name = "participant_id", insertable = false, updatable = false)
   @OrderBy("id")
   private List<CsecEntity> csecs = new ArrayList<>();
 
