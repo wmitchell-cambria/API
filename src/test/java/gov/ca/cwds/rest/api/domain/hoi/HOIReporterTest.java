@@ -34,104 +34,9 @@ public class HOIReporterTest {
       new LegacyDescriptor("jhdgfkhaj", "jhdgfkhaj-hohj-jkj", new DateTime(),
           LegacyTable.REPORTER.getName(), LegacyTable.REPORTER.getDescription());
 
-
   @Before
   public void setup() throws Exception {
     target = new HOIReporter();
-  }
-
-  @Test
-  public void type() throws Exception {
-    assertThat(HOIReporter.class, notNullValue());
-  }
-
-  @Test
-  public void instantiation() throws Exception {
-    HOIReporter target = new HOIReporter();
-    assertThat(target, notNullValue());
-  }
-
-  @Test
-  public void getId_Args__() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String actual = target.getId();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setId_Args__String() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String id = null;
-    target.setId(id);
-  }
-
-  @Test
-  public void getFirstName_Args__() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String actual = target.getFirstName();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setFirstName_Args__String() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String firstName = null;
-    target.setFirstName(firstName);
-  }
-
-  @Test
-  public void getLastName_Args__() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String actual = target.getLastName();
-    String expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void setLastName_Args__String() throws Exception {
-    HOIReporter target = new HOIReporter();
-    String lastName = null;
-    target.setLastName(lastName);
-  }
-
-  @Test
-  public void getLegacyDescriptor_Args__() throws Exception {
-    HOIReporter target = new HOIReporter();
-    LegacyDescriptor actual = target.getLegacyDescriptor();
-    assertThat(actual, is(notNullValue()));
-  }
-
-  @Test
-  public void setLegacyDescriptor_Args__LegacyDescriptor() throws Exception {
-    HOIReporter target = new HOIReporter();
-    LegacyDescriptor legacyDescriptor = mock(LegacyDescriptor.class);
-    target.setLegacyDescriptor(legacyDescriptor);
-  }
-
-  @Test
-  public void testEmptyConstructor() throws Exception {
-    HOIReporter empty = new HOIReporter();
-    assertNotNull(empty);
-  }
-
-
-  @Test
-  public void equalsHashCodeWork() {
-    HOIReporter empty = new HOIReporter();
-    assertThat(empty.hashCode(), is(not(0)));
-  }
-
-  @Test
-  public void constructorTest() throws Exception {
-    HOIReporter domain =
-        new HOIReporter(role, id, firstName, lastName, nameSuffix, legacyDescriptor);
-    assertThat(domain.getId(), is(equalTo(id)));
-    assertThat(domain.getFirstName(), is(equalTo(firstName)));
-    assertThat(domain.getLastName(), is(equalTo(lastName)));
-    assertThat(domain.getNameSuffix(), is(equalTo(nameSuffix)));
-    assertThat(domain.getLegacyDescriptor(), is(equalTo(legacyDescriptor)));
   }
 
   @Test
@@ -203,5 +108,4 @@ public class HOIReporterTest {
     Role role = Role.fromString("In valid value");
     assertThat(role, is(nullValue()));
   }
-
 }
