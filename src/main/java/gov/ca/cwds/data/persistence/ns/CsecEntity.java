@@ -17,7 +17,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "csec")
-public class CsecEntity implements PersistentObject {
+public class CsecEntity implements PersistentObject, Serializable {
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
   @Column(name = "id")
