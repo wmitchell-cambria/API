@@ -40,13 +40,13 @@ public class Relationship implements PersistentObject {
 
   public Relationship() { }
 
-  public Relationship(String id, String clientId, String relativeId, int relationshipType, Date created_at, Date updated_at ) {
+  public Relationship(String id, String clientId, String relativeId, int relationshipType, Date createdAt, Date updatedAt ) {
     this.id = id;
     this.clientId = clientId;
     this.relativeId = relativeId;
     this.relationshipType = relationshipType;
-    this.createdAt = created_at;
-    this.updatedAt = updated_at;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
   @Override
   public Serializable getPrimaryKey() {

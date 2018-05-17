@@ -27,29 +27,13 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
       value = "The relationship type code", example = "190")
   private int relationshipType;
 
-  @JsonProperty("created_at")
-  @ApiModelProperty(required = true, readOnly = false,
-      value = "The relationship type code. Genearted on create", example = "190")
-  private Date createdAt;
-
-  @JsonProperty("updated_at")
-  @ApiModelProperty(required = true, readOnly = false,
-      value = "The relationship type code. Genearted on create, and updated when modified",
-      example = "190")
-  private Date updatedAt;
-
   public ScreeningRelationship() { }
 
   public ScreeningRelationship(String id, String personId, String relationId, int relationshipType) {
-    this(id, personId,relationId, relationshipType, new Date(), null);
-  }
-  public ScreeningRelationship(String id, String personId, String relationId, int relationshipType, Date created_at, Date updated_at) {
     this.id = id;
     this.clientId = personId;
     this.relativeId = relationId;
     this.relationshipType = relationshipType;
-    this.createdAt = created_at;
-    this.updatedAt = updated_at;
   }
 
   public String getId() {
@@ -84,22 +68,6 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     this.relationshipType = relationshipType;
   }
 
-  public Date getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
@@ -115,12 +83,6 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     builder.append(",\n");
     builder.append("\trelationshipType:");
     builder.append(relationshipType);
-    builder.append(",\n");
-    builder.append("\tcreatedAt:");
-    builder.append(createdAt);
-    builder.append(",\n");
-    builder.append("\tupdatedAt:");
-    builder.append(updatedAt);
     builder.append(",\n");
     builder.append('}');
     return builder.toString();
