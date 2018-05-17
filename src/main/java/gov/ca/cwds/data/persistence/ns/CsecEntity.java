@@ -107,7 +107,6 @@ public class CsecEntity implements PersistentObject, Serializable {
   @Override
   public int hashCode() {
     int result = participantId != null ? participantId.hashCode() : 0;
-    result = 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
-    return result;
+    return 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
   }
 }
