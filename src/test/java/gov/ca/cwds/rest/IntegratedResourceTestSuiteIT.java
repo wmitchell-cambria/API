@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
         InvolvementHistoryResourceFT.class,
         ScreeningIntakeResourceFT.class
 })
-public class FTSuite {
+public class IntegratedResourceTestSuiteIT {
 
   @ClassRule
   public static final BaseDropwizardApplication<ApiConfiguration> application =
