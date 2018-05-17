@@ -7,4 +7,26 @@
       <column name="address_id" value="79"/>
     </insert>
   </changeSet>
+  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
+    <insert tableName="screening_addresses">
+      <column name="id" value="714"/>
+      <column name="screening_id" value="714"/>
+      <column name="address_id" value="1095"/>
+    </insert>
+    <insert tableName="screening_addresses">
+      <column name="id" value="750"/>
+      <column name="screening_id" value="750"/>
+      <column name="address_id" value="1153"/>
+    </insert>
+    <insert tableName="screening_addresses">
+      <column name="id" value="862"/>
+      <column name="screening_id" value="862"/>
+      <column name="address_id" value="1331"/>
+    </insert>
+    <insert tableName="screening_addresses">
+      <column name="id" value="883"/>
+      <column name="screening_id" value="885"/>
+      <column name="address_id" value="1379"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>
