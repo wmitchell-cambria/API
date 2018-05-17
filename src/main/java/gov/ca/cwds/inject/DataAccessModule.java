@@ -233,6 +233,7 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.Ethnicity.class,
       gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
       gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
+      gov.ca.cwds.data.persistence.ns.Relationship.class,
       gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();

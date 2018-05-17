@@ -12,4 +12,51 @@
       <column name="address_id" value="143"/>
     </insert>
   </changeSet>
+  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
+    <insert tableName="participant_addresses">
+      <column name="id" value="403"/>
+      <column name="participant_id" value="756"/>
+      <column name="address_id" value="1156"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="469"/>
+      <column name="participant_id" value="852"/>
+      <column name="address_id" value="1332"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="470"/>
+      <column name="participant_id" value="853"/>
+      <column name="address_id" value="1333"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="471"/>
+      <column name="participant_id" value="854"/>
+      <column name="address_id" value="1334"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="472"/>
+      <column name="participant_id" value="856"/>
+      <column name="address_id" value="1335"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="494"/>
+      <column name="participant_id" value="898"/>
+      <column name="address_id" value="1380"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="495"/>
+      <column name="participant_id" value="899"/>
+      <column name="address_id" value="1381"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="496"/>
+      <column name="participant_id" value="900"/>
+      <column name="address_id" value="1382"/>
+    </insert>
+    <insert tableName="participant_addresses">
+      <column name="id" value="497"/>
+      <column name="participant_id" value="902"/>
+      <column name="address_id" value="1383"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>

@@ -60,7 +60,7 @@ public class HOIScreeningService
   /**
    * Construct the object
    */
-  HOIScreeningService() {
+  public HOIScreeningService() {
     super();
     screeningsComparator = (s1, s2) -> {
       if (s2.getStartDate() == null) {
@@ -158,7 +158,7 @@ public class HOIScreeningService
   }
 
   @Override
-  protected HOIScreeningResponse handleRequest(HOIScreening hoiScreening) {
+  public HOIScreeningResponse handleRequest(HOIScreening hoiScreening) {
     LOGGER.info("HOIScreeningService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
