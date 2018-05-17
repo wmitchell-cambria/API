@@ -93,6 +93,7 @@ public class IntakeLov implements PersistentObject {
   /**
    * Constructor.
    * 
+   * @param legacySystemCodeId legacy SystemCode Id
    * @param legacyMeta legacy "meta" category
    * @param legacyShortDescription legacy short description
    * @param legacyLogicalCode legacy logical code
@@ -104,10 +105,11 @@ public class IntakeLov implements PersistentObject {
    * @param intakeCode Intake LOV code
    * @param intakeDisplay Intake display string
    */
-  public IntakeLov(String legacyMeta, String legacyShortDescription, String legacyLogicalCode,
-      boolean useLogical, String legacyCategoryId, String legacyOtherCode,
+  public IntakeLov(Long legacySystemCodeId, String legacyMeta, String legacyShortDescription,
+      String legacyLogicalCode, boolean useLogical, String legacyCategoryId, String legacyOtherCode,
       String legacyLongDescription, String intakeType, String intakeCode, String intakeDisplay) {
     super();
+    this.legacySystemCodeId = legacySystemCodeId;
     this.legacyMeta = legacyMeta;
     this.legacyShortDescription = legacyShortDescription;
     this.legacyLogicalCode = legacyLogicalCode;
