@@ -40,9 +40,7 @@ public class InvestigationServiceTest {
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
-  private ClientsRelationshipsService relationshipListService;
   private ContactService contactService;
-  private HistoryOfInvolvementService hoiService;
   private ScreeningSummaryService screeningSummaryService;
 
   private InvestigationService investigationService;
@@ -67,14 +65,11 @@ public class InvestigationServiceTest {
     this.longTextService = mock(LongTextService.class);
     this.peopleService = mock(PeopleService.class);
     this.allegationService = mock(AllegationService.class);
-    this.relationshipListService = mock(ClientsRelationshipsService.class);
     this.contactService = mock(ContactService.class);
-    this.hoiService = mock(HistoryOfInvolvementService.class);
     this.screeningSummaryService = mock(ScreeningSummaryService.class);
 
     investigationService = new InvestigationService(investigationDao, staffPersonDao, addressDao,
-        longTextService, peopleService, allegationService, relationshipListService, contactService,
-        hoiService, screeningSummaryService);
+        longTextService, peopleService, allegationService, contactService, screeningSummaryService);
 
     investigationStub = new InvestigationEntityBuilder().build();
 
