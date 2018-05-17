@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.fixture.IntakeLovEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantIntakeApiResourceBuilder;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -39,20 +40,18 @@ public class RaceAndEthnicityTransformerTest {
   @Test
   public void testSuccesWhenBuildRaceAndEthnicty() {
     ParticipantIntakeApi participantsIntake = new ParticipantIntakeApiResourceBuilder().build();
-    IntakeLov intakeLov1 = new IntakeLov();
-    intakeLov1.setLegacySystemCodeId(841L);
-    intakeLov1.setIntakeCode("Central American");
+    IntakeLov intakeLov1 = new IntakeLovEntityBuilder().setLegacySystemCodeId(841L)
+        .setIntakeCode("Central American").build();
     nsCodeToNsLovMap.put(intakeLov1.getIntakeCode(), intakeLov1);
 
-    IntakeLov intakeLov2 = new IntakeLov();
-    intakeLov2.setLegacySystemCodeId(3164L);
-    intakeLov2.setIntakeCode("Mexican");
+    IntakeLov intakeLov2 =
+        new IntakeLovEntityBuilder().setLegacySystemCodeId(3164L).setIntakeCode("Mexican").build();
     nsCodeToNsLovMap.put(intakeLov2.getIntakeCode(), intakeLov2);
 
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicCode().get(0), is(equalTo((short) 3164)));
-    assertThat(actual.getRaceCode().get(0), is(equalTo((short) 841)));
+    assertThat(raceAndEthnicity.getHispanicCode().get(0), is(equalTo((short) 3164)));
+    assertThat(raceAndEthnicity.getRaceCode().get(0), is(equalTo((short) 841)));
   }
 
   /**
@@ -64,16 +63,14 @@ public class RaceAndEthnicityTransformerTest {
     ParticipantIntakeApi participantsIntake = new ParticipantIntakeApiResourceBuilder()
         .setRaces("[\n" + "{\"race\":\"Abandoned\",\"race_detail\":null}]").setEthnicity(null)
         .build();
-    IntakeLov intakeLov1 = new IntakeLov();
-    intakeLov1.setLegacySystemCodeId(6351L);
-    intakeLov1.setIntakeCode("Abandoned");
+    IntakeLov intakeLov1 = new IntakeLovEntityBuilder().setLegacySystemCodeId(6351L)
+        .setIntakeCode("Abandoned").build();
     nsCodeToNsLovMap.put(intakeLov1.getIntakeCode(), intakeLov1);
 
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-
-    assertThat(actual.getRaceCode().get(0), is(equalTo((short) 6351)));
-    assertThat(actual.getUnableToDetermineCode(), is(equalTo("A")));
+    assertThat(raceAndEthnicity.getRaceCode().get(0), is(equalTo((short) 6351)));
+    assertThat(raceAndEthnicity.getUnableToDetermineCode(), is(equalTo("A")));
   }
 
   /**
@@ -86,9 +83,9 @@ public class RaceAndEthnicityTransformerTest {
         .setEthnicity(
             "{\n" + "  \"hispanic_latino_origin\": null,\n" + "  \"ethnicity_detail\": []\n" + "}")
         .build();
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicOriginCode(), is(equalTo("X")));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("X")));
   }
 
   /**
@@ -100,9 +97,9 @@ public class RaceAndEthnicityTransformerTest {
         .setRaces(null).setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"No\",\n"
             + "  \"ethnicity_detail\": []\n" + "}")
         .build();
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicOriginCode(), is(equalTo("N")));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("N")));
   }
 
   /**
@@ -114,9 +111,9 @@ public class RaceAndEthnicityTransformerTest {
         .setRaces(null).setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"Unknown\",\n"
             + "  \"ethnicity_detail\": []\n" + "}")
         .build();
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicOriginCode(), is(equalTo("U")));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("U")));
   }
 
   /**
@@ -129,10 +126,10 @@ public class RaceAndEthnicityTransformerTest {
         .setRaces(null).setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"Abandoned\",\n"
             + "  \"ethnicity_detail\": []\n" + "}")
         .build();
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicOriginCode(), is(equalTo("Z")));
-    assertThat(actual.getHispanicUnableToDetermineCode(), is(equalTo("A")));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("Z")));
+    assertThat(raceAndEthnicity.getHispanicUnableToDetermineCode(), is(equalTo("A")));
   }
 
   /**
@@ -145,9 +142,9 @@ public class RaceAndEthnicityTransformerTest {
             .setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"Declined to answer\",\n"
                 + "  \"ethnicity_detail\": []\n" + "}")
             .build();
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getHispanicOriginCode(), is(equalTo("D")));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("D")));
   }
 
   /**
@@ -158,7 +155,7 @@ public class RaceAndEthnicityTransformerTest {
     ParticipantIntakeApi participantsIntake =
         new ParticipantIntakeApiResourceBuilder().setRaces("{invalid}").setEthnicity(null).build();
     @SuppressWarnings("unused")
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
   }
 
@@ -168,13 +165,13 @@ public class RaceAndEthnicityTransformerTest {
   @Test
   public void testWhenParticipantNull() {
     ParticipantIntakeApi participantsIntake = null;
-    RaceAndEthnicity actual =
+    RaceAndEthnicity raceAndEthnicity =
         new RaceAndEthnicityTransformer().transform(participantsIntake, nsCodeToNsLovMap);
-    assertThat(actual.getRaceCode(), is(nullValue()));
-    assertThat(actual.getHispanicCode(), is(nullValue()));
-    assertThat(actual.getUnableToDetermineCode(), is(nullValue()));
-    assertThat(actual.getHispanicOriginCode(), is(nullValue()));
-    assertThat(actual.getHispanicUnableToDetermineCode(), is(nullValue()));
+    assertThat(raceAndEthnicity.getRaceCode(), is(nullValue()));
+    assertThat(raceAndEthnicity.getHispanicCode(), is(nullValue()));
+    assertThat(raceAndEthnicity.getUnableToDetermineCode(), is(nullValue()));
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(nullValue()));
+    assertThat(raceAndEthnicity.getHispanicUnableToDetermineCode(), is(nullValue()));
   }
 
 }
