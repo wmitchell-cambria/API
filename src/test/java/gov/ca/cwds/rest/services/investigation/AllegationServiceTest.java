@@ -42,8 +42,7 @@ public class AllegationServiceTest {
     this.injuryBodyDetailDao = mock(InjuryBodyDetailDao.class);
     this.injuryHarmDetailDao = mock(InjuryHarmDetailDao.class);
 
-    allegationService =
-        new AllegationService(allegationDao, injuryBodyDetailDao, injuryHarmDetailDao);
+    allegationService = new AllegationService(injuryBodyDetailDao, injuryHarmDetailDao);
 
     stubAllegation = new AllegationEntityBuilder().build();
 

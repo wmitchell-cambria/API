@@ -44,9 +44,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
   private LongTextService longTextService;
   private PeopleService peopleService;
   private AllegationService allegationService;
-  private ClientsRelationshipsService relationshipListService;
   private ContactService contactService;
-  private HistoryOfInvolvementService hoiSvc;
   private ScreeningSummaryService screeningSummaryService;
 
   private Investigation validInvestigation = new InvestigationEntityBuilder().build();
@@ -59,16 +57,13 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
    * @param longTextService - longText Service
    * @param peopleService - People Service
    * @param allegationService - Allegation Service
-   * @param relationshipListService - RelationshipList Service
    * @param contactService - contact service
-   * @param hoiSvc service for history of involvement
    * @param screeningSummaryService - Screening Summary Service
    */
   @Inject
   public InvestigationService(InvestigationDao investigationDao, StaffPersonDao staffPersonDao,
       AddressDao addressDao, LongTextService longTextService, PeopleService peopleService,
-      AllegationService allegationService, ClientsRelationshipsService relationshipListService,
-      ContactService contactService, HistoryOfInvolvementService hoiSvc,
+      AllegationService allegationService, ContactService contactService,
       ScreeningSummaryService screeningSummaryService) {
     super();
     this.investigationDao = investigationDao;
@@ -77,9 +72,7 @@ public class InvestigationService implements TypedCrudsService<String, Investiga
     this.longTextService = longTextService;
     this.peopleService = peopleService;
     this.allegationService = allegationService;
-    this.relationshipListService = relationshipListService;
     this.contactService = contactService;
-    this.hoiSvc = hoiSvc;
     this.screeningSummaryService = screeningSummaryService;
   }
 
