@@ -41,7 +41,7 @@ public class ParticipantsTransformer {
         addresses.add(new AddressTransformer().transform(addressIntake, nsCodeToNsLovMap));
       }
       String gender = getGender(p.getGender());
-      Long pid = (long) Integer.parseInt(p.getId());
+      Long pid = (long) Long.valueOf(p.getId());
       p.getRaces();
       p.getSensitive();
       p.getSealed();

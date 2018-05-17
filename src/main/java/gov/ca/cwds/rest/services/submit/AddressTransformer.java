@@ -21,7 +21,7 @@ public class AddressTransformer {
         ? nsCodeToNsLovMap.get(addressIntake.getState()).getLegacySystemCodeId().intValue()
         : null;
     Integer type =
-        StringUtils.isNotBlank(addressIntake.getType()) ? Integer.parseInt(addressIntake.getType())
+        StringUtils.isNotBlank(addressIntake.getType()) ? Integer.valueOf(addressIntake.getType())
             : null;
     return new Address(addressIntake.getLegacySourceTable(), addressIntake.getLegacyId(),
         addressIntake.getStreetAddress(), addressIntake.getCity(), state, addressIntake.getZip(),

@@ -21,17 +21,14 @@ public class AllegationsTransformer {
       Map<String, IntakeLov> nsCodeToNsLovMap) {
     Set<Allegation> allegations = new HashSet<>();
     for (AllegationIntake allegationIntake : allegationsIntake) {
-      Set<Short> types = new HashSet<>();
       for (String description : allegationIntake.getTypes()) {
         Short allegationSysId = StringUtils.isNotBlank(description)
             ? nsCodeToNsLovMap.get(description).getLegacySystemCodeId().shortValue()
             : null;
-        types.add(allegationSysId);
-      }
-      for (Short type : types) {
-        Allegation allegation = new Allegation(allegationIntake.getLegacySourceTable(),
-            allegationIntake.getLegacyId(), allegationIntake.getVictimPersonId(),
-            allegationIntake.getPerpetratorPersonId(), type, allegationIntake.getCounty());
+        Allegation allegation =
+            new Allegation(allegationIntake.getLegacySourceTable(), allegationIntake.getLegacyId(),
+                allegationIntake.getVictimPersonId(), allegationIntake.getPerpetratorPersonId(),
+                allegationSysId, allegationIntake.getCounty());
         allegations.add(allegation);
       }
     }
