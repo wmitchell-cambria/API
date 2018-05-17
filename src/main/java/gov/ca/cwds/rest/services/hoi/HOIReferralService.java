@@ -23,12 +23,10 @@ import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReporter.Role;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
-import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
@@ -39,8 +37,8 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  * 
  * @author CWDS API Team
  */
-public class HOIReferralService
-    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
+public class HOIReferralService extends
+    SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> implements HOIBaseService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferralService.class);
 
@@ -106,44 +104,14 @@ public class HOIReferralService
         allegationMap, role);
   }
 
-  private List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
+  protected List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
     final List<String> authorizedClientIds = authorizeClients(clientIds);
     return authorizedClientIds != null && !authorizedClientIds.isEmpty()
         ? Arrays.asList(referralClientDao.findByClientIds(authorizedClientIds))
         : new ArrayList<>();
   }
 
-  /**
-   * SNAP-49: HOI not shown for client.
-   * 
-   * <p>
-   * Sometimes Cases or Referrals link to clients that the current user is not authorized to view
-   * due to sealed/sensitivity restriction, county access privileges, or a short-coming with an the
-   * authorization rule. The client authorizer throws an UnauthorizedException, then skip that
-   * client and move on. Don't bomb all History of Involvement because the user is not authorized to
-   * view a client's half-sister's foster sibling.
-   * </p>
-   * 
-   * @param clientIds client keys to authorize
-   * @return list of client id's that the user is authorized to view
-   */
-  private List<String> authorizeClients(Collection<String> clientIds) {
-    final List<String> ret = new ArrayList<>(clientIds.size());
-    for (String clientId : clientIds) {
-      try {
-        authorizeClient(clientId);
-        ret.add(clientId);
-      } catch (Exception e) {
-        final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID \"%s\"!", clientId);
-        RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, LOGGER,
-            ErrorType.CLIENT_AUTHORIZATION_WARNING);
-      }
-    }
-
-    return ret;
-  }
-
-  private Role fetchForReporterRole(Referral referral, ReferralClient referralClient,
+  protected Role fetchForReporterRole(Referral referral, ReferralClient referralClient,
       Reporter reporter) {
     Role role = null;
     if (reporter == null) {
@@ -196,8 +164,14 @@ public class HOIReferralService
     throw new NotImplementedException("handle request not implemented");
   }
 
-  void authorizeClient(String clientId) {
-    authorizationService.ensureClientAccessAuthorized(clientId);
+  @Override
+  public AuthorizationService getAuthorizationService() {
+    return authorizationService;
+  }
+
+  @Override
+  public Logger getLogger() {
+    return LOGGER;
   }
 
 }
