@@ -22,11 +22,9 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class InvolvementHistoryResourceFT extends IntakeBaseTest {
+public class InvolvementHistoryResourceIRT extends IntakeBaseTest {
 
   static final String VALID_HOI_JSON = "fixtures/gov/ca/cwds/rest/resources/hoi/history-of-involvements.valid.json";
-
-  private ObjectMapper objectMapper = Jackson.newObjectMapper();
 
   @Test
   public void testGet() throws Exception {

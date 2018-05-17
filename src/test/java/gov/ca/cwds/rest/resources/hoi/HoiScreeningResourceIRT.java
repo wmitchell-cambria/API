@@ -1,7 +1,7 @@
 package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
-import static gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResourceFT.VALID_HOI_JSON;
+import static gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResourceIRT.VALID_HOI_JSON;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -24,9 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
-public class HoiScreeningResourceFT extends IntakeBaseTest {
-
-  private ObjectMapper objectMapper = Jackson.newObjectMapper();
+public class HoiScreeningResourceIRT extends IntakeBaseTest {
 
   @Test
   public void testGet() throws Exception {
