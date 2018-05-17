@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.Date;
 
 public class ScreeningRelationship extends ReportingDomain implements Request {
   @JsonProperty("id")

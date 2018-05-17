@@ -287,7 +287,8 @@ jacocoTestReport {
 
 sonarqube {
   properties {
-      property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec", "${buildDir}/jacoco/functionalTest.exec"
+      property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec"
+      property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/functionalTest.exec"
       property "sonar.jacoco.itReportPaths", "${buildDir}/jacoco/integrationTest.exec"
   }
 }
