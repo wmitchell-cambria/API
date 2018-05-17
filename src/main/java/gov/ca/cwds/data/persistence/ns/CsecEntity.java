@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.ns;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "csec")
-public class CsecEntity {
+public class CsecEntity implements PersistentObject {
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
   @Column(name = "id")
@@ -78,6 +80,11 @@ public class CsecEntity {
   }
 
   @Override
+  public Serializable getPrimaryKey() {
+    return getId();
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -98,7 +105,6 @@ public class CsecEntity {
   @Override
   public int hashCode() {
     int result = participantId != null ? participantId.hashCode() : 0;
-    result = 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
-    return result;
+    return 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
   }
 }

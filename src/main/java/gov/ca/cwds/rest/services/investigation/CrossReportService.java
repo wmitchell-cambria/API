@@ -4,7 +4,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.dao.investigation.CrossReportDao;
 import gov.ca.cwds.fixture.investigation.CrossReportEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.CrossReport;
@@ -18,15 +17,10 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 public class CrossReportService implements TypedCrudsService<String, CrossReport, Response> {
 
   private static CrossReport crossReportStub = new CrossReportEntityBuilder().build();
-  private CrossReportDao crossReportDao;
 
-  /**
-   * @param crossReportDao - cross report data access object
-   */
   @Inject
-  public CrossReportService(CrossReportDao crossReportDao) {
+  public CrossReportService() {
     super();
-    this.crossReportDao = crossReportDao;
   }
 
   /**

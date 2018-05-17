@@ -14,7 +14,6 @@ import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.dao.investigation.SafetyAlertsDao;
 import gov.ca.cwds.fixture.investigation.SafetyAlertsEntityBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
@@ -32,7 +31,6 @@ public class SafetyAlertsServiceTest {
   private Set<String> alerts = new HashSet<>();
 
   private SafetyAlertsService safetyAlertsService;
-  private SafetyAlertsDao safetyAlertsDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -40,7 +38,7 @@ public class SafetyAlertsServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
-    safetyAlertsService = new SafetyAlertsService(safetyAlertsDao);
+    safetyAlertsService = new SafetyAlertsService();
   }
 
   // find test
