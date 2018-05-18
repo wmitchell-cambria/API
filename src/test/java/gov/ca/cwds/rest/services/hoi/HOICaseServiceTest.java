@@ -41,14 +41,11 @@ import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCaseEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
-import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
-import gov.ca.cwds.utils.JsonUtils;
 
 /**
  * @author CWDS API Team
@@ -276,9 +273,6 @@ public class HOICaseServiceTest extends Doofenshmirtz<Client> {
     final HOICaseService spyTarget = spy(target);
     final HOICaseResponse response = spyTarget.handleFind(request);
 
-    final List<ErrorMessage> errors =
-        RequestExecutionContext.instance().getMessageBuilder().getMessages();
-    System.out.println(JsonUtils.to(errors));
     assertThat("Expected authorization errors!!",
         response.hasMessages() && !response.getMessages().isEmpty());
   }
