@@ -17,7 +17,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "csec")
-public class CsecEntity implements PersistentObject {
+public class CsecEntity implements PersistentObject, Serializable {
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy= GenerationType.IDENTITY)
   @Column(name = "id")
@@ -105,7 +107,6 @@ public class CsecEntity implements PersistentObject {
   @Override
   public int hashCode() {
     int result = participantId != null ? participantId.hashCode() : 0;
-    result = 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
-    return result;
+    return 31 * result + (csecCodeId != null ? csecCodeId.hashCode() : 0);
   }
 }
