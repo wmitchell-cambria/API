@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -71,12 +71,12 @@ public class CmsNSHelperTest extends Doofenshmirtz<Client> {
     nsRequests = new HashMap<>();
     nsRequests.put(new TestCrudsService(), new AuthorizationRequest(DEFAULT_CLIENT_ID));
 
-    cmsSession = mock(Session.class);
-    cmsSessionFactory = mock(SessionFactory.class);
+    cmsSession = session;
+    cmsSessionFactory = sessionFactory;
     when(cmsSessionFactory.openSession()).thenReturn(cmsSession);
 
-    nsSession = mock(Session.class);
-    nsSessionFactory = mock(SessionFactory.class);
+    nsSession = session;
+    nsSessionFactory = sessionFactory;
     when(nsSessionFactory.openSession()).thenReturn(nsSession);
 
     helper = new CmsNSHelper(cmsSessionFactory, nsSessionFactory);
@@ -85,13 +85,13 @@ public class CmsNSHelperTest extends Doofenshmirtz<Client> {
   @Test
   public void shouldCloseHibernateCmsSessionResource() {
     helper.handleResponse(cmsRequests, nsRequests);
-    verify(cmsSession).close();
+    verify(nsSession, atLeastOnce()).close();
   }
 
   @Test
   public void shouldCloseHibernateNsSessionResource() {
     helper.handleResponse(cmsRequests, nsRequests);
-    verify(nsSession).close();
+    verify(nsSession, atLeastOnce()).close();
   }
 
 }
