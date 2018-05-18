@@ -69,7 +69,7 @@ public class CmsNSHelperTest extends Doofenshmirtz<Client> {
     cmsRequests.put(new TestCrudsService(), new AuthorizationRequest(DEFAULT_CLIENT_ID));
 
     nsRequests = new HashMap<>();
-    cmsRequests.put(new TestCrudsService(), new AuthorizationRequest(DEFAULT_CLIENT_ID));
+    nsRequests.put(new TestCrudsService(), new AuthorizationRequest(DEFAULT_CLIENT_ID));
 
     cmsSession = mock(Session.class);
     cmsSessionFactory = mock(SessionFactory.class);
