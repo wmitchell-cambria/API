@@ -44,7 +44,9 @@ public class ParticipantsTransformer {
         addresses.add(addressTransformer.transform(addressIntake, nsCodeToNsLovMap));
       }
       addresses = Collections.unmodifiableSet(addresses);
-      String gender = getGender(p.getGender());
+      String gender = StringUtils.isNotBlank(p.getGender())
+          ? (Gender.findByNsDescription(p.getGender().toLowerCase())).getCmsDescription()
+          : "";
       Long pid = Long.valueOf(p.getId());
       p.getSensitive();
       p.getSealed();
@@ -65,20 +67,6 @@ public class ParticipantsTransformer {
       participants.add(participant);
     }
     return participants;
-  }
-
-  private String getGender(String gender) {
-    if (StringUtils.isNotBlank(gender)) {
-      if (("male").equalsIgnoreCase(gender)) {
-        return "M";
-      } else if (("female").equalsIgnoreCase(gender)) {
-        return "F";
-      } else if (("intersex").equalsIgnoreCase(gender)) {
-        return "I";
-      }
-      return "U";
-    }
-    return "U";
   }
 
 }
