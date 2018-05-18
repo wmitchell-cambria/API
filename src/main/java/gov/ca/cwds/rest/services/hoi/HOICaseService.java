@@ -98,26 +98,31 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
    */
   @Override
   public HOICaseResponse handleFind(HOIRequest hoiRequest) {
-    Collection<String> clientIds = hoiRequest.getClientIds();
+    HOICaseResponse ret = new HOICaseResponse();
+    final Collection<String> clientIds = hoiRequest.getClientIds();
     if (clientIds.isEmpty()) {
       return new HOICaseResponse();
     }
 
     final List<String> authorizedClients = authorizeClients(clientIds);
     final HOICasesData hcd = new HOICasesData(authorizedClients);
-    loadRelationshipsByClients(authorizedClients, hcd);
-    hcd.getAllClientIds().addAll(getClientIdsFromRelations(hcd));
-    loadRelationshipsByClients(hcd.getAllClientIds(), hcd);
-    loadClients(hcd);
-    loadCmsCases(hcd);
 
-    final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
-    for (CmsCase cmsCase : hcd.getCmsCases().values()) {
-      cases.add(constructHOICase(cmsCase, hcd));
+    if (!authorizedClients.isEmpty()) {
+      loadRelationshipsByClients(authorizedClients, hcd);
+      hcd.getAllClientIds().addAll(getClientIdsFromRelations(hcd));
+      loadRelationshipsByClients(hcd.getAllClientIds(), hcd);
+      loadClients(hcd);
+      loadCmsCases(hcd);
+
+      final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
+      for (CmsCase cmsCase : hcd.getCmsCases().values()) {
+        cases.add(constructHOICase(cmsCase, hcd));
+      }
+      cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
+      ret = new HOICaseResponse(cases);
     }
-    cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
 
-    return new HOICaseResponse(cases);
+    return ret;
   }
 
   private void loadRelationshipsByClients(Collection<String> clientIds, HOICasesData hcd) {
