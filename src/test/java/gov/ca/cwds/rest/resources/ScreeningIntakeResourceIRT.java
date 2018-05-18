@@ -32,9 +32,8 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 /**
  * CWDS API Team
  */
-public class ScreeningIntakeResourceFT extends IntakeBaseTest {
+public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
 
-  private ObjectMapper objectMapper = Jackson.newObjectMapper();
   @Test
   public void testGet() throws Exception {
     String actualJson = doGetCall("52");

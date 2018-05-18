@@ -23,7 +23,7 @@ import gov.ca.cwds.IntakeBaseTest;
  * @author CWDS API Team
  *
  */
-public class HoiCaseResourceFT extends IntakeBaseTest {
+public class HoiCaseResourceIRT extends IntakeBaseTest {
   private static final String USER_SOCIAL_WORKER_ONLY =
       "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
   private static final String USER_COUNTY_SENSITIVE =

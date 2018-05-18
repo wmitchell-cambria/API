@@ -1,7 +1,9 @@
 package gov.ca.cwds;
 
-import gov.ca.cwds.rest.FTSuite;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import gov.ca.cwds.rest.IntegratedResourceTestSuiteIT;
 import gov.ca.cwds.test.support.DatabaseHelper;
+import io.dropwizard.jackson.Jackson;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
 
@@ -16,11 +18,13 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
 
   @ClassRule
   public static final BaseDropwizardApplication<ApiConfiguration> application =
-          FTSuite.application;
+          IntegratedResourceTestSuiteIT.application;
 
   protected BaseDropwizardApplication<ApiConfiguration> getApplication() {
     return application;
   }
+
+  protected ObjectMapper objectMapper = Jackson.newObjectMapper();
 
   @BeforeClass
   public static void beforeClass() throws Exception {
