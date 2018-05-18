@@ -139,14 +139,16 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private void loadClients(HOICasesData hcd) {
-    Collection<String> ids = new HashSet<>(hcd.getAllClientIds());
-    ids.addAll(getClientIdsFromRelations(hcd));
-    hcd.setAllClients(clientDao.findClientsByIds(ids));
+    final Collection<String> ids = new HashSet<>(hcd.getAllClientIds());
+    if (!ids.isEmpty()) {
+      ids.addAll(getClientIdsFromRelations(hcd));
+      hcd.setAllClients(clientDao.findClientsByIds(ids));
+    }
   }
 
   private Collection<String> getClientIdsFromRelations(HOICasesData hcd) {
-    Collection<String> ids = new HashSet<>();
-    Predicate<ClientRelationship> relationshipFilter = rel -> HOIRelationshipTypeService
+    final Collection<String> ids = new HashSet<>();
+    final Predicate<ClientRelationship> relationshipFilter = rel -> HOIRelationshipTypeService
         .isParentChildOrSiblingRelationshipType(rel.getClientRelationshipType());
     hcd.getAllRelationshipsByPrimaryClients().stream().filter(relationshipFilter)
         .forEach(rel -> ids.add(rel.getSecondaryClientId()));
@@ -156,12 +158,14 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private void loadCmsCases(HOICasesData hcd) {
-    Map<String, CmsCase> cmsCases = caseDao.findByClientIds(hcd.getAllClientIds());
-    Collection<String> staffPersonIds =
-        cmsCases.values().stream().map(CmsCase::getFkstfperst).collect(Collectors.toSet());
-    Map<String, StaffPerson> staffPersons = staffPersonDao.findByIds(staffPersonIds);
-    cmsCases.values().forEach(c -> c.setStaffPerson(staffPersons.get(c.getFkstfperst())));
-    hcd.setCmsCases(cmsCases);
+    final Map<String, CmsCase> cmsCases = caseDao.findByClientIds(hcd.getAllClientIds());
+    if (!cmsCases.isEmpty()) {
+      final Collection<String> staffPersonIds =
+          cmsCases.values().stream().map(CmsCase::getFkstfperst).collect(Collectors.toSet());
+      final Map<String, StaffPerson> staffPersons = staffPersonDao.findByIds(staffPersonIds);
+      cmsCases.values().forEach(c -> c.setStaffPerson(staffPersons.get(c.getFkstfperst())));
+      hcd.setCmsCases(cmsCases);
+    }
   }
 
   private HOICase constructHOICase(CmsCase cmsCase, HOICasesData hcd) {

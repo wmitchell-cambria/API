@@ -12,7 +12,6 @@ import gov.ca.cwds.rest.authenticate.UserInfo;
 
 /**
  * @author CWDS API Team
- *
  */
 public class FunctionalTest {
 
@@ -42,13 +41,11 @@ public class FunctionalTest {
   }
 
   private String login(ConfigImpl configImpl) {
-    AuthenticationUtils authentication = new AuthenticationUtils(configImpl);
-    return authentication.getToken(UserGroup.SOCIAL_WORKER);
+    return new AuthenticationUtils(configImpl).getToken(UserGroup.SOCIAL_WORKER);
   }
 
   private UserInfo getStaffpersonInfo(ConfigImpl configImpl) {
-    AuthenticationUtils authentication = new AuthenticationUtils(configImpl);
-    return authentication.getStaffPersonDetails(token);
+    return new AuthenticationUtils(configImpl).getStaffPersonDetails(token);
   }
 
   protected String getResourceUrlFor(String resource) {
