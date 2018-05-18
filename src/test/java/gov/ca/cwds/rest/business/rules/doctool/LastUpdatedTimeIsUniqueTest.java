@@ -104,7 +104,7 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  *
  */
-public class TestForLastUpdatedTimeIsUnique {
+public class LastUpdatedTimeIsUniqueTest {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
