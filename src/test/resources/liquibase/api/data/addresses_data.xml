@@ -1,6 +1,16 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk (generated)" id="1522794912070-1">
+  <changeSet author="Intake Team" id="addresses_data">
+    <insert tableName="addresses">
+      <column name="id" value="55"/>
+      <column name="street_address" value="2300 Erie Hill"/>
+      <column name="city" value="San Diego"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95223"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id" value="0ByMpj00CN"/>
+      <column name="legacy_source_table" value="ADDRS_T"/>
+    </insert>
     <insert tableName="addresses">
       <column name="id" value="79"/>
       <column name="street_address" value="erfsgd"/>
@@ -31,8 +41,6 @@
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
-  </changeSet>
-  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
     <insert tableName="addresses">
       <column name="id" value="1095"/>
       <column name="street_address"/>
