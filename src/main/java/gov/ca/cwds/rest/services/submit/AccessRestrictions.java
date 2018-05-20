@@ -25,11 +25,12 @@ public enum AccessRestrictions {
    */
   SEALED("R", "sealed");
 
+  private static final Map<String, AccessRestrictions> mapByNsDescription = new HashMap<>();
+
   private final String cmsDescription;
   private final String nsDescription;
 
   private AccessRestrictions(String cmsDescription, String nsDescription) {
-    ;
     this.nsDescription = nsDescription;
     this.cmsDescription = cmsDescription;
   }
@@ -42,8 +43,6 @@ public enum AccessRestrictions {
     return mapByNsDescription.containsKey(nsDescription) ? mapByNsDescription.get(nsDescription)
         : AccessRestrictions.NONE;
   }
-
-  private static final Map<String, AccessRestrictions> mapByNsDescription = new HashMap<>();
 
   static {
     for (AccessRestrictions e : AccessRestrictions.values()) {
