@@ -43,10 +43,6 @@ public enum Gender {
     return cmsDescription;
   }
 
-  public String getNsDescription() {
-    return nsDescription;
-  }
-
   public static Gender findByNsDescription(String nsDescription) {
     return mapByNsDescription.containsKey(nsDescription) ? mapByNsDescription.get(nsDescription)
         : Gender.UNKNOWN;
