@@ -1,13 +1,11 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk (generated)" id="1522795056761-1">
+  <changeSet author="Intake Team" id="screening_addresses_data">
     <insert tableName="screening_addresses">
       <column name="id" value="52"/>
       <column name="screening_id" value="52"/>
       <column name="address_id" value="79"/>
     </insert>
-  </changeSet>
-  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
     <insert tableName="screening_addresses">
       <column name="id" value="714"/>
       <column name="screening_id" value="714"/>

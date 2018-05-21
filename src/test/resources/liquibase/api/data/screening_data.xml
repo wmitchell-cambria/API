@@ -1,6 +1,13 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk (generated)" id="1522794818923-1">
+  <changeSet author="Intake Team" id="screenings_data">
+    <insert tableName="screenings">
+      <column name="id" value="36"/>
+      <column name="reference" value="CEN6VP"/>
+      <column name="started_at" valueDate="2018-03-29 23:23:47"/>
+      <column name="assignee_staff_id" value="0X5"/>
+      <column name="indexable" value="false"/>
+    </insert>
     <insert tableName="screenings">
       <column name="id" value="52"/>
       <column name="reference" value="GBA10B"/>
@@ -27,8 +34,6 @@
       <column name="indexable" value="false"/>
       <column name="curr_loc_of_children" value="Home with father mother"/>
     </insert>
-  </changeSet>
-  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
     <insert tableName="screenings">
       <column name="id" value="714"/>
       <column name="reference" value="9A934Q"/>

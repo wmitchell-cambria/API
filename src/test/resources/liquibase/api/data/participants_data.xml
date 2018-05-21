@@ -1,6 +1,23 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk (generated)" id="1522795007311-1">
+  <changeSet author="Intake Team" id="participants_data">
+    <insert tableName="participants">
+      <column name="id" value="25"/>
+      <column name="date_of_birth" valueDate="1999-11-15"/>
+      <column name="first_name" value="William"/>
+      <column name="gender" value="male"/>
+      <column name="last_name" value="Pfeiffer"/>
+      <column name="ssn" value="123-45-6789"/>
+      <column name="screening_id" value="36"/>
+      <column name="legacy_id" value="9C7kKgc0CN"/>
+      <column name="languages" value="{&quot;English&quot;}"/>
+      <column name="middle_name" value="T"/>
+      <column name="name_suffix" value="Jr"/>
+      <column name="races" value="[{&quot;race&quot;:&quot;White&quot;}]"/>
+      <column name="ethnicity" value="{&quot;hispanic_latino_origin&quot;:&quot;Unknown&quot;,&quot;ethnicity_detail&quot;:[]}"/>
+      <column name="sensitive" valueBoolean="false"/>
+      <column name="sealed" valueBoolean="false"/>
+    </insert>
     <insert tableName="participants">
       <column name="id" value="42"/>
       <column name="date_of_birth" valueDate="2002-11-15"/>
@@ -64,8 +81,6 @@
       <column name="approximate_age"/>
       <column name="approximate_age_units"/>
     </insert>
-  </changeSet>
-  <changeSet author="Serge Redchuk (generated)" id="1526316404817-1">
     <insert tableName="participants">
       <column name="id" value="708"/>
       <column name="date_of_birth" valueDate="1952-12-21"/>

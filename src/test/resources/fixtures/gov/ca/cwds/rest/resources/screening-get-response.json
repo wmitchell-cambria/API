@@ -69,29 +69,69 @@
   ],
   "participants": [
     {
-      "id": "44",
-      "legacy_id": "FGisWCk0Ki",
-      "first_name": "Catrina",
-      "last_name": "Sam",
-      "gender": "female",
-      "ssn": "435-40-1360",
-      "date_of_birth": "1967-09-05",
+      "id": "42",
+      "legacy_source_table": "CLIENT_T",
+      "legacy_id": "6YtTyyc0ND",
+      "first_name": "john",
+      "last_name": "Curteis",
+      "gender": "male",
+      "ssn": "456-47-8798",
+      "date_of_birth": "2002-11-15",
       "roles": [
-        "Mandated Reporter"
+        "Victim"
       ],
-      "addresses": [],
-      "races": [],
+      "addresses": [
+        {
+          "messages": [],
+          "id": "142",
+          "legacy_id": "79VrmIT00c",
+          "legacy_source_table": "ADDRS_T",
+          "type": "Other",
+          "street_address": "erfsgd101",
+          "city": "Sacramento",
+          "state": "CA",
+          "zip": "95833",
+          "legacy_descriptor": {
+            "legacy_id": "4MITEVl00c",
+            "legacy_ui_id": "0247-6288-0598-5000038",
+            "legacy_last_updated": "1997-08-27T10:16:08.264-0700",
+            "legacy_table_name": "ADDRS_T",
+            "legacy_table_description": "Address"
+          }
+        }
+      ],
+      "races": [
+        {
+          "race": "White",
+          "race_detail": null
+        }
+      ],
       "ethnicity": {
-        "hispanic_latino_origin": "Unknown",
+        "hispanic_latino_origin": "No",
         "ethnicity_detail": []
       },
-      "middle_name": "",
+      "middle_name": "T",
+      "name_suffix": "Jr",
+      "approximate_age": "12",
+      "approximate_age_units": "year",
       "languages": [
         "English"
       ],
       "screening_id": "52",
-      "phone_numbers": [],
-      "csec": [],
+      "phone_numbers": [
+        {
+          "id": 242,
+          "number": "9660007290"
+        }
+      ],
+      "csec": [
+        {
+          "id": "1",
+          "csec_code_id": "519",
+          "start_date": "2018-03-30",
+          "end_date": "2018-03-31"
+        }
+      ],
       "sealed": false,
       "sensitive": false
     },
@@ -146,71 +186,31 @@
       "sensitive": false
     },
     {
-      "id": "42",
-      "legacy_source_table": "CLIENT_T",
-      "legacy_id": "6YtTyyc0ND",
-      "first_name": "john",
-      "last_name": "Curteis",
-      "gender": "male",
-      "ssn": "456-47-8798",
-      "date_of_birth": "2002-11-15",
+      "id": "44",
+      "legacy_id": "FGisWCk0Ki",
+      "first_name": "Catrina",
+      "last_name": "Sam",
+      "gender": "female",
+      "ssn": "435-40-1360",
+      "date_of_birth": "1967-09-05",
       "roles": [
-        "Victim"
+        "Mandated Reporter"
       ],
-      "addresses": [
-        {
-          "messages": [],
-          "id": "142",
-          "legacy_id": "79VrmIT00c",
-          "legacy_source_table": "ADDRS_T",
-          "type": "Other",
-          "street_address": "erfsgd101",
-          "city": "Sacramento",
-          "state": "CA",
-          "zip": "95833"
-        }
-      ],
-      "races": [
-        {
-          "race": "White",
-          "race_detail": null
-        }
-      ],
+      "addresses": [],
+      "races": [],
       "ethnicity": {
-        "hispanic_latino_origin": "No",
+        "hispanic_latino_origin": "Unknown",
         "ethnicity_detail": []
       },
-      "middle_name": "T",
-      "name_suffix": "Jr",
-      "approximate_age": "12",
-      "approximate_age_units": "year",
+      "middle_name": "",
       "languages": [
         "English"
       ],
       "screening_id": "52",
-      "phone_numbers": [
-        {
-          "id": 242,
-          "number": "9660007290"
-        }
-      ],
-      "csec": [
-        {
-          "id": "1",
-          "csec_code_id": "519",
-          "start_date": "2018-03-30",
-          "end_date": "2018-03-31"
-        }
-      ],
+      "phone_numbers": [],
+      "csec": [],
       "sealed": false,
-      "sensitive": false,
-      "legacy_descriptor": {
-        "legacy_id": "3FVrmIT00c",
-        "legacy_ui_id": "0184-6135-8268-9000038",
-        "legacy_last_updated": "1997-08-27T10:16:08.264-0700",
-        "legacy_table_name": "CLIENT_T",
-        "legacy_table_description": "Client"
-      }
+      "sensitive": false
     }
   ]
 }
