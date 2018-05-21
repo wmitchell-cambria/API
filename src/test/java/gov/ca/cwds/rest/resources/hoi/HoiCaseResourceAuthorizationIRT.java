@@ -81,34 +81,34 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID_1);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SENSITIVE_ID_1);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SEALED_ID_1);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_SAME_COUNTY_SEALED_ID_1);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientDifferentCountySensistive()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientDifferentCountySealed()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientNoCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserSocialWorkerOnlyAndClientNoCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_SOCIAL_WORKER_ONLY, CLIENT_NO_COUNTY_SEALED_ID);
   }
 
 
@@ -127,19 +127,19 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_1);
+    assertHandleFindEmptyResults(USER_COUNTY_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_1);
   }
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientDifferentCountySensitive()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientDifferentCountySealed()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
   }
 
   @Test
@@ -150,7 +150,7 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserCountySensitiveAndClientNoCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SENSITIVE, CLIENT_NO_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SENSITIVE, CLIENT_NO_COUNTY_SEALED_ID);
   }
 
 
@@ -163,7 +163,7 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserCountySealedAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_2);
+    assertHandleFindEmptyResults(USER_COUNTY_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_2);
   }
 
   @Test
@@ -175,17 +175,17 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
   @Test
   public void testHandleFindForUserCountySealedAndClientDifferentCountySensitive()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SEALED, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserCountySealedAndClientDifferentCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SEALED, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
   }
 
   @Test
   public void testHandleFindForUserCountySealedAndClientNoCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_COUNTY_SEALED, CLIENT_NO_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_COUNTY_SEALED, CLIENT_NO_COUNTY_SENSITIVE_ID);
   }
 
   @Test
@@ -210,28 +210,28 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientSameCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_3);
+    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_SAME_COUNTY_SEALED_ID_3);
   }
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientDifferentCountySensitive()
       throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientDifferentCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
   }
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientNoCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_NO_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_NO_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserStateSensitiveAndClientNoCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SENSITIVE, CLIENT_NO_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_NO_COUNTY_SEALED_ID);
   }
 
 
@@ -244,7 +244,7 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserStateSealedAndClientSameCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_3);
+    assertHandleFindEmptyResults(USER_STATE_SEALED, CLIENT_SAME_COUNTY_SENSITIVE_ID_3);
   }
 
   @Test
@@ -255,17 +255,17 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
   @Test
   public void testHandleFindForUserStateSealedAndClientDifferentCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_STATE_SEALED, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
   }
 
   @Test
   public void testHandleFindForUserStateSealedAndClientDifferentCountySealed() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
+    assertHandleFindEmptyResults(USER_STATE_SEALED, CLIENT_DIFFERENT_COUNTY_SEALED_ID);
   }
 
   @Test
   public void testHandleFindForUserStateSealedAndClientNoCountySensitive() throws Exception {
-    assertNonAuthorizedHandleFind(USER_STATE_SEALED, CLIENT_NO_COUNTY_SENSITIVE_ID);
+    assertHandleFindEmptyResults(USER_STATE_SEALED, CLIENT_NO_COUNTY_SENSITIVE_ID);
   }
 
   @Test
@@ -284,8 +284,13 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
   private void assertNonAuthorizedHandleFind(String userFilePath, String clientIds)
       throws IOException {
     String actualJson = doHandleFindCall(userFilePath, clientIds);
-
     Assert.assertTrue(actualJson.contains("org.apache.shiro.authz.UnauthorizedException"));
+  }
+
+  private void assertHandleFindEmptyResults(String userFilePath, String clientIds)
+      throws IOException {
+    String actualJson = doHandleFindCall(userFilePath, clientIds);
+    Assert.assertTrue(actualJson.trim().length() < 10);
   }
 
   private String doHandleFindCall(String userFilePath, String clientIds)
