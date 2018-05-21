@@ -277,7 +277,6 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
   private void assertHandleFind(String userFilePath, String clientIds, String expectedResponse)
       throws java.io.IOException, JSONException {
     String actualJson = doHandleFindCall(userFilePath, clientIds);
-
     JSONAssert.assertEquals(expectedResponse, actualJson, true);
   }
 
