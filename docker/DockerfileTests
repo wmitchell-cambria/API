@@ -2,18 +2,27 @@ FROM gradle
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV APP_PATH /ferb
-ENV GRADLE_USER_HOME ${APP_PATH}/gradle_dependencies
+ENV GRADLE_CACHE ${APP_PATH}/build/gradle_cache
 
 USER root
 RUN mkdir $APP_PATH
-RUN mkdir ${GRADLE_USER_HOME}
+RUN mkdir ${APP_PATH}/build
+RUN mkdir ${GRADLE_CACHE}
+
 WORKDIR $APP_PATH
+COPY buildSrc ./buildSrc
+COPY config ./config
+COPY docker ./docker
+COPY gradle ./gradle
+COPY src ./src
+COPY build.gradle .
+COPY entrypoint.sh .
+COPY gradle.properties .
+COPY gradlew .
+COPY settings.gradle .
 
-COPY . $APP_PATH
+COPY docker/ferb-test/config/testConfig.yml ${APP_PATH}/config/testConfig.yml
 
-COPY docker/ferb-test/config/testConfig.yml ${APP_PATH}/config/myTestConfig.yml
-COPY build/gradle /ferb/gradle_dependencies
+RUN ./gradlew build -x test -x functionalQATest --gradle-user-home=${GRADLE_CACHE} --refresh-dependencies
 
-RUN ./gradlew build -x test -x functionalQATest --gradle-user-home=/ferb/gradle_dependencies --refresh-dependencies
-
-ENTRYPOINT ["./gradlew", "--gradle-user-home=/ferb/gradle_dependencies", "--info", "--rerun-tasks", "functionalQATest"]
+ENTRYPOINT ["./gradlew", "--gradle-user-home=${GRADLE_CACHE}", "--info", "--rerun-tasks", "functionalQATest"]
