@@ -211,7 +211,7 @@ logging:
     "io.dropwizard.jersey.DropwizardResourceConfig":
       level: INFO
     "AUDIT":
-      level: ALL
+      level: ${LOGLEVEL:-ALL}
   appenders:
     - type: console
       threshold: ALL

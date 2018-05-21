@@ -8,10 +8,11 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * {@link Response} adding an id to the {@link LongText}
+ * {@link Response} adding an id to the {@link LongText}.
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class PostedLongText extends LongText {
 
   private static final long serialVersionUID = 1L;

@@ -19,7 +19,6 @@ plugins {
 }
 
 apply plugin: 'com.github.jk1.dependency-license-report'
-
 apply plugin: 'maven-publish'
 apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -187,7 +186,6 @@ dependencies {
     
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
-
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: cwdsModelVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
@@ -202,7 +200,7 @@ dependencies {
 		
 	// functional testing
     testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
-    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'	
+    	compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'	
 	}
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
     testCompile group: 'io.rest-assured', name: 'json-schema-validator', version: '3.0.7'
@@ -231,7 +229,7 @@ tasks.withType(Test) {
 
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
-    // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    // systemProperty 'java.library.path', '.:${rootProject.projectDir}/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
     systemProperty 'java.library.path', '.:./lib:/opt/jenkins/workspace/taborda-API/lib:/usr/local/lib'
 }
 
