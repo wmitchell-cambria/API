@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -108,6 +109,10 @@ public class Screening extends ReportingDomain implements Request, Response {
   @JsonProperty("access_restrictions")
   @ApiModelProperty(value = "Access Restrictions", example = "sensitive")
   private String accessRestrictions;
+
+  @JsonProperty("restrictions_date")
+  @ApiModelProperty(value = "Restrictions Date", example = "2001-01-01")
+  private LocalDate restrictionsDate;
 
   @JsonProperty("restrictions_rationale")
   @ApiModelProperty(value = "Restrictions Rationale", example = "string")
@@ -337,6 +342,14 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   public void setAccessRestrictions(String accessRestrictions) {
     this.accessRestrictions = accessRestrictions;
+  }
+
+  public LocalDate getRestrictionsDate() {
+    return restrictionsDate;
+  }
+
+  public void setRestrictionsDate(LocalDate restrictionsDate) {
+    this.restrictionsDate = restrictionsDate;
   }
 
   public String getRestrictionsRationale() {

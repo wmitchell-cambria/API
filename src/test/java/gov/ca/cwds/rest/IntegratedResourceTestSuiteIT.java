@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest;
 
+import gov.ca.cwds.rest.resources.ParticipantIntakeApiResourceIRT;
 import gov.ca.cwds.rest.resources.ScreeningIntakeResourceIRT;
 import gov.ca.cwds.rest.resources.hoi.HoiCaseResourceAuthorizationIRT;
 import gov.ca.cwds.rest.resources.hoi.HoiCaseResourceIRT;
@@ -20,7 +21,8 @@ import org.junit.runners.Suite;
     HoiScreeningResourceIRT.class,
     HoiUsingClientIdResourceIRT.class,
     InvolvementHistoryResourceIRT.class,
-    ScreeningIntakeResourceIRT.class
+    ScreeningIntakeResourceIRT.class,
+    ParticipantIntakeApiResourceIRT.class
 })
 public class IntegratedResourceTestSuiteIT {
 
