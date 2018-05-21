@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -130,7 +131,8 @@ public class ScreeningSubmitServiceTest {
     screening.setScreeningDecisionDetail("evaluate_out");
     screening.setIncidentAddress(null);
     screening.setParticipantIntakeApis(null);
-
+    screening.setSafetyAlerts(new HashSet<String>());
+    screening.setSafetyInformation(null);
   }
 
   // create test

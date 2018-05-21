@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.services.submit;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +23,15 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  */
 public class ScreeningTransformer {
 
+  private static final String LEGACY_SOURCE_TABLE = "";
+  private static final String CURRENT_LOCATION_OF_CHILDREN = null;
+  private static final String RESPONSIBLE_AGENCY = "C";
+  private static final Boolean FAMILY_AWARENESS = Boolean.FALSE;
+  private static final Boolean FILED_WITH_LAW_ENFORCEMENT = Boolean.FALSE;
+  private static final Short APPROVAL_STATUS =
+      SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
+
+
   public ScreeningToReferral transform(Screening screening, String loggedInStaffId,
       String loggedInStaffCounty, Map<String, IntakeLov> nsLovMap,
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
@@ -37,45 +45,21 @@ public class ScreeningTransformer {
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
     Set<Allegation> allegations =
         new AllegationsTransformer().transform(screening.getAllegations(), nsCodeToNsLovMap);
-    Long id = (long) Integer.parseInt(screening.getId());
-    String legacySourceTable = "";
-    String referralId = screening.getReferralId();
-    String endedAt =
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt()));
-    String incidentCounty = screening.getIncidentCounty();
-    String incidentDate = screening.getIncidentDate();
-    String locationType = screening.getLocationType();
     String communicationMethod = screening.getCommunicationMethod();
     Short communicationMethodSysId = StringUtils.isNotBlank(communicationMethod)
         ? nsCodeToNsLovMap.get(communicationMethod).getLegacySystemCodeId().shortValue()
         : null;
-    String currentLocationOfChildren = null; // do not see in intake-api
-    String name = screening.getName();
-    String reportNarrative = screening.getReportNarrative();
-    String reference = screening.getReference();
     String responseTime = screening.getScreeningDecisionDetail();
     Short responseTimeSysId = StringUtils.isNotBlank(responseTime)
         ? nsCodeToNsLovMap.get(responseTime).getLegacySystemCodeId().shortValue()
         : null;
-    String startedAt =
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt()));
-    String assignee = screening.getAssignee();
-    String assigneeStaffId = screening.getAssigneeStaffId();
-    String additionalInformation = screening.getAdditionalInformation();
-    String screeningDecision = screening.getScreeningDecision();
-    String screeningDecisionDetail = screening.getScreeningDecisionDetail();
-    Short approvalStatus =
-        SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
-    // this is defaulted in intake-api,see referral_representer
-    Boolean familyAwareness = Boolean.FALSE; // this is defaulted in intake-api, see
-                                             // referral_representer
-    Boolean filedWithLawEnforcement = Boolean.FALSE;
-    // this is defaulted in intake-api, see referral_representer
-    String responsibleAgency = "C"; // this is defaulted in intake-api, see referral_representer
-    String limitedAccessCode = setLimitedAccessCode(screening.getAccessRestrictions());
-    String limitedAccessDescription = screening.getRestrictionsRationale();
-    String limitedAccessAgency = loggedInStaffCounty;
-    Date limitedAccessDate = null;// dateToday
+    String limitedAccessCode = StringUtils.isNotBlank(screening.getAccessRestrictions())
+        ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
+            .getCmsDescription()
+        : "N";
+    Date limitedAccessDate = null;
+    // this is the field restrictions_date in postgres screening that was missed in creation of
+    // Screening Domain object, Dev will add on Monday
     Address address = (screening.getIncidentAddress() != null)
         ? new AddressTransformer().transform(screening.getIncidentAddress(), nsCodeToNsLovMap)
         : null;
@@ -87,27 +71,21 @@ public class ScreeningTransformer {
         (screening.getCrossReports() != null) ? new CrossReportsTransformer()
             .transform(screening.getCrossReports(), nsCodeToNsLovMap, cmsSysIdToNsLovMap) : null;
 
-    Set<String> alerts = new HashSet<>(); // Need to map this field
-    String alertInformation = null; // Need to map this field
-    return new ScreeningToReferral(id, legacySourceTable, referralId, endedAt, incidentCounty,
-        incidentDate, locationType, communicationMethodSysId, currentLocationOfChildren, name,
-        reportNarrative, reference, responseTimeSysId, startedAt, assignee, assigneeStaffId,
-        additionalInformation, screeningDecision, screeningDecisionDetail, approvalStatus,
-        familyAwareness, filedWithLawEnforcement, responsibleAgency, limitedAccessCode,
-        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, alerts, alertInformation,
-        address, participants, crossReports, allegations);
-  }
+    return new ScreeningToReferral((long) Integer.parseInt(screening.getId()), LEGACY_SOURCE_TABLE,
+        screening.getReferralId(),
+        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt())),
+        screening.getIncidentCounty(), screening.getIncidentDate(), screening.getLocationType(),
+        communicationMethodSysId, CURRENT_LOCATION_OF_CHILDREN, screening.getName(),
+        screening.getReportNarrative(), screening.getReference(), responseTimeSysId,
+        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt())),
+        screening.getAssignee(), screening.getAssigneeStaffId(),
+        screening.getAdditionalInformation(), screening.getScreeningDecision(),
+        screening.getScreeningDecisionDetail(), APPROVAL_STATUS, FAMILY_AWARENESS,
+        FILED_WITH_LAW_ENFORCEMENT, RESPONSIBLE_AGENCY, limitedAccessCode,
+        screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
+        screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
+        crossReports, allegations);
 
-
-  private String setLimitedAccessCode(String accessRestrictions) {
-    if (accessRestrictions != null) {
-      if (("sensitive").equalsIgnoreCase(accessRestrictions)) {
-        return "S";
-      } else if (("sealed").equalsIgnoreCase(accessRestrictions)) {
-        return "R";
-      }
-    }
-    return "N";
   }
 
 }
