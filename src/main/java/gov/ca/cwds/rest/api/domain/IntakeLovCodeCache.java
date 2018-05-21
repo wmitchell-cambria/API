@@ -35,8 +35,8 @@ public interface IntakeLovCodeCache extends ApiMarker {
   Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId);
 
   /**
-   * @param metaId
-   * @param intakeCode
+   * @param metaId - metaId
+   * @param intakeCode - intakeCode
    * @return
    */
   IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode);

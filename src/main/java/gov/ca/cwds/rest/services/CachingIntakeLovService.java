@@ -20,6 +20,8 @@ import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
 
 /**
+ * Intake code cache Implementation
+ * 
  * @author CWDS API Team
  *
  */
@@ -41,9 +43,11 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
   }
 
   /**
-   * @param intakeLovDao
-   * @param secondsToRefreshCache
-   * @param preloadCache
+   * Construct the object.
+   * 
+   * @param intakeLovDao Intake Lov Dao
+   * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
+   * @param preloadCache If true then preload all system code cache
    */
   @Inject
   public CachingIntakeLovService(IntakeLovDao intakeLovDao, long secondsToRefreshCache,
@@ -107,6 +111,11 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
     return obj;
   }
 
+  /**
+   * =============================================================================== <br>
+   * Cache loader for intake codes. <br>
+   * ===============================================================================
+   */
   private static class IntakeCodeCacheLoader extends CacheLoader<CacheKey, Object> {
 
     private IntakeLovService intakeLovService;
