@@ -31,7 +31,6 @@ public class ScreeningTransformer {
   private static final Short APPROVAL_STATUS =
       SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
 
-
   public ScreeningToReferral transform(Screening screening, String loggedInStaffId,
       String loggedInStaffCounty, Map<String, IntakeLov> nsLovMap,
       Map<String, IntakeLov> cmsSysIdToNsLovMap) {
@@ -57,9 +56,7 @@ public class ScreeningTransformer {
         ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
             .getCmsDescription()
         : "N";
-    Date limitedAccessDate = null;
-    // this is the field restrictions_date in postgres screening that was missed in creation of
-    // Screening Domain object, Dev will add on Monday
+    Date limitedAccessDate = setLimitedAccesDate(screening);
     Address address = (screening.getIncidentAddress() != null)
         ? new AddressTransformer().transform(screening.getIncidentAddress(), nsCodeToNsLovMap)
         : null;
@@ -71,7 +68,7 @@ public class ScreeningTransformer {
         (screening.getCrossReports() != null) ? new CrossReportsTransformer()
             .transform(screening.getCrossReports(), nsCodeToNsLovMap, cmsSysIdToNsLovMap) : null;
 
-    return new ScreeningToReferral((long) Integer.parseInt(screening.getId()), LEGACY_SOURCE_TABLE,
+    return new ScreeningToReferral(Integer.parseInt(screening.getId()), LEGACY_SOURCE_TABLE,
         screening.getReferralId(),
         DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt())),
         screening.getIncidentCounty(), screening.getIncidentDate(), screening.getLocationType(),
@@ -85,7 +82,12 @@ public class ScreeningTransformer {
         screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
         screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
         crossReports, allegations);
+  }
 
+  private Date setLimitedAccesDate(Screening screening) {
+    return screening.getRestrictionsDate() != null
+        ? java.sql.Date.valueOf(screening.getRestrictionsDate())
+        : null;
   }
 
 }

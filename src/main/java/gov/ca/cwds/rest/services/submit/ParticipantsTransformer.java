@@ -31,7 +31,6 @@ public class ParticipantsTransformer {
       Map<String, IntakeLov> nsCodeToNsLovMap) {
     Set<Participant> participants = new HashSet<>();
 
-
     Boolean clientStaffPersonAdded = Boolean.FALSE;
     Boolean reporterConfidentialWaiver = Boolean.FALSE;
     String reporterEmployerName = "Employer Name";
@@ -48,9 +47,6 @@ public class ParticipantsTransformer {
           ? (Gender.findByNsDescription(p.getGender().toLowerCase())).getCmsDescription()
           : "";
       Long pid = Long.valueOf(p.getId());
-      p.getSensitive();
-      p.getSealed();
-      String sensitivityIndicator = "N";
       RaceAndEthnicity raceAndEthnicity =
           raceAndEthnicityTransformer.transform(p, nsCodeToNsLovMap);
       String dob = DomainChef.cookDate(p.getDateOfBirth());
@@ -62,11 +58,20 @@ public class ParticipantsTransformer {
           p.getLegacyDescriptor(), p.getFirstName(), p.getMiddleName(), p.getLastName(),
           p.getNameSuffix(), gender, ssn, dob, english, russian,
           Integer.parseInt(p.getScreeningId()), reporterConfidentialWaiver, reporterEmployerName,
-          clientStaffPersonAdded, sensitivityIndicator, p.getApproximateAge(),
+          clientStaffPersonAdded, setSensitivityIndicator(p), p.getApproximateAge(),
           p.getApproximateAgeUnits(), p.getRoles(), addresses, raceAndEthnicity);
       participants.add(participant);
     }
     return participants;
+  }
+
+  private String setSensitivityIndicator(ParticipantIntakeApi p) {
+    if (Boolean.TRUE.equals(p.getSensitive())) {
+      return "S";
+    } else if (Boolean.TRUE.equals(p.getSealed())) {
+      return "R";
+    }
+    return "N";
   }
 
 }
