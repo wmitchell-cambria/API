@@ -219,7 +219,6 @@ public class HOICaseServiceTest extends Doofenshmirtz<Client> {
     }
   }
 
-
   @Test(expected = NotImplementedException.class)
   public void testHandleRequest() {
     target.handleRequest(new HOICase());
