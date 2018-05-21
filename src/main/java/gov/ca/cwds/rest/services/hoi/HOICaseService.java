@@ -101,7 +101,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     HOICaseResponse ret = new HOICaseResponse();
     final Collection<String> clientIds = hoiRequest.getClientIds();
     if (clientIds.isEmpty()) {
-      return new HOICaseResponse();
+      return ret;
     }
 
     final List<String> authorizedClients = authorizeClients(clientIds);
@@ -114,12 +114,15 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       loadClients(hcd);
       loadCmsCases(hcd);
 
-      final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
-      for (CmsCase cmsCase : hcd.getCmsCases().values()) {
-        cases.add(constructHOICase(cmsCase, hcd));
+      final Map<String, CmsCase> cmsCases = hcd.getCmsCases();
+      if (cmsCases != null && !cmsCases.isEmpty()) {
+        final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
+        for (CmsCase cmsCase : hcd.getCmsCases().values()) {
+          cases.add(constructHOICase(cmsCase, hcd));
+        }
+        cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
+        ret = new HOICaseResponse(cases);
       }
-      cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
-      ret = new HOICaseResponse(cases);
     }
 
     return ret;
