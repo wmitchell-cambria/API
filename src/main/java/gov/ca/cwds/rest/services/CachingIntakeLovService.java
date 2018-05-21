@@ -73,7 +73,7 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
   @Override
   public Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId) {
     Map<String, IntakeLov> intakeLov = new HashMap<>();
-    if (!StringUtils.isBlank(metaId)) {
+    if (StringUtils.isNotBlank(metaId)) {
       CacheKey cacheKey = CacheKey.createForMeta(metaId);
       return (Map<String, IntakeLov>) getFromCache(cacheKey);
     }
@@ -82,7 +82,6 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
 
   @Override
   public IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
-
     if (StringUtils.isNotBlank(metaId)) {
       CacheKey cacheKey = CacheKey.createForMeta(metaId);
       @SuppressWarnings("unchecked")
@@ -130,9 +129,9 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
     }
 
     /**
-     * Loads all system code cache entries.
+     * Loads all intake code cache entries.
      * 
-     * @return All system code cache entries.
+     * @return All intake code cache entries.
      * @throws Exception on disconnect, NPE, etc.
      */
     public Map<CacheKey, Object> loadAll() {
@@ -188,10 +187,12 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
       this.value = value;
     }
 
+    @SuppressWarnings("unused")
     public Serializable getValue() {
       return value;
     }
 
+    @SuppressWarnings("unused")
     public String getType() {
       return type;
     }
