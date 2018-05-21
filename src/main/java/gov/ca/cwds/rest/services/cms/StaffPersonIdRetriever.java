@@ -62,8 +62,6 @@ public class StaffPersonIdRetriever {
       Object currentPrincipal = principalCount > 1 ? principals.get(1) : null;
 
       perryUserIdentity = getCurrentPrincipal(currentPrincipal);
-      LOGGER.info("======= current user {} has following principals {}", currentUser, principalCollection.asList().stream().collect(
-          Collectors.joining(",")));
     } else {
       LOGGER.warn("======= current user has no principals for {}", currentUser);
     }

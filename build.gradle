@@ -338,7 +338,7 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
 }
 
 task createGradleCache(type: Copy) {
-    from '/Users/tparker/.gradle/caches/'
+    from "$System.env.HOME/.gradle/caches/"
     into 'build/gradle_cache'
 }
 
