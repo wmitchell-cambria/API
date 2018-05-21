@@ -21,9 +21,9 @@ import gov.ca.cwds.IntakeBaseTest;
 
 /**
  * @author CWDS API Team
- *
  */
 public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
+
   private static final String USER_SOCIAL_WORKER_ONLY =
       "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
   private static final String USER_COUNTY_SENSITIVE =
@@ -56,6 +56,8 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-3.json";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "SZdBGYk75C";
+  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_HOI_RESPONSE_1 =
+      "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-different-county-sensitive-response-1.json";
 
   private static final String CLIENT_DIFFERENT_COUNTY_SEALED_ID = "4jCKVgx0GE";
 
@@ -216,7 +218,8 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
   @Test
   public void testHandleFindForUserStateSensitiveAndClientDifferentCountySensitive()
       throws Exception {
-    assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID);
+    assertHandleFind(USER_STATE_SENSITIVE, CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID,
+        fixture(CLIENT_DIFFERENT_COUNTY_SENSITIVE_HOI_RESPONSE_1));
   }
 
   @Test
