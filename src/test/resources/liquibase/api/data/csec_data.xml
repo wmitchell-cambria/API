@@ -1,12 +1,54 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk" id="csec_data">
+  <changeSet author="Intake Team" id="csec_data">
     <insert tableName="csec">
       <column name="id" value="1"/>
       <column name="participant_id" value="42"/>
       <column name="csec_code_id" value="519"/>
       <column name="start_date" valueDate="2018-03-30"/>
       <column name="end_date" valueDate="2018-03-31"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2501"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="519"/>
+      <column name="start_date" valueDate="2001-01-01"/>
+      <column name="end_date" valueDate="2002-02-02"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2502"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="520"/>
+      <column name="start_date" valueDate="2001-01-02"/>
+      <column name="end_date" valueDate="2002-02-03"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2503"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="521"/>
+      <column name="start_date" valueDate="2001-01-03"/>
+      <column name="end_date" valueDate="2002-02-04"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2504"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="522"/>
+      <column name="start_date" valueDate="2001-01-04"/>
+      <column name="end_date" valueDate="2002-02-05"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2505"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="523"/>
+      <column name="start_date" valueDate="2001-01-05"/>
+      <column name="end_date" valueDate="2002-02-06"/>
+    </insert>
+    <insert tableName="csec">
+      <column name="id" value="2506"/>
+      <column name="participant_id" value="25"/>
+      <column name="csec_code_id" value="524"/>
+      <column name="start_date" valueDate="2001-01-06"/>
+      <column name="end_date" valueDate="2002-02-07"/>
     </insert>
   </changeSet>
 </databaseChangeLog>

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -65,8 +64,6 @@ public class CrossReportsTransformerTest {
 
   @Test
   public void transformConvertsCrossReportsIntakeToCrossReports() {
-    Set<GovernmentAgency> agencies = new HashSet<>();
-    agencies.add(new GovernmentAgencyResourceBuilder().build());
     crossReportIntake.setMethod("Electronic Report");
 
     CrossReport crossReport = new CrossReportResourceBuilder().setCountyId("34")
@@ -82,8 +79,6 @@ public class CrossReportsTransformerTest {
 
   @Test
   public void transformConvertsCrossReportsIntakeToCrossReportsWhenMethodEmpty() {
-    Set<GovernmentAgency> agencies = new HashSet<>();
-    agencies.add(new GovernmentAgencyResourceBuilder().build());
     crossReportIntake.setMethod("");
 
     CrossReport crossReport = new CrossReportResourceBuilder().setCountyId("34")
@@ -99,8 +94,6 @@ public class CrossReportsTransformerTest {
 
   @Test
   public void transformConvertsCrossReportsIntakeToCrossReportsWhenCountyEmpty() {
-    Set<GovernmentAgency> agencies = new HashSet<>();
-    agencies.add(new GovernmentAgencyResourceBuilder().build());
     crossReportIntake.setMethod("Electronic Report");
     crossReportIntake.setCountyId(null);
 
