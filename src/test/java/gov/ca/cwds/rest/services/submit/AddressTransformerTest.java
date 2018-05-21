@@ -53,4 +53,30 @@ public class AddressTransformerTest {
     assertEquals(actual, expected);
   }
 
+  @Test
+  public void transformConvertsAddressIntakeApiToAddressWhenStateIsNull() {
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptorEntityBuilder().build();
+    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType("28").setState(null)
+        .setLegacyDescriptor(legacyDescriptor).build();
+
+    Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
+        "Springfield", null, "93838", 28, legacyDescriptor);
+
+    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
+    assertEquals(actual, expected);
+  }
+
+  @Test
+  public void transformConvertsAddressIntakeApiToAddressWhenTypeIsNull() {
+    LegacyDescriptor legacyDescriptor = new LegacyDescriptorEntityBuilder().build();
+    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType(null)
+        .setLegacyDescriptor(legacyDescriptor).build();
+
+    Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
+        "Springfield", 1828, "93838", null, legacyDescriptor);
+
+    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
+    assertEquals(actual, expected);
+  }
+
 }

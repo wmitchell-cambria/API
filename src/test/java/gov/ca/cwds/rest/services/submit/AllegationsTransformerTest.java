@@ -76,4 +76,17 @@ public class AllegationsTransformerTest {
     assertEquals(actual, expected);
   }
 
+  @Test
+  public void transformConvertsAllegationsIntakeToAllegationsWhenDescriptionIsEmpty() {
+    allegationIntake.setTypes(Stream.of("").collect(Collectors.toSet()));
+    Allegation allegation =
+        new AllegationResourceBuilder().setInjuryHarmType(null).createAllegation();
+    Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
+    Set<Allegation> expected = Stream.of(allegation).collect(Collectors.toSet());
+    Set<Allegation> actual =
+        new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
+
+    assertEquals(actual, expected);
+  }
+
 }

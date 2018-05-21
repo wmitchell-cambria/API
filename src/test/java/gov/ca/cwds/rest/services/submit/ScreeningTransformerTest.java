@@ -76,6 +76,9 @@ public class ScreeningTransformerTest {
     screening.setScreeningDecisionDetail("evaluate_out");
     screening.setIncidentAddress(null);
     screening.setParticipantIntakeApis(null);
+    screening.setSafetyAlerts(new HashSet<String>());
+    screening.setSafetyInformation(null);
+    screening.setAccessRestrictions("none");
   }
 
   @Test

@@ -118,6 +118,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
 
+    new TestingRequestExecutionContext("02f");
+    SystemCodeCache.global().getAllSystemCodes();
+
     // Authentication, authorization:
     mockSubject = mock(Subject.class);
     principalCollection = mock(PrincipalCollection.class);

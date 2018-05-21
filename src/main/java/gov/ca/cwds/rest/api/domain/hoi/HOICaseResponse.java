@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.RequestContextAwareResponse;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 
@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiModel;
  */
 @ApiModel
 @JsonSnakeCase
-public class HOICaseResponse implements Response {
+public class HOICaseResponse implements RequestContextAwareResponse {
 
   /**
    * Base serialization version. Increment by class version.
