@@ -1,5 +1,21 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_DIFFERENT_COUNTY_SEALED_ID;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_NO_CONDITIONS_ID;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_NO_COUNTY_SEALED_ID;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_NO_COUNTY_SENSITIVE_ID;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SEALED_ID_1;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SEALED_ID_2;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SEALED_ID_3;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SENSITIVE_ID_1;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SENSITIVE_ID_2;
+import static gov.ca.cwds.IntakeBaseTestConstants.CLIENT_SAME_COUNTY_SENSITIVE_ID_3;
+import static gov.ca.cwds.IntakeBaseTestConstants.USER_COUNTY_SEALED;
+import static gov.ca.cwds.IntakeBaseTestConstants.USER_COUNTY_SENSITIVE;
+import static gov.ca.cwds.IntakeBaseTestConstants.USER_SOCIAL_WORKER_ONLY;
+import static gov.ca.cwds.IntakeBaseTestConstants.USER_STATE_SEALED;
+import static gov.ca.cwds.IntakeBaseTestConstants.USER_STATE_SENSITIVE;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
@@ -24,48 +40,25 @@ import gov.ca.cwds.IntakeBaseTest;
  */
 public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
 
-  private static final String USER_SOCIAL_WORKER_ONLY =
-      "fixtures/gov/ca/cwds/rest/resources/hoi/user-social-worker-only.json";
-  private static final String USER_COUNTY_SENSITIVE =
-      "fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sensitive.json";
-  private static final String USER_COUNTY_SEALED =
-      "fixtures/gov/ca/cwds/rest/resources/hoi/user-county-sealed.json";
-  private static final String USER_STATE_SENSITIVE =
-      "fixtures/gov/ca/cwds/rest/resources/hoi/user-state-sensetive.json";
-  private static final String USER_STATE_SEALED =
-      "fixtures/gov/ca/cwds/rest/resources/hoi/user-state-sealed.json";
-
-  private static final String CLIENT_NO_CONDITIONS_ID = "AhGPhcm0T1";
   private static final String CLIENT_NO_CONDITIONS_HOI_RESPONSE =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-no-conditions-response.json";
 
-  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_1 = "1S3k0iv00T";
-  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_2 = "PQ3s1OD01t";
-  private static final String CLIENT_SAME_COUNTY_SENSITIVE_ID_3 = "AbA4BJy0Aq";
   private static final String CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_1 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sensitive-response-1.json";
   private static final String CLIENT_SAME_COUNTY_SENSITIVE_HOI_RESPONSE_3 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sensitive-response-3.json";
 
-  private static final String CLIENT_SAME_COUNTY_SEALED_ID_1 = "4kgIiDy00T";
-  private static final String CLIENT_SAME_COUNTY_SEALED_ID_2 = "Ba29OOP75A";
-  private static final String CLIENT_SAME_COUNTY_SEALED_ID_3 = "Abxl9D005Y";
   private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_2 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-2.json";
   private static final String CLIENT_SAME_COUNTY_SEALED_HOI_RESPONSE_3 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-same-county-sealed-response-3.json";
 
-  private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_ID = "SZdBGYk75C";
   private static final String CLIENT_DIFFERENT_COUNTY_SENSITIVE_HOI_RESPONSE_1 =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-different-county-sensitive-response-1.json";
 
-  private static final String CLIENT_DIFFERENT_COUNTY_SEALED_ID = "4jCKVgx0GE";
-
-  private static final String CLIENT_NO_COUNTY_SENSITIVE_ID = "F187hFj00E";
   private static final String CLIENT_NO_COUNTY_SENSITIVE_HOI_RESPONSE =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-no-county-sensitive-response.json";
 
-  private static final String CLIENT_NO_COUNTY_SEALED_ID = "SIfUah90GD";
   private static final String CLIENT_NO_COUNTY_SEALED_HOI_RESPONSE =
       "fixtures/gov/ca/cwds/rest/resources/hoi/hoi-case-client-no-county-sealed-response.json";
 
@@ -196,7 +189,6 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
         fixture(CLIENT_NO_COUNTY_SEALED_HOI_RESPONSE));
   }
 
-
   // state sensitive
   @Test
   public void testHandleFindForUserStateSensitiveAndClientNoCondition() throws Exception {
@@ -236,7 +228,6 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
   public void testHandleFindForUserStateSensitiveAndClientNoCountySealed() throws Exception {
     assertHandleFindEmptyResults(USER_STATE_SENSITIVE, CLIENT_NO_COUNTY_SEALED_ID);
   }
-
 
   // state sealed
   @Test
@@ -295,8 +286,7 @@ public class HoiCaseResourceAuthorizationIRT extends IntakeBaseTest {
     Assert.assertTrue(actualJson.trim().length() < 10);
   }
 
-  private String doHandleFindCall(String userFilePath, String clientIds)
-      throws java.io.IOException {
+  private String doHandleFindCall(String userFilePath, String clientIds) throws IOException {
     WebTarget target =
         clientTestRule.withSecurityToken(userFilePath).target(RESOURCE_CASE_HISTORY_OF_INVOLVEMENT);
 
