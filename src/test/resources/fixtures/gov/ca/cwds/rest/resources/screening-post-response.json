@@ -37,10 +37,12 @@
       "agencies": [
         {
           "id": "${agency1_id}",
+          "code": "Tet1MxS00E",
           "type": "DISTRICT_ATTORNEY"
         },
         {
           "id": "${agency2_id}",
+          "code": "OCyM47F00J",
           "type": "LAW_ENFORCEMENT"
         }
       ]

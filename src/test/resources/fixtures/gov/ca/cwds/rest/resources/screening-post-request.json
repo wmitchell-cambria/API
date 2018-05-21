@@ -34,9 +34,11 @@
       "county_id": "1101",
       "agencies": [
         {
+          "code": "Tet1MxS00E",
           "type": "DISTRICT_ATTORNEY"
         },
         {
+          "code": "OCyM47F00J",
           "type": "LAW_ENFORCEMENT"
         }
       ]
