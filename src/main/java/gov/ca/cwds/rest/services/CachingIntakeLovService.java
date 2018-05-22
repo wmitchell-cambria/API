@@ -136,7 +136,7 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
      * @throws Exception on disconnect, NPE, etc.
      */
     public Map<CacheKey, Object> loadAll() {
-      LOGGER.info("Loading all system code cache...");
+      LOGGER.info("Loading all intake code cache...");
 
       Map<CacheKey, Object> intakeCodeMap = new HashMap<>();
       Map<String, Map<String, IntakeLov>> intakeLovMap = new HashMap<>();
