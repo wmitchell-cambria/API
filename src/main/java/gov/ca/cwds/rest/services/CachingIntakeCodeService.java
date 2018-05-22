@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
-import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 
 /**
  * Intake code cache Implementation
@@ -25,9 +25,9 @@ import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
  * @author CWDS API Team
  *
  */
-public class CachingIntakeLovService extends IntakeLovService implements IntakeLovCodeCache {
+public class CachingIntakeCodeService extends IntakeLovService implements IntakeCodeCache {
 
-  private transient LoadingCache<CacheKey, Object> intakeLovCodeCache;
+  private transient LoadingCache<CacheKey, Object> intakeCodeCache;
 
   /**
    * 
@@ -38,7 +38,7 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
    * Default no-arg constructor.
    */
   @SuppressWarnings("unused")
-  private CachingIntakeLovService() {
+  private CachingIntakeCodeService() {
     // no-opt
   }
 
@@ -50,18 +50,18 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
    * @param preloadCache If true then preload all system code cache
    */
   @Inject
-  public CachingIntakeLovService(IntakeLovDao intakeLovDao, long secondsToRefreshCache,
+  public CachingIntakeCodeService(IntakeLovDao intakeLovDao, long secondsToRefreshCache,
       boolean preloadCache) {
     super(intakeLovDao);
 
     final IntakeCodeCacheLoader cacheLoader = new IntakeCodeCacheLoader(this);
-    intakeLovCodeCache = CacheBuilder.newBuilder()
+    intakeCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
 
     if (preloadCache) {
       try {
         Map<CacheKey, Object> intakeCode = cacheLoader.loadAll();
-        intakeLovCodeCache.putAll(intakeCode);
+        intakeCodeCache.putAll(intakeCode);
       } catch (Exception e) {
         LOGGER.error("Error loading intake codes", e);
         throw new ServiceException(e);
@@ -103,7 +103,7 @@ public class CachingIntakeLovService extends IntakeLovService implements IntakeL
   private Object getFromCache(CacheKey cacheEntryKey) {
     Object obj = null;
     try {
-      obj = intakeLovCodeCache.get(cacheEntryKey);
+      obj = intakeCodeCache.get(cacheEntryKey);
     } catch (Exception e) {
       LOGGER.warn("getFromCache -> Unable to load object for key: " + cacheEntryKey, e);
     }

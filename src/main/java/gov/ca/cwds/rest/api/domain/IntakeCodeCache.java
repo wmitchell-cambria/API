@@ -10,13 +10,13 @@ import gov.ca.cwds.data.std.ApiMarker;
  * @author CWDS API Team
  *
  */
-public interface IntakeLovCodeCache extends ApiMarker {
+public interface IntakeCodeCache extends ApiMarker {
 
   /**
    * Register this intakes Code cache instance for system-wide use.
    */
   default void register() {
-    DeferredRegistry.<IntakeLovCodeCache>register(IntakeLovCodeCache.class, this);
+    DeferredRegistry.<IntakeCodeCache>register(IntakeCodeCache.class, this);
   }
 
   /**
@@ -24,8 +24,8 @@ public interface IntakeLovCodeCache extends ApiMarker {
    * 
    * @return singleton intakes code cache
    */
-  static IntakeLovCodeCache global() {
-    return DeferredRegistry.<IntakeLovCodeCache>unwrap(IntakeLovCodeCache.class);
+  static IntakeCodeCache global() {
+    return DeferredRegistry.<IntakeCodeCache>unwrap(IntakeCodeCache.class);
   }
 
   /**

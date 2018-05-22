@@ -3,13 +3,14 @@ package gov.ca.cwds.data.cms;
 import java.util.Map;
 
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
-import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 
 /**
  * @author CWDS API Team
  *
  */
-public class TestIntakeCodeCache implements IntakeLovCodeCache {
+public class TestIntakeCodeCache implements IntakeCodeCache {
 
   /**
    * 
@@ -35,12 +36,13 @@ public class TestIntakeCodeCache implements IntakeLovCodeCache {
       return new IntakeLov(sysCode, null, null, null, false, "DSP_RSNC", null, null, null,
           "Abandoned", null);
     }
-    if ("ETHNCTYC".contains(metaId) && "Central American".contains(intakeCode)) {
+    if (SystemCodeCategoryId.ETHNICITY.contains(metaId)
+        && "Central American".contains(intakeCode)) {
       final Long sysCode = 841L;
       return new IntakeLov(sysCode, null, null, null, false, "ETHNCTYC", null, null, null,
           "Central American", null);
     }
-    if ("ETHNCTYC".contains(metaId) && "Mexican".contains(intakeCode)) {
+    if (SystemCodeCategoryId.ETHNICITY.contains(metaId) && "Mexican".contains(intakeCode)) {
       final Long sysCode = 3164L;
       return new IntakeLov(sysCode, null, null, null, false, "ETHNCTYC", null, null, null,
           "Mexican", null);

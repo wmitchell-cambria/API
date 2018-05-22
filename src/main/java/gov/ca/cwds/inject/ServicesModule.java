@@ -24,12 +24,12 @@ import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
-import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.AddressService;
-import gov.ca.cwds.rest.services.CachingIntakeLovService;
+import gov.ca.cwds.rest.services.CachingIntakeCodeService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
@@ -273,26 +273,26 @@ public class ServicesModule extends AbstractModule {
   }
 
   /**
-   * @param intakeLovDao
-   * @return
+   * @param intakeLovDao - intakeLovDao
+   * @return the IntakeCode
    */
   @Provides
   public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
     LOGGER.debug("provide intakeCode service");
     final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
-    return new CachingIntakeLovService(intakeLovDao, secondsToRefreshCache, false);
+    return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache, false);
   }
 
   /**
-   * @param intakeLovService
-   * @return
+   * @param intakeLovService - intakeLovService
+   * @return IntakeCodeCache
    */
   @Provides
-  public IntakeLovCodeCache provideIntakeLovCodeCache(IntakeLovService intakeLovService) {
+  public IntakeCodeCache provideIntakeLovCodeCache(IntakeLovService intakeLovService) {
     LOGGER.debug("provide intakeCode cache");
-    IntakeLovCodeCache intakeLovCodeCache = (IntakeLovCodeCache) intakeLovService;
-    intakeLovCodeCache.register();
-    return intakeLovCodeCache;
+    IntakeCodeCache intakeCodeCache = (IntakeCodeCache) intakeLovService;
+    intakeCodeCache.register();
+    return intakeCodeCache;
   }
 
   /**
