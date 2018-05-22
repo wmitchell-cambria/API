@@ -29,15 +29,19 @@ public interface IntakeCodeCache extends ApiMarker {
   }
 
   /**
+   * Get all legacy system code using meta id.
+   * 
    * @param metaId - metaId
    * @return All legacy system codes for the metaId.
    */
   Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId);
 
   /**
+   * Get the valid legacy system code identified by meta Id and intake code.
+   * 
    * @param metaId - metaId
    * @param intakeCode - intakeCode
-   * @return
+   * @return the legacy system code id
    */
   IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode);
 
