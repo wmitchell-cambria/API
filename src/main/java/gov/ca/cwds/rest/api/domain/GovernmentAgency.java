@@ -2,11 +2,11 @@ package gov.ca.cwds.rest.api.domain;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -14,13 +14,16 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
 
+
+import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 /**
  * {@link DomainObject} representing a GovernmentAgency
  * 
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "type"})
+@JsonPropertyOrder({"id", "code", "type"})
 public class GovernmentAgency implements Serializable {
 
   /**
@@ -39,6 +42,11 @@ public class GovernmentAgency implements Serializable {
       "DEPARTMENT_OF_JUSTICE", "LAW_ENFORCEMENT"})
   private String type;
 
+  @JsonProperty("code")
+  @ApiModelProperty(example = "ABC1234567")
+  @Size(max = CMS_ID_LEN)
+  private String code;
+
   /**
    * default constructor
    */
@@ -50,8 +58,7 @@ public class GovernmentAgency implements Serializable {
    * @param id - id
    * @param type - type
    */
-  @JsonCreator
-  public GovernmentAgency(@JsonProperty("id") String id, @JsonProperty("type") String type) {
+  public GovernmentAgency(String id, String type) {
     this.id = id;
     this.type = type;
   }
@@ -82,7 +89,16 @@ public class GovernmentAgency implements Serializable {
     return type;
   }
 
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
+  }
+
   /**
+
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()
