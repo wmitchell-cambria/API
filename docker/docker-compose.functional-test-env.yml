@@ -1,0 +1,123 @@
+version: '2.3'
+services:
+  nginx:
+    image: nginx:stable
+    ports:
+      - '80:80'
+    volumes:
+      - ${PWD}/docker/nginx/config/nginx.conf:/etc/nginx/nginx.conf
+    restart: always
+    depends_on:
+      - perry
+      - ferb
+    networks:
+      default:
+        aliases:
+          - ferbapi.local.cwds.io
+          - perry.local.cwds.io
+          - intake.local.cwds.io
+  ferb-test:
+    image: ${FERB_TEST_IMAGE_VERSION:-cwds/api-functional-test:latest}
+    environment:
+      TEST_FILE_PATH: /ferb/conf/testConfig.yml
+      BASE_URL: "http://ferb:8082"
+      CALL_BACK_URL: "http://ferb:8082"
+      AUTH_BASE_URL: "http://perry:8083"
+      PERRY_LOGIN_URL: "http://perry:8083/perry/login"
+      AUTH_LOGIN_URL: "http://perry:8083/perry/authn/login"
+      VALIDATE_URL: "http://perry:8083/perry/authn/validate"
+      TOKEN_URL: "http://perry:8083/perry/authn/token"
+      LOG_OUT_URL: "http://perry:8083/perry/authn/logout"
+    volumes:
+      - ./ferb-test/config/:/ferb/conf
+      - ./ferb-test/reports:/ferb/build/reports
+      - ./ferb-test/logs:/ferb/logs
+    depends_on:
+      - ferb
+      - nginx
+  ferb:
+    image: ${FERB_IMAGE_VERSION:-cwds/api:latest}
+    command: bash -c "./entrypoint.sh 2>&1 | tee 'log.file'"
+    ports:
+      - "8082:8082"
+    expose:
+      - 8082
+    volumes:
+      - ${PWD}/docker/ferb-test/config/shiro_v2.ini:/opt/cws-api/config/shiro_v2.ini
+    environment:
+      SWAGGER_JSON_URL: http://ferbapi.local.cwds.io/swagger.json
+      SWAGGER_CALLBACK_URL: http://ferbapi.local.cwds.io/swagger
+      LOGIN_URL: http://perry.local.cwds.io/perry/authn/login
+      DB_CMS_USER: db2inst1
+      DB_CMS_PASSWORD: db2inst1
+      DB_CMS_JDBC_URL: jdbc:db2://db2:50000/DB0TDEV
+      DB_CMS_SCHEMA: CWSINT
+      DB_CMS_HOST: db2
+      DB_CMS_PORT: 50000
+      DB_CMS_SERVICE: DB0TDEV
+      DB_CWSRS_JDBC_URL: jdbc:db2://db2:50000/DB0TDEV
+      DB_CWSRS_USER:  db2inst1
+      DB_CWSRS_PASSWORD:  db2inst1
+      DB_CWSRS_SCHEMA:  CWSRS1
+      DB_NS_USER: postgres_data
+      DB_NS_PASSWORD: postgres_data
+      DB_NS_JDBC_URL: jdbc:postgresql://db:5432/postgres_data?currentSchema=intakens
+      SHOW_SWAGGER: 'true'
+      ES_CLUSTER_PEOPLE: elasticsearchintake
+      ES_CLUSTER_SCREENINGS: elasticsearchintake
+      ES_PORT_PEOPLE: 9300
+      ES_PORT_SCREENINGS: 9300
+      APP_STD_PORT: 8082
+      SHIRO_CONFIG_PATH: config/shiro_v2.ini
+    depends_on:
+      - db
+      - db2
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://ferb:8082/swagger && echo 'OK'"]
+      interval: 30s
+      timeout: 60s
+      retries: 3
+  perry:
+    image: ${PERRY_IMAGE_VERSION:-cwds/perry:1.6.2_424-RC}
+    command: bash -c "./entrypoint.sh 2>&1 | tee 'log.file'"
+    ports:
+      - "8083:8083"
+    expose:
+      - 8083
+    environment:
+      LOGIN_RESOURCE_HELPER: "gov.ca.cwds.rest.resources.auth.SimpleAccountLoginResourceHelper"
+      DEV_MODE: 'true' # comment out to turn on prod mode
+      DB_CMS_USER: db2inst1
+      DB_CMS_PASSWORD: db2inst1
+      DB_CMS_JDBC_URL: jdbc:db2://db2:50000/DB0TDEV
+      DB_CMS_SCHEMA: CWSINT
+      SIMPLE_ACCOUNT_LOGIN_BASE_PATH: /perry/
+      SAF_CLIENT_ID: ""
+      HTTP_PORT: 8083
+    depends_on:
+      - db2
+    healthcheck:
+      test: head -n 4000 log.file | grep "Started PerryApplication in"
+      interval: 5s
+      timeout: 10s
+      retries: 80
+  db2:
+    image: ${DB2DATA_IMAGE_VERSION:-cwds/db2data:0.5.6-SNAPSHOT}
+    ports:
+      - 50000:50000
+    privileged: true
+    tty: true
+    restart: always
+    environment:
+      LICENSE: "accept"
+      DB2INST1_USER: "db2inst1"
+      DB2INST1_PASSWORD: "db2inst1"
+  db:
+    image: ${POSTGRES_IMAGE_VERSION:-cwds/postgresql_data:0.7.1_555-RC}
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres_data
+volumes:
+  esdata1:
+    driver: local
