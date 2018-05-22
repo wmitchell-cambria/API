@@ -1,6 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import java.util.Properties;
 
 import javax.validation.Validation;
@@ -20,15 +19,20 @@ import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
 import gov.ca.cwds.rest.ApiConfiguration;
+import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.AddressService;
+import gov.ca.cwds.rest.services.CachingIntakeLovService;
+import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
@@ -266,6 +270,29 @@ public class ServicesModule extends AbstractModule {
     SystemCodeCache systemCodeCache = (SystemCodeCache) systemCodeService;
     systemCodeCache.register();
     return systemCodeCache;
+  }
+
+  /**
+   * @param intakeLovDao
+   * @return
+   */
+  @Provides
+  public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
+    LOGGER.debug("provide intakeCode service");
+    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
+    return new CachingIntakeLovService(intakeLovDao, secondsToRefreshCache, false);
+  }
+
+  /**
+   * @param intakeLovService
+   * @return
+   */
+  @Provides
+  public IntakeLovCodeCache provideIntakeLovCodeCache(IntakeLovService intakeLovService) {
+    LOGGER.debug("provide intakeCode cache");
+    IntakeLovCodeCache intakeLovCodeCache = (IntakeLovCodeCache) intakeLovService;
+    intakeLovCodeCache.register();
+    return intakeLovCodeCache;
   }
 
   /**

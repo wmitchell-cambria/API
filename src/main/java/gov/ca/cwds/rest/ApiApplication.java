@@ -22,6 +22,7 @@ import gov.ca.cwds.health.resource.DB2Database;
 import gov.ca.cwds.health.resource.SwaggerEndpoint;
 import gov.ca.cwds.inject.ApplicationModule;
 import gov.ca.cwds.inject.InjectorHolder;
+import gov.ca.cwds.rest.api.domain.IntakeLovCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
@@ -112,6 +113,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+    injector.getInstance(IntakeLovCodeCache.class);
 
     // ERROR: "binder can only be called inside configure" -- but can't call it in configure()
     // either.
