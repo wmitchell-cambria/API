@@ -79,8 +79,6 @@ public class AllegationServiceTest {
     assertThat(found, is(nullValue()));
   }
 
-  // delete test
-
   @Test
   public void testDeleteDelegatesToCrudsService() {
     allegationService.delete("ABC2345678");
