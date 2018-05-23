@@ -1,10 +1,12 @@
 package gov.ca.cwds.rest.services;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.std.ApiMarker;
 import gov.ca.cwds.rest.api.domain.IntakeLovEntry;
 import gov.ca.cwds.rest.api.domain.IntakeLovResponse;
@@ -20,22 +22,24 @@ public class IntakeLovService
 
   private static final long serialVersionUID = 1L;
 
-  private transient IntakeLovDao dao;
+  private transient IntakeLovDao intakeLovDao;
+
+  protected IntakeLovService() {}
 
   /**
    * Constructor
    * 
-   * @param dao main DAO
+   * @param intakeLovDao main DAO
    */
   @Inject
-  public IntakeLovService(IntakeLovDao dao) {
-    this.dao = dao;
+  public IntakeLovService(IntakeLovDao intakeLovDao) {
+    this.intakeLovDao = intakeLovDao;
   }
 
   @Override
   protected IntakeLovResponse handleRequest(IntakeLovEntry req) {
     return new IntakeLovResponse(
-        dao.findAll().stream().map(IntakeLovEntry::new).collect(Collectors.toList()));
+        intakeLovDao.findAll().stream().map(IntakeLovEntry::new).collect(Collectors.toList()));
   }
 
   @Override
@@ -45,6 +49,13 @@ public class IntakeLovService
     } catch (Exception e) {
       throw new ServiceException("ERROR handling \"find\"", e);
     }
+  }
+
+  /**
+   * @return the intake Codes
+   */
+  public List<IntakeLov> findAllIntakeLov() {
+    return intakeLovDao.findAll();
   }
 
 }
