@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -27,11 +28,11 @@ import io.dropwizard.jackson.Jackson;
  *
  */
 public class ConfigImpl implements YmlLoader {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(ConfigImpl.class);
 
   public static final String API_CONF_YML_PATH = "config/api.yml";
   public static final String FILE_PATH_KEY = "TEST_FILE_PATH";
+  public CwdsAuthenticationClientConfig config;
 
   @Override
   public InputStream open(String path) throws IOException {
@@ -44,7 +45,8 @@ public class ConfigImpl implements YmlLoader {
 
   @Override
   public CwdsAuthenticationClientConfig readConfig() {
-    return loadTestConfiguratin();
+    config = loadTestConfiguratin();
+    return config;
   }
 
   private CwdsAuthenticationClientConfig loadTestConfiguratin() {
@@ -60,8 +62,9 @@ public class ConfigImpl implements YmlLoader {
         new SubstitutingSourceProvider(this, new EnvironmentVariableSubstitutor(false))
             .open(testConfFilePath);) {
       testConf = yaml.loadAs(ymlTestingSourceProvider, CwdsAuthenticationClientConfig.class);
-    } catch (IOException e) {
-      LOGGER.error("Unable to load the yaml test config file {}", e);
+    } catch (Exception e ) {
+      LOGGER.error("Unable to convert test file to YAML. Check YML syntax and data structure against class.");
+      e.printStackTrace();
     }
     return testConf;
   }
@@ -84,12 +87,13 @@ public class ConfigImpl implements YmlLoader {
 
   private String getApiYmlPath(String defaultPath) {
     String filepath = retreiveTestConfigFromEnvVar();
+    LOGGER.info("default Test file path: " + defaultPath);
     return filepath.isEmpty() ? defaultPath : filepath;
   }
 
   private String retreiveTestConfigFromEnvVar() {
     String filePath = System.getenv().get(FILE_PATH_KEY);
+    LOGGER.info("Overridden Test file path: " + filePath);
     return filePath != null ? filePath : "";
   }
-
 }

@@ -2,6 +2,7 @@ package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
 
+import java.util.Map;
 import javax.servlet.DispatcherType;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import gov.ca.cwds.health.resource.DB2Database;
 import gov.ca.cwds.health.resource.SwaggerEndpoint;
 import gov.ca.cwds.inject.ApplicationModule;
 import gov.ca.cwds.inject.InjectorHolder;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.filters.RequestExecutionContextFilter;
 import gov.ca.cwds.rest.filters.RequestResponseLoggingFilter;
@@ -112,6 +114,7 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
     environment.healthChecks().register("swagger_status", swaggerHealthCheck);
 
     injector.getInstance(SystemCodeCache.class);
+    injector.getInstance(IntakeCodeCache.class);
 
     // ERROR: "binder can only be called inside configure" -- but can't call it in configure()
     // either.
@@ -125,6 +128,12 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
         .setPaperTrailDao(paperTrailDao);
     LOGGER.info("PaperTrailInterceptor: {}",
         applicationModule.getDataAccessModule().getPaperTrailInterceptor());
+
+    Map<String, String> env = System.getenv();
+    for (String envName : env.keySet()) {
+      LOGGER.info("******************* environment variables ***********************************");
+      LOGGER.info("{}={}",envName, env.get(envName));
+    }
   }
 
   private void upgradeNsDb(ApiConfiguration configuration) {

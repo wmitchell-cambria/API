@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -30,9 +31,12 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
   private static final Logger LOGGER = LoggerFactory.getLogger(CwdsDevAuthenticationClient.class);
 
   private static final int GET_ONLY_ACCESS_CODE_VALUE = 11;
-  private static final String NEW_REQUEST_TO_BEGIN = "=========================================";
   private static final String ACCESS_CODE = "accessCode";
   private static final String LOCATION = "Location";
+  private static final String NEW_REQUEST_TO_BEGIN = "================START Login=========================";
+  private static final String REQUEST_STEP= "{}=========================================";
+  private static final String NEW_REQUEST_TO_END = "==================END Login=======================";
+
   private String authLoginUrl;
   private String tokenUrl;
   private String perryLoginUrl;
@@ -73,24 +77,25 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
       HttpGet httpGet = new HttpGet(authLoginUrl);
       URI uri = new URIBuilder(authLoginUrl).addParameters(postParams).build();
       httpGet.setURI(uri);
-      HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
+      CloseableHttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
       httpResponse.getFirstHeader(LOCATION).getValue();
       httpGet.releaseConnection();
 
       redirectUrl = giveUsernameCredentials();
       token = requestToken(redirectUrl);
 
+
     } catch (Exception e) {
       LOGGER.error("Unable to create the token", e);
     } finally {
-      this.httpGet.reset();
+      LOGGER.info(NEW_REQUEST_TO_END);
     }
     return token;
   }
 
   private String requestToken(String redirectUrl) throws IOException, URISyntaxException {
     ArrayList<NameValuePair> postParams = new ArrayList<>();
-    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info(REQUEST_STEP, 2);
     LOGGER.info("GET ACCESS CODE: {}", redirectUrl);
     httpGet = new HttpGet(redirectUrl);
     HttpResponse httpResponse = httpClient.execute(httpGet, httpContext);
@@ -99,7 +104,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
     int startIndex = accessCodeParm.indexOf(ACCESS_CODE) + GET_ONLY_ACCESS_CODE_VALUE;
     String accessCode = accessCodeParm.substring(startIndex);
 
-    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info(REQUEST_STEP, 3);
     LOGGER.info("GET TOKEN: {}", tokenUrl);
     postParams.clear();
     postParams.add(new BasicNameValuePair(ACCESS_CODE, accessCode));
@@ -114,7 +119,7 @@ public class CwdsDevAuthenticationClient extends HttpClientBuild implements Cwds
 
   private String giveUsernameCredentials() throws IOException {
     ArrayList<NameValuePair> postParams = new ArrayList<>();
-    LOGGER.info(NEW_REQUEST_TO_BEGIN);
+    LOGGER.info(REQUEST_STEP, 1);
     LOGGER.info("POST: {}", perryLoginUrl);
     HttpPost httpPost = new HttpPost(perryLoginUrl);
     postParams.clear();

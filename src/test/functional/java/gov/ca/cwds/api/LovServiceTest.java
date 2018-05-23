@@ -15,6 +15,13 @@ public class LovServiceTest extends FunctionalTest {
   }
 
   @Test
+  public void endPointIsResponding(){
+    given().queryParam("token", token)
+    .when().get(lovPath )
+    .then().statusCode(200);
+  }
+
+  @Test
   public void whenSubmittingAGetRequestThenWeShouldReceiveListOfLovs(){
     given().queryParam("token", token)
     .when().get(lovPath )

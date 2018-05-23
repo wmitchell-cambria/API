@@ -19,9 +19,11 @@ import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.inject.DataAccessModuleTest.TestDataAccessModule;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
 import io.dropwizard.setup.Bootstrap;
@@ -51,14 +53,18 @@ public class ServicesModuleTest {
 
   SystemCodeDao systemCodeDao;
   SystemMetaDao systemMetaDao;
+  IntakeLovDao intakeLovDao;
   SystemCodeService systemCodeService;
+  IntakeLovService intakeLovService;
   ServicesModule target;
 
   @Before
   public void setup() throws Exception {
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
+    intakeLovDao = mock(IntakeLovDao.class);
     systemCodeService = new SystemCodeService(systemCodeDao, systemMetaDao);
+    intakeLovService = new IntakeLovService(intakeLovDao);
     target = new ServicesModule();
   }
 
@@ -111,6 +117,12 @@ public class ServicesModuleTest {
   @Test
   public void provideSystemCodeService_A$SystemCodeDao$SystemMetaDao() throws Exception {
     SystemCodeService actual = target.provideSystemCodeService(systemCodeDao, systemMetaDao);
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void provideIntakeCodeService_A$IntakeLovDao() throws Exception {
+    IntakeLovService actual = target.provideIntakeLovService(intakeLovDao);
     assertThat(actual, is(notNullValue()));
   }
 

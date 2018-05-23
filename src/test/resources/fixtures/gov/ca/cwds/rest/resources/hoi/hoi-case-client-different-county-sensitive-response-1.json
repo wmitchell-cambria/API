@@ -1,0 +1,57 @@
+[
+  {
+    "id": "09BDRic75C",
+    "start_date": "1997-04-20",
+    "county": {
+      "id": "1086",
+      "description": "Los Angeles"
+    },
+    "service_component": {
+      "id": "1693",
+      "description": "Family Maintenance"
+    },
+    "focus_child": {
+      "id": "SZdBGYk75C",
+      "first_name": "Sam",
+      "last_name": "Yitzhok",
+      "name_suffix": "",
+      "legacy_descriptor": {
+        "legacy_id": "SZdBGYk75C",
+        "legacy_ui_id": "1623-0502-0784-2027230",
+        "legacy_last_updated": "1998-03-12T10:25:21.942-0800",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
+    },
+    "assigned_social_worker": {
+      "id": "75E",
+      "first_name": "iggy",
+      "last_name": "jkoffice",
+      "name_suffix": "",
+      "legacy_descriptor": {
+        "legacy_id": "75E",
+        "legacy_ui_id": "75E",
+        "legacy_last_updated": "2000-08-29T13:55:46.824-0700",
+        "legacy_table_name": "STFPERST",
+        "legacy_table_description": "Staff"
+      }
+    },
+    "access_limitation": {
+      "limited_access_code": "SENSITIVE",
+      "limited_access_date": "2014-06-17",
+      "limited_access_description": "County determined by primary assignment as of Release 7.1 implementation date of May 2014",
+      "limited_access_government_entity": {
+        "id": "1086",
+        "description": "Los Angeles"
+      }
+    },
+    "parents": [],
+    "legacy_descriptor": {
+      "legacy_id": "09BDRic75C",
+      "legacy_ui_id": "0008-4109-4000-2027230",
+      "legacy_last_updated": "2014-06-17T12:18:28.673-0700",
+      "legacy_table_name": "CASE_T",
+      "legacy_table_description": "Case"
+    }
+  }
+]

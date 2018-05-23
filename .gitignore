@@ -9,3 +9,4 @@ bin/
 *.sw*
 *api.iml
 .DS_Store
+docker/ferb-test/reports
