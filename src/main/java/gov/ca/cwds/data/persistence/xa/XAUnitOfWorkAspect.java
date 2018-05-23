@@ -15,8 +15,14 @@ import com.atomikos.icatch.jta.UserTransactionImp;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * AOP aspect supports {@link XAUnitOfWork}.
+ * AOP aspect supports annotation {@link XAUnitOfWork}.
  * 
+ * <p>
+ * In AOP terms, this wrapper method follows the <strong>"around"</strong> protocol. Start with
+ * {@link XAUnitOfWorkAspect#beforeStart(XAUnitOfWork)}, call the annotated method, and finish with
+ * {@link XAUnitOfWorkAspect#afterEnd()}.
+ * </p>
+ *
  * @author CWDS API Team
  */
 public class XAUnitOfWorkAspect {
@@ -59,7 +65,7 @@ public class XAUnitOfWorkAspect {
   /**
    * Commit or rollback.
    * <p>
-   * NOTE: method onFinish() closes the session.
+   * NOTE: method {@link #onFinish()} closes the session.
    * </p>
    * 
    * @throws CaresXAException on database error

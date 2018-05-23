@@ -14,7 +14,7 @@ import javassist.util.proxy.ProxyFactory;
 
 /**
  * A factory for creating proxies for components that use Hibernate data access objects outside
- * Jersey resources using two-phase commit, XA transactions.
+ * Jersey resources using two-phase commits via XA transactions.
  * 
  * <p>
  * A created proxy will be aware of the {@link XAUnitOfWork} annotation on the original class
@@ -66,6 +66,12 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   /**
    * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with a complex constructor.
+   * 
+   * <p>
+   * In AOP terms, this wrapper method follows the <strong>"around"</strong> protocol by starting
+   * with {@link XAUnitOfWorkAspect#beforeStart(XAUnitOfWork)}, calling the target, annotated
+   * method, and finishing with {@link XAUnitOfWorkAspect#afterEnd()}.
+   * </p>
    *
    * @param clazz the specified class definition
    * @param constructorParamTypes the types of the constructor parameters
@@ -89,9 +95,9 @@ public class XAUnitOfWorkAwareProxyFactory {
         final XAUnitOfWorkAspect aspect = newAspect(sessionFactories);
 
         try {
-          aspect.beforeStart(xaUnitOfWork);
-          final Object result = proceed.invoke(self, args);
-          aspect.afterEnd();
+          aspect.beforeStart(xaUnitOfWork); // before annotated method
+          final Object result = proceed.invoke(self, args); // call annotated method
+          aspect.afterEnd(); // after method
           return result;
         } catch (InvocationTargetException e) {
           LOGGER.error("XA ERROR! InvocationTargetException: {}", e.getCause(), e);
@@ -123,4 +129,5 @@ public class XAUnitOfWorkAwareProxyFactory {
   public XAUnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
     return new XAUnitOfWorkAspect(sessionFactories);
   }
+
 }
