@@ -83,15 +83,12 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   @Override
   public IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
     IntakeLov intakeLov = new IntakeLov();
-    if (StringUtils.isNotBlank(metaId)) {
-      CacheKey cacheKey = CacheKey.createForMeta(metaId);
-      @SuppressWarnings("unchecked")
-      Map<String, IntakeLov> intakeLovMap = (Map<String, IntakeLov>) getFromCache(cacheKey);
-      if (intakeLovMap != null) {
-        intakeLov = intakeLovMap.get(intakeCode);
-      }
+    Map<String, IntakeLov> intakeLovMap = getAllLegacySystemCodesForMeta(metaId);
+    if (intakeLovMap != null) {
+      intakeLov = intakeLovMap.get(intakeCode);
     }
     return intakeLov;
+
   }
 
   /**
