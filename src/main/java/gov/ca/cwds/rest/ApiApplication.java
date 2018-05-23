@@ -130,9 +130,9 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
         applicationModule.getDataAccessModule().getPaperTrailInterceptor());
 
     Map<String, String> env = System.getenv();
-    for (String envName : env.keySet()) {
+    for (Map.Entry entry : env.entrySet()) {
       LOGGER.info("******************* environment variables ***********************************");
-      LOGGER.info("{}={}",envName, env.get(envName));
+      LOGGER.info("{}={}",entry.getKey(), entry.getValue());
     }
   }
 
