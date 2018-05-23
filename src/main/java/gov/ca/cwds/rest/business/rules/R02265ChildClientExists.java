@@ -39,19 +39,16 @@ public class R02265ChildClientExists implements RuleValidator {
   @Override
   public boolean isValid() {
     boolean childClientIndicatorVar;
-    try {
-      childClientIndicatorVar = clientAge() < ADULT;
-    } catch (IllegalArgumentException e) {
+    String dob = incomingParticipant.getDateOfBirth();
+    if (dob == null) {
       childClientIndicatorVar = false;
+    } else {
+      childClientIndicatorVar = clientAge(dob) < ADULT;
     }
     return childClientIndicatorVar;
   }
 
-  private int clientAge() {
-    String dob = incomingParticipant.getDateOfBirth();
-    if (dob == null) {
-      throw new IllegalArgumentException("Cannot parse null date");
-    }
+  private int clientAge(String dob) {
     DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
     DateTime receivedDate = formatter.parseDateTime(dateStarted);
     DateTime clientDob = formatter.parseDateTime(dob);
