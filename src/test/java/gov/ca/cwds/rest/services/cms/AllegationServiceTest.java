@@ -12,6 +12,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.persistence.EntityExistsException;
@@ -22,7 +23,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,14 +38,13 @@ import io.dropwizard.jackson.Jackson;
 
 /**
  * @author CWDS API Team
- *
  */
 @SuppressWarnings("javadoc")
 public class AllegationServiceTest {
+
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private AllegationService allegationService;
   private AllegationDao allegationDao;
-  private RIAllegation riAllegation;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -55,7 +54,7 @@ public class AllegationServiceTest {
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
     allegationDao = mock(AllegationDao.class);
-    riAllegation = mock(RIAllegation.class);
+    RIAllegation riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
   }
 
@@ -75,7 +74,7 @@ public class AllegationServiceTest {
 
 
   @Test
-  public void testFindReturnsNullWhenNotFound() throws Exception {
+  public void testFindReturnsNullWhenNotFound() {
     Response found = allegationService.find("ABC1234567");
     assertThat(found, is(nullValue()));
   }
@@ -90,7 +89,7 @@ public class AllegationServiceTest {
 
 
   @Test
-  public void testDeleteReturnsNullWhenNotFound() throws Exception {
+  public void testDeleteReturnsNullWhenNotFound() {
     Response found = allegationService.delete("ABC1234567");
     assertThat(found, is(nullValue()));
   }
@@ -106,17 +105,6 @@ public class AllegationServiceTest {
     when(allegationDao.delete(id)).thenReturn(allegation);
     Allegation found = allegationService.delete(id);
     assertThat(found, is(expected));
-  }
-
-
-  public void testDeleteThrowsNotImplementedException() throws Exception {
-    // delete is implemented
-
-  }
-
-
-  public void testDeleteReturnsClass() throws Exception {
-
   }
 
   // update test
@@ -137,7 +125,7 @@ public class AllegationServiceTest {
   }
 
   @Test
-  public void testUpdateThrowsExceptionWhenNotFound() throws Exception {
+  public void testUpdateThrowsExceptionWhenNotFound() {
     try {
       Allegation allegationRequest = MAPPER.readValue(
           fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
@@ -148,21 +136,6 @@ public class AllegationServiceTest {
     } catch (Exception e) {
       assertEquals(e.getClass(), ServiceException.class);
     }
-  }
-
-
-  public void testUpdateReturnsDomain() throws Exception {
-
-  }
-
-
-  public void testUpdateThrowsServiceException() throws Exception {
-
-  }
-
-
-  public void testUpdateThrowsNotImplementedException() throws Exception {
-
   }
 
   // create test
@@ -184,7 +157,7 @@ public class AllegationServiceTest {
   }
 
   @Test
-  public void allegationServiceServiceCreateThrowsEntityExistsException() throws Exception {
+  public void allegationServiceServiceCreateThrowsEntityExistsException() {
     try {
       Allegation allegationRequest = MAPPER.readValue(
           fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
@@ -233,40 +206,34 @@ public class AllegationServiceTest {
 
   @Test
   public void testCreateNullIDError() throws Exception {
-    try {
-      Allegation allegationDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
-      gov.ca.cwds.data.persistence.cms.Allegation toCreate =
-          new gov.ca.cwds.data.persistence.cms.Allegation(null, allegationDomain, "ABC",
-              new Date());
+    Allegation allegationDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
+    gov.ca.cwds.data.persistence.cms.Allegation toCreate =
+        new gov.ca.cwds.data.persistence.cms.Allegation(null, allegationDomain, "ABC",
+            new Date());
 
-      when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
-          .thenReturn(toCreate);
+    when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
+        .thenReturn(toCreate);
 
-      PostedAllegation expected = new PostedAllegation(toCreate);
-    } catch (ServiceException e) {
-      assertEquals("Allegation ID cannot be blank", e.getMessage());
-    }
-
+    thrown.expect(ServiceException.class);
+    thrown.expectMessage("Allegation ID cannot be blank");
+    new PostedAllegation(toCreate);
   }
 
   @Test
   public void testCreateBlankIDError() throws Exception {
-    try {
-      Allegation allegationDomain = MAPPER.readValue(
-          fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
-      gov.ca.cwds.data.persistence.cms.Allegation toCreate =
-          new gov.ca.cwds.data.persistence.cms.Allegation("    ", allegationDomain, "ABC",
-              new Date());
+    Allegation allegationDomain = MAPPER.readValue(
+        fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
+    gov.ca.cwds.data.persistence.cms.Allegation toCreate =
+        new gov.ca.cwds.data.persistence.cms.Allegation("    ", allegationDomain, "ABC",
+            new Date());
 
-      when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
-          .thenReturn(toCreate);
+    when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
+        .thenReturn(toCreate);
 
-      PostedAllegation expected = new PostedAllegation(toCreate);
-    } catch (ServiceException e) {
-      assertEquals("Allegation ID cannot be blank", e.getMessage());
-    }
-
+    thrown.expect(ServiceException.class);
+    thrown.expectMessage("Allegation ID cannot be blank");
+    new PostedAllegation(toCreate);
   }
 
   /*
@@ -277,22 +244,35 @@ public class AllegationServiceTest {
     Allegation allegationDomain = MAPPER
         .readValue(fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
     when(allegationDao.create(any(gov.ca.cwds.data.persistence.cms.Allegation.class)))
-        .thenAnswer(new Answer<gov.ca.cwds.data.persistence.cms.Allegation>() {
-
-
-          @Override
-          public gov.ca.cwds.data.persistence.cms.Allegation answer(InvocationOnMock invocation)
-              throws Throwable {
-            gov.ca.cwds.data.persistence.cms.Allegation report =
-                (gov.ca.cwds.data.persistence.cms.Allegation) invocation.getArguments()[0];
-            return report;
-          }
-        });
+        .thenAnswer(
+            (Answer<gov.ca.cwds.data.persistence.cms.Allegation>) invocation -> (gov.ca.cwds.data.persistence.cms.Allegation) invocation
+                .getArguments()[0]);
 
     PostedAllegation returned = allegationService.create(allegationDomain);
-    assertEquals(returned.getId().length(), 10);
+    assertEquals(10, returned.getId().length());
     PostedAllegation newReturned = allegationService.create(allegationDomain);
     Assert.assertNotEquals(returned.getId(), newReturned.getId());
+  }
+
+  @Test(expected = ServiceException.class)
+  public void testCreateFailedByR06505() throws IOException {
+    Allegation allegationDomain = MAPPER
+        .readValue(fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
+    allegationDomain.setVictimClientId(null);
+    
+    allegationService.create(allegationDomain);
+  }
+
+  @Test
+  public void testUpdateFailedByR06505() throws IOException {
+    Allegation allegationDomain = MAPPER
+        .readValue(fixture("fixtures/domain/legacy/Allegation/valid/valid.json"), Allegation.class);
+    allegationDomain.setAllegationType(null);
+
+    thrown.expect(ServiceException.class);
+    thrown.expectMessage(
+        "R-06505: Allegation should have victim and abuse category. ID = OMNnHms0X5");
+    allegationService.update("OMNnHms0X5", allegationDomain);
   }
 
 }
