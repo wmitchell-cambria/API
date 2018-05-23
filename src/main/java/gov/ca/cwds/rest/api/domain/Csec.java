@@ -1,8 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import gov.ca.cwds.rest.api.Request;
-import gov.ca.cwds.rest.api.Response;
 
 import java.time.LocalDate;
 
@@ -10,7 +8,7 @@ import java.time.LocalDate;
  * CWDS API Team
  */
 @SuppressWarnings({"squid:S3437"})
-public class Csec implements Request, Response {
+public class Csec extends ReportingDomain {
   @JsonProperty("id")
   private String id;
 
