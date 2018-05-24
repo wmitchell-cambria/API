@@ -1,7 +1,8 @@
 package gov.ca.cwds.rest.filters;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -18,14 +19,15 @@ public class RequestExecutionContextRegistry implements ApiMarker {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<RequestExecutionContextCallback> callbacks = new ArrayList<>();
+    private final Map<Serializable, RequestExecutionContextCallback> callbacks =
+        new ConcurrentHashMap<>();
 
     private final Lock lock = new ReentrantLock();
 
     public void register(RequestExecutionContextCallback callback) {
       try {
         lock.lockInterruptibly();
-        callbacks.add(callback);
+        callbacks.put(callback.key(), callback);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       } finally {
@@ -34,11 +36,11 @@ public class RequestExecutionContextRegistry implements ApiMarker {
     }
 
     public void startRequest(RequestExecutionContext ctx) {
-      callbacks.stream().sequential().forEach(c -> c.startRequest(ctx));
+      callbacks.values().stream().sequential().forEach(c -> c.startRequest(ctx));
     }
 
     public void endRequest(RequestExecutionContext ctx) {
-      callbacks.stream().sequential().forEach(c -> c.endRequest(ctx));
+      callbacks.values().stream().sequential().forEach(c -> c.endRequest(ctx));
     }
 
   }

@@ -38,6 +38,7 @@ public class XAUnitOfWorkAspect {
   private List<Session> sessions = new ArrayList<>();
 
   /**
+   * Preferred constructor
    * 
    * @param sessionFactories - all datasources to participate in the XA transaction
    */

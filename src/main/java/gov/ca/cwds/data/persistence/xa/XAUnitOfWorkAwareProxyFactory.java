@@ -27,13 +27,17 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final ImmutableMap<String, SessionFactory> sessionFactories;
 
+  private final XAUnitOfWorkAspectFactory factory;
+
   public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
     final ImmutableMap.Builder<String, SessionFactory> sessionFactoriesBuilder =
         ImmutableMap.builder();
     for (FerbHibernateBundle bundle : bundles) {
       sessionFactoriesBuilder.put(bundle.name(), bundle.getSessionFactory());
     }
+
     sessionFactories = sessionFactoriesBuilder.build();
+    factory = new ReentrantXAUnitOfWorkAspectFactory(sessionFactories);
   }
 
   /**
@@ -92,7 +96,7 @@ public class XAUnitOfWorkAwareProxyFactory {
           : factory.create(constructorParamTypes, constructorArguments));
       proxy.setHandler((self, overridden, proceed, args) -> {
         final XAUnitOfWork xaUnitOfWork = overridden.getAnnotation(XAUnitOfWork.class);
-        final XAUnitOfWorkAspect aspect = newAspect(sessionFactories);
+        final XAUnitOfWorkAspect aspect = newAspect();
 
         try {
           aspect.beforeStart(xaUnitOfWork); // before annotated method
@@ -119,15 +123,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   public XAUnitOfWorkAspect newAspect() {
-    return new XAUnitOfWorkAspect(sessionFactories);
-  }
-
-  /**
-   * @param sessionFactories Hibernate session factories for this transaction
-   * @return a new aspect
-   */
-  public XAUnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
-    return new XAUnitOfWorkAspect(sessionFactories);
+    return factory.newAspect();
   }
 
 }

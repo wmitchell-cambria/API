@@ -6,8 +6,10 @@ import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextCallback;
+import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
 
-public class ReentrantXAUnitOfWorkAspectFactory implements RequestExecutionContextCallback {
+public class ReentrantXAUnitOfWorkAspectFactory
+    implements RequestExecutionContextCallback, XAUnitOfWorkAspectFactory {
 
   private static final long serialVersionUID = 1L;
 
@@ -17,6 +19,12 @@ public class ReentrantXAUnitOfWorkAspectFactory implements RequestExecutionConte
 
   public ReentrantXAUnitOfWorkAspectFactory(ImmutableMap<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
+    RequestExecutionContextRegistry.registerCallback(this);
+  }
+
+  @Override
+  public String key() {
+    return ReentrantXAUnitOfWorkAspectFactory.class.getName();
   }
 
   @Override
@@ -38,6 +46,12 @@ public class ReentrantXAUnitOfWorkAspectFactory implements RequestExecutionConte
     return aspect;
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspectFactory#newAspect()
+   */
+  @Override
   public XAUnitOfWorkAspect newAspect() {
     return make(this.sessionFactories);
   }
