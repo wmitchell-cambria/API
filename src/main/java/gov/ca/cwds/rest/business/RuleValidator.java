@@ -10,5 +10,5 @@ public interface RuleValidator {
   /**
    * @return the valid boolean
    */
-  public boolean isValid();
+  boolean isValid();
 }
