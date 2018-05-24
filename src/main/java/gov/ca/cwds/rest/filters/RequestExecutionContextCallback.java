@@ -4,10 +4,8 @@ import gov.ca.cwds.data.std.ApiMarker;
 
 public interface RequestExecutionContextCallback extends ApiMarker {
 
-  String callbackKey();
+  void startRequest(RequestExecutionContext ctx);
 
-  void requestStarted(RequestExecutionContext ctx);
-
-  void requestEnded(RequestExecutionContext ctx);
+  void endRequest(RequestExecutionContext ctx);
 
 }

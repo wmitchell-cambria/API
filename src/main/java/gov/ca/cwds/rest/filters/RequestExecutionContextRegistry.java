@@ -1,7 +1,9 @@
 package gov.ca.cwds.rest.filters;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import gov.ca.cwds.data.std.ApiMarker;
 
@@ -12,17 +14,45 @@ import gov.ca.cwds.data.std.ApiMarker;
  */
 public class RequestExecutionContextRegistry implements ApiMarker {
 
+  private static final class CallbackRegistry implements ApiMarker {
+
+    private static final long serialVersionUID = 1L;
+
+    private final List<RequestExecutionContextCallback> callbacks = new ArrayList<>();
+
+    private final Lock lock = new ReentrantLock();
+
+    public void register(RequestExecutionContextCallback callback) {
+      try {
+        lock.lockInterruptibly();
+        callbacks.add(callback);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      } finally {
+        lock.unlock();
+      }
+    }
+
+    public void startRequest(RequestExecutionContext ctx) {
+      callbacks.stream().sequential().forEach(c -> c.startRequest(ctx));
+    }
+
+    public void endRequest(RequestExecutionContext ctx) {
+      callbacks.stream().sequential().forEach(c -> c.endRequest(ctx));
+    }
+
+  }
+
   private static final long serialVersionUID = 1L;
 
   private static final ThreadLocal<RequestExecutionContext> pegged = new ThreadLocal<>();
 
-  private static final Map<String, RequestExecutionContextCallback> registeredCallbacks =
-      new LinkedHashMap<>();
+  private static final CallbackRegistry callbackRegistry = new CallbackRegistry();
 
   // Callback registry for stop and start.
 
   public static synchronized void registerCallback(RequestExecutionContextCallback callback) {
-    registeredCallbacks.put(callback.callbackKey(), callback);
+    callbackRegistry.register(callback);
   }
 
   /**
@@ -32,13 +62,16 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    */
   static void register(RequestExecutionContext ctx) {
     pegged.set(ctx);
+    callbackRegistry.endRequest(ctx);
   }
 
   /**
    * Remove RequestExecutionContext from ThreadLocal
    */
   static void remove() {
+    final RequestExecutionContext ctx = pegged.get();
     pegged.remove();
+    callbackRegistry.startRequest(ctx);
   }
 
   /**
