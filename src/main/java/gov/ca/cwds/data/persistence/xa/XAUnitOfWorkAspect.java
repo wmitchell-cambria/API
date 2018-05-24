@@ -38,7 +38,7 @@ public class XAUnitOfWorkAspect {
   private List<Session> sessions = new ArrayList<>();
 
   /**
-   * Preferred constructor
+   * Preferred constructor.
    * 
    * @param sessionFactories - all datasources to participate in the XA transaction
    */
@@ -185,13 +185,13 @@ public class XAUnitOfWorkAspect {
    */
   protected void beginTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.info("XA BEGIN TRANSACTION: not transactional");
+      LOGGER.info("XA BEGIN TRANSACTION: unit of work not transactional");
       return;
     }
 
     try {
       LOGGER.info("XA BEGIN TRANSACTION!");
-      txn.setTransactionTimeout(80);
+      txn.setTransactionTimeout(80); // NEXT: soft-code timeout
       txn.begin();
     } catch (Exception e) {
       LOGGER.error("XA BEGIN FAILED! {}", e.getMessage(), e);
@@ -206,16 +206,16 @@ public class XAUnitOfWorkAspect {
    */
   protected void rollbackTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.info("XA ROLLBACK TRANSACTION: not transactional");
+      LOGGER.debug("XA ROLLBACK TRANSACTION: unit of work not transactional");
       return;
     }
 
     try {
-      LOGGER.info("XA ROLLBACK TRANSACTION!");
+      LOGGER.debug("XA ROLLBACK TRANSACTION!");
       txn.rollback();
     } catch (Exception e) {
-      LOGGER.error("XA ROLLBACK TRANSACTION FAILED! {}", e.getMessage(), e);
-      throw new CaresXAException("XA ROLLBACK TRANSACTION FAILED!", e);
+      LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
+      throw new CaresXAException("XA ROLLBACK FAILED!", e);
     }
   }
 
@@ -226,7 +226,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void commitTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.info("XA COMMIT TRANSACTION: not transactional");
+      LOGGER.debug("XA COMMIT TRANSACTION: unit of work not transactional");
       return;
     }
 
@@ -234,8 +234,8 @@ public class XAUnitOfWorkAspect {
       LOGGER.info("XA COMMIT TRANSACTION!");
       txn.commit();
     } catch (Exception e) {
-      LOGGER.error("XA COMMIT  TRANSACTIONFAILED! {}", e.getMessage(), e);
-      throw new CaresXAException("XA COMMIT TRANSACTION FAILED!", e);
+      LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
+      throw new CaresXAException("XA COMMIT FAILED!", e);
     }
   }
 

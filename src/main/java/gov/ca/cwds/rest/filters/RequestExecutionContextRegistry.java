@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.filters;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import gov.ca.cwds.data.std.ApiMarker;
 
@@ -15,6 +13,16 @@ import gov.ca.cwds.data.std.ApiMarker;
  */
 public class RequestExecutionContextRegistry implements ApiMarker {
 
+  /**
+   * Register callbacks for request events, like request start and end.
+   * 
+   * <p>
+   * Callback methods are invoked on the same thread, since some callback implementations may depend
+   * on ThreadLocal themselves.
+   * </p>
+   * 
+   * @author CWDS API Team
+   */
   private static final class CallbackRegistry implements ApiMarker {
 
     private static final long serialVersionUID = 1L;
@@ -22,17 +30,8 @@ public class RequestExecutionContextRegistry implements ApiMarker {
     private final Map<Serializable, RequestExecutionContextCallback> callbacks =
         new ConcurrentHashMap<>();
 
-    private final Lock lock = new ReentrantLock();
-
     public void register(RequestExecutionContextCallback callback) {
-      try {
-        lock.lockInterruptibly();
-        callbacks.put(callback.key(), callback);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      } finally {
-        lock.unlock();
-      }
+      callbacks.put(callback.key(), callback);
     }
 
     public void startRequest(RequestExecutionContext ctx) {

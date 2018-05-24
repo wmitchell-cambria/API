@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.xa;
 
+import java.io.Serializable;
+
 import org.hibernate.SessionFactory;
 
 import com.google.common.collect.ImmutableMap;
@@ -23,45 +25,37 @@ public class ReentrantXAUnitOfWorkAspectFactory
   }
 
   @Override
-  public String key() {
+  public Serializable key() {
     return ReentrantXAUnitOfWorkAspectFactory.class.getName();
   }
 
   @Override
   public void startRequest(RequestExecutionContext ctx) {
-    local.set(null);
+    local.set(null); // clear this thread
   }
 
   @Override
   public void endRequest(RequestExecutionContext ctx) {
-    local.set(null);
+    local.set(null); // clear this thread
   }
 
   protected XAUnitOfWorkAspect make(ImmutableMap<String, SessionFactory> someSessionFactories) {
-    XAUnitOfWorkAspect aspect = local.get();
-    if (aspect == null) {
-      aspect = new XAUnitOfWorkAspect(someSessionFactories);
-      local.set(aspect);
+    XAUnitOfWorkAspect ret = local.get();
+    if (ret == null) {
+      ret = new XAUnitOfWorkAspect(someSessionFactories);
+      local.set(ret);
     }
-    return aspect;
+    return ret;
   }
 
-  /*
-   * (non-Javadoc)
+  /**
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspectFactory#newAspect()
    */
   @Override
-  public XAUnitOfWorkAspect newAspect() {
-    return make(this.sessionFactories);
-  }
-
-  /**
-   * @param someSessionFactories Hibernate session factories for this transaction
-   * @return a new aspect
-   */
-  public XAUnitOfWorkAspect newAspect(ImmutableMap<String, SessionFactory> someSessionFactories) {
-    return make(someSessionFactories);
+  public XAUnitOfWorkAspect make() {
+    return make(sessionFactories);
   }
 
 }

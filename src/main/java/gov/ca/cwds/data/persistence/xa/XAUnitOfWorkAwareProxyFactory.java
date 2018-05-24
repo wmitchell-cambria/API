@@ -123,7 +123,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   public XAUnitOfWorkAspect newAspect() {
-    return factory.newAspect();
+    return factory.make();
   }
 
 }
