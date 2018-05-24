@@ -19,6 +19,8 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @SuppressWarnings("serial")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLov.findAll",
     query = "FROM IntakeLov ORDER BY intakeType, intakeCode")
+@NamedQuery(name = "gov.ca.cwds.data.persistence.ns.IntakeLov.findByLegacyCategoryId",
+    query = "FROM IntakeLov WHERE legacyCategoryId = :legacyCategoryId ORDER BY intakeType, intakeCode")
 @Entity
 @Table(name = "VW_INTAKE_LOV")
 public class IntakeLov implements PersistentObject {
