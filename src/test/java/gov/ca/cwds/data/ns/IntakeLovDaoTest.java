@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.sql.Connection;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,7 +76,7 @@ public class IntakeLovDaoTest {
     when(query.list()).thenReturn(Arrays.asList(intakeLov));
     when(query.setString(any(String.class), any(String.class))).thenReturn(query);
     IntakeLovDao target = new IntakeLovDao(sessionFactory);
-    Map<String, IntakeLov> response = target.findByLegacyMetaId("LANG_TPC");
+    List<IntakeLov> response = target.findByLegacyMetaId("LANG_TPC");
     assertThat(response, notNullValue());
   }
 

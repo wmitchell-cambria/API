@@ -1,8 +1,6 @@
 package gov.ca.cwds.data.ns;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -54,7 +52,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
    * @param legacyCategoryId - legacyCategoryId
    * @return the intake code based on the category id
    */
-  public Map<String, IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
+  public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
     final Session session = getCurrentSession();
@@ -65,8 +63,8 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
     try {
       final Query query =
           session.getNamedQuery(namedQueryName).setString("legacyCategoryId", legacyCategoryId);
-      final Map<String, IntakeLov> intakeCodes = ((List<IntakeLov>) query.list()).stream()
-          .collect(Collectors.toMap(IntakeLov::getIntakeCode, c -> c));
+      final List<IntakeLov> intakeCodes = query.list();
+
       if (!transactionExists)
         txn.commit();
       return intakeCodes;
