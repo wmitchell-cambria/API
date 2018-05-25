@@ -1,0 +1,15 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+  <changeSet author="Prasad Mysore" id="safely_surr_babies_data">
+    <insert tableName="safely_surrendered_babies">
+      <column name="surrendered_by" value="John"/>
+      <column name="relation_to_child" value="1594"/>
+      <column name="bracelet_id" value="ABC12345"/>
+      <column name="parent_gaurd_given_bracelet_id" value="Y"/>
+      <column name="parent_gaurd_prov_med_question" value="Y"/>
+      <column name="med_questionaire_return_date" valueDate="2018-03-31"/>
+      <column name="comments" value="surrendered by father"/>
+      <column name="participant_child" value="43"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>

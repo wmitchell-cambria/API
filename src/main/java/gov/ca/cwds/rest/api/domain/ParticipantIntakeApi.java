@@ -160,6 +160,9 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @JsonProperty("csec")
   private List<Csec> csecs = new ArrayList<>();
 
+  @JsonProperty("safelySurenderedBabies")
+  private SafelySurenderedBabies safelySurenderedBabies;
+
   /**
    * empty constructor
    */
@@ -200,6 +203,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
       String ssn, Date dateOfBirth, List<String> languages, String races, String ethnicity,
       String screeningId, Set<String> roles, Set<AddressIntakeApi> addresses,
       Set<PhoneNumber> phoneNumbers, Boolean sealed, Boolean sensitive) {
+
     super();
     this.id = id;
     this.firstName = firstName;
@@ -564,6 +568,15 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   public void setCsecs(List<Csec> csecs) {
     this.csecs = csecs;
+  }
+
+
+  public SafelySurenderedBabies getSafelySurenderedBabies() {
+    return safelySurenderedBabies;
+  }
+
+  public void setSafelySurenderedBabies(SafelySurenderedBabies safelySurenderedBabies) {
+    this.safelySurenderedBabies = safelySurenderedBabies;
   }
 
   /**

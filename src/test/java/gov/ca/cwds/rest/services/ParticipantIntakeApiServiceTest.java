@@ -7,7 +7,19 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
+
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AllegationDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
@@ -29,15 +41,7 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
 import gov.ca.cwds.rest.services.mapper.CsecMapper;
-import java.util.Arrays;
-import java.util.HashSet;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
 
 /**
  */
@@ -66,13 +70,16 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   private ParticipantPhoneNumbersDao participantPhoneNumbersDao;
 
   @InjectMocks
-  private ParticipantIntakeApiService participantIntakeApiService = new ParticipantIntakeApiService();
+  private ParticipantIntakeApiService participantIntakeApiService =
+      new ParticipantIntakeApiService();
 
 
   @Before
   @Override
   public void setup() throws Exception {
     participantIntakeApiService.setCsecMapper(CsecMapper.INSTANCE);
+    participantIntakeApiService
+        .setSafelySurrenderedBabiesMapper(SafelySurrenderedBabiesMapper.INSTANCE);
 
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
 
@@ -107,11 +114,14 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
     Addresses addresses2 = new AddressesEntityBuilder().setId(aId2).build();
-    PhoneNumbers phoneNumbers1 = new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
-    PhoneNumbers phoneNumbers2 = new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
+    PhoneNumbers phoneNumbers1 =
+        new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
+    PhoneNumbers phoneNumbers2 =
+        new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
 
     when(addressesDao.findByParticipant(pId)).thenReturn(Arrays.asList(addresses1, addresses2));
-    when(phoneNumbersDao.findByParticipant(pId)).thenReturn(Arrays.asList(phoneNumbers1, phoneNumbers2));
+    when(phoneNumbersDao.findByParticipant(pId))
+        .thenReturn(Arrays.asList(phoneNumbers1, phoneNumbers2));
     when(participantDao.find(pId)).thenReturn(participantEntity);
 
     ParticipantIntakeApi expected = new ParticipantIntakeApi(participantEntity);
@@ -123,6 +133,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     PhoneNumber phoneNumber1 = new PhoneNumber(phoneNumbers1);
     PhoneNumber phoneNumber2 = new PhoneNumber(phoneNumbers2);
     expected.addPhoneNumbers(new HashSet<>(Arrays.asList(phoneNumber1, phoneNumber2)));
+    expected.setSafelySurenderedBabies(null);
 
     ParticipantIntakeApi found = participantIntakeApiService.find(pId);
     assertThat(found, is(expected));
@@ -174,8 +185,10 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
     Addresses addresses2 = new AddressesEntityBuilder().setId(aId2).build();
-    PhoneNumbers phoneNumbers1 = new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
-    PhoneNumbers phoneNumbers2 = new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
+    PhoneNumbers phoneNumbers1 =
+        new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
+    PhoneNumbers phoneNumbers2 =
+        new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
 
     when(addressesDao.find(aId1)).thenReturn(addresses1);
     when(addressesDao.find(aId2)).thenReturn(null);
@@ -272,17 +285,25 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
 
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
     Addresses addresses2delete = new AddressesEntityBuilder().setId(aId2).build();
-    PhoneNumbers phoneNumbers1 = new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
-    PhoneNumbers phoneNumbers2delete = new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
+    PhoneNumbers phoneNumbers1 =
+        new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
+    PhoneNumbers phoneNumbers2delete =
+        new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
 
-    ParticipantAddresses participantAddresses1 = new ParticipantAddresses(participantEntity, addresses1);
-    ParticipantAddresses participantAddresses2 = new ParticipantAddresses(participantEntity, addresses2delete);
+    ParticipantAddresses participantAddresses1 =
+        new ParticipantAddresses(participantEntity, addresses1);
+    ParticipantAddresses participantAddresses2 =
+        new ParticipantAddresses(participantEntity, addresses2delete);
 
-    ParticipantPhoneNumbers participantPhoneNumbers1 = new ParticipantPhoneNumbers(participantEntity, phoneNumbers1);
-    ParticipantPhoneNumbers participantPhoneNumbers2 = new ParticipantPhoneNumbers(participantEntity, phoneNumbers2delete);
+    ParticipantPhoneNumbers participantPhoneNumbers1 =
+        new ParticipantPhoneNumbers(participantEntity, phoneNumbers1);
+    ParticipantPhoneNumbers participantPhoneNumbers2 =
+        new ParticipantPhoneNumbers(participantEntity, phoneNumbers2delete);
 
-    when(participantAddressesDao.findByParticipantId(pId)).thenReturn(new HashSet<>(Arrays.asList(participantAddresses1, participantAddresses2)));
-    when(participantPhoneNumbersDao.findByParticipantId(pId)).thenReturn(new HashSet<>(Arrays.asList(participantPhoneNumbers1, participantPhoneNumbers2)));
+    when(participantAddressesDao.findByParticipantId(pId))
+        .thenReturn(new HashSet<>(Arrays.asList(participantAddresses1, participantAddresses2)));
+    when(participantPhoneNumbersDao.findByParticipantId(pId)).thenReturn(
+        new HashSet<>(Arrays.asList(participantPhoneNumbers1, participantPhoneNumbers2)));
     when(participantDao.find(pId)).thenReturn(participantEntity);
 
     ParticipantIntakeApi expected = new ParticipantIntakeApi(participantEntity);
@@ -297,8 +318,8 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   public void testUpdateThrowsAssertionError() throws Exception {
     thrown.expect(AssertionError.class);
     try {
-      participantIntakeApiService
-          .update(null, new ParticipantIntakeApi(new ParticipantEntityBuilder().build()));
+      participantIntakeApiService.update(null,
+          new ParticipantIntakeApi(new ParticipantEntityBuilder().build()));
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
@@ -327,17 +348,26 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
     Addresses addresses2delete = new AddressesEntityBuilder().setId(aId2).build();
     Addresses addresses3new = new AddressesEntityBuilder().setId(aId3).build();
-    PhoneNumbers phoneNumbers1 = new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
-    PhoneNumbers phoneNumbers2delete = new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
-    PhoneNumbers phoneNumbers3new = new PhoneNumbersEntityBuilder().setId(pN3).setNumber("3333333333").setType("Cell").build();
+    PhoneNumbers phoneNumbers1 =
+        new PhoneNumbersEntityBuilder().setId(pN1).setNumber("111111111").setType("Home").build();
+    PhoneNumbers phoneNumbers2delete =
+        new PhoneNumbersEntityBuilder().setId(pN2).setNumber("222222222").setType("Work").build();
+    PhoneNumbers phoneNumbers3new =
+        new PhoneNumbersEntityBuilder().setId(pN3).setNumber("3333333333").setType("Cell").build();
 
-    ParticipantAddresses participantAddresses1 = new ParticipantAddresses(participantEntity, addresses1);
-    ParticipantAddresses participantAddresses2 = new ParticipantAddresses(participantEntity, addresses2delete);
-    ParticipantAddresses participantAddresses3 = new ParticipantAddresses(participantEntity, addresses3new);
+    ParticipantAddresses participantAddresses1 =
+        new ParticipantAddresses(participantEntity, addresses1);
+    ParticipantAddresses participantAddresses2 =
+        new ParticipantAddresses(participantEntity, addresses2delete);
+    ParticipantAddresses participantAddresses3 =
+        new ParticipantAddresses(participantEntity, addresses3new);
 
-    ParticipantPhoneNumbers participantPhoneNumbers1 = new ParticipantPhoneNumbers(participantEntity, phoneNumbers1);
-    ParticipantPhoneNumbers participantPhoneNumbers2 = new ParticipantPhoneNumbers(participantEntity, phoneNumbers2delete);
-    ParticipantPhoneNumbers participantPhoneNumbers3 = new ParticipantPhoneNumbers(participantEntity, phoneNumbers3new);
+    ParticipantPhoneNumbers participantPhoneNumbers1 =
+        new ParticipantPhoneNumbers(participantEntity, phoneNumbers1);
+    ParticipantPhoneNumbers participantPhoneNumbers2 =
+        new ParticipantPhoneNumbers(participantEntity, phoneNumbers2delete);
+    ParticipantPhoneNumbers participantPhoneNumbers3 =
+        new ParticipantPhoneNumbers(participantEntity, phoneNumbers3new);
 
     when(addressesDao.find(aId1)).thenReturn(addresses1);
     when(addressesDao.find(aId2)).thenReturn(addresses2delete);
@@ -349,9 +379,11 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     when(phoneNumbersDao.find(pN3)).thenReturn(null);
     when(phoneNumbersDao.create(any())).thenReturn(phoneNumbers3new);
 
-    when(participantAddressesDao.findByParticipantId(pId)).thenReturn(new HashSet<>(Arrays.asList(participantAddresses1, participantAddresses2)));
+    when(participantAddressesDao.findByParticipantId(pId))
+        .thenReturn(new HashSet<>(Arrays.asList(participantAddresses1, participantAddresses2)));
     when(participantAddressesDao.create(any())).thenReturn(participantAddresses3);
-    when(participantPhoneNumbersDao.findByParticipantId(pId)).thenReturn(new HashSet<>(Arrays.asList(participantPhoneNumbers1, participantPhoneNumbers2)));
+    when(participantPhoneNumbersDao.findByParticipantId(pId)).thenReturn(
+        new HashSet<>(Arrays.asList(participantPhoneNumbers1, participantPhoneNumbers2)));
     when(participantPhoneNumbersDao.create(any())).thenReturn(participantPhoneNumbers3);
 
     when(participantDao.find(pId)).thenReturn(participantEntity);
@@ -367,6 +399,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     AddressIntakeApi addressIntakeApi33 = new AddressIntakeApi(addresses3new);
     expected.addAddresses(new HashSet<>(Arrays.asList(addressIntakeApi1, addressIntakeApi3)));
     expected00.addAddresses(new HashSet<>(Arrays.asList(addressIntakeApi11, addressIntakeApi33)));
+    expected00.setSafelySurenderedBabies(null);
 
     PhoneNumber phoneNumber1 = new PhoneNumber(phoneNumbers1);
     PhoneNumber phoneNumber11 = new PhoneNumber(phoneNumbers1);
