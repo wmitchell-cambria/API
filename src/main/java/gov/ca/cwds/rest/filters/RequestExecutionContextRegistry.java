@@ -14,7 +14,7 @@ import gov.ca.cwds.data.std.ApiMarker;
 public class RequestExecutionContextRegistry implements ApiMarker {
 
   /**
-   * Register callbacks for request events, like request start and end.
+   * Register callbacks for request events, such as request start and end.
    * 
    * <p>
    * Callback methods are invoked on the same thread, since some callback implementations may depend
@@ -23,7 +23,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    * 
    * @author CWDS API Team
    */
-  private static final class CallbackRegistry implements ApiMarker {
+  static final class CallbackRegistry implements ApiMarker {
 
     private static final long serialVersionUID = 1L;
 

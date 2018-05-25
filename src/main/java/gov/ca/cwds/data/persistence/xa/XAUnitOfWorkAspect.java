@@ -130,7 +130,6 @@ public class XAUnitOfWorkAspect {
     try {
       session = sessionFactory.getCurrentSession();
     } catch (HibernateException e) {
-      LOGGER.warn("No current session. Open a new one. {}", e.getMessage());
       LOGGER.trace("No current session. Open a new one. {}", e.getMessage(), e);
       session = sessionFactory.openSession();
     }
@@ -148,7 +147,6 @@ public class XAUnitOfWorkAspect {
    */
   protected void openSessions() {
     LOGGER.info("XA OPEN SESSIONS.");
-    LOGGER.info("XA OPEN SESSIONS: all XA sources");
     sessionFactories.values().stream().forEach(this::grabSession);
   }
 
