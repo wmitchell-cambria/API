@@ -70,11 +70,6 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   // This method will be implemented with the convertor story
   @Override
   public IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
-    IntakeLov intakeLov = new IntakeLov();
-    List<IntakeLov> intakeLovMap = getAllLegacySystemCodesForMeta(metaId);
-    if (intakeLovMap != null) {
-      intakeLov = intakeLov;
-    }
     return null;
 
   }
