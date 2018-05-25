@@ -34,11 +34,11 @@ public interface CrossReportMapper {
 
   @AfterMapping
   default void toDomain(@MappingTarget CrossReportIntake crossReport, CrossReportEntity crossReportEntity) {
-    crossReport.setInformDate(DomainChef.cookDate(crossReportEntity.getInformDate()));
+    crossReport.setInformDate(DomainChef.cookISO8601Timestamp(crossReportEntity.getInformDate()));
   }
 
   @AfterMapping
   default void toEntity(@MappingTarget CrossReportEntity crossReportEntity, CrossReportIntake crossReport) {
-    crossReportEntity.setInformDate(DomainChef.uncookDateString(crossReport.getInformDate()));
+    crossReportEntity.setInformDate(DomainChef.uncookISO8601Timestamp(crossReport.getInformDate()));
   }
 }

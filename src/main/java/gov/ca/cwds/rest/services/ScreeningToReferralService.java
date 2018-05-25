@@ -428,7 +428,7 @@ public class ScreeningToReferralService implements CrudsService {
 
         perpatratorClientId = getClientLegacyId(perpatratorClient, perpatratorClientId,
             allegation.getPerpetratorPersonId());
-        if (!validateAllegationVictimExists(victimClientId)) {
+        if (validateAllegationVictimExists(victimClientId)) {
           saveAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
               allegationDispositionType, allegation);
         }
@@ -460,11 +460,10 @@ public class ScreeningToReferralService implements CrudsService {
   private boolean validateAllegationVictimExists(String victimClientId) {
     if (victimClientId.isEmpty()) {
       String message = "Victim could not be determined for an allegation";
-      ServiceException exception = new ServiceException(message);
-      logError(message, exception);
-      return true;
+      logError(message, new ServiceException(message));
+      return false;
     }
-    return false;
+    return true;
   }
 
   private void validateAllegationHasPerpetrator(boolean allegationHasPerpPersonId,

@@ -1,14 +1,13 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -26,6 +25,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.fixture.ScreeningResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.Screening;
@@ -110,29 +110,7 @@ public class ScreeningSubmitServiceTest {
     when(screeningToReferral.getReferralId()).thenReturn("ABC1234567");
     when(screeningToReferralService.create(any())).thenReturn(screeningToReferral);
 
-    screening = new Screening();
-    screening.setId("1");
-    screening.setReferralId("");
-    screening.setEndedAt("2017-01-01");
-    screening.setIncidentCounty("34");
-    screening.setIncidentDate("2017-01-01");
-    screening.setLocationType("Foster Home");
-    screening.setCommunicationMethod("in_person");
-    screening.setCurrentLocationOfChildren(null);
-    screening.setName("The Rocky Horror Show");
-    screening.setReportNarrative("Narrative 123 test");
-    screening.setReference("123ABC");
-    screening.setRestrictionsRationale("");
-    screening.setStartedAt("2017-01-01");
-    screening.setAssignee("Michael Bastow");
-    screening.setAssigneeStaffId("0X5");
-    screening.setAdditionalInformation("additional information");
-    screening.setScreeningDecision("Screening Decision");
-    screening.setScreeningDecisionDetail("evaluate_out");
-    screening.setIncidentAddress(null);
-    screening.setParticipantIntakeApis(null);
-    screening.setSafetyAlerts(new HashSet<String>());
-    screening.setSafetyInformation(null);
+    screening = new ScreeningResourceBuilder().build();
   }
 
   // create test
@@ -157,12 +135,13 @@ public class ScreeningSubmitServiceTest {
   }
 
   @Test
-  public void testFindReturnsNullWhenNotFound() throws Exception {
+  public void testFindThrowsExceptionWhenNotFound() throws Exception {
     when(screenigService.find("000")).thenReturn(null);
-    Response found = screeningSubmitService.find("000");
-
-    assertThat(found, is(nullValue()));
-
+    try {
+      screeningSubmitService.find("000");
+      fail("Expected exception");
+    } catch (Exception e) {
+    }
   }
 
   @Test

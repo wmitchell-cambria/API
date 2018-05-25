@@ -311,7 +311,7 @@ public class ParticipantServiceTest {
         messageBuilder.getMessages().size(), 1);
     String message = messageBuilder.getMessages().get(0).getMessage().trim();
     String expectedErrorMessage =
-        "Unable to update client John Smith. Client was previously modified.";
+        "Unable to update client John Smith. Client has been modified by another process.";
     assertEquals("Expected client previously modified message to have been recorded",
         expectedErrorMessage, message);
   }
@@ -524,9 +524,9 @@ public class ParticipantServiceTest {
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
     verify(foundVictim, times(1)).update("Barney", "middlestone", "Rubble", "", "M", "123456789",
-        (short) 841, "A", "A", "X");
+        (short) 841, "A", "A", "X", "2001-03-15");
     verify(foundPerp, times(1)).update("Fred", "Finnigan", "Flintsone", "", "M", "123456789",
-        (short) 841, "A", "A", "X");
+        (short) 841, "A", "A", "X", "2001-03-15");
     verify(clientService).update(eq(existingPerpId), any());
   }
 
