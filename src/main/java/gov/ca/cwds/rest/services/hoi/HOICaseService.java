@@ -210,7 +210,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private SystemCodeDescriptor constructCounty(CmsCase cmsCase) {
     return new SystemCodeDescriptor(cmsCase.getGovernmentEntityType(),
-        SystemCodeCache.global().getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()));
+        SystemCodeCache.global()
+            .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()) == null ? ""
+                : SystemCodeCache.global()
+                    .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()));
   }
 
   private HOIVictim constructFocusChild(Client client) {
