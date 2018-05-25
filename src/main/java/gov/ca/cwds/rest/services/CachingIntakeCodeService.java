@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -58,23 +58,19 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
 
   @SuppressWarnings("unchecked")
   @Override
-  public Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId) {
-    Map<String, IntakeLov> intakeLov = new HashMap<>();
+  public List<IntakeLov> getAllLegacySystemCodesForMeta(String metaId) {
+    List<IntakeLov> intakeLov = new ArrayList<>();
     if (StringUtils.isNotBlank(metaId)) {
       CacheKey cacheKey = CacheKey.createForMeta(metaId);
-      intakeLov = (Map<String, IntakeLov>) getFromCache(cacheKey);
+      intakeLov = (List<IntakeLov>) getFromCache(cacheKey);
     }
     return intakeLov;
   }
 
+  // This method will be implemented with the convertor story
   @Override
   public IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
-    IntakeLov intakeLov = new IntakeLov();
-    Map<String, IntakeLov> intakeLovMap = getAllLegacySystemCodesForMeta(metaId);
-    if (intakeLovMap != null) {
-      intakeLov = intakeLovMap.get(intakeCode);
-    }
-    return intakeLov;
+    return null;
 
   }
 
@@ -117,8 +113,7 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
     public Object load(CacheKey key) throws Exception {
       Object objectToCache = null;
       if (CacheKey.META_ID_TYPE.equals(key.getType())) {
-        Map<String, IntakeLov> intakeCodeList =
-            intakeLovService.loadAllLegacyMetaIds(key.getValue());
+        List<IntakeLov> intakeCodeList = intakeLovService.loadAllLegacyMetaIds(key.getValue());
         objectToCache = intakeCodeList;
       }
       return objectToCache;
