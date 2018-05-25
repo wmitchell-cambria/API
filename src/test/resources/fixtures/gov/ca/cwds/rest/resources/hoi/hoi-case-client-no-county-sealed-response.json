@@ -3,7 +3,8 @@
     "id": "ToQnUaR0GD",
     "start_date": "1999-08-26",
     "county": {
-      "id": "0"
+      "id": "0",
+      "description": ""
     },
     "service_component": {
       "id": "1692",
