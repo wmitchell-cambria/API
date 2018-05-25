@@ -31,12 +31,12 @@ public class ReentrantXAUnitOfWorkAspectFactory
 
   @Override
   public void startRequest(RequestExecutionContext ctx) {
-    local.set(null); // clear this thread
+    local.set(null); // clear the current thread
   }
 
   @Override
   public void endRequest(RequestExecutionContext ctx) {
-    local.set(null); // clear this thread
+    local.set(null); // clear the current thread
   }
 
   protected XAUnitOfWorkAspect make(ImmutableMap<String, SessionFactory> someSessionFactories) {
@@ -51,7 +51,7 @@ public class ReentrantXAUnitOfWorkAspectFactory
   /**
    * {@inheritDoc}
    * 
-   * @see gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspectFactory#newAspect()
+   * @see gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspectFactory#make()
    */
   @Override
   public XAUnitOfWorkAspect make() {

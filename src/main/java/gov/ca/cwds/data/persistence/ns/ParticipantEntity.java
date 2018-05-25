@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +40,6 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
  *
  * @author CWDS API Team
  */
-@SuppressWarnings("serial")
 @NamedQuery(name = FIND_LEGACY_ID_LIST_BY_SCREENING_ID,
     query = "SELECT legacyId FROM ParticipantEntity WHERE screeningEntity.id = :screeningId)")
 @NamedQuery(name = FIND_PARTICIPANTS_BY_SCREENING_IDS,
@@ -49,7 +48,8 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
     query = "FROM ParticipantEntity WHERE screeningId = :screeningId)")
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
+public class ParticipantEntity
+    implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
 
   private static final long serialVersionUID = 1L;
 
