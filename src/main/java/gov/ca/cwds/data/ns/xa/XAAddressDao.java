@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.ns;
+package gov.ca.cwds.data.ns.xa;
 
 import org.hibernate.SessionFactory;
 
@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.XaNsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class XaNsAddressDao extends CrudsDaoImpl<Addresses> {
+public class XAAddressDao extends CrudsDaoImpl<Addresses> {
 
   /**
    * Constructor
@@ -21,7 +21,7 @@ public class XaNsAddressDao extends CrudsDaoImpl<Addresses> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsAddressDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XAAddressDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

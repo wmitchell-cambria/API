@@ -1,30 +1,30 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.ns.LegacyDescriptorDao;
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
-import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
+import gov.ca.cwds.data.ns.xa.XAScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on Screening History Of Involvement
@@ -35,7 +35,7 @@ public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  ScreeningDao screeningDao;
+  XAScreeningDao screeningDao;
 
   @Inject
   ParticipantDao participantDao;
@@ -97,8 +97,8 @@ public class HOIScreeningService
      * of code back at this spot:<br/>
      * authorizationService&#46;ensureClientAccessAuthorized&#40;clientIds&#41;&#59;
      */
-    Set<ScreeningEntity> screeningEntities = screeningDao
-        .findScreeningsByClientIds(hsd.getClientIds());
+    Set<ScreeningEntity> screeningEntities =
+        screeningDao.findScreeningsByClientIds(hsd.getClientIds());
     hsd.getScreeningEntities().addAll(screeningEntities);
 
     Map<String, Set<ParticipantEntity>> participantEntitiesMap = participantDao.findByScreeningIds(
@@ -147,12 +147,10 @@ public class HOIScreeningService
        * line of code back at this spot:<br/>
        * authorizationService&#46;ensureScreeningAccessAuthorized&#40;screeningEntity&#41;&#59;
        */
-      screenings.add(hoiScreeningFactory.buildHOIScreening(
-          screeningEntity,
+      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity,
           hsd.getCountyIntakeLOVCodeEntityMap().get(screeningEntity.getIncidentCounty()),
           hsd.getParticipantLegacyDescriptors(),
-          hsd.getStaffPersonMap().get(screeningEntity.getAssigneeStaffId()))
-      );
+          hsd.getStaffPersonMap().get(screeningEntity.getAssigneeStaffId())));
     }
     return screenings;
   }

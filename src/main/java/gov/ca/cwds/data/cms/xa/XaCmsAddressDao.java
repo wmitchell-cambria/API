@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.cms;
+package gov.ca.cwds.data.cms.xa;
 
 import org.hibernate.SessionFactory;
 

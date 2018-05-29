@@ -19,9 +19,9 @@ import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
- * Address DAO
+ * Legacy descriptor DAO.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class LegacyDescriptorDao extends CrudsDaoImpl<LegacyDescriptorEntity> {
 

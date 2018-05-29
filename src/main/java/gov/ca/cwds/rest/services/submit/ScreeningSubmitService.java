@@ -41,7 +41,6 @@ public class ScreeningSubmitService implements CrudsService {
   @Inject
   private StaffPersonService staffPersonService;
 
-
   /**
    * {@inheritDoc}
    * 

@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.XaNsAddressDao;
+import gov.ca.cwds.data.ns.xa.XAAddressDao;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -32,7 +32,7 @@ public class AddressService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressService.class);
 
   private AddressDao addressDao;
-  private XaNsAddressDao xaNsAddressDao;
+  private XAAddressDao xaNsAddressDao;
   private XaCmsAddressDao xaCmsAddressDao;
 
   /**
@@ -43,7 +43,7 @@ public class AddressService implements CrudsService {
    * @param xaCmsAddressDao {@link Dao} for XA (two-phase commit) transactions for CMS (DB2)
    */
   @Inject
-  public AddressService(AddressDao addressDao, XaNsAddressDao xaNsAddressDao,
+  public AddressService(AddressDao addressDao, XAAddressDao xaNsAddressDao,
       XaCmsAddressDao xaCmsAddressDao) {
     this.addressDao = addressDao;
     this.xaNsAddressDao = xaNsAddressDao;
