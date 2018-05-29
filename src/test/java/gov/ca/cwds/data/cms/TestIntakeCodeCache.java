@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.cms;
 
-import java.util.Map;
+import java.util.List;
 
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
@@ -25,7 +25,7 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
   }
 
   @Override
-  public Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId) {
+  public List<IntakeLov> getAllLegacySystemCodesForMeta(String metaId) {
     return null;
   }
 

@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.api.domain;
 
-import java.util.Map;
+import java.util.List;
 
 import gov.ca.cwds.data.persistence.cms.DeferredRegistry;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
@@ -34,7 +34,7 @@ public interface IntakeCodeCache extends ApiMarker {
    * @param metaId - metaId
    * @return All legacy system codes for the metaId.
    */
-  Map<String, IntakeLov> getAllLegacySystemCodesForMeta(String metaId);
+  List<IntakeLov> getAllLegacySystemCodesForMeta(String metaId);
 
   /**
    * Get the valid legacy system code identified by meta Id and intake code.
