@@ -4,15 +4,15 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.CrossReportDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Screening DAO takes an XA session factory for distributed transactions.
+ * Postgres Cross Report DAO takes an XA session factory for distributed transactions.
  * 
  * @author CWDS API Team
  */
-public class XaScreeningDao extends ScreeningDao {
+public class XaNsCrossReportDao extends CrossReportDao {
 
   /**
    * Constructor
@@ -20,7 +20,7 @@ public class XaScreeningDao extends ScreeningDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsCrossReportDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

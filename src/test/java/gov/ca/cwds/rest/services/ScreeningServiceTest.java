@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.xa.XaScreeningDao;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningDao;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
@@ -43,7 +43,7 @@ public class ScreeningServiceTest {
   private ElasticsearchDao esDao;
 
   @Mock
-  private XaScreeningDao screeningDao;
+  private XaNsScreeningDao screeningDao;
 
   @Mock
   private Client esClient;

@@ -9,7 +9,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -33,7 +33,7 @@ public class ScreeningSubmitService implements CrudsService {
   private ScreeningService screeningService;
 
   @Inject
-  private IntakeLovDao intakeLovDao;
+  private XaNsIntakeLovDao intakeLovDao;
 
   @Inject
   private ScreeningToReferralService screeningToReferralService;
@@ -52,16 +52,15 @@ public class ScreeningSubmitService implements CrudsService {
   }
 
   public Response submit(Serializable id) {
-    Screening screening = screeningService.getScreening((String) id);
-    String staffId = RequestExecutionContext.instance().getStaffId();
-    String userCountyCode =
+    final Screening screening = screeningService.getScreening((String) id);
+    final String staffId = RequestExecutionContext.instance().getStaffId();
+    final String userCountyCode =
         staffPersonService.find(RequestExecutionContext.instance().getStaffId()).getCountyCode();
-    // abstract this out and cache these values
-    Map<String, IntakeLov> nsCodeToNsLovMap = new HashMap<>();
 
-    Map<String, IntakeLov> cmsSysIdToNsLovMap = new HashMap<>();
-
-    List<IntakeLov> intakeLovs = intakeLovDao.findAll();
+    // NEXT: abstract this out and cache these values
+    final Map<String, IntakeLov> nsCodeToNsLovMap = new HashMap<>();
+    final Map<String, IntakeLov> cmsSysIdToNsLovMap = new HashMap<>();
+    final List<IntakeLov> intakeLovs = intakeLovDao.findAll();
 
     for (IntakeLov e : intakeLovs) {
       nsCodeToNsLovMap.put(e.getIntakeCode(), e);
@@ -72,36 +71,34 @@ public class ScreeningSubmitService implements CrudsService {
         cmsSysIdToNsLovMap.put((e.getLegacySystemCodeId().toString()), e);
       }
     }
-    // cms session
-    ScreeningToReferral screeningToReferral = new ScreeningTransformer().transform(screening,
+
+    // CMS session
+    final ScreeningToReferral screeningToReferral = new ScreeningTransformer().transform(screening,
         staffId, userCountyCode, nsCodeToNsLovMap, cmsSysIdToNsLovMap);
 
-    ScreeningToReferral str =
+    final ScreeningToReferral str =
         (ScreeningToReferral) screeningToReferralService.create(screeningToReferral);
     screening.setReferralId(str.getReferralId());
-    // ns session
+
+    // NS session
     screeningService.updateScreening(screening.getId(), screening);
 
     return screening;
   }
-
 
   @Override
   public Response create(Request request) {
     throw new NotImplementedException("Create is not implemented");
   }
 
-
   @Override
   public Response delete(Serializable id) {
     throw new NotImplementedException("Delete is not implemented");
   }
 
-
   @Override
   public Response update(Serializable id, Request request) {
     throw new NotImplementedException("Update is not implemented");
   }
-
 
 }

@@ -21,12 +21,12 @@ import com.google.inject.name.Named;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.AddressesDao;
-import gov.ca.cwds.data.ns.AgencyDao;
-import gov.ca.cwds.data.ns.AllegationIntakeDao;
-import gov.ca.cwds.data.ns.CrossReportDao;
-import gov.ca.cwds.data.ns.ScreeningAddressDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
+import gov.ca.cwds.data.ns.xa.XaNsAgencyDao;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDao;
+import gov.ca.cwds.data.ns.xa.XaNsCrossReportDao;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDao;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.AllegationEntity;
 import gov.ca.cwds.data.persistence.ns.CrossReportEntity;
@@ -53,7 +53,7 @@ import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 
 /**
- * Business layer object to work on {@link Screening}
+ * Business layer object to work on {@link Screening}.
  * 
  * @author CWDS API Team
  */
@@ -66,22 +66,22 @@ public class ScreeningService implements CrudsService {
   private ElasticsearchDao esDao;
 
   @Inject
-  private AllegationIntakeDao allegationDao;
+  private XaNsAllegationIntakeDao allegationDao;
 
   @Inject
-  private AddressesDao addressesDao;
+  private XaNsAddressesDao addressesDao;
 
   @Inject
-  private ScreeningAddressDao screeningAddressDao;
+  private XaNsScreeningAddressDao screeningAddressDao;
 
   @Inject
-  private AgencyDao agencyDao;
+  private XaNsAgencyDao agencyDao;
 
   @Inject
-  private CrossReportDao crossReportDao;
+  private XaNsCrossReportDao crossReportDao;
 
   @Inject
-  private ScreeningDao screeningDao;
+  private XaNsScreeningDao screeningDao;
 
   @Inject
   private ParticipantIntakeApiService participantIntakeApiService;
@@ -427,7 +427,7 @@ public class ScreeningService implements CrudsService {
     this.esDao = esDao;
   }
 
-  void setScreeningDao(ScreeningDao screeningDao) {
+  void setScreeningDao(XaNsScreeningDao screeningDao) {
     this.screeningDao = screeningDao;
   }
 
