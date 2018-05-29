@@ -25,5 +25,4 @@ public class CountyTriggerDao extends CrudsDaoImpl<CountyTrigger> {
     super(sessionFactory);
   }
 
-
 }

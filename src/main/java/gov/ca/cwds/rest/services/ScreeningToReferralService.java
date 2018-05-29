@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Allegation;
@@ -41,6 +42,7 @@ import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -84,14 +86,13 @@ public class ScreeningToReferralService implements CrudsService {
    * @param clientRelationshipDao clientRelationshipDao
    */
   @Inject
-  public ScreeningToReferralService(ReferralService referralService,
+  public ScreeningToReferralService(XaCmsReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
-      ParticipantService participantService, Validator validator, ReferralDao referralDao,
+      ParticipantService participantService, Validator validator, XaCmsReferralDao referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
       GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
       ClientRelationshipDao clientRelationshipDao) {
-
     super();
     this.clientRelationshipDao = clientRelationshipDao;
     this.referralService = referralService;

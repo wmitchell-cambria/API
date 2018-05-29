@@ -63,7 +63,7 @@ public class NonLACountyTriggers {
    * @param managed Client creates the countyOwnership with the client foreign key
    */
   public void createClientCountyTrigger(Client managed) {
-    CountyOwnership countyOwnership = new CountyOwnership();
+    final CountyOwnership countyOwnership = new CountyOwnership();
     countyOwnership.setEntityId(managed.getPrimaryKey());
     countyOwnership.setEntityCode(CLIENT_ENTITY_CODE);
     countyOwnershipDao.create(countyOwnership);
@@ -128,14 +128,11 @@ public class NonLACountyTriggers {
     createOrUpdateCountyOwnership(countyOwnership, methodName, countyExists);
   }
 
-  /**
-   * 
-   */
   private void createOrUpdateCountyOwnership(CountyOwnership countyOwnership, String methodName,
       Boolean countyExists) {
     Method method = null;
     try {
-    	  if (!(SET_COUNTY + COUNTY_SPECIFIC_CODE_DEFAULT_CODE + FLAG).equals(methodName)) {
+      if (!(SET_COUNTY + COUNTY_SPECIFIC_CODE_DEFAULT_CODE + FLAG).equals(methodName)) {
         method = countyOwnership.getClass().getMethod(methodName, String.class);
         method.invoke(countyOwnership, SET_FLAG);
       }
