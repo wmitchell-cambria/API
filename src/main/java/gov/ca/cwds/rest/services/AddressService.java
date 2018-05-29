@@ -12,8 +12,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.xa.XAAddressDao;
-import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -32,7 +31,7 @@ public class AddressService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressService.class);
 
   private AddressDao addressDao;
-  private XAAddressDao xaNsAddressDao;
+  private XaNsAddressesDao xaNsAddressDao;
   private XaCmsAddressDao xaCmsAddressDao;
 
   /**
@@ -43,7 +42,7 @@ public class AddressService implements CrudsService {
    * @param xaCmsAddressDao {@link Dao} for XA (two-phase commit) transactions for CMS (DB2)
    */
   @Inject
-  public AddressService(AddressDao addressDao, XAAddressDao xaNsAddressDao,
+  public AddressService(AddressDao addressDao, XaNsAddressesDao xaNsAddressDao,
       XaCmsAddressDao xaCmsAddressDao) {
     this.addressDao = addressDao;
     this.xaNsAddressDao = xaNsAddressDao;
@@ -98,8 +97,7 @@ public class AddressService implements CrudsService {
    * {@inheritDoc}
    * 
    * <p>
-   * Update NS and CMS with XA transaction. See
-   * <a href="https://osi-cwds.atlassian.net/browse/">INT-1592</a>.
+   * Update NS and CMS with XA transaction. See INT-1592.
    * </p>
    * 
    * <p>
@@ -110,7 +108,6 @@ public class AddressService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
    *      gov.ca.cwds.rest.api.Request)
    */
-  @XAUnitOfWork
   @Override
   public Response update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
@@ -121,57 +118,50 @@ public class AddressService implements CrudsService {
     final RequestExecutionContext ctx = RequestExecutionContext.instance();
     final String staffId = ctx.getStaffId();
 
-    // ==================
-    // PostgreSQL:
-    // ==================
+    try {
+      // ==================
+      // PostgreSQL:
+      // ==================
 
-    // Proof of concept only. Don't bother parsing raw street addresses.
-    LOGGER.info("XA: Postgres");
-    final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
-    nsAddr.setZip(reqAddr.getZip());
-    nsAddr.setCity(reqAddr.getCity());
-    nsAddr.setLegacyId(reqAddr.getLegacyId());
+      // Proof of concept only. Don't bother parsing raw street addresses.
+      final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
+      nsAddr.setZip(AddressUtils.defaultIfBlank(reqAddr.getZip()));
+      nsAddr.setCity(reqAddr.getCity());
+      nsAddr.setLegacyId(reqAddr.getLegacyId());
 
-    final Integer addrType = reqAddr.getType();
-    if (addrType != null && addrType.intValue() != 0) {
-      nsAddr.setType(addrType.toString());
+      if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
+        nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
+      } else {
+        nsAddr.setLegacySourceTable("ADDRS_T");
+      }
+
+      final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
+
+      // ==================
+      // DB2:
+      // ==================
+
+      final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
+          xaCmsAddressDao.find(nsAddr.getLegacyId());
+      cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
+      cmsAddr.setCity(reqAddr.getCity());
+      cmsAddr.setZip(reqAddr.getZip());
+      cmsAddr.setLastUpdatedId(staffId);
+      cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
+      xaCmsAddressDao.update(cmsAddr);
+
+      ret.setLegacyId(reqAddr.getLegacyId());
+      ret.setLegacySourceTable(reqAddr.getLegacySourceTable());
+
+      // Return results.
+      final PostedAddress result = new PostedAddress(ret);
+      result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
+      result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
+      return result;
+    } catch (Exception e) {
+      LOGGER.error("XA TRANSACTION ERROR!", e);
+      throw new ServiceException("XA TRANSACTION ERROR!", e);
     }
-
-    if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
-      nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
-    } else {
-      nsAddr.setLegacySourceTable("ADDRS_T");
-    }
-
-    final gov.ca.cwds.data.persistence.ns.Addresses ret = xaNsAddressDao.update(nsAddr);
-
-    // ==================
-    // DB2:
-    // ==================
-
-    LOGGER.info("XA: DB2");
-    final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
-        xaCmsAddressDao.find(nsAddr.getLegacyId());
-    cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
-    cmsAddr.setCity(reqAddr.getCity());
-    cmsAddr.setZip(AddressUtils.defaultIfBlank(reqAddr.getZip()));
-    cmsAddr.setLastUpdatedId(staffId);
-    cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
-
-    if (addrType != null && addrType.intValue() != 0) {
-      cmsAddr.setContextAddressType(addrType.shortValue());
-    }
-
-    xaCmsAddressDao.update(cmsAddr);
-
-    ret.setLegacyId(reqAddr.getLegacyId());
-    ret.setLegacySourceTable(reqAddr.getLegacySourceTable());
-
-    // Return results.
-    final PostedAddress result = new PostedAddress(ret);
-    result.setLegacyDescriptor(reqAddr.getLegacyDescriptor());
-    result.getLegacyDescriptor().setId(reqAddr.getLegacyId());
-    return result;
   }
 
 }

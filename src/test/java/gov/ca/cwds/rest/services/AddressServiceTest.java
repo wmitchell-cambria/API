@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
 import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.xa.XAAddressDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.rest.api.Request;
@@ -47,7 +47,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   private static final ObjectMapper MY_MAPPER = Jackson.newObjectMapper();
 
   AddressDao addressDao;
-  XAAddressDao xaNsAddressDao;
+  XaNsAddressesDao xaNsAddressDao;
   XaCmsAddressDao xaCmsAddressDao;
   AddressService target;
 
@@ -62,8 +62,11 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
     super.setup();
 
     addressDao = mock(AddressDao.class);
-    xaNsAddressDao = mock(XAAddressDao.class);
+    xaNsAddressDao = mock(XaNsAddressesDao.class);
     xaCmsAddressDao = mock(XaCmsAddressDao.class);
+
+    // public AddressService(AddressDao addressDao, XaNsAddressesDao xaNsAddressDao, XaCmsAddressDao
+    // xaCmsAddressDao) {
     target = new AddressService(addressDao, xaNsAddressDao, xaCmsAddressDao);
 
     legacyDescriptor.setId(DEFAULT_CLIENT_ID);

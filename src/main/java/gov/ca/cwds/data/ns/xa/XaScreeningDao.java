@@ -12,7 +12,7 @@ import gov.ca.cwds.inject.XaNsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class XAScreeningDao extends ScreeningDao {
+public class XaScreeningDao extends ScreeningDao {
 
   /**
    * Constructor
@@ -20,7 +20,7 @@ public class XAScreeningDao extends ScreeningDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XAScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

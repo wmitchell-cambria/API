@@ -79,7 +79,7 @@ import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.ns.xa.XAAddressDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
@@ -381,7 +381,7 @@ public class DataAccessModule extends AbstractModule {
     bind(AddressDao.class);
     bind(AddressesDao.class);
     bind(CsecDao.class);
-    bind(XAAddressDao.class);
+    bind(XaNsAddressDao.class);
 
     bind(PersonDao.class);
     bind(ScreeningDao.class);

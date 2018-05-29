@@ -4,8 +4,7 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
@@ -13,7 +12,7 @@ import gov.ca.cwds.inject.XaNsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class XAAddressDao extends CrudsDaoImpl<Addresses> {
+public class XaNsAddressDao extends AddressDao {
 
   /**
    * Constructor
@@ -21,7 +20,7 @@ public class XAAddressDao extends CrudsDaoImpl<Addresses> {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XAAddressDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsAddressDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

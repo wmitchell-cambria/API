@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.xa.XaScreeningDao;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
@@ -43,7 +43,7 @@ public class ScreeningServiceTest {
   private ElasticsearchDao esDao;
 
   @Mock
-  private ScreeningDao screeningDao;
+  private XaScreeningDao screeningDao;
 
   @Mock
   private Client esClient;
@@ -75,7 +75,6 @@ public class ScreeningServiceTest {
     screeningService.setScreeningDao(screeningDao);
 
     new TestingRequestExecutionContext("0X5");
-
   }
 
   @Test
@@ -177,6 +176,5 @@ public class ScreeningServiceTest {
     ScreeningDashboardList sdl = (ScreeningDashboardList) screeningService.findScreeningDashboard();
     List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
     assertThat(screeningDashboard.size(), is(0));
-
   }
 }

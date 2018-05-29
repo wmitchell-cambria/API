@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
-public class XALegacyDescriptorDao extends LegacyDescriptorDao {
+public class XaNsAddressesDao extends AddressesDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XALegacyDescriptorDao extends LegacyDescriptorDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XALegacyDescriptorDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsAddressesDao(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
