@@ -50,8 +50,6 @@ public class RequestExecutionContextRegistry implements ApiMarker {
 
   private static final CallbackRegistry callbackRegistry = new CallbackRegistry();
 
-  // Callback registry for stop and start.
-
   public static synchronized void registerCallback(RequestExecutionContextCallback callback) {
     callbackRegistry.register(callback);
   }
