@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @ApiModel("Screening")
+@SuppressWarnings({"squid:S3437"})
 public class Screening extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;

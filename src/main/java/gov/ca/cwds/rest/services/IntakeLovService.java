@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,10 +53,11 @@ public class IntakeLovService
   }
 
   /**
-   * @return the intake Codes
+   * @param legacyCategoryId - legacyCategoryId
+   * @return the intake code in the value based on the category id
    */
-  public List<IntakeLov> findAllIntakeLov() {
-    return intakeLovDao.findAll();
+  public List<IntakeLov> loadAllLegacyMetaIds(Serializable legacyCategoryId) {
+    return intakeLovDao.findByLegacyMetaId(legacyCategoryId.toString());
   }
 
 }

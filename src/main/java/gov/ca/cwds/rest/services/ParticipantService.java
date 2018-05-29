@@ -306,12 +306,12 @@ public class ParticipantService implements CrudsService {
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
           incomingParticipant.getGender(), incomingParticipant.getSsn(), primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode);
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode, incomingParticipant.getDateOfBirth());
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
       String message =
-          String.format("Unable to update client %s %s. Client was previously modified.",
+          String.format("Unable to update client %s %s. Client has been modified by another process.",
               incomingParticipant.getFirstName(), incomingParticipant.getLastName());
       messageBuilder.addMessageAndLog(message, LOGGER);
     }
