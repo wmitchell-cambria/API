@@ -14,36 +14,29 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.xa.XaNsStaffPersonDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * @author CWDS API Team
- *
  */
 public class StaffPersonServiceTest {
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+
   private StaffPersonService staffPersonService;
-  private StaffPersonDao staffPersonDao;
+  private XaNsStaffPersonDao staffPersonDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
-    staffPersonDao = mock(StaffPersonDao.class);
+    staffPersonDao = mock(XaNsStaffPersonDao.class);
     staffPersonService = new StaffPersonService(staffPersonDao);
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void findReturnsCorrectStaffPersonWhenFound() throws Exception {
     String id = "ABC";
@@ -59,34 +52,28 @@ public class StaffPersonServiceTest {
             DomainChef.cookBoolean(false), "3XPCP92b24", "john.doe@anyco.com");
 
     when(staffPersonDao.find(id)).thenReturn(staffPerson);
-
     StaffPerson found = staffPersonService.find(id);
-
     assertThat(found, is(expected));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void findReturnsNullWhenNotFound() throws Exception {
     Response found = staffPersonService.find("0XA");
     assertThat(found, is(nullValue()));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void deleteThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
     staffPersonService.delete("ABC");
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void updateThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);
     staffPersonService.update("ABC", mock(StaffPerson.class));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void createThrowsNotImplementedException() throws Exception {
     thrown.expect(NotImplementedException.class);

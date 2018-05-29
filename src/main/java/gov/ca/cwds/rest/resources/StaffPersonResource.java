@@ -38,6 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class StaffPersonResource {
+
   private TypedResourceDelegate<String, StaffPerson> typedResourceDelegate;
 
   /**
@@ -50,7 +51,6 @@ public class StaffPersonResource {
       @StaffPersonsServiceBackedResource TypedResourceDelegate<String, StaffPerson> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
-
 
   /**
    * Finds an {@link StaffPerson} by id.

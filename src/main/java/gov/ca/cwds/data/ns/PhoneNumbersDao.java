@@ -1,17 +1,20 @@
 package gov.ca.cwds.data.ns;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
-import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.PhoneNumbers;
+import gov.ca.cwds.inject.NsSessionFactory;
+
 /**
- * PhoneNumber DAO
+ * Postgres phone number DAO.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class PhoneNumbersDao extends CrudsDaoImpl<PhoneNumbers> {
 
@@ -31,4 +34,5 @@ public class PhoneNumbersDao extends CrudsDaoImpl<PhoneNumbers> {
         .setParameter(PhoneNumbers.PARAM_PARTICIPANT_ID, participantId);
     return query.getResultList();
   }
+
 }

@@ -1,18 +1,20 @@
 package gov.ca.cwds.data.ns;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.Allegation;
-import gov.ca.cwds.inject.NsSessionFactory;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import java.util.List;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.Allegation;
+import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
- * Address DAO
+ * Allegation DAO, you know, for referral/screening allegations.
  * 
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class AllegationDao extends CrudsDaoImpl<Allegation> {
 
@@ -28,22 +30,19 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
 
   public List<Allegation> findByVictimId(String id) {
     final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
-            .getNamedQuery(Allegation.FIND_BY_VICTIM_ID)
-            .setParameter("victimId", id);
+        .getNamedQuery(Allegation.FIND_BY_VICTIM_ID).setParameter("victimId", id);
     return query.list();
   }
 
   public List<Allegation> findByPerpetratorId(String id) {
     final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
-            .getNamedQuery(Allegation.FIND_BY_PERPETRATOR_ID)
-            .setParameter("perpetratorId", id);
+        .getNamedQuery(Allegation.FIND_BY_PERPETRATOR_ID).setParameter("perpetratorId", id);
     return query.list();
   }
 
   public List<Allegation> findByVictimOrPerpetratorId(String id) {
     final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
-            .getNamedQuery(Allegation.FIND_BY_VICTIM_OR_PERPETRATOR_ID)
-            .setParameter("id", id);
+        .getNamedQuery(Allegation.FIND_BY_VICTIM_OR_PERPETRATOR_ID).setParameter("id", id);
     return query.list();
   }
 
