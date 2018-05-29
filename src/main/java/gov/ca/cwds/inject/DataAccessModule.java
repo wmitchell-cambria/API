@@ -1,6 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.ns.CsecDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,6 +53,7 @@ import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
@@ -63,6 +63,7 @@ import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
 import gov.ca.cwds.data.ns.AllegationIntakeDao;
+import gov.ca.cwds.data.ns.CsecDao;
 import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
@@ -80,6 +81,20 @@ import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
+import gov.ca.cwds.data.ns.xa.XaNsAgencyDao;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationDao;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDao;
+import gov.ca.cwds.data.ns.xa.XaNsCrossReportDao;
+import gov.ca.cwds.data.ns.xa.XaNsCsecDao;
+import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDao;
+import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDao;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantAddressesDao;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantDao;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantPhoneNumbersDao;
+import gov.ca.cwds.data.ns.xa.XaNsPhoneNumbersDao;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDao;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
@@ -375,13 +390,15 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
+
+    // CMS XA:
     bind(XaCmsAddressDao.class);
+    bind(XaCmsStaffPersonDao.class);
 
     // NS:
     bind(AddressDao.class);
     bind(AddressesDao.class);
     bind(CsecDao.class);
-    bind(XaNsAddressDao.class);
 
     bind(PersonDao.class);
     bind(ScreeningDao.class);
@@ -402,6 +419,24 @@ public class DataAccessModule extends AbstractModule {
     bind(IntakeLOVCodeDao.class);
     bind(IntakeLovDao.class);
     bind(PaperTrailDao.class);
+
+    // NS XA:
+    bind(XaNsAddressDao.class);
+    bind(XaNsAddressesDao.class);
+    bind(XaNsAgencyDao.class);
+    bind(XaNsAllegationDao.class);
+    bind(XaNsAllegationIntakeDao.class);
+    bind(XaNsCrossReportDao.class);
+    bind(XaNsCsecDao.class);
+    bind(XaNsIntakeLovDao.class);
+    bind(XaNsLegacyDescriptorDao.class);
+    bind(XaNsParticipantAddressesDao.class);
+    bind(XaNsParticipantDao.class);
+    bind(XaNsParticipantPhoneNumbersDao.class);
+    bind(XaNsPhoneNumbersDao.class);
+    bind(XaNsScreeningAddressDao.class);
+    bind(XaNsScreeningDao.class);
+
     bind(PaperTrailInterceptor.class);
 
     // Trigger Tables:

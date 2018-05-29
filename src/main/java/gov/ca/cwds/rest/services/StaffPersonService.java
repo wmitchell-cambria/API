@@ -5,7 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.xa.XaNsStaffPersonDao;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -17,7 +17,7 @@ import io.dropwizard.hibernate.UnitOfWork;
  */
 public class StaffPersonService implements TypedCrudsService<String, StaffPerson, StaffPerson> {
 
-  private XaNsStaffPersonDao staffPersonDao;
+  private XaCmsStaffPersonDao staffPersonDao;
 
   /**
    * Constructor
@@ -26,7 +26,7 @@ public class StaffPersonService implements TypedCrudsService<String, StaffPerson
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
    */
   @Inject
-  public StaffPersonService(XaNsStaffPersonDao staffPersonDao) {
+  public StaffPersonService(XaCmsStaffPersonDao staffPersonDao) {
     this.staffPersonDao = staffPersonDao;
   }
 

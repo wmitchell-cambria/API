@@ -131,7 +131,7 @@ public class ParticipantIntakeApiService implements CrudsService {
   public ParticipantIntakeApi delete(Serializable primaryKey) {
     assert primaryKey instanceof String;
 
-    ParticipantEntity participantEntity = participantDao.find(primaryKey);
+    final ParticipantEntity participantEntity = participantDao.find(primaryKey);
     if (participantEntity == null) {
       return null;
     }
@@ -287,15 +287,15 @@ public class ParticipantIntakeApiService implements CrudsService {
       ParticipantEntity participantEntityManaged) {
     final List<CsecEntity> csecEnities = new ArrayList<>(participantIntakeApi.getCsecs().size());
     for (Csec csec : participantIntakeApi.getCsecs()) {
-      String participantId = participantEntityManaged.getId();
-      CsecEntity csecEntity = csecMapper.map(csec);
+      final String participantId = participantEntityManaged.getId();
+      final CsecEntity csecEntity = csecMapper.map(csec);
       csecEntity.setParticipantId(participantId);
       if (csecEntity.getId() == null) {
-        CsecEntity createdCsecEntity = csecDao.create(csecEntity);
+        final CsecEntity createdCsecEntity = csecDao.create(csecEntity);
         csec.setId(String.valueOf(createdCsecEntity.getId()));
         csecEnities.add(createdCsecEntity);
       } else {
-        CsecEntity managedCsecEntity = csecDao.find(csecEntity.getId());
+        final CsecEntity managedCsecEntity = csecDao.find(csecEntity.getId());
         if (managedCsecEntity == null) {
           throw new ServiceException(
               "Cannot update CSEC that doesn't exist. id = " + csecEntity.getId());
@@ -360,7 +360,6 @@ public class ParticipantIntakeApiService implements CrudsService {
       participantPhoneNumbers.setCreatedAt(new Date());
       participantPhoneNumbers.setUpdatedAt(participantPhoneNumbers.getCreatedAt());
       participantPhoneNumbersDao.create(participantPhoneNumbers);
-
     }
 
     return phoneNumberSetPosted;
@@ -390,7 +389,7 @@ public class ParticipantIntakeApiService implements CrudsService {
       phoneNumberSetPosted.add(phoneNumber);
 
       // See if we had this ParticipantPhoneNumber entity before. Otherwise create
-      ParticipantPhoneNumbers participantPhoneNumbers =
+      final ParticipantPhoneNumbers participantPhoneNumbers =
           participantPhoneNumbersOldMap.get(phoneNumbersEntityManaged.getId());
       if (participantPhoneNumbers != null) {
         // Remove from the Old map

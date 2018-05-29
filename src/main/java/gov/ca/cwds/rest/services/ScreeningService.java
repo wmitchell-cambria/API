@@ -65,7 +65,7 @@ public class ScreeningService implements CrudsService {
   @Inject
   private ElasticsearchDao esDao;
 
-  // NS DAO:
+  // NS DAO's:
   @Inject
   private XaNsAllegationIntakeDao allegationDao;
 
@@ -87,7 +87,7 @@ public class ScreeningService implements CrudsService {
   @Inject
   private ParticipantIntakeApiService participantIntakeApiService;
 
-  // Mapper:
+  // Mappers:
   @Inject
   private ScreeningMapper screeningMapper;
 

@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaNsStaffPersonDao extends StaffPersonDao {
+public class XaCmsStaffPersonDao extends StaffPersonDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaNsStaffPersonDao extends StaffPersonDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsStaffPersonDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsStaffPersonDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

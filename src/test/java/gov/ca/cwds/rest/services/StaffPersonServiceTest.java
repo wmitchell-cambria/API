@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.cms.xa.XaNsStaffPersonDao;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
@@ -26,14 +26,14 @@ import gov.ca.cwds.rest.api.domain.StaffPerson;
 public class StaffPersonServiceTest {
 
   private StaffPersonService staffPersonService;
-  private XaNsStaffPersonDao staffPersonDao;
+  private XaCmsStaffPersonDao staffPersonDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
-    staffPersonDao = mock(XaNsStaffPersonDao.class);
+    staffPersonDao = mock(XaCmsStaffPersonDao.class);
     staffPersonService = new StaffPersonService(staffPersonDao);
   }
 
