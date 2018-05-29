@@ -126,11 +126,16 @@ public class AddressService implements CrudsService {
     // ==================
 
     // Proof of concept only. Don't bother parsing raw street addresses.
-    LOGGER.info("XA for Postgres");
+    LOGGER.info("XA: Postgres");
     final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
     nsAddr.setZip(reqAddr.getZip());
     nsAddr.setCity(reqAddr.getCity());
     nsAddr.setLegacyId(reqAddr.getLegacyId());
+
+    final Integer addrType = reqAddr.getType();
+    if (addrType != null && addrType.intValue() != 0) {
+      nsAddr.setType(addrType.toString());
+    }
 
     if (StringUtils.isNotEmpty(reqAddr.getLegacySourceTable())) {
       nsAddr.setLegacySourceTable(reqAddr.getLegacySourceTable().trim().toUpperCase());
@@ -144,7 +149,7 @@ public class AddressService implements CrudsService {
     // DB2:
     // ==================
 
-    LOGGER.info("XA for DB2");
+    LOGGER.info("XA: DB2");
     final gov.ca.cwds.data.persistence.cms.Address cmsAddr =
         xaCmsAddressDao.find(nsAddr.getLegacyId());
     cmsAddr.setAddressDescription(reqAddr.getStreetAddress());
@@ -152,6 +157,11 @@ public class AddressService implements CrudsService {
     cmsAddr.setZip(AddressUtils.defaultIfBlank(reqAddr.getZip()));
     cmsAddr.setLastUpdatedId(staffId);
     cmsAddr.setLastUpdatedTime(ctx.getRequestStartTime());
+
+    if (addrType != null && addrType.intValue() != 0) {
+      cmsAddr.setContextAddressType(addrType.shortValue());
+    }
+
     xaCmsAddressDao.update(cmsAddr);
 
     ret.setLegacyId(reqAddr.getLegacyId());
