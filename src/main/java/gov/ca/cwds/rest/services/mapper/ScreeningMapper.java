@@ -21,11 +21,13 @@ public interface ScreeningMapper {
   @Mapping(target = "startedAt", expression = "java(DomainChef.cookISO8601Timestamp(screeningEntity.getStartedAt()))")
   @Mapping(target = "endedAt", expression = "java(DomainChef.cookISO8601Timestamp(screeningEntity.getEndedAt()))")
   @Mapping(target = "incidentDate", expression = "java(DomainChef.cookDate(screeningEntity.getIncidentDate()))")
+  @Mapping(target = "reportType", expression = "java(screeningEntity.getReportType() == null ? \"\" : screeningEntity.getReportType())")
   Screening map(ScreeningEntity screeningEntity);
 
   @InheritInverseConfiguration
   @Mapping(target = "startedAt", expression = "java(DomainChef.uncookISO8601Timestamp(screening.getStartedAt()))")
   @Mapping(target = "endedAt", expression = "java(DomainChef.uncookISO8601Timestamp(screening.getEndedAt()))")
   @Mapping(target = "incidentDate", expression = "java(DomainChef.uncookDateString(screening.getIncidentDate()))")
+  @Mapping(target = "reportType", expression = "java(screening.getReportType() == null ? \"\" : screening.getReportType())")
   ScreeningEntity map(Screening screening);
 }
