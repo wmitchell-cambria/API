@@ -98,7 +98,8 @@ public class AddressService implements CrudsService {
    * {@inheritDoc}
    * 
    * <p>
-   * Update NS and CMS with XA transaction. See INT-1592.
+   * Update NS and CMS with XA transaction. See
+   * <a href="https://osi-cwds.atlassian.net/browse/">INT-1592</a>.
    * </p>
    * 
    * <p>
@@ -124,8 +125,8 @@ public class AddressService implements CrudsService {
     // PostgreSQL:
     // ==================
 
-    LOGGER.info("XA for Postgres");
     // Proof of concept only. Don't bother parsing raw street addresses.
+    LOGGER.info("XA for Postgres");
     final gov.ca.cwds.data.persistence.ns.Addresses nsAddr = xaNsAddressDao.find(strNsId);
     nsAddr.setZip(reqAddr.getZip());
     nsAddr.setCity(reqAddr.getCity());

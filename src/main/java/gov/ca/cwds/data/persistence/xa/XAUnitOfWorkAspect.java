@@ -78,7 +78,7 @@ public class XAUnitOfWorkAspect {
     }
 
     try {
-      LOGGER.error("XA afterEnd(): commit");
+      LOGGER.debug("XA afterEnd(): commit");
       commitTransaction();
     } catch (Exception e) {
       rollbackTransaction();
@@ -97,7 +97,7 @@ public class XAUnitOfWorkAspect {
       return;
     }
 
-    LOGGER.error("XA onError(): rollback");
+    LOGGER.warn("XA onError(): rollback");
     try {
       rollbackTransaction();
     } finally {
@@ -125,7 +125,7 @@ public class XAUnitOfWorkAspect {
    * @return session current session for this datasource
    */
   protected Session grabSession(SessionFactory sessionFactory) {
-    LOGGER.info("XA grabSession()!");
+    LOGGER.trace("XA grabSession()!");
     Session session;
     try {
       session = sessionFactory.getCurrentSession();
@@ -146,7 +146,7 @@ public class XAUnitOfWorkAspect {
    * Open sessions for selected datasources.
    */
   protected void openSessions() {
-    LOGGER.info("XA OPEN SESSIONS.");
+    LOGGER.debug("XA OPEN SESSIONS!");
     sessionFactories.values().stream().forEach(this::grabSession);
   }
 
@@ -154,13 +154,13 @@ public class XAUnitOfWorkAspect {
    * Close all sessions.
    */
   protected void closeSessions() {
-    LOGGER.info("XA CLOSE SESSIONS!");
+    LOGGER.debug("XA CLOSE SESSIONS!");
     sessions.stream().forEach(this::closeSession);
   }
 
   protected void closeSession(Session session) {
     if (session != null) {
-      LOGGER.info("XA CLOSE SESSION");
+      LOGGER.debug("XA CLOSE SESSION");
       session.close();
     }
   }
@@ -183,12 +183,12 @@ public class XAUnitOfWorkAspect {
    */
   protected void beginTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.info("XA BEGIN TRANSACTION: unit of work not transactional");
+      LOGGER.debug("XA BEGIN TRANSACTION: unit of work is not transactional");
       return;
     }
 
     try {
-      LOGGER.info("XA BEGIN TRANSACTION!");
+      LOGGER.debug("XA BEGIN TRANSACTION!");
       txn.setTransactionTimeout(80); // NEXT: soft-code timeout
       txn.begin();
     } catch (Exception e) {
@@ -229,7 +229,7 @@ public class XAUnitOfWorkAspect {
     }
 
     try {
-      LOGGER.info("XA COMMIT TRANSACTION!");
+      LOGGER.debug("XA COMMIT TRANSACTION!");
       txn.commit();
     } catch (Exception e) {
       LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
