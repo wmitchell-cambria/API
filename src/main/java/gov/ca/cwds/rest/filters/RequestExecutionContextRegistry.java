@@ -7,7 +7,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import gov.ca.cwds.data.std.ApiMarker;
 
 /**
- * Request execution context registry based on ThreadLocal.
+ * {@link RequestExecutionContext} registry based on ThreadLocal.
+ * 
+ * <p>
+ * Also registers callbacks for request events, such as request start and end.
+ * </p>
  * 
  * @author CWDS API Team
  */

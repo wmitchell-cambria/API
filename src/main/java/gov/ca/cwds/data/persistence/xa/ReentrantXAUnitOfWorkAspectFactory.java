@@ -10,6 +10,13 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextCallback;
 import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
 
+/**
+ * Reentrant handler allows for nested {@link XAUnitOfWork} annotations. Returns a new AOP
+ * {@link XAUnitOfWorkAspect} for the first {@link XAUnitOfWork} encountered or returns the
+ * request's XA aspect joins the transaction.
+ * 
+ * @author CWDS API Team
+ */
 public class ReentrantXAUnitOfWorkAspectFactory
     implements RequestExecutionContextCallback, XAUnitOfWorkAspectFactory {
 
