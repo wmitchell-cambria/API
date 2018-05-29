@@ -116,7 +116,7 @@
       ],
       "phone_numbers": [
         {
-          "id": "${participant_phone_number_id}",
+          "id":${participant_phone_number_id},
           "number": "9660007290"
         }
       ],

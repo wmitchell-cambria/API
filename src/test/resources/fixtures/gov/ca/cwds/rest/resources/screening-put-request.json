@@ -133,8 +133,8 @@
         "parent_guardian_given_bracelet_id": "U",
         "parent_guardian_provided_med_questionaire": "U",
         "med_questionaire_return_date": "1992-05-18",
-        "comments": "Mother surrendered the baby",
-        "participant_child": "28"
+        "comments": "Parent surrendered the baby",
+        "participant_child": "42"
       },
       "sealed": false,
       "sensitive": false,
