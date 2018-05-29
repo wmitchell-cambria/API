@@ -57,7 +57,7 @@ import gov.ca.cwds.rest.util.DocUtils;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
- * Business layer object to work on {@link Referral}
+ * Business layer object to work on {@link Referral}.
  *
  * @author CWDS API Team
  */
@@ -393,8 +393,8 @@ public class ReferralService implements
     String longTextId = null;
     if (screening.getAlertInformation() != null && !screening.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screening.getIncidentCounty(), 
-            screening.getAlertInformation(), mb);
+        longTextId =
+            createLongText(screening.getIncidentCounty(), screening.getAlertInformation(), mb);
       } catch (ServiceException e) {
         mb.addMessageAndLog(e.getMessage(), e, LOGGER);
       }
