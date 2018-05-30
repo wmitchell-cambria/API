@@ -98,7 +98,7 @@ public class ReferralService implements
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
-   * @param cmsDocumentService the service for storing Cms Documents
+   * @param cmsDocumentService the service for storing CMS Documents
    * @param drmsDocumentService the service for generating DRMS Documents
    * @param drmsDocumentTemplateService the service for DRMS Document Templates
    * @param addressService the service for creating addresses
@@ -227,7 +227,6 @@ public class ReferralService implements
    */
   public String createCmsReferralFromScreening(ScreeningToReferral screeningToReferral,
       String dateStarted, String timeStarted, MessageBuilder strsMessageBuilder) {
-
     String referralId;
 
     if (screeningToReferral.getReferralId() == null
@@ -276,9 +275,8 @@ public class ReferralService implements
       referralId = screeningToReferral.getReferralId();
       gov.ca.cwds.rest.api.domain.cms.Referral foundReferral = this.find(referralId);
       if (foundReferral == null) {
-        String message = "Legacy Id does not correspond to an existing CMS/CWS Referral";
-        ServiceException se = new ServiceException(message);
-        strsMessageBuilder.addMessageAndLog(message, se, LOGGER);
+        final String message = "Legacy Id does not correspond to an existing CMS/CWS Referral";
+        strsMessageBuilder.addMessageAndLog(message, new ServiceException(message), LOGGER);
       }
     }
     return referralId;
@@ -316,7 +314,6 @@ public class ReferralService implements
      */
     createReferralAddress(screeningToReferral, strsMessageBuilder);
     String allegesAbuseOccurredAtAddressId = screeningToReferral.getAddress().getLegacyId();
-
     String limitedAccessDate = DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
 
     int govEnt = convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(),
@@ -536,6 +533,7 @@ public class ReferralService implements
       screenerNarrativeId = posted.getId();
 
     }
+
     return screenerNarrativeId;
   }
 
@@ -569,6 +567,10 @@ public class ReferralService implements
 
   public RIReferral getRiReferral() {
     return riReferral;
+  }
+
+  public NonLACountyTriggers getNonLaTriggers() {
+    return nonLaTriggers;
   }
 
 }

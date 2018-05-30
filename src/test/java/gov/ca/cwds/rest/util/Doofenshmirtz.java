@@ -94,13 +94,24 @@ import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
+import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
+import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
+import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
+import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
+import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 
 /**
  * <a href="http://phineasandferb.wikia.com/wiki/Heinz_Doofenshmirtz">Heinz Doofenshmirtz</a> is the
@@ -148,7 +159,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected XaCmsAllegationDaoImpl allegationDao;
   protected XaCmsClientDaoImpl clientDao;
   protected XaCmsReferralDaoImpl referralDao;
-  protected XaCmsStaffPersonDaoImpl staffpersonDao;
+  protected XaCmsStaffPersonDaoImpl staffPersonDao;
   protected XaNonLACountyTriggers nonLACountyTriggers;
   protected XaCmsAddressDaoImpl addressDao;
   protected XaCmsSsaName3DaoImpl ssaName3Dao;
@@ -170,8 +181,16 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected DrmsDocumentDao drmsDocumentDao;
   protected LongTextDaoImpl longTextDao;
   protected TriggerTablesDao triggerTablesDao;
-
   protected LACountyTrigger laCountyTrigger;
+
+  protected RIChildClient riChildClient;
+  protected RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
+  protected RIClientAddress riClientAddress;
+  protected RIAllegation riAllegation;
+  protected RICrossReport riCrossReport;
+  protected RIReporter riReporter;
+  protected RIReferral riReferral;
+  protected RIReferralClient riReferralClient;
 
   protected AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   protected AllegationService allegationService;
@@ -190,6 +209,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
   protected XaCmsReferralService referralService;
   protected XaCmsAddressService addressService;
+  protected CmsDocumentService cmsDocumentService;
+  protected DrmsDocumentService drmsDocumentService;
+  protected DrmsDocumentTemplateService drmsDocumentTemplateService;
 
   protected ScreeningToReferralService screeningToReferralService;
 
@@ -310,7 +332,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     systemMetaDao = mock(SystemMetaDao.class);
 
     referralDao = mock(XaCmsReferralDaoImpl.class);
-    staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
+    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
     upperCaseTables = mock(XaUpperCaseTables.class);
     addressDao = mock(XaCmsAddressDaoImpl.class);
@@ -336,9 +358,22 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
 
+    riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
+    riAllegation = mock(RIAllegation.class);
+    riCrossReport = mock(RICrossReport.class);
+    riReporter = mock(RIReporter.class);
+    riClientAddress = mock(RIClientAddress.class);
+    riChildClient = mock(RIChildClient.class);
+    riReferral = mock(RIReferral.class);
+
     reminders = mock(Reminders.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+
+    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
+        triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
+        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
+        riReferral);
 
     screeningToReferralService =
         new ScreeningToReferralService(referralService, allegationService, crossReportService,

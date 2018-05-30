@@ -63,7 +63,6 @@ import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -137,41 +136,27 @@ public class LastUpdatedTimeIsUniqueTest
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
         triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
-    riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
-    riAllegation = mock(RIAllegation.class);
-    riCrossReport = mock(RICrossReport.class);
-    riReporter = mock(RIReporter.class);
-    riClientAddress = mock(RIClientAddress.class);
-    riChildClient = mock(RIChildClient.class);
-
-    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
-        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
+        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
     allegationService = new AllegationService(allegationDao, riAllegation);
     allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
         allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
     crossReportService = new CrossReportService(crossReportDao, riCrossReport);
     reporterService = new ReporterService(reporterDao, riReporter);
     clientAddressService =
-        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
     childClientService = new ChildClientService(childClientDao, riChildClient);
-
-    riReferral = mock(RIReferral.class);
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
-
-    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
-        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
-        riReferral);
 
     screeningToReferralService =
         new ScreeningToReferralService(referralService, allegationService, crossReportService,

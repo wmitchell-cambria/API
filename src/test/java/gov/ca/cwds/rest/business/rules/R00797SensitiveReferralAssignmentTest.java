@@ -174,12 +174,12 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
 
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
     riReferralClient = mock(RIReferralClient.class);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
-        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
+        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
 
     riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
@@ -200,7 +200,7 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
     clientAddressDao = mock(ClientAddressDao.class);
     riClientAddress = mock(RIClientAddress.class);
     clientAddressService =
-        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
     longTextDao = mock(LongTextDaoImpl.class);
@@ -219,7 +219,7 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
     assignmentUnitDao = mock(AssignmentUnitDao.class);
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
-    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
         triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
@@ -232,7 +232,7 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
+        triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
         drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
         riReferral);
   }
@@ -346,7 +346,7 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
     caseLoadList[0] = caseLoad;
     StaffPerson staffPerson =
         new StaffPersonEntityBuilder().setId("02f").setCountyCode("34").build();
-    when(staffpersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("BTr");
     when(assignmentDao.findCaseLoads(any(String.class))).thenReturn(caseLoadList);
     CaseLoad caseload = new CaseLoadEntityBuilder().build();

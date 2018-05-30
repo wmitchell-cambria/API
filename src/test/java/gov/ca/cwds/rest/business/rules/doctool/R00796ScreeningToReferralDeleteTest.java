@@ -23,17 +23,11 @@ import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
-import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
-import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.Reminders;
-import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
-import gov.ca.cwds.rest.business.rules.xa.XaUpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
@@ -90,23 +84,6 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
   private AssignmentService assignmentService;
   private ParticipantService participantService;
 
-  private RIChildClient riChildClient;
-  private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-  private RIClientAddress riClientAddress;
-  private RIAllegation riAllegation;
-  private RICrossReport riCrossReport;
-  private RIReporter riReporter;
-  private RIReferral riReferral;
-  private RIReferralClient riReferralClient;
-
-  private XaCmsReferralDaoImpl referralDao;
-  private XaCmsStaffPersonDaoImpl staffPersonDao;
-  private XaCmsAddressDaoImpl addressDao;
-  private XaCmsSsaName3DaoImpl ssaName3Dao;
-  private XaUpperCaseTables upperCaseTables;
-
-  private XaNonLACountyTriggers nonLACountyTriggers;
-
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
@@ -117,7 +94,6 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private AssignmentDao assignmentDao;
-  private Reminders reminders;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private AssignmentUnitDao assignmentUnitDao;
@@ -135,18 +111,6 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(XaCmsReferralDaoImpl.class);
-    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
-    ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
-    addressDao = mock(XaCmsAddressDaoImpl.class);
-
-    upperCaseTables = mock(XaUpperCaseTables.class);
-
-    nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
-
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     riReferral = mock(RIReferral.class);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
 
@@ -180,7 +144,6 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
     riCrossReport = mock(RICrossReport.class);
     crossReportService = new CrossReportService(crossReportDao, riCrossReport);
 
-    reporterDao = mock(ReporterDao.class);
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
 
