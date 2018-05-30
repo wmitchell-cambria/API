@@ -34,6 +34,11 @@ public class RequestExecutionContextRegistry implements ApiMarker {
     private final Map<Serializable, RequestExecutionContextCallback> callbacks =
         new ConcurrentHashMap<>();
 
+    /**
+     * Register a class instance for callbacks.
+     * 
+     * @param callback instance to call
+     */
     public void register(RequestExecutionContextCallback callback) {
       callbacks.putIfAbsent(callback.key(), callback);
     }
