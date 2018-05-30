@@ -7,7 +7,7 @@ public class FerbConstants {
   public static final boolean SENSITIVITY_OVERRIDE =
       DomainChef.uncookBooleanString(System.getProperty("OVERRIDE_CLIENT_SENSITIVITY"));
 
-  public class ReportType {
+  public static class ReportType {
     private ReportType() {
       // no-op
     }
