@@ -167,7 +167,7 @@ public class Screening extends ReportingDomain implements Request, Response {
    */
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,
-      String screeningDecisionDetail, String assignee, String startedAt, String referralId,
+      String screeningDecisionDetail, String assignee, LocalDateTime startedAt, String referralId,
       String assigneeStaffId, String reportType) {
     super();
     this.id = id;
