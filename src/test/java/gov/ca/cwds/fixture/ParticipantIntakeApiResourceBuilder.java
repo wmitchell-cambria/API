@@ -28,7 +28,7 @@ public class ParticipantIntakeApiResourceBuilder {
   String ssn = "123456789";
   Date dateOfBirth = DomainChef.uncookDateString("2001-03-15");
   String approximateAge = "12";
-  String approximateAgeUnits = "Y";
+  String approximateAgeUnits = "years";
   List<String> languages = new LinkedList<>(Arrays.asList("English", "Russian"));
   String clientId = "1234567ABC";
   String legacySourceTable = LegacyTable.CLIENT.getName();
