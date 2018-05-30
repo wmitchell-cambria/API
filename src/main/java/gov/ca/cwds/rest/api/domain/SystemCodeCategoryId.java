@@ -119,6 +119,11 @@ public final class SystemCodeCategoryId {
    */
   public static final String COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN = "CSEC_TPC";
 
+  /**
+   * Reason for Removal type
+   */
+  public static final String SAFELY_SURRENDERED_BABIES = "SSB_TPC";
+
 
   /**
    * Private constructor

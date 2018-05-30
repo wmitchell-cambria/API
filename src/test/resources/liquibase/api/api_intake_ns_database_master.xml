@@ -17,6 +17,9 @@
   <!--<include file="liquibase/data/201805091355_convert_crossReport_inform_date_type.sql"/>-->
   <include file="liquibase/data/201805141747_csec_ddl.xml"/>
   <include file="liquibase/data/201805151038_lov_csec_data.xml"/>
+  <include file="liquibase/data/201805151135_create_tbl_ssb.sql"/>
+  <include file="liquibase/data/201805161035_insert_ssb_lov.sql"/>
+  
 
   <include file="data/screening_data.xml" relativeToChangelogFile="true"/>
   <include file="data/addresses_data.xml" relativeToChangelogFile="true"/>
@@ -30,5 +33,6 @@
   <include file="data/agencies_data.xml" relativeToChangelogFile="true"/>
   <include file="data/legacy_descriptors_data.xml" relativeToChangelogFile="true"/>
   <include file="data/csec_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/safely_surr_babies_data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
