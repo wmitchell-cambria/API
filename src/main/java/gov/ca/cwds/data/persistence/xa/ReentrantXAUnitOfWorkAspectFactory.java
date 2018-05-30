@@ -14,8 +14,8 @@ import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
  * Reentrant handler allows for nested {@link XAUnitOfWork} annotations.
  * 
  * <p>
- * Returns a new AOP {@link XAUnitOfWorkAspect} for the first {@link XAUnitOfWork} encountered or
- * returns the request's existing XA aspect and joins the transaction.
+ * Returns a new AOP {@link XAUnitOfWorkAspect} for the first {@link XAUnitOfWork} encountered, or
+ * if XA has already started, returns the request's XA aspect and joins the transaction.
  * </p>
  * 
  * @author CWDS API Team

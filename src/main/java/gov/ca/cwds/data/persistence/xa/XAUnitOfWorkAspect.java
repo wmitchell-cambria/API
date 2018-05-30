@@ -31,11 +31,11 @@ public class XAUnitOfWorkAspect {
 
   private final UserTransaction txn = new UserTransactionImp();
 
+  private final ImmutableMap<String, SessionFactory> sessionFactories;
+
+  private final List<Session> sessions = new ArrayList<>();
+
   private XAUnitOfWork xaUnitOfWork;
-
-  private ImmutableMap<String, SessionFactory> sessionFactories;
-
-  private List<Session> sessions = new ArrayList<>();
 
   /**
    * Preferred constructor.
@@ -238,10 +238,6 @@ public class XAUnitOfWorkAspect {
 
   public ImmutableMap<String, SessionFactory> getSessionFactories() {
     return sessionFactories;
-  }
-
-  public void setSessionFactories(ImmutableMap<String, SessionFactory> sessionFactories) {
-    this.sessionFactories = sessionFactories;
   }
 
   public XAUnitOfWork getXaUnitOfWork() {

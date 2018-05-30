@@ -60,7 +60,6 @@ public class ScreeningToReferralResource {
    * Finds an referral by id.
    * 
    * @param id the id
-   * 
    * @return the response
    */
   @XAUnitOfWork
@@ -80,7 +79,6 @@ public class ScreeningToReferralResource {
    * Create an {@link ScreeningToReferral}.
    * 
    * @param screeningToReferral The {@link ScreeningToReferral}
-   * 
    * @return The {@link Response}
    */
   @XAUnitOfWork

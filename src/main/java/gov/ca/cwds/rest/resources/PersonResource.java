@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_PEOPLE;
 
 import javax.validation.Valid;
@@ -18,9 +19,9 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.PersonServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Person;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -60,7 +61,7 @@ public class PersonResource {
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -78,7 +79,7 @@ public class PersonResource {
    * @param id The id of the {@link Person}
    * @return {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -95,7 +96,7 @@ public class PersonResource {
    * @param person The {@link Person}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -115,7 +116,7 @@ public class PersonResource {
    * @param person {@link Person}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

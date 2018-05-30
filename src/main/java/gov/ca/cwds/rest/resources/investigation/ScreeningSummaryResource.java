@@ -14,10 +14,10 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.ScreeningSummaryServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.ScreeningSummary;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,11 +58,10 @@ public class ScreeningSummaryResource {
   /**
    * Find an {@link ScreeningSummary}.
    *
-   * @param id The id of the Referral the Screening Summary is for
-   * 
+   * @param id The Referral id that this Screening Summary is for
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @GET
   @Path("/{id}/screening")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_ADDRESSES;
 
 import javax.validation.Valid;
@@ -22,7 +23,6 @@ import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.AddressServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -63,7 +63,7 @@ public class AddressResource {
    * @param id The id
    * @return The response
    */
-  @XAUnitOfWork
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -81,7 +81,7 @@ public class AddressResource {
    * @param id The id of the {@link Address}
    * @return {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -98,7 +98,7 @@ public class AddressResource {
    * @param address The {@link Address}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),

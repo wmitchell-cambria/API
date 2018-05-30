@@ -185,10 +185,4 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @Test
-  public void setSessionFactories_A$ImmutableMap() throws Exception {
-    ImmutableMap<String, SessionFactory> sessionFactories_ = mock(ImmutableMap.class);
-    target.setSessionFactories(sessionFactories_);
-  }
-
 }

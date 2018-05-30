@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
+
 import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -23,6 +25,7 @@ import gov.ca.cwds.data.persistence.ns.PersonEthnicity;
 import gov.ca.cwds.data.persistence.ns.PersonLanguage;
 import gov.ca.cwds.data.persistence.ns.PersonPhone;
 import gov.ca.cwds.data.persistence.ns.PersonRace;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -32,7 +35,6 @@ import gov.ca.cwds.rest.api.domain.Person;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.PostedPerson;
 import gov.ca.cwds.rest.api.domain.Race;
-import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on {@link Person} and {@link Person}.
@@ -107,7 +109,7 @@ public class PersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   public PostedPerson create(Request request) {
     assert request instanceof Person;
     final Person person = (Person) request;

@@ -266,7 +266,6 @@ public class ScreeningToReferralService implements CrudsService {
    */
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> processCrossReports(ScreeningToReferral scr,
       String referralId) {
-
     String crossReportId = "";
     Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports = new HashSet<>();
     Set<CrossReport> crossReports;
