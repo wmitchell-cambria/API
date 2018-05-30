@@ -1,14 +1,14 @@
 package gov.ca.cwds.rest.services.submit;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.AllegationIntake;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 
 /**
  * Business layer object to transform NS {@link AllegationIntake} to {@link Allegation}
@@ -17,22 +17,30 @@ import gov.ca.cwds.rest.api.domain.AllegationIntake;
  */
 public class AllegationsTransformer {
 
-  public Set<Allegation> transform(Set<AllegationIntake> allegationsIntake,
-      Map<String, IntakeLov> nsCodeToNsLovMap) {
+  /**
+   * @param allegationsIntake - allegationsIntake
+   * @return the {@link Allegation}
+   */
+  public Set<Allegation> transform(Set<AllegationIntake> allegationsIntake) {
     Set<Allegation> allegations = new HashSet<>();
     for (AllegationIntake allegationIntake : allegationsIntake) {
       for (String description : allegationIntake.getTypes()) {
-        Short allegationSysId = StringUtils.isNotBlank(description)
-            ? nsCodeToNsLovMap.get(description).getLegacySystemCodeId().shortValue()
-            : null;
+        Short allegationType = setAllegationType(description);
         Allegation allegation =
             new Allegation(allegationIntake.getLegacySourceTable(), allegationIntake.getLegacyId(),
                 allegationIntake.getVictimPersonId(), allegationIntake.getPerpetratorPersonId(),
-                allegationSysId, allegationIntake.getCounty());
+                allegationType, allegationIntake.getCounty());
         allegations.add(allegation);
       }
+
     }
     return allegations;
+  }
+
+  private Short setAllegationType(String description) {
+    return StringUtils.isNotBlank(description) ? IntakeCodeCache.global()
+        .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.INJURY_HARM_TYPE, description)
+        : null;
   }
 
 }

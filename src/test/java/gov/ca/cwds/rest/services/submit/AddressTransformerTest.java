@@ -1,18 +1,10 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.fixture.AddressIntakeApiResourceBuilder;
 import gov.ca.cwds.fixture.LegacyDescriptorEntityBuilder;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -27,18 +19,10 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 @SuppressWarnings("javadoc")
 public class AddressTransformerTest {
 
-  private Map<String, IntakeLov> nsCodeToNsLovMap;
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
-  @Before
-  public void setup() throws Exception {
-    IntakeLov intakeLovStateCa = mock(IntakeLov.class);
-    when(intakeLovStateCa.getLegacySystemCodeId()).thenReturn(new Long(1828));
-    nsCodeToNsLovMap = new HashMap<String, IntakeLov>();
-    nsCodeToNsLovMap.put("CA", intakeLovStateCa);
-  }
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
   @Test
   public void transformConvertsAddressIntakeApiToAddress() {
@@ -49,7 +33,7 @@ public class AddressTransformerTest {
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
         "Springfield", 1828, "93838", 28, legacyDescriptor);
 
-    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
+    Address actual = new AddressTransformer().transform(intakeApi);
     assertEquals(actual, expected);
   }
 
@@ -62,7 +46,7 @@ public class AddressTransformerTest {
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
         "Springfield", null, "93838", 28, legacyDescriptor);
 
-    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
+    Address actual = new AddressTransformer().transform(intakeApi);
     assertEquals(actual, expected);
   }
 
@@ -75,7 +59,7 @@ public class AddressTransformerTest {
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
         "Springfield", 1828, "93838", null, legacyDescriptor);
 
-    Address actual = new AddressTransformer().transform(intakeApi, nsCodeToNsLovMap);
+    Address actual = new AddressTransformer().transform(intakeApi);
     assertEquals(actual, expected);
   }
 
