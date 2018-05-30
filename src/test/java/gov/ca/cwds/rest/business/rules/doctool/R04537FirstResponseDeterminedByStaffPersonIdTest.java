@@ -39,11 +39,11 @@ import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.data.persistence.cms.Assignment;
@@ -96,8 +96,8 @@ import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -114,10 +114,12 @@ import io.dropwizard.jackson.Jackson;
  */
 public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
-  private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private ReferralService referralService;
+  private ScreeningToReferralService screeningToReferralService;
+
+  private XaCmsReferralService referralService;
+
   private ClientService clientService;
   private AllegationService allegationService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
@@ -141,12 +143,13 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+
+  private XaCmsReferralDao referralDao;
   private ClientRelationshipDao clientRelationshipDao;
 
-
-  private ReferralDao referralDao;
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
+
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
@@ -157,6 +160,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private LongTextDao longTextDao;
   private StaffPersonDao staffpersonDao;
   private AssignmentDao assignmentDao;
+
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
@@ -188,7 +192,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(ReferralDao.class);
+    referralDao = mock(XaCmsReferralDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
@@ -277,10 +281,10 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
-    referralService =
-        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
-            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-            drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
+        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
+        riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService, validator, referralDao, new MessageBuilder(),

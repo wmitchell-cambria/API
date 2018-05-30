@@ -114,14 +114,13 @@ public class ScreeningToReferralService implements CrudsService {
     verifyReferralHasValidParticipants(screeningToReferral);
 
     /**
-     * <blockquote>
-     * 
-     * <pre>
+     * <p>
      * BUSINESS RULE: "R - 05446" - Default dateStarted and timeStarted
+     * </p>
      * 
-     * Referral received date and received time need to set when referral was created 
-     * </blockquote>
-     * </pre>
+     * <p>
+     * Referral received date and received time need to set when referral was created
+     * </p>
      */
     String dateStarted =
         StartDateTimeValidator.extractStartDate(screeningToReferral.getStartedAt(), messageBuilder);
@@ -134,7 +133,6 @@ public class ScreeningToReferralService implements CrudsService {
         processParticipants(screeningToReferral, dateStarted, referralId, messageBuilder);
 
     Set<CrossReport> resultCrossReports = createCrossReports(screeningToReferral, referralId);
-
     Set<Allegation> resultAllegations = createAllegations(screeningToReferral, referralId,
         clientParticipants.getVictimIds(), clientParticipants.getPerpetratorIds());
 
@@ -218,26 +216,27 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   /**
-   * {@inheritDoc}
+   * <p>
+   * <strong>DocTool Rule R - 00796</strong>
+   * </p>
    * 
-   * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
+   * <p>
+   * If the user had originally indicated that the call should be treated as a referral, and that
+   * referral had been committed to the database, that referral must be deleted from the system.
+   * Also deleted would be any referral clients associated with the referral, any clients associated
+   * to the referral if that referral had been their only interaction with the system, and all
+   * allegations associated with the referral. Do NOT delete the client if the client already exists
+   * on the Host and associated to other Case or Referral.
+   * </p>
    * 
-   *      <pre>
-   * 
-   * DocTool Rule R - 00796 
-   * 
-   * If the user had originally indicated that the call should be treated as a referral,
-   * and that referral had been committed to the database, that referral must be deleted from the
-   * system. Also deleted would be any referral clients associated with the referral, any clients
-   * associated to the referral if that referral had been their only interaction with the system,
-   * and all allegations associated with the referral. Do NOT delete the client if the client
-   * already exists on the Host and associated to other Case or Referral.
-   * 
+   * <p>
    * This rule involves deleting a referral and associated referral clients, clients and
    * allegations. Since there is no business requirement at this time to delete a referral we will
-   * not be implementing this rule. A NO-OP delete method is provided that gives a Not
-   * Implemented Exception.
-   *      </pre>
+   * not be implementing this rule. A NO-OP delete method is provided that gives a Not Implemented
+   * Exception.
+   * </p>
+   * 
+   * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
   public Response delete(Serializable primaryKey) {
@@ -279,9 +278,7 @@ public class ScreeningToReferralService implements CrudsService {
     crossReports = scr.getCrossReports();
 
     if (crossReports != null) {
-
       for (CrossReport crossReport : crossReports) {
-
         Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
         String outStateLawEnforcementAddr = "";
 
@@ -417,7 +414,6 @@ public class ScreeningToReferralService implements CrudsService {
     }
 
     for (Allegation allegation : allegations) {
-
       if (!validateAllegationHasVictim(scr, allegation)) {
         victimClientId =
             getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
@@ -435,6 +431,7 @@ public class ScreeningToReferralService implements CrudsService {
         }
       }
     }
+
     return processedAllegations;
   }
 
@@ -536,9 +533,7 @@ public class ScreeningToReferralService implements CrudsService {
             DomainChef.cookDate(RequestExecutionContext.instance().getRequestStartTime()));
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
-
     this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
-
 
 }

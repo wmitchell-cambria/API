@@ -42,6 +42,7 @@ import io.swagger.annotations.ApiModelProperty;
 @IfThen.List({@IfThen(ifProperty = "streetNumber", thenProperty = "streetName", required = false),
     @IfThen(ifProperty = "streetName", thenProperty = "city", required = false)})
 public class Address extends ReportingDomain implements Request, Response {
+
   private static final Long DEFAULT_LONG = 0L;
   private static final int DEFAULT_INT = 0;
   private static final short DEFAULT_CODE = 0;

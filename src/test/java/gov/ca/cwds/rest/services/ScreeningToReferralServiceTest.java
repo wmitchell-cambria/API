@@ -120,6 +120,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 import io.dropwizard.jackson.Jackson;
 
 /**
@@ -127,15 +128,17 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  */
 @SuppressWarnings("unused")
-public class ScreeningToReferralServiceTest {
+public class ScreeningToReferralServiceTest extends Doofenshmirtz {
+
+  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private final String validReferralId = "X2WXo678Ac";
 
-  private ScreeningToReferralResourceBuilder defaultReferralBuilder;
   private ScreeningToReferralService screeningToReferralService;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private ScreeningToReferralResourceBuilder defaultReferralBuilder;
 
   private ReferralService referralService;
+
   private ClientService clientService;
   private ReferralClientService referralClientService;
   private AllegationService allegationService;
@@ -167,6 +170,7 @@ public class ScreeningToReferralServiceTest {
   private ChildClientDao childClientDao;
   private LongTextDao longTextDao;
   private StaffPersonDao staffpersonDao;
+
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
@@ -202,6 +206,7 @@ public class ScreeningToReferralServiceTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  @Override
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {

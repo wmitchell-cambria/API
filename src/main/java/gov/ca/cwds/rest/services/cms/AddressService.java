@@ -23,7 +23,6 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
-
 /**
  * @author CWDS API Team
  */

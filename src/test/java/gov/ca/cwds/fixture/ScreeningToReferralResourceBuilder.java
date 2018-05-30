@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
@@ -15,7 +16,6 @@ import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ScreeningToReferralResourceBuilder {
 
   private static final DateFormat dateTimeFormat =
@@ -49,38 +49,30 @@ public class ScreeningToReferralResourceBuilder {
   private String limitedAccessDescription = "";
   private String limitedAccessAgency = "23";
   private Date limitedAccessDate = null;
+
   private gov.ca.cwds.rest.api.domain.Address address;
   private Set<Participant> participants;
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports;
   private Set<gov.ca.cwds.rest.api.domain.Allegation> allegations;
   private SafetyAlerts safetyAlerts;
- 
+
   public ScreeningToReferralResourceBuilder() {
     address = new AddressResourceBuilder().createAddress();
-    Participant victim = new ParticipantResourceBuilder()
-        .setFirstName("Victim")
-        .setGender("M")
-        .createVictimParticipant();
-    Participant perp = new ParticipantResourceBuilder()
-        .setFirstName("Perpetrator")
-        .setGender("F")
-        .createPerpParticipant();
-    Participant reporter =
-        new ParticipantResourceBuilder()
-        .setFirstName("Reporter")
-        .setGender("F")
-        .createReporterParticipant();
+    final Participant victim = new ParticipantResourceBuilder().setFirstName("Victim")
+        .setGender("M").createVictimParticipant();
+    final Participant perp = new ParticipantResourceBuilder().setFirstName("Perpetrator")
+        .setGender("F").createPerpParticipant();
+    final Participant reporter = new ParticipantResourceBuilder().setFirstName("Reporter")
+        .setGender("F").createReporterParticipant();
     this.participants = new HashSet<>(Arrays.asList(victim, perp, reporter));
-    gov.ca.cwds.rest.api.domain.CrossReport crossReport =
+
+    final gov.ca.cwds.rest.api.domain.CrossReport crossReport =
         new CrossReportResourceBuilder().createCrossReport();
     this.crossReports = new HashSet<>(Arrays.asList(crossReport));
-    gov.ca.cwds.rest.api.domain.Allegation allegation =
-        new AllegationResourceBuilder()
-        .setInjuryHarmType(injuryHarmCategory)
-        .createAllegation();
+    final gov.ca.cwds.rest.api.domain.Allegation allegation =
+        new AllegationResourceBuilder().setInjuryHarmType(injuryHarmCategory).createAllegation();
     this.allegations = new HashSet<>(Arrays.asList(allegation));
     safetyAlerts = new SafetyAlerts();
-
   }
 
   public static DateFormat getDatetimeformat() {
@@ -186,11 +178,11 @@ public class ScreeningToReferralResourceBuilder {
   public Short getInjuryHarmCategory() {
     return injuryHarmCategory;
   }
-  
+
   public String getSafetyAlertInformation() {
     return safetyAlerts.getAlertInformation();
   }
-  
+
   public Set<String> getAlerts() {
     return safetyAlerts.getAlerts();
   }
@@ -376,11 +368,12 @@ public class ScreeningToReferralResourceBuilder {
     return this;
   }
 
-  public ScreeningToReferralResourceBuilder setSafetyAlertInformationn(String safetyAlertInformation) {
+  public ScreeningToReferralResourceBuilder setSafetyAlertInformationn(
+      String safetyAlertInformation) {
     this.safetyAlerts.setAlertInformation(safetyAlertInformation);
     return this;
   }
-  
+
   public ScreeningToReferralResourceBuilder setSafetyAlerts(Set<String> safetyAlerts) {
     this.safetyAlerts.setAlerts(safetyAlerts);
     return this;
@@ -415,9 +408,8 @@ public class ScreeningToReferralResourceBuilder {
         reportNarrative, reference, responseTime, startedAt, assignee, assigneeStaffId,
         additionalInformation, screeningDecision, screeningDecisionDetail, approvalStatus,
         familyAwareness, filedWithLawEnforcement, responsibleAgency, limitedAccessCode,
-        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, safetyAlerts.getAlerts(), 
-        safetyAlerts.getAlertInformation(),
-        address, participants,
-        crossReports, allegations);
+        limitedAccessDescription, limitedAccessAgency, limitedAccessDate, safetyAlerts.getAlerts(),
+        safetyAlerts.getAlertInformation(), address, participants, crossReports, allegations);
   }
+
 }

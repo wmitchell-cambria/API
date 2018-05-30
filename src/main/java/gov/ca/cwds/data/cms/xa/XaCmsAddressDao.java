@@ -4,11 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.BaseDaoImpl;
-import gov.ca.cwds.data.persistence.cms.Address;
+import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsAddressDao extends BaseDaoImpl<Address> {
+public class XaCmsAddressDao extends AddressDao {
 
   @Inject
   public XaCmsAddressDao(@XaCmsSessionFactory SessionFactory sessionFactory) {

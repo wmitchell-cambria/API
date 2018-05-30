@@ -9,7 +9,6 @@ import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
@@ -25,7 +24,7 @@ public class XaCmsReferralService extends ReferralService {
       LACountyTrigger laCountyTrigger, TriggerTablesDao triggerTablesDao,
       XaCmsStaffPersonDao staffpersonDao, AssignmentService assignmentService, Validator validator,
       CmsDocumentService cmsDocumentService, DrmsDocumentService drmsDocumentService,
-      DrmsDocumentTemplateService drmsDocumentTemplateService, AddressService addressService,
+      DrmsDocumentTemplateService drmsDocumentTemplateService, XaCmsAddressService addressService,
       LongTextService longTextService, RIReferral riReferral) {
     super(referralDao, nonLaTriggers, laCountyTrigger, triggerTablesDao, staffpersonDao,
         assignmentService, validator, cmsDocumentService, drmsDocumentService,

@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +25,6 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
@@ -40,11 +39,12 @@ import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -69,12 +69,12 @@ import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
+import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ClientParticipants;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
@@ -88,8 +88,9 @@ import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -106,17 +107,19 @@ import io.dropwizard.jackson.Jackson;
  */
 public class R00797SensitiveReferralAssignmentTest {
 
-  private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-  private ReferralService referralService;
+  private ScreeningToReferralService screeningToReferralService;
+
+  private XaCmsReferralService referralService;
+  private XaCmsAddressService addressService;
+
   private ClientService clientService;
   private ReferralClientService referralClientService;
   private AllegationService allegationService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private CrossReportService crossReportService;
   private ReporterService reporterService;
-  private AddressService addressService;
   private ClientAddressService clientAddressService;
   private ChildClientService childClientService;
   private LongTextService longTextService;
@@ -135,20 +138,21 @@ public class R00797SensitiveReferralAssignmentTest {
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private ReferralDao referralDao;
+  private XaCmsReferralDao referralDao;
+  private XaCmsAddressDao addressDao;
+  private XaCmsStaffPersonDao staffpersonDao;
+  private XaNonLACountyTriggers nonLACountyTriggers;
+
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
   private ReporterDao reporterDao;
-  private AddressDao addressDao;
   private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
   private LongTextDao longTextDao;
-  private StaffPersonDao staffpersonDao;
   private AssignmentDao assignmentDao;
-  private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private DrmsDocumentDao drmsDocumentDao;
@@ -165,7 +169,6 @@ public class R00797SensitiveReferralAssignmentTest {
   private gov.ca.cwds.data.persistence.cms.Referral referral;
   private Validator validator;
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -182,11 +185,11 @@ public class R00797SensitiveReferralAssignmentTest {
     new TestingRequestExecutionContext("02f");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(ReferralDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
+    referralDao = mock(XaCmsReferralDao.class);
+    nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
+    staffpersonDao = mock(XaCmsStaffPersonDao.class);
 
     clientDao = mock(ClientDao.class);
     ssaName3Dao = mock(SsaName3Dao.class);
@@ -217,8 +220,8 @@ public class R00797SensitiveReferralAssignmentTest {
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
 
-    addressDao = mock(AddressDao.class);
-    addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
+    addressDao = mock(XaCmsAddressDao.class);
+    addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     clientAddressDao = mock(ClientAddressDao.class);
     riClientAddress = mock(RIClientAddress.class);
@@ -253,13 +256,12 @@ public class R00797SensitiveReferralAssignmentTest {
     ClientParticipants referralParticipants = new ClientParticipants();
     when(participantService.saveParticipants(any(), any(), any(), any()))
         .thenReturn(referralParticipants);
-
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
-    referralService =
-        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
-            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
-            drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
+        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
+        riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService, validator, referralDao, new MessageBuilder(),
@@ -270,22 +272,24 @@ public class R00797SensitiveReferralAssignmentTest {
   /**
    * <p>
    * BUSINESS RULE: "R - 00797" Sensitive Referral Assignment
-   * 
-   * A Sealed or Sensitive CASE or REFERRAL may be assigned to any Staff Person, whether they have
-   * sealed or sensitive authority or not.
-   * 
-   * We are currently not checking for sealed or sensitive authority of a Staff Person when
-   * assigning a CASE or REFERRAL If we start checking for sealed or sensitive authority of a Staff
-   * Person, this test should fail. The test should then be redesigned to make sure that the
-   * Business Rule R - 00797 is being applied to Referral Creation.
+   * </p>
    * 
    * <p>
+   * A Sealed or Sensitive CASE or REFERRAL may be assigned to any Staff Person, whether they have
+   * sealed or sensitive authority or not.
+   * </p>
+   * 
+   * <p>
+   * We are currently not checking for sealed or sensitive authority of a Staff Person when
+   * assigning a CASE or REFERRAL. If we start checking for sealed or sensitive authority of a Staff
+   * Person, this test should fail. The test should then be redesigned to make sure that the
+   * Business Rule R - 00797 is being applied to Referral Creation.
+   * </p>
    * 
    * @throws Exception - Exception
    */
   @Test
   public void testForSensitiveReferralAssignment() throws Exception {
-
     gov.ca.cwds.data.persistence.cms.Referral referralToCreate =
         new ReferralEntityBuilder().build();
     when(referralDao.create(any(gov.ca.cwds.data.persistence.cms.Referral.class)))

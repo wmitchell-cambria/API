@@ -1,13 +1,13 @@
 package gov.ca.cwds.fixture;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import javax.validation.Validation;
 
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.cms.ReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
@@ -40,15 +40,16 @@ import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 
 /**
  * 
  * @author CWDS API Team
  */
 public class MockedScreeningToReferralServiceBuilder {
-  private ReferralService referralService;
+
+  private XaCmsReferralService referralService;
   private ClientService clientService;
   private ReferralClientService referralClientService;
   private AllegationService allegationService;
@@ -63,13 +64,13 @@ public class MockedScreeningToReferralServiceBuilder {
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
   private ClientRelationshipDao clientRelationshipDao;
-  private ReferralDao referralDao;
+  private XaCmsReferralDao referralDao;
   private MessageBuilder messageBuilder;
 
   /**
    * @return the referralService
    */
-  public ReferralService getReferralService() {
+  public XaCmsReferralService getReferralService() {
     if (referralService == null) {
       buildDefaultMockForReferralService();
     }
@@ -77,7 +78,7 @@ public class MockedScreeningToReferralServiceBuilder {
   }
 
   private void buildDefaultMockForReferralService() {
-    referralService = mock(ReferralService.class);
+    referralService = mock(XaCmsReferralService.class);
     PostedReferral postedReferral = mock(PostedReferral.class);
     when(postedReferral.getId()).thenReturn("3456765433");
     when(referralService.create(any(Referral.class))).thenReturn(postedReferral);
@@ -300,9 +301,9 @@ public class MockedScreeningToReferralServiceBuilder {
   /**
    * @return the referralDao
    */
-  public ReferralDao getReferralDao() {
+  public XaCmsReferralDao getReferralDao() {
     if (referralDao == null) {
-      referralDao = mock(ReferralDao.class);
+      referralDao = mock(XaCmsReferralDao.class);
     }
     return referralDao;
   }
@@ -332,7 +333,7 @@ public class MockedScreeningToReferralServiceBuilder {
    * @return the referralService
    */
   public MockedScreeningToReferralServiceBuilder addReferralService(
-      ReferralService referralService) {
+      XaCmsReferralService referralService) {
     this.referralService = referralService;
     return this;
   }
@@ -439,7 +440,7 @@ public class MockedScreeningToReferralServiceBuilder {
    * @param referralDao - referralDao
    * @return the referralDao
    */
-  public MockedScreeningToReferralServiceBuilder addReferralDao(ReferralDao referralDao) {
+  public MockedScreeningToReferralServiceBuilder addReferralDao(XaCmsReferralDao referralDao) {
     this.referralDao = referralDao;
     return this;
   }
