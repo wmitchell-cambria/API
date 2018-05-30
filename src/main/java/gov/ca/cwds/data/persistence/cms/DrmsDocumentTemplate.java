@@ -23,7 +23,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 /**
  * {@link PersistentObject} Class representing an DrmsDocumentTemplate.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 @NamedQuery(name = NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY,
     query = "FROM DrmsDocumentTemplate WHERE applicationContextType = :applicationContextType "
@@ -217,4 +217,5 @@ public class DrmsDocumentTemplate implements PersistentObject {
   public String getTransactionType() {
     return transactionType;
   }
+
 }

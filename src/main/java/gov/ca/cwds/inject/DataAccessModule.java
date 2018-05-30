@@ -76,6 +76,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsDocumentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentTemplateDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsGovernmentOrganizationCrossReportDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsGovernmentOrganizationDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsLongTextDaoImpl;
@@ -398,8 +399,6 @@ public class DataAccessModule extends AbstractModule {
     bind(CmsDocReferralClientDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
     bind(DeliveredServiceDao.class);
-    bind(DrmsDocumentDao.class);
-    bind(DrmsDocumentTemplateDao.class);
     bind(ExternalInterfaceDao.class);
     bind(IndividualDeliveredServiceDao.class);
     bind(LawEnforcementDao.class);
@@ -429,7 +428,8 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsCountyTriggerDaoImpl.class);
     bind(CrossReportDao.class).to(XaCmsCrossReportDaoImpl.class);
     bind(CwsOfficeDao.class).to(XaCmsCwsOfficeDaoImpl.class);
-    bind(XaCmsDrmsDocumentDaoImpl.class);
+    bind(DrmsDocumentDao.class).to(XaCmsDrmsDocumentDaoImpl.class);
+    bind(DrmsDocumentTemplateDao.class).to(XaCmsDrmsDocumentTemplateDaoImpl.class);
     bind(LongTextDaoImpl.class).to(XaCmsLongTextDaoImpl.class);
     bind(ReferralAssignmentDao.class).to(XaCmsReferralAssignmentDaoImpl.class);
     bind(ReferralClientDao.class).to(XaCmsReferralClientDaoImpl.class);
