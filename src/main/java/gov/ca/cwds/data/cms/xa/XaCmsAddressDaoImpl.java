@@ -7,10 +7,10 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsAddressDao extends AddressDao {
+public class XaCmsAddressDaoImpl extends AddressDao {
 
   @Inject
-  public XaCmsAddressDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsAddressDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

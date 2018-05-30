@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 
 import javax.validation.Validation;
 
-import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
 import gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory;
@@ -65,7 +65,7 @@ public class MockedScreeningToReferralServiceBuilder
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-  private XaCmsReferralDao referralDao;
+  private XaCmsReferralDaoImpl referralDao;
   private MessageBuilder messageBuilder;
 
   /**
@@ -298,9 +298,9 @@ public class MockedScreeningToReferralServiceBuilder
   /**
    * @return the referralDao
    */
-  public XaCmsReferralDao getReferralDao() {
+  public XaCmsReferralDaoImpl getReferralDao() {
     if (referralDao == null) {
-      referralDao = mock(XaCmsReferralDao.class);
+      referralDao = mock(XaCmsReferralDaoImpl.class);
     }
     return referralDao;
   }
@@ -308,9 +308,9 @@ public class MockedScreeningToReferralServiceBuilder
   /**
    * @return the clientRelationshipDao
    */
-  public XaCmsClientRelationshipDao getClientRelationshipDao() {
+  public XaCmsClientRelationshipDaoImpl getClientRelationshipDao() {
     if (clientRelationshipDao == null) {
-      clientRelationshipDao = mock(XaCmsClientRelationshipDao.class);
+      clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
     }
     return clientRelationshipDao;
   }
@@ -437,7 +437,7 @@ public class MockedScreeningToReferralServiceBuilder
    * @param referralDao - referralDao
    * @return the referralDao
    */
-  public MockedScreeningToReferralServiceBuilder addReferralDao(XaCmsReferralDao referralDao) {
+  public MockedScreeningToReferralServiceBuilder addReferralDao(XaCmsReferralDaoImpl referralDao) {
     this.referralDao = referralDao;
     return this;
   }

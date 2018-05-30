@@ -4,18 +4,18 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsAllegationPerpetratorHistoryDao extends AllegationPerpetratorHistoryDao {
+public class XaCmsCwsOfficeDaoImpl extends CwsOfficeDao {
 
   /**
    * Constructor
-   * 
+   *
    * @param sessionFactory The sessionFactory
    */
   @Inject
-  public XaCmsAllegationPerpetratorHistoryDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsCwsOfficeDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

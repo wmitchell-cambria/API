@@ -58,15 +58,15 @@ import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
-import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
-import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDao;
-import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDao;
-import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
-import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
-import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
@@ -405,15 +405,15 @@ public class DataAccessModule extends AbstractModule {
     bind(GovernmentOrganizationCrossReportDao.class);
 
     // CMS XA:
-    bind(XaCmsAddressDao.class);
-    bind(XaCmsAddressUcDao.class);
-    bind(XaCmsClientRelationshipDao.class);
-    bind(XaCmsCountyOwnershipDao.class);
+    bind(XaCmsAddressDaoImpl.class);
+    bind(XaCmsAddressUcDaoImpl.class);
+    bind(XaCmsClientRelationshipDaoImpl.class);
+    bind(XaCmsCountyOwnershipDaoImpl.class);
     bind(XaCmsCountyTriggerDao.class);
-    bind(XaCmsReferralClientDao.class);
-    bind(XaCmsReferralDao.class);
-    bind(XaCmsSsaName3Dao.class);
-    bind(XaCmsStaffPersonDao.class);
+    bind(XaCmsReferralClientDaoImpl.class);
+    bind(XaCmsReferralDaoImpl.class);
+    bind(XaCmsSsaName3DaoImpl.class);
+    bind(XaCmsStaffPersonDaoImpl.class);
 
     // NS:
     bind(AddressDao.class);

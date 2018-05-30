@@ -23,10 +23,10 @@ import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
-import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
-import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
@@ -99,10 +99,10 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
 
-  private XaCmsReferralDao referralDao;
-  private XaCmsStaffPersonDao staffPersonDao;
-  private XaCmsAddressDao addressDao;
-  private XaCmsSsaName3Dao ssaName3Dao;
+  private XaCmsReferralDaoImpl referralDao;
+  private XaCmsStaffPersonDaoImpl staffPersonDao;
+  private XaCmsAddressDaoImpl addressDao;
+  private XaCmsSsaName3DaoImpl ssaName3Dao;
   private XaUpperCaseTables upperCaseTables;
 
   private XaNonLACountyTriggers nonLACountyTriggers;
@@ -135,10 +135,10 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(XaCmsReferralDao.class);
-    staffPersonDao = mock(XaCmsStaffPersonDao.class);
-    ssaName3Dao = mock(XaCmsSsaName3Dao.class);
-    addressDao = mock(XaCmsAddressDao.class);
+    referralDao = mock(XaCmsReferralDaoImpl.class);
+    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
+    ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
+    addressDao = mock(XaCmsAddressDaoImpl.class);
 
     upperCaseTables = mock(XaUpperCaseTables.class);
 
@@ -146,7 +146,7 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
 
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
-    staffPersonDao = mock(XaCmsStaffPersonDao.class);
+    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     riReferral = mock(RIReferral.class);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
 

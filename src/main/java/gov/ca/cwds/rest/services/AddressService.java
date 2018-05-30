@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
 import gov.ca.cwds.rest.api.Request;
@@ -32,7 +32,7 @@ public class AddressService implements CrudsService {
 
   private XaNsAddressDao addressDao;
   private XaNsAddressesDao xaNsAddressDao;
-  private XaCmsAddressDao xaCmsAddressDao;
+  private XaCmsAddressDaoImpl xaCmsAddressDao;
 
   /**
    * Constructor
@@ -44,7 +44,7 @@ public class AddressService implements CrudsService {
    */
   @Inject
   public AddressService(XaNsAddressDao xaNsddressDao, XaNsAddressesDao xaNsAddressDao,
-      XaCmsAddressDao xaCmsAddressDao) {
+      XaCmsAddressDaoImpl xaCmsAddressDao) {
     this.addressDao = xaNsddressDao;
     this.xaNsAddressDao = xaNsAddressDao;
     this.xaCmsAddressDao = xaCmsAddressDao;

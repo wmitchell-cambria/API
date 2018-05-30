@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsCrossReportDao extends CrossReportDao {
+public class XaCmsAllegationPerpetratorHistoryDaoImpl extends AllegationPerpetratorHistoryDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaCmsCrossReportDao extends CrossReportDao {
    * @param sessionFactory The sessionFactory
    */
   @Inject
-  public XaCmsCrossReportDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsAllegationPerpetratorHistoryDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

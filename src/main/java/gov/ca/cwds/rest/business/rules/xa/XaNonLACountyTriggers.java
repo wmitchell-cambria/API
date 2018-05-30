@@ -2,9 +2,9 @@ package gov.ca.cwds.rest.business.rules.xa;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 
 public class XaNonLACountyTriggers extends NonLACountyTriggers {
@@ -15,8 +15,8 @@ public class XaNonLACountyTriggers extends NonLACountyTriggers {
    * @param referralClientDao - referralClientDao
    */
   @Inject
-  public XaNonLACountyTriggers(XaCmsCountyOwnershipDao countyOwnershipDao,
-      XaCmsReferralDao referralDao, XaCmsReferralClientDao referralClientDao) {
+  public XaNonLACountyTriggers(XaCmsCountyOwnershipDaoImpl countyOwnershipDao,
+      XaCmsReferralDaoImpl referralDao, XaCmsReferralClientDaoImpl referralClientDao) {
     super(countyOwnershipDao, referralDao, referralClientDao);
   }
 

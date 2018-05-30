@@ -15,6 +15,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Entity
 @Table(name = "CWS_OFFT")
 public class CwsOffice extends CmsPersistentObject {
+
+  private static final long serialVersionUID = 1L;
+
   @Id
   @Column(name = "IDENTIFIER", nullable = false, length = 10)
   private String id;
@@ -99,15 +102,15 @@ public class CwsOffice extends CmsPersistentObject {
   @Column(name = "DIR_NM_TL", nullable = false, length = 45)
   private String directorsNameTitle;
 
-  public CwsOffice() {
-  }
+  public CwsOffice() {}
 
-  public CwsOffice(String id, Long faxNumber, String geographicRegionCode, short governmentEntityType,
-       String headquarterIndicator, String inactiveIndicator, String mailStopDescription,
-       Long messagePhoneNumber, int messagePhoneExtensionNumber, String cwsOfficeNumber,
-       Long primaryPhoneNumber, int primaryPhoneExtensionNumber, String fkStaffPerson,
-       String commentDescription, String agencyName, String departmentDivisionName, String cwsOfficeName,
-       String countySpecificCode, short agencyCodeNumber, short locationCountyType, String directorsNameTitle) {
+  public CwsOffice(String id, Long faxNumber, String geographicRegionCode,
+      short governmentEntityType, String headquarterIndicator, String inactiveIndicator,
+      String mailStopDescription, Long messagePhoneNumber, int messagePhoneExtensionNumber,
+      String cwsOfficeNumber, Long primaryPhoneNumber, int primaryPhoneExtensionNumber,
+      String fkStaffPerson, String commentDescription, String agencyName,
+      String departmentDivisionName, String cwsOfficeName, String countySpecificCode,
+      short agencyCodeNumber, short locationCountyType, String directorsNameTitle) {
     this.id = id;
     this.faxNumber = faxNumber;
     this.geographicRegionCode = geographicRegionCode;
@@ -308,7 +311,7 @@ public class CwsOffice extends CmsPersistentObject {
   public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
-  
+
   @Override
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);

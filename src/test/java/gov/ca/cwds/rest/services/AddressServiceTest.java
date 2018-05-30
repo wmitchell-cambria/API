@@ -23,7 +23,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
 import gov.ca.cwds.data.persistence.ns.Addresses;
@@ -48,7 +48,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
 
   XaNsAddressDao xaNsAddressDao;
   XaNsAddressesDao xaNsAddressesDao;
-  XaCmsAddressDao xaCmsAddressDao;
+  XaCmsAddressDaoImpl xaCmsAddressDao;
   AddressService target;
 
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
@@ -63,7 +63,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
 
     xaNsAddressDao = mock(XaNsAddressDao.class);
     xaNsAddressesDao = mock(XaNsAddressesDao.class);
-    xaCmsAddressDao = mock(XaCmsAddressDao.class);
+    xaCmsAddressDao = mock(XaCmsAddressDaoImpl.class);
 
     // public AddressService(AddressDao addressDao, XaNsAddressesDao xaNsAddressDao, XaCmsAddressDao
     // xaCmsAddressDao) {

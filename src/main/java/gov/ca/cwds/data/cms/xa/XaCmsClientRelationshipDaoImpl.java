@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsClientRelationshipDao extends ClientRelationshipDao {
+public class XaCmsClientRelationshipDaoImpl extends ClientRelationshipDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaCmsClientRelationshipDao extends ClientRelationshipDao {
    * @param sessionFactory The sessionFactory
    */
   @Inject
-  public XaCmsClientRelationshipDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsClientRelationshipDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

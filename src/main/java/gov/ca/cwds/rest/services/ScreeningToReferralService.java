@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDao;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Allegation;
@@ -65,8 +65,8 @@ public class ScreeningToReferralService implements CrudsService {
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private XaCmsReferralDao referralDao;
-  private XaCmsClientRelationshipDao clientRelationshipDao;
+  private XaCmsReferralDaoImpl referralDao;
+  private XaCmsClientRelationshipDaoImpl clientRelationshipDao;
 
   /**
    * Constructor
@@ -86,11 +86,11 @@ public class ScreeningToReferralService implements CrudsService {
   @Inject
   public ScreeningToReferralService(XaCmsReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
-      ParticipantService participantService, Validator validator, XaCmsReferralDao referralDao,
+      ParticipantService participantService, Validator validator, XaCmsReferralDaoImpl referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
       GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
-      XaCmsClientRelationshipDao clientRelationshipDao) {
+      XaCmsClientRelationshipDaoImpl clientRelationshipDao) {
     super();
     this.clientRelationshipDao = clientRelationshipDao;
     this.referralService = referralService;
@@ -105,7 +105,6 @@ public class ScreeningToReferralService implements CrudsService {
     this.governmentOrganizationCrossReportService = governmentOrganizationCrossReportService;
   }
 
-  // @UnitOfWork(value = "cms")
   @Override
   public Response create(Request request) {
     ScreeningToReferral screeningToReferral = (ScreeningToReferral) request;

@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.CountyOwnershipDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsReferralClientDao extends ReferralClientDao {
+public class XaCmsCountyOwnershipDaoImpl extends CountyOwnershipDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaCmsReferralClientDao extends ReferralClientDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaCmsReferralClientDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsCountyOwnershipDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
