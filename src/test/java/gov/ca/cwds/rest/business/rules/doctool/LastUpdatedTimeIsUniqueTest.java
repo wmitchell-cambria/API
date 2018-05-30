@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
-import javax.validation.Validator;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -49,14 +48,6 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
-import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
-import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
-import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
-import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
-import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
-import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
@@ -72,19 +63,8 @@ public class LastUpdatedTimeIsUniqueTest
    */
   private ScreeningToReferralService screeningToReferralService;
 
-  private RIChildClient riChildClient;
-  private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-  private RIClientAddress riClientAddress;
-  private RIAllegation riAllegation;
-  private RICrossReport riCrossReport;
-  private RIReporter riReporter;
-  private RIReferral riReferral;
-  private RIReferralClient riReferralClient;
-
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
-
-  private Validator validator;
 
   private static gov.ca.cwds.data.persistence.cms.Referral createdReferal = null;
   private static gov.ca.cwds.data.persistence.cms.Address createdAddress = null;

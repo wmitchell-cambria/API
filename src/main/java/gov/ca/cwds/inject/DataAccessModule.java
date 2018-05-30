@@ -70,7 +70,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsClientAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDaoImpl;
-import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDao;
+import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
@@ -85,6 +85,7 @@ import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
 import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.data.ns.CsecDao;
@@ -93,6 +94,7 @@ import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.ns.LanguageDao;
 import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.ns.ParticipantAddressesDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.PersonAddressDao;
 import gov.ca.cwds.data.ns.PersonEthnicityDao;
@@ -427,7 +429,7 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsClientDaoImpl.class);
     bind(XaCmsClientRelationshipDaoImpl.class);
     bind(XaCmsCountyOwnershipDaoImpl.class);
-    bind(XaCmsCountyTriggerDao.class);
+    bind(XaCmsCountyTriggerDaoImpl.class);
     bind(XaCmsCrossReportDaoImpl.class);
     bind(XaCmsCwsOfficeDaoImpl.class);
     bind(XaCmsDrmsDocumentDaoImpl.class);
@@ -457,16 +459,16 @@ public class DataAccessModule extends AbstractModule {
 
     // NS XA:
     bind(XaNsAddressDaoImpl.class);
-    bind(XaNsAddressesDaoImpl.class);
-    bind(XaNsAgencyDaoImpl.class);
-    bind(XaNsAllegationDaoImpl.class);
-    bind(XaNsAllegationIntakeDaoImpl.class);
+    bind(AddressesDao.class).to(XaNsAddressesDaoImpl.class);
+    bind(AgencyDao.class).to(XaNsAgencyDaoImpl.class);
+    bind(gov.ca.cwds.data.ns.AllegationDao.class).to(XaNsAllegationDaoImpl.class);
+    bind(AllegationIntakeDao.class).to(XaNsAllegationIntakeDaoImpl.class);
     bind(gov.ca.cwds.data.ns.CrossReportDao.class).to(XaNsCrossReportDaoImpl.class);
     bind(XaNsCsecDaoImpl.class);
     bind(XaNsIntakeLovDaoImpl.class);
     bind(XaNsLegacyDescriptorDaoImpl.class);
     bind(PaperTrailDao.class).to(XaNsPaperTrailDaoImpl.class);
-    bind(XaNsParticipantAddressesDaoImpl.class);
+    bind(ParticipantAddressesDao.class).to(XaNsParticipantAddressesDaoImpl.class);
     bind(XaNsParticipantDaoImpl.class);
     bind(XaNsParticipantPhoneNumbersDaoImpl.class);
     bind(XaNsPersonDaoImpl.class);
@@ -478,8 +480,9 @@ public class DataAccessModule extends AbstractModule {
     bind(PaperTrailInterceptor.class);
 
     // Trigger Tables:
-    bind(CountyOwnershipDao.class);
-    bind(CountyTriggerDao.class);
+    bind(CountyOwnershipDao.class).to(XaCmsCountyOwnershipDaoImpl.class);
+    bind(CountyTriggerDao.class).to(XaCmsCountyTriggerDaoImpl.class);
+
     bind(NonLACountyTriggers.class);
     bind(LACountyTrigger.class);
     bind(TriggerTablesDao.class);

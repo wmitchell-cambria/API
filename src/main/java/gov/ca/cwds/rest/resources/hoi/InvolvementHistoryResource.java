@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.InvolvementHistoryServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
@@ -57,6 +58,7 @@ public class InvolvementHistoryResource {
    * 
    * @return the response
    */
+  @XAUnitOfWork
   @GET
   @Path("/{id}/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

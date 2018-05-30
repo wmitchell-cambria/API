@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.cms.CountyTriggerDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsCountyTriggerDao extends CountyTriggerDao {
+public class XaCmsCountyTriggerDaoImpl extends CountyTriggerDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaCmsCountyTriggerDao extends CountyTriggerDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaCmsCountyTriggerDao(@XaCmsSessionFactory SessionFactory sessionFactory) {
+  public XaCmsCountyTriggerDaoImpl(@XaCmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

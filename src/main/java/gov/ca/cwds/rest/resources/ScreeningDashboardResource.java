@@ -13,10 +13,10 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.ScreeningService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -55,7 +55,7 @@ public class ScreeningDashboardResource {
    * 
    * @return the {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @GET
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
