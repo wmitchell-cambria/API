@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.security.annotations.Authorize;
 
 /**
- * Service to check that logged in staff person is authorized to access entities
+ * Service to check that logged-in staff person is authorized to access entities.
  * 
  * @author CWDS API Team
  */
@@ -29,7 +29,7 @@ public class AuthorizationService
   }
 
   /**
-   * Check if logged in user is authorized to access requested entity
+   * Check if logged-in user is authorized to access requested entity.
    */
   @Override
   protected AuthorizationResponse handleRequest(AuthorizationRequest request) {
@@ -40,24 +40,24 @@ public class AuthorizationService
   }
 
   /**
-   * Check if logged in user is authorized to access client identified by given clientId, throws
+   * Check if logged-in user is authorized to access client identified by given clientId, throws
    * AuthorizationException if it is not.
    * 
    * @param clientId The client id
    * @throws AuthorizationException If client identified by given clientId is not accessible to
-   *         logged in user.
+   *         logged-in user.
    */
   public void ensureClientAccessAuthorized(@Authorize("client:read:clientId") String clientId) {
     // Authorizer annotation does the work
   }
 
   /**
-   * Check if logged in user is authorized to access clients identified by given clientIds, throws
+   * Check if logged-in user is authorized to access clients identified by given clientIds, throws
    * AuthorizationException if any client is not authorized for staff person.
    * 
    * @param clientIds The client ids
    * @throws AuthorizationException If any client identified by given clientIds is not accessible to
-   *         logged in user.
+   *         logged-in user.
    */
   public void ensureClientAccessAuthorized(Collection<String> clientIds) {
     for (String clientId : clientIds) {
@@ -66,15 +66,14 @@ public class AuthorizationService
   }
 
   /**
-   * Check if logged in user is authorized to access given screening and all participants, throws
+   * Check if logged-in user is authorized to access given screening and all participants, throws
    * AuthorizationException if not authorized.
    * 
    * @param screeningEntity The screening
-   * @throws AuthorizationException If given screening not accessible to logged in user.
+   * @throws AuthorizationException If given screening not accessible to logged-in user.
    */
   public void ensureScreeningAccessAuthorized(
       @Authorize("screening:read:screeningEntity") ScreeningEntity screeningEntity) {
-
     if (screeningEntity == null) {
       return;
     }
@@ -92,10 +91,11 @@ public class AuthorizationService
   }
 
   /**
-   * This method in not implemented
+   * This method in not implemented. Try not to faint.
    */
   @Override
   protected AuthorizationResponse handleFind(String arg0) {
     throw new UnsupportedOperationException();
   }
+
 }

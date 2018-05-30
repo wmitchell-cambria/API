@@ -74,6 +74,8 @@ import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsGovernmentOrganizationCrossReportDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsGovernmentOrganizationDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsLongTextDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
@@ -379,49 +381,46 @@ public class DataAccessModule extends AbstractModule {
   @Override
   protected void configure() {
     // CMS:
-    // CmsReferral participants:
+    bind(AddressUcDao.class);
     bind(AllegationDao.class);
-    bind(ClientDao.class);
-    bind(ReferralClientDao.class);
-    bind(ReferralDao.class);
-    bind(ReporterDao.class);
-    bind(CrossReportDao.class);
-    bind(CaseDao.class);
-    bind(ReferralAssignmentDao.class);
-    bind(CaseAssignmentDao.class);
-    bind(ClientRelationshipDao.class);
-    bind(ClientCollateralDao.class);
-
-    bind(AttorneyDao.class);
-    bind(CmsDocReferralClientDao.class);
-    bind(CmsDocumentDao.class);
-    bind(OtherClientNameDao.class);
-    bind(StaffPersonDao.class);
-    bind(StateIdDao.class);
-    bind(LongTextDaoImpl.class);
     bind(AllegationPerpetratorHistoryDao.class);
-    bind(ClientUcDao.class);
-    bind(ChildClientDao.class);
-    bind(SystemCodeDao.class);
-    bind(SystemMetaDao.class);
-    bind(DrmsDocumentDao.class);
-    bind(DrmsDocumentTemplateDao.class);
-    bind(OtherCaseReferralDrmsDocumentDao.class);
     bind(AssignmentDao.class);
     bind(AssignmentUnitDao.class);
-    bind(CwsOfficeDao.class);
-    bind(TickleDao.class);
-    bind(AddressUcDao.class);
-    bind(ExternalInterfaceDao.class);
-    bind(DeliveredServiceDao.class);
+    bind(AttorneyDao.class);
+    bind(CaseAssignmentDao.class);
+    bind(CaseDao.class);
+    bind(CaseLoadDao.class);
+    bind(ChildClientDao.class);
+    bind(ClientCollateralDao.class);
+    bind(ClientDao.class);
+    bind(ClientRelationshipDao.class);
+    bind(ClientScpEthnicityDao.class);
+    bind(ClientUcDao.class);
+    bind(CmsDocReferralClientDao.class);
+    bind(CmsDocumentDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
-    bind(ReferralClientDeliveredServiceDao.class);
+    bind(CrossReportDao.class);
+    bind(CwsOfficeDao.class);
+    bind(DeliveredServiceDao.class);
+    bind(DrmsDocumentDao.class);
+    bind(DrmsDocumentTemplateDao.class);
+    bind(ExternalInterfaceDao.class);
+    bind(GovernmentOrganizationCrossReportDao.class);
     bind(IndividualDeliveredServiceDao.class);
     bind(LawEnforcementDao.class);
-    bind(CaseLoadDao.class);
-    bind(ClientScpEthnicityDao.class);
-    bind(GovernmentOrganizationDao.class);
-    bind(GovernmentOrganizationCrossReportDao.class);
+    bind(LongTextDaoImpl.class);
+    bind(OtherCaseReferralDrmsDocumentDao.class);
+    bind(OtherClientNameDao.class);
+    bind(ReferralAssignmentDao.class);
+    bind(ReferralClientDao.class);
+    bind(ReferralClientDeliveredServiceDao.class);
+    bind(ReferralDao.class);
+    bind(ReporterDao.class);
+    bind(StaffPersonDao.class);
+    bind(StateIdDao.class);
+    bind(SystemCodeDao.class);
+    bind(SystemMetaDao.class);
+    bind(TickleDao.class);
 
     // CMS XA:
     bind(XaCmsAddressDaoImpl.class);
@@ -445,7 +444,10 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsReferralDaoImpl.class);
     bind(XaCmsReporterDaoImpl.class);
     bind(XaCmsSsaName3DaoImpl.class);
-    bind(XaCmsStaffPersonDaoImpl.class);
+    bind(StaffPersonDao.class).to(XaCmsStaffPersonDaoImpl.class);
+    bind(GovernmentOrganizationDao.class).to(XaCmsGovernmentOrganizationDaoImpl.class);
+    bind(GovernmentOrganizationCrossReportDao.class)
+        .to(XaCmsGovernmentOrganizationCrossReportDaoImpl.class);
 
     // NS:
     bind(LanguageDao.class);

@@ -39,10 +39,6 @@ import io.swagger.annotations.ApiResponses;
  * 
  * @author CWDS API Team
  */
-// @Api(value = RESOURCE_LOV, tags = {RESOURCE_LOV})
-// @Path(value = RESOURCE_LOV)
-// @Produces(MediaType.APPLICATION_JSON)
-// @Consumes(MediaType.APPLICATION_JSON)
 public class SystemCodeResource {
 
   private ResourceDelegate resourceDelegate;
@@ -61,7 +57,6 @@ public class SystemCodeResource {
    * Finds a {@link SystemCode} by id.
    * 
    * @param id The id
-   *
    * @return the response
    */
   @UnitOfWork(value = "cms")
@@ -78,8 +73,7 @@ public class SystemCodeResource {
   }
 
   /**
-   * Finds list of {@link SystemMeta}
-   * 
+   * Finds list of {@link SystemMeta}.
    *
    * @return the response
    */
@@ -96,11 +90,10 @@ public class SystemCodeResource {
   }
 
   /**
-   * Delete a {@link SystemCode}
+   * Delete a {@link SystemCode}.
    * 
    * @param id The id of the {@link SystemCode}
    * @param acceptHeader The accept header.
-   * 
    * @return {@link Response}
    */
   @DELETE
@@ -124,8 +117,7 @@ public class SystemCodeResource {
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
   @ApiOperation(hidden = true, value = "Delete SystemCode - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
-  public Response create(
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
+  public Response create(@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
@@ -134,7 +126,6 @@ public class SystemCodeResource {
    *
    * @param id The id of the {@link SystemCode}
    * @param acceptHeader The accept header.
-   *
    * @return The {@link Response}
    */
   @PUT
@@ -149,4 +140,5 @@ public class SystemCodeResource {
       @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
+
 }

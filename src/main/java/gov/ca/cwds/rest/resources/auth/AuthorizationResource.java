@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource to determine if logged in staff person is authorized to access entities.
+ * A resource to determine if logged-in staff person is authorized to access entities.
  *
  * @author CWDS API Team
  */
@@ -45,7 +45,7 @@ public class AuthorizationResource {
   }
 
   /**
-   * Determine if logged in user is authorized to access client identified by given id.
+   * Determine if logged-in user is authorized to access client identified by given id.
    *
    * @param id the id
    * @return the response
@@ -62,4 +62,5 @@ public class AuthorizationResource {
     simpleResourceDelegate.handle(new AuthorizationRequest(id));
     return Response.status(Response.Status.OK).build();
   }
+
 }

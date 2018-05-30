@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Screening;
@@ -51,6 +52,7 @@ public class ScreeningSubmitService implements CrudsService {
     return submit(primaryKey);
   }
 
+  @XAUnitOfWork
   public Response submit(Serializable id) {
     final Screening screening = screeningService.getScreening((String) id);
     final String staffId = RequestExecutionContext.instance().getStaffId();
@@ -82,7 +84,6 @@ public class ScreeningSubmitService implements CrudsService {
 
     // NS session
     screeningService.updateScreening(screening.getId(), screening);
-
     return screening;
   }
 

@@ -27,7 +27,7 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Business layer object to work on Screening History Of Involvement
+ * Business layer object to work on Screening History Of Involvement.
  *
  * @author CWDS API Team
  */
@@ -160,4 +160,5 @@ public class HOIScreeningService
     LOGGER.info("HOIScreeningService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
+
 }
