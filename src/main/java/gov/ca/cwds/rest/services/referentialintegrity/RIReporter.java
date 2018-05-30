@@ -56,9 +56,6 @@ public class RIReporter implements ApiReferentialCheck<Reporter> {
   private static final String REFERRAL_ID_MISSING_ERROR =
       "Reporter => Referral with given Identifier is not present in database";
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RIReporter.class);

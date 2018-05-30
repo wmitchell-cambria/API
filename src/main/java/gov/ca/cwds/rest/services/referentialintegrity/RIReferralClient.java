@@ -48,9 +48,6 @@ public class RIReferralClient implements ApiReferentialCheck<ReferralClient> {
   private static final String CLIENT_ID_MISSING_ERROR =
       "ReferralClient => Client with given Identifier is not present in database";
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RIReferralClient.class);
@@ -69,7 +66,6 @@ public class RIReferralClient implements ApiReferentialCheck<ReferralClient> {
     this.clientDao = clientDao;
     this.referralDao = referralDao;
     ApiHibernateInterceptor.addHandler(ReferralClient.class, c -> apply((ReferralClient) c));
-
   }
 
   /**

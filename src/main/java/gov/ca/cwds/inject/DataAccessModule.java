@@ -69,6 +69,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsChildClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDocumentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
@@ -398,7 +399,6 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(ClientUcDao.class);
     bind(CmsDocReferralClientDao.class);
-    bind(CmsDocumentDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
     bind(CrossReportDao.class);
     bind(CwsOfficeDao.class);
@@ -424,6 +424,7 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsAssignmentUnitDaoImpl.class);
     bind(XaCmsCaseDaoImpl.class);
     bind(XaCmsCaseLoadDaoImpl.class);
+    bind(CmsDocumentDao.class).to(XaCmsDocumentDaoImpl.class);
     bind(XaCmsChildClientDaoImpl.class);
     bind(XaCmsClientAddressDaoImpl.class);
     bind(XaCmsClientDaoImpl.class);

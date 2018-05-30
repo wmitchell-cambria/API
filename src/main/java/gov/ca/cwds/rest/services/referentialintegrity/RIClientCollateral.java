@@ -47,9 +47,6 @@ public class RIClientCollateral implements ApiReferentialCheck<ClientCollateral>
   private static final String CLIENT_ID_MISSING_ERROR =
       "ClientCollateral => Client with given Identifier is not present in database";
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RIClientCollateral.class);

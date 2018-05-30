@@ -41,9 +41,6 @@ public class RIChildClient implements ApiReferentialCheck<ChildClient> {
   private static final String VICTIM_CLIENT_ID_MISSING_ERROR =
       "ChildClient => Victim Client with given Identifier is not present in database";
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RIChildClient.class);

@@ -56,9 +56,6 @@ public class RIGovernmentOrganizationCrossReport
   private static final String CROSSREPORT_ID_MISSING_ERROR =
       "GovernmentOrganizationCrossReport => CrossReport with given Identifier is not present in database";
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER =
@@ -67,7 +64,6 @@ public class RIGovernmentOrganizationCrossReport
   private transient CrossReportDao crossReportDao;
   private transient ReferralDao referralDao;
   private transient GovernmentOrganizationDao governmentOrganizationDao;
-
 
   /**
    * Constructor
@@ -92,10 +88,8 @@ public class RIGovernmentOrganizationCrossReport
     LOGGER.debug("RI: GovernmentOrganizationCrossReport");
     if (crossReportDao.find(governmentOrganizationCrossReport.getCrossReportThirdId()) == null) {
       throw new ReferentialIntegrityException(CROSSREPORT_ID_MISSING_ERROR);
-
     } else if (referralDao.find(governmentOrganizationCrossReport.getReferralId()) == null) {
       throw new ReferentialIntegrityException(REFERRAL_ID_MISSING_ERROR);
-
     } else if (governmentOrganizationCrossReport.getGovernmentOrganizationId() != null
         && governmentOrganizationDao
             .find(governmentOrganizationCrossReport.getGovernmentOrganizationId()) == null) {
