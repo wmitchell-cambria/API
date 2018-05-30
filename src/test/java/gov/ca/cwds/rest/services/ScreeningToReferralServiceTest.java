@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
-import javax.validation.Validator;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
@@ -34,16 +33,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
-import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
-import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
@@ -79,11 +73,7 @@ import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
-import gov.ca.cwds.rest.business.rules.LACountyTrigger;
-import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.Reminders;
-import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
@@ -98,13 +88,11 @@ import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
-import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * 
@@ -113,8 +101,6 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("unused")
 public class ScreeningToReferralServiceTest
     extends Doofenshmirtz<gov.ca.cwds.data.persistence.cms.Client> {
-
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private final String validReferralId = "X2WXo678Ac";
 
@@ -131,22 +117,9 @@ public class ScreeningToReferralServiceTest
   private ChildClientService childClientService;
   private LongTextService longTextService;
   private AssignmentService assignmentService;
-  private ParticipantService participantService;
 
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private ChildClientDao childClientDao;
-
-  private NonLACountyTriggers nonLACountyTriggers;
-  private LACountyTrigger laCountyTrigger;
-  private TriggerTablesDao triggerTablesDao;
-  private DrmsDocumentService drmsDocumentService;
-  private AssignmentDao assignmentDao;
-  private SsaName3Dao ssaName3Dao;
-  private Reminders reminders;
-  private UpperCaseTables upperCaseTables;
-  private Validator validator;
-  private ExternalInterfaceTables externalInterfaceTables;
-  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private Participant defaultVictim;
   private Participant defaultReporter;
@@ -570,13 +543,11 @@ public class ScreeningToReferralServiceTest
         new ParticipantResourceBuilder().setAddresses(null).setId(12345).createPerpParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(perpWithNoAddress, defaultVictim, defaultReporter));
-
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     Response response = screeningToReferralService.create(screeningToReferral);

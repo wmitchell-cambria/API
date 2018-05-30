@@ -13,10 +13,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  */
 public class PostedReporter extends Reporter {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 
@@ -24,10 +23,7 @@ public class PostedReporter extends Reporter {
    * Default Constructor
    */
   public PostedReporter() {
-    /**
-     * default constructor
-     * 
-     */
+    // default constructor
   }
 
   /**

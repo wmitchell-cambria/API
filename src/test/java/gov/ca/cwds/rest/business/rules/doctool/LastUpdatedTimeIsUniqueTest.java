@@ -44,25 +44,13 @@ import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
-import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
-import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
-import gov.ca.cwds.rest.services.cms.AllegationService;
-import gov.ca.cwds.rest.services.cms.AssignmentService;
-import gov.ca.cwds.rest.services.cms.ChildClientService;
-import gov.ca.cwds.rest.services.cms.ClientAddressService;
-import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
-import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
-import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.cms.ReferralClientService;
-import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -95,12 +83,10 @@ public class LastUpdatedTimeIsUniqueTest
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
 
-  private ClientScpEthnicityService clientScpEthnicityService;
   private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
 
-  private ExternalInterfaceTables externalInterfaceTables;
   private Validator validator;
 
   private static gov.ca.cwds.data.persistence.cms.Referral createdReferal = null;
@@ -129,34 +115,10 @@ public class LastUpdatedTimeIsUniqueTest
     super.setup();
     new TestingRequestExecutionContext("0X5");
 
-    clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     longTextService = new LongTextService(longTextDao);
     cmsDocumentService = mock(CmsDocumentService.class);
     drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
-
-    externalInterfaceTables = mock(ExternalInterfaceTables.class);
-    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
-        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
-        assignmentUnitDao, cwsOfficeDao, messageBuilder);
-
-    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
-        nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
-    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
-        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
-    allegationService = new AllegationService(allegationDao, riAllegation);
-    allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
-        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
-    crossReportService = new CrossReportService(crossReportDao, riCrossReport);
-    reporterService = new ReporterService(reporterDao, riReporter);
-    clientAddressService =
-        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
-            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
-    childClientService = new ChildClientService(childClientDao, riChildClient);
-
-    participantService = new ParticipantService(clientService, referralClientService,
-        reporterService, childClientService, clientAddressService, validator,
-        clientScpEthnicityService, caseDao, referralClientDao);
 
     screeningToReferralService =
         new ScreeningToReferralService(referralService, allegationService, crossReportService,

@@ -64,10 +64,18 @@ import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAllegationPerpetratorHistoryDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentUnitDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCaseDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseLoadDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsChildClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsLongTextDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
@@ -75,8 +83,10 @@ import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
@@ -93,6 +103,7 @@ import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
+import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
@@ -197,6 +208,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected AssignmentService assignmentService;
   protected ChildClientService childClientService;
   protected ClientAddressService clientAddressService;
+  protected ClientScpEthnicityService clientScpEthnicityService;
   protected ClientService clientService;
   protected CrossReportService crossReportService;
   protected LongTextService longTextService;
@@ -205,6 +217,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected ReporterService reporterService;
 
   protected Reminders reminders;
+  protected ExternalInterfaceTables externalInterfaceTables;
   protected GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   protected XaCmsReferralService referralService;
@@ -328,33 +341,37 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(con.prepareStatement(any(String.class))).thenReturn(prepStmt);
     when(prepStmt.executeUpdate()).thenReturn(10);
 
+    // =================
+    // DAO's:
+    // =================
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
 
-    referralDao = mock(XaCmsReferralDaoImpl.class);
-    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
-    ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
-    upperCaseTables = mock(XaUpperCaseTables.class);
     addressDao = mock(XaCmsAddressDaoImpl.class);
-    clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
-    clientDao = mock(XaCmsClientDaoImpl.class);
     allegationDao = mock(XaCmsAllegationDaoImpl.class);
+    allegationPerpetratorHistoryDao = mock(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    assignmentUnitDao = mock(XaCmsAssignmentUnitDaoImpl.class);
+    caseDao = mock(XaCmsCaseDaoImpl.class);
     caseLoadDao = mock(XaCmsCaseLoadDaoImpl.class);
-    reporterDao = mock(XaCmsReporterDaoImpl.class);
-    referralDao = mock(XaCmsReferralDaoImpl.class);
+    childClientDao = mock(XaCmsChildClientDaoImpl.class);
+    clientAddressDao = mock(XaCmsClientAddressDaoImpl.class);
+    clientDao = mock(XaCmsClientDaoImpl.class);
+    clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
+    crossReportDao = mock(XaCmsCrossReportDaoImpl.class);
+    cwsOfficeDao = mock(XaCmsCwsOfficeDaoImpl.class);
+    drmsDocumentDao = mock(XaCmsDrmsDocumentDaoImpl.class);
+    longTextDao = mock(XaCmsLongTextDaoImpl.class);
     nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
     referralClientDao = mock(XaCmsReferralClientDaoImpl.class);
-    clientAddressDao = mock(XaCmsClientAddressDaoImpl.class);
+    referralDao = mock(XaCmsReferralDaoImpl.class);
+    reporterDao = mock(XaCmsReporterDaoImpl.class);
+    ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
+    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
+    upperCaseTables = mock(XaUpperCaseTables.class);
 
-    allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
-    assignmentUnitDao = mock(AssignmentUnitDao.class);
-    caseDao = mock(CaseDao.class);
-    childClientDao = mock(ChildClientDao.class);
-    crossReportDao = mock(CrossReportDao.class);
-    cwsOfficeDao = mock(CwsOfficeDao.class);
-    drmsDocumentDao = mock(DrmsDocumentDao.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    longTextDao = mock(LongTextDaoImpl.class);
+    final Reporter reporter = new Reporter();
+    when(reporterDao.create(any(Reporter.class))).thenReturn(reporter);
+
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
 
@@ -367,8 +384,41 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     riReferral = mock(RIReferral.class);
 
     reminders = mock(Reminders.class);
+    externalInterfaceTables = mock(ExternalInterfaceTables.class);
+
+    // =================
+    // SERVICES:
+    // =================
+    clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
+
+    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
+        nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
+
+    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
+        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
+
+    allegationService = new AllegationService(allegationDao, riAllegation);
+    allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
+        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
+
+    crossReportService = new CrossReportService(crossReportDao, riCrossReport);
+    reporterService = new ReporterService(reporterDao, riReporter);
+
+    clientAddressService =
+        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
+            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
+
+    childClientService = new ChildClientService(childClientDao, riChildClient);
+
+    participantService = new ParticipantService(clientService, referralClientService,
+        reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService, caseDao, referralClientDao);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
