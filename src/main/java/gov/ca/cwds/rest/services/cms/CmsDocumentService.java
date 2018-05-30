@@ -33,6 +33,11 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  */
 public class CmsDocumentService implements TypedCrudsService<String, CmsDocument, CmsDocument> {
 
+  /**
+   * Hibernate Work implementation deletes document blob segments.
+   * 
+   * @author CWDS API Team
+   */
   private static final class WorkDeleteBlobSegments implements Work {
 
     final String docId;
@@ -53,6 +58,11 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
 
   }
 
+  /**
+   * Hibernate Work implementation overwrites document blob segments.
+   * 
+   * @author CWDS API Team
+   */
   private static final class WorkInsertBlobSegments implements Work {
 
     final String docId;
