@@ -23,13 +23,14 @@ import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
-import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -64,12 +65,13 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * 
  * @author CWDS API Team
  */
-public class R00796ScreeningToReferralDeleteTest {
+public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAddress> {
 
   private ScreeningToReferralService screeningToReferralService;
 
@@ -108,7 +110,6 @@ public class R00796ScreeningToReferralDeleteTest {
 
   private XaNonLACountyTriggers nonLACountyTriggers;
 
-  private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
@@ -116,14 +117,13 @@ public class R00796ScreeningToReferralDeleteTest {
   private ReporterDao reporterDao;
   private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
-  private LongTextDao longTextDao;
+  private LongTextDaoImpl longTextDao;
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private AssignmentDao assignmentDao;
   private Reminders reminders;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
-  private CaseLoadDao caseLoadDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
@@ -132,6 +132,7 @@ public class R00796ScreeningToReferralDeleteTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  @Override
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("0X5");
@@ -198,7 +199,7 @@ public class R00796ScreeningToReferralDeleteTest {
         new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
-    longTextDao = mock(LongTextDao.class);
+    longTextDao = mock(LongTextDaoImpl.class);
     longTextService = new LongTextService(longTextDao);
 
     childClientDao = mock(ChildClientDao.class);
@@ -219,12 +220,6 @@ public class R00796ScreeningToReferralDeleteTest {
     participantService = mock(ParticipantService.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
     reminders = mock(Reminders.class);
-
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

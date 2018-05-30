@@ -30,7 +30,7 @@ import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
@@ -121,7 +121,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
   private AddressDao addressDao;
   private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
-  private LongTextDao longTextDao;
+  private LongTextDaoImpl longTextDao;
   private StaffPersonDao staffpersonDao;
   private AssignmentDao assignmentDao;
   private NonLACountyTriggers nonLACountyTriggers;
@@ -157,7 +157,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    longTextDao = mock(LongTextDao.class);
+    longTextDao = mock(LongTextDaoImpl.class);
     longTextService = new LongTextService(longTextDao);
 
     referralDao = mock(ReferralDao.class);

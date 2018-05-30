@@ -36,22 +36,14 @@ import org.mockito.ArgumentCaptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -112,7 +104,6 @@ import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
@@ -135,10 +126,7 @@ public class ScreeningToReferralServiceTest
 
   private final String validReferralId = "X2WXo678Ac";
 
-  private ScreeningToReferralService screeningToReferralService;
   private ScreeningToReferralResourceBuilder defaultReferralBuilder;
-
-  private ReferralService referralService;
 
   private ClientService clientService;
   private ReferralClientService referralClientService;
@@ -152,6 +140,7 @@ public class ScreeningToReferralServiceTest
   private LongTextService longTextService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIAssignment riAssignment;
@@ -159,18 +148,11 @@ public class ScreeningToReferralServiceTest
   private RIAllegation riAllegation;
   private RICrossReport riCrossReport;
 
-  private ReferralDao referralDao;
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
-  private ReporterDao reporterDao;
-  private AddressDao addressDao;
   private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
-  private LongTextDao longTextDao;
-  private StaffPersonDao staffpersonDao;
 
   private NonLACountyTriggers nonLACountyTriggers;
   private LACountyTrigger laCountyTrigger;
@@ -178,7 +160,6 @@ public class ScreeningToReferralServiceTest
   private DrmsDocumentService drmsDocumentService;
   private AssignmentDao assignmentDao;
   private SsaName3Dao ssaName3Dao;
-  private ClientRelationshipDao clientRelationshipDao;
   private Reminders reminders;
   private UpperCaseTables upperCaseTables;
   private Validator validator;
@@ -211,6 +192,7 @@ public class ScreeningToReferralServiceTest
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
 
@@ -219,10 +201,7 @@ public class ScreeningToReferralServiceTest
 
     DrmsDocumentDao drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
-
     reminders = mock(Reminders.class);
-
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
 
     lastUpdateDate = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .parseDateTime("2010-03-14T13:33:12.456-0700");
@@ -253,8 +232,8 @@ public class ScreeningToReferralServiceTest
     when(childClientService.create(any())).thenReturn(childClient);
 
     addressService = mock(AddressService.class);
-
     allegationService = mock(AllegationService.class);
+
     gov.ca.cwds.data.persistence.cms.Allegation allegation = new AllegationEntityBuilder().build();
     PostedAllegation postedAllegation = new PostedAllegation(allegation);
     when(allegationService.create(any())).thenReturn(postedAllegation);
@@ -282,7 +261,6 @@ public class ScreeningToReferralServiceTest
     when(longTextService.create(any())).thenReturn(longText);
 
     ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
-    referralService = mock(ReferralService.class);
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
 
@@ -298,16 +276,6 @@ public class ScreeningToReferralServiceTest
     defaultMandatedReporter = new ParticipantResourceBuilder().createReporterParticipant();
 
     defaultPerpetrator = new ParticipantResourceBuilder().createPerpParticipant();
-
-    messageBuilder = new MessageBuilder();
-
-    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, messageBuilder, allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
-
   }
 
   @SuppressWarnings("javadoc")

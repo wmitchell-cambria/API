@@ -45,7 +45,6 @@ public class GovernmentOrganizationCrossReportService implements
     agencyCodeMap.put("DEPARTMENT_OF_JUSTICE", "D");
     agencyCodeMap.put("COMMUNITY_CARE_LICENSING", "L");
     agencyCodeMap.put("PROBATION", "P");
-
   }
 
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
@@ -71,7 +70,6 @@ public class GovernmentOrganizationCrossReportService implements
    */
   @Override
   public GovernmentOrganizationCrossReport create(GovernmentOrganizationCrossReport request) {
-
     GovernmentOrganizationCrossReport governmentOrganizationCrossReport = request;
 
     try {
@@ -107,7 +105,6 @@ public class GovernmentOrganizationCrossReportService implements
               agencyCodeMap.get(agency.getType()));
       create(governmentOrganizationCrossReport);
     }
-
   }
 
   /**
@@ -134,7 +131,6 @@ public class GovernmentOrganizationCrossReportService implements
    */
   @Override
   public GovernmentOrganizationCrossReport find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.GovernmentOrganizationCrossReport persistedGovernmentOrganizationCrossReport =
         governmentOrganizationCrossReportDao.find(primaryKey);
     if (persistedGovernmentOrganizationCrossReport != null) {
@@ -154,7 +150,6 @@ public class GovernmentOrganizationCrossReportService implements
   @Override
   public GovernmentOrganizationCrossReport update(String primaryKey,
       GovernmentOrganizationCrossReport request) {
-
     GovernmentOrganizationCrossReport governmentOrganizationCrossReport = request;
 
     try {

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import javax.validation.Validation;
 
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDao;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
@@ -42,12 +42,14 @@ import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * 
  * @author CWDS API Team
  */
-public class MockedScreeningToReferralServiceBuilder {
+public class MockedScreeningToReferralServiceBuilder
+    extends Doofenshmirtz<gov.ca.cwds.data.persistence.cms.Client> {
 
   private XaCmsReferralService referralService;
   private ClientService clientService;
@@ -63,7 +65,6 @@ public class MockedScreeningToReferralServiceBuilder {
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-  private ClientRelationshipDao clientRelationshipDao;
   private XaCmsReferralDao referralDao;
   private MessageBuilder messageBuilder;
 
@@ -145,11 +146,9 @@ public class MockedScreeningToReferralServiceBuilder {
       buildDefaultMockForAllegationPerpetratorHistoryService();
     }
     return allegationPerpetratorHistoryService;
-
   }
 
   private void buildDefaultMockForAllegationPerpetratorHistoryService() {
-
     allegationPerpetratorHistoryService = mock(AllegationPerpetratorHistoryService.class);
 
     PostedAllegationPerpetratorHistory postedAllegationPerpetratorHistory =
@@ -162,7 +161,6 @@ public class MockedScreeningToReferralServiceBuilder {
 
     when(allegationPerpetratorHistoryService.create(any(AllegationPerpetratorHistory.class)))
         .thenReturn(postedAllegationPerpetratorHistory);
-
   }
 
   /**
@@ -295,7 +293,6 @@ public class MockedScreeningToReferralServiceBuilder {
     PostedAssignment postedAssignment = mock(PostedAssignment.class);
     when(postedAssignment.getId()).thenReturn("6789012ABC");
     when(assignmentService.create(any(Assignment.class))).thenReturn(postedAssignment);
-
   }
 
   /**
@@ -311,9 +308,9 @@ public class MockedScreeningToReferralServiceBuilder {
   /**
    * @return the clientRelationshipDao
    */
-  public ClientRelationshipDao getClientRelationshipDao() {
+  public XaCmsClientRelationshipDao getClientRelationshipDao() {
     if (clientRelationshipDao == null) {
-      clientRelationshipDao = mock(ClientRelationshipDao.class);
+      clientRelationshipDao = mock(XaCmsClientRelationshipDao.class);
     }
     return clientRelationshipDao;
   }

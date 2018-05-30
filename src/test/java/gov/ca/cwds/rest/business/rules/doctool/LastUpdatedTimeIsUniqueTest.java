@@ -45,7 +45,6 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
-import gov.ca.cwds.rest.business.rules.Reminders;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
@@ -61,7 +60,6 @@ import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
-import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -98,16 +96,12 @@ public class LastUpdatedTimeIsUniqueTest
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
 
-  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-
   private ClientScpEthnicityService clientScpEthnicityService;
   private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
 
-  private Reminders reminders;
   private ExternalInterfaceTables externalInterfaceTables;
-
   private Validator validator;
 
   private static gov.ca.cwds.data.persistence.cms.Referral createdReferal = null;
@@ -167,9 +161,7 @@ public class LastUpdatedTimeIsUniqueTest
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
     childClientService = new ChildClientService(childClientDao, riChildClient);
 
-    reminders = mock(Reminders.class);
     riReferral = mock(RIReferral.class);
-    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,

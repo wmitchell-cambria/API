@@ -32,24 +32,21 @@ import gov.ca.cwds.data.cms.AssignmentUnitDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.data.persistence.cms.Assignment;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
 import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -107,12 +104,13 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * 
  * @author CWDS API Team
  */
-public class R04537FirstResponseDeterminedByStaffPersonIdTest {
+public class R04537FirstResponseDeterminedByStaffPersonIdTest extends Doofenshmirtz<ClientAddress> {
 
   private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
@@ -144,12 +142,6 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private XaCmsReferralDao referralDao;
-  private ClientRelationshipDao clientRelationshipDao;
-
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
-
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
@@ -157,7 +149,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private AddressDao addressDao;
   private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
-  private LongTextDao longTextDao;
+  private LongTextDaoImpl longTextDao;
   private StaffPersonDao staffpersonDao;
   private AssignmentDao assignmentDao;
 
@@ -177,7 +169,6 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private gov.ca.cwds.data.persistence.cms.Referral referral;
   private Validator validator;
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -186,20 +177,13 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
    */
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
-  @SuppressWarnings("javadoc")
+  @Override
   @Before
   public void setup() throws Exception {
+    setup();
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(XaCmsReferralDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-
-    clientDao = mock(ClientDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     ssaName3Dao = mock(SsaName3Dao.class);
@@ -208,15 +192,10 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
 
-    referralClientDao = mock(ReferralClientDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
     riReferralClient = mock(RIReferralClient.class);
+    riAllegation = mock(RIAllegation.class);
 
     allegationDao = mock(AllegationDao.class);
-    riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
 
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
@@ -232,7 +211,6 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
 
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
     addressDao = mock(AddressDao.class);
     addressService = new AddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
@@ -246,7 +224,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
         new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
-    longTextDao = mock(LongTextDao.class);
+    longTextDao = mock(LongTextDaoImpl.class);
     longTextService = new LongTextService(longTextDao);
 
     drmsDocumentDao = mock(DrmsDocumentDao.class);
@@ -278,18 +256,6 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     ClientParticipants referralParticipants = new ClientParticipants();
     when(participantService.saveParticipants(any(), any(), any(), any()))
         .thenReturn(referralParticipants);
-
-    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-
-    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
-        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
-        riReferral);
-
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService, validator, referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
-        clientRelationshipDao);
   }
 
   /**

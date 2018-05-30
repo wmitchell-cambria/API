@@ -11,7 +11,7 @@ import gov.ca.cwds.data.ApiHibernateInterceptor;
 import gov.ca.cwds.data.ApiReferentialCheck;
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -54,7 +54,7 @@ public class RIReferral implements ApiReferentialCheck<Referral> {
   private transient AddressDao addressDao;
   private transient StaffPersonDao staffPersonDao;
   private transient DrmsDocumentDao drmsDocumentDao;
-  private transient LongTextDao longTextDao;
+  private transient LongTextDaoImpl longTextDao;
   private transient ReferralDao referralDao;
 
   private static final String STAFF_PERSON_ID_MISSING_ERROR = "Referral => Staff Person with given Identifier is not present in database";
@@ -79,7 +79,7 @@ public class RIReferral implements ApiReferentialCheck<Referral> {
    */
   @Inject
   public RIReferral(final AddressDao addressDao, StaffPersonDao staffPersonDao,
-      DrmsDocumentDao drmsDocumentDao, LongTextDao longTextDao, ReferralDao referralDao) {
+      DrmsDocumentDao drmsDocumentDao, LongTextDaoImpl longTextDao, ReferralDao referralDao) {
     this.addressDao = addressDao;
     this.staffPersonDao = staffPersonDao;
     this.drmsDocumentDao = drmsDocumentDao;
