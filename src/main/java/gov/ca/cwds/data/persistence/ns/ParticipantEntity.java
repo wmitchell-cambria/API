@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -49,7 +50,8 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
     query = "FROM ParticipantEntity WHERE screeningId = :screeningId)")
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
+public class ParticipantEntity
+    implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -135,6 +137,11 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @JoinColumn(name = "participant_id", insertable = false, updatable = false)
   @OrderBy("id")
   private List<CsecEntity> csecs = new ArrayList<>();
+
+  @HashCodeExclude
+  @OneToOne(cascade = CascadeType.DETACH)
+  @JoinColumn(name = "id")
+  private SafelySurrenderedBabiesEntity safelySurrenderedBabies;
 
   /**
    * Default constructor
@@ -334,6 +341,15 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   public void setCsecs(List<CsecEntity> csecs) {
     this.csecs = csecs;
+  }
+
+
+  public SafelySurrenderedBabiesEntity getSafelySurrenderedBabies() {
+    return safelySurrenderedBabies;
+  }
+
+  public void setSafelySurrenderedBabies(SafelySurrenderedBabiesEntity safelySurrenderedBabies) {
+    this.safelySurrenderedBabies = safelySurrenderedBabies;
   }
 
   public void setRoles(String[] roles) {
