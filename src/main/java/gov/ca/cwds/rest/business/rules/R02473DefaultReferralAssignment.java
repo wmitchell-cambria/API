@@ -71,7 +71,6 @@ public class R02473DefaultReferralAssignment implements RuleAction {
 
   @Override
   public void execute() {
-
     if (isValidAssigneeStaffId(screeningToReferral)) {
       CaseLoad caseLoad = null;
       String caseLoadId = null;
@@ -82,6 +81,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
       if (caseLoads != null && caseLoads.length > 0) {
         caseLoad = caseLoads[0];
       }
+
       if (caseLoad == null) {
         String message = "R - 02473 Caseload is either inactive or on hold";
         ServiceException se = new ServiceException(message);
@@ -106,7 +106,6 @@ public class R02473DefaultReferralAssignment implements RuleAction {
         strsMessageBuilder.addMessageAndLog(message, e, LOGGER);
       }
     }
-
   }
 
   private void setStartTime(gov.ca.cwds.rest.api.domain.cms.Assignment da) {

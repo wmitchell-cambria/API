@@ -926,8 +926,11 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
     return reporter;
   }
 
+  public void setReferralName(String referralName) {
+    this.referralName = referralName;
+  }
+
   /**
-   * 
    * @return referralClients object
    */
   public Set<ReferralClient> getReferralClients() {

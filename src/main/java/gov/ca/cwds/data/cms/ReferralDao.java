@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.cms;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -23,6 +24,14 @@ public class ReferralDao extends CrudsDaoImpl<Referral> {
   @Inject
   public ReferralDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
+  }
+
+  @Override
+  public Referral create(Referral ref) {
+    if (StringUtils.isBlank(ref.getReferralName())) {
+      ref.setReferralName("CARES REFERRAL");
+    }
+    return super.create(ref);
   }
 
 }
