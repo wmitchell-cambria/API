@@ -151,10 +151,7 @@ public class RaceAndEthnicityTransformer {
     if (StringUtils.isBlank(intakeEthnicity.getHispanicLatinoOrigin())) {
       raceAndEthnicity.setHispanicOriginCode(DEFAULT_VALUE);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Yes")) {
-      hispanicCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity(
-          SystemCodeCategoryId.ETHNICITY, intakeEthnicity.getEthnicityDetail().get(0)));
-      raceAndEthnicity.setHispanicCode(hispanicCodes);
-      raceAndEthnicity.setHispanicOriginCode(YES);
+      setHispanicCodeForYes(intakeEthnicity, raceAndEthnicity, hispanicCodes);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("No")) {
       raceAndEthnicity.setHispanicOriginCode(NO);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Unknown")) {
@@ -164,6 +161,16 @@ public class RaceAndEthnicityTransformer {
       raceAndEthnicity.setHispanicUnableToDetermineCode("A");
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Declined to answer")) {
       raceAndEthnicity.setHispanicOriginCode(DECLINED_TO_ANSWER);
+    }
+  }
+
+  private void setHispanicCodeForYes(IntakeEthnicity intakeEthnicity,
+      RaceAndEthnicity raceAndEthnicity, List<Short> hispanicCodes) {
+    raceAndEthnicity.setHispanicOriginCode(YES);
+    if (!intakeEthnicity.ethnicityDetail.isEmpty()) {
+      hispanicCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity(
+          SystemCodeCategoryId.ETHNICITY, intakeEthnicity.getEthnicityDetail().get(0)));
+      raceAndEthnicity.setHispanicCode(hispanicCodes);
     }
   }
 

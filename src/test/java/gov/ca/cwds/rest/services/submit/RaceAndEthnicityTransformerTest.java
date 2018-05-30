@@ -83,6 +83,22 @@ public class RaceAndEthnicityTransformerTest {
   }
 
   /**
+   * Test when hispanic code is Yes and ethnicity detail is Empty, then hispanicOriginCode is set
+   * "Y" and hispanic code to null
+   */
+  @Test
+  public void testWhenHispanicIsYesAndEthnicityDeatilEmpty() {
+    ParticipantIntakeApi participantsIntake = new ParticipantIntakeApiResourceBuilder()
+        .setRaces(null).setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"Yes\",\n"
+            + "  \"ethnicity_detail\": []\n" + "}")
+        .build();
+    RaceAndEthnicity raceAndEthnicity =
+        new RaceAndEthnicityTransformer().transform(participantsIntake);
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("Y")));
+    assertThat(raceAndEthnicity.getHispanicCode(), is(nullValue()));
+  }
+
+  /**
    * Test when hispanic is Unknown then hispanicOriginCode is set "U"
    */
   @Test
