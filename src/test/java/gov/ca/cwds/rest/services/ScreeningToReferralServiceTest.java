@@ -40,7 +40,6 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
-import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
@@ -151,7 +150,6 @@ public class ScreeningToReferralServiceTest
   private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
-  private ClientAddressDao clientAddressDao;
   private ChildClientDao childClientDao;
 
   private NonLACountyTriggers nonLACountyTriggers;

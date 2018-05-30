@@ -15,8 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -37,6 +35,7 @@ import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.DrmsDocumentEntityBuilder;
@@ -77,16 +76,16 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
-import io.dropwizard.jackson.Jackson;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * Test Class for DocTool Rule: R - 05914 - Do Not Update Approval Status Type
  * 
  * @author CWDS API Team
  */
-public class R05914DoNotUpdateApprovalStatusTypeTest {
+public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<ClientAddress> {
+
   private ScreeningToReferralService screeningToReferralService;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   private ReferralService referralService;
   private ClientService clientService;
@@ -151,6 +150,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
    */
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
+  @Override
   @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
@@ -229,7 +229,6 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
     childClientService = new ChildClientService(childClientDao, riChildClient);
 
     assignmentDao = mock(AssignmentDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     caseLoadDao = mock(CaseLoadDao.class);
@@ -240,16 +239,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
         triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 
-    reminders = mock(Reminders.class);
-    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
     participantService = mock(ParticipantService.class);
-
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
-
   }
 
   /**

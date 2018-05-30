@@ -4,12 +4,26 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+import java.util.Set;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -19,7 +33,6 @@ import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
@@ -27,10 +40,10 @@ import gov.ca.cwds.data.cms.LongTextDaoImpl;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressEntityBuilder;
@@ -75,7 +88,6 @@ import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
-import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
@@ -88,23 +100,14 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 import io.dropwizard.jackson.Jackson;
-import java.util.Date;
-import java.util.Set;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * 
  * @author CWDS API Team
  */
-public class R05559SetPrimaryContactStaffPersonIdTest {
+public class R05559SetPrimaryContactStaffPersonIdTest extends Doofenshmirtz<ClientAddress> {
 
   private ScreeningToReferralService screeningToReferralService;
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -125,6 +128,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -133,7 +137,6 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private RIReporter riReporter;
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
-  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private ReferralDao referralDao;
   private ClientDao clientDao;
@@ -152,15 +155,12 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private DrmsDocumentDao drmsDocumentDao;
-  private SsaName3Dao ssaName3Dao;
-  private Reminders reminders;
   private UpperCaseTables upperCaseTables;
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
   private AssignmentUnitDao assignmentUnitDao;
   private CwsOfficeDao cwsOfficeDao;
   private MessageBuilder messageBuilder;
-  private ClientRelationshipDao clientRelationshipDao;
 
   private gov.ca.cwds.data.persistence.cms.Referral referral;
   private Validator validator;
@@ -177,24 +177,17 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   /**
    * @throws Exception - Exception
    */
+  @Override
   @Before
   public void setup() throws Exception {
+    setup();
     new TestingRequestExecutionContext("02f");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    referralDao = mock(ReferralDao.class);
-    nonLACountyTriggers = mock(NonLACountyTriggers.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-
-    clientDao = mock(ClientDao.class);
-    ssaName3Dao = mock(SsaName3Dao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
     referralClientDao = mock(ReferralClientDao.class);
     riReferralClient = mock(RIReferralClient.class);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
@@ -254,17 +247,10 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     when(participantService.saveParticipants(any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
-    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-
     referralService =
         new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
-
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService, validator, referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
-        clientRelationshipDao);
   }
 
   /**
