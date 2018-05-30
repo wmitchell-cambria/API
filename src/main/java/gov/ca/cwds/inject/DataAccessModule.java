@@ -397,8 +397,6 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientUcDao.class);
     bind(CmsDocReferralClientDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
-    bind(CrossReportDao.class);
-    bind(CwsOfficeDao.class);
     bind(DeliveredServiceDao.class);
     bind(DrmsDocumentDao.class);
     bind(DrmsDocumentTemplateDao.class);
