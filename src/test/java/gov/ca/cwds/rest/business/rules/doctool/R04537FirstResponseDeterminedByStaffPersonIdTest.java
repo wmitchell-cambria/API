@@ -180,7 +180,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest extends Doofenshmi
   @Override
   @Before
   public void setup() throws Exception {
-    setup();
+    super.setup();
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 

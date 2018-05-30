@@ -134,7 +134,6 @@ public class ReferralService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Referral find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Referral persistedReferral = referralDao.find(primaryKey);
     if (persistedReferral != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Referral(persistedReferral);
@@ -265,13 +264,13 @@ public class ReferralService implements
         referral.setUiIdentifier(referralId);
         referral.setDrmsAllegationDescriptionDoc(screenerNarrativeId);
       }
+
       PostedReferral postedReferral = this.create(referral);
       referralId = postedReferral.getId();
 
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, strsMessageBuilder);
-
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
       referralId = screeningToReferral.getReferralId();
@@ -382,7 +381,7 @@ public class ReferralService implements
    * THEN  firstResponseDeterminedByStaffPersonId is set to the staffpersonId
    *
    * </pre>
-   *
+   * 
    * </blockquote>
    */
   private static String firstResponseDeterminedByStaffPersonId() {
@@ -436,7 +435,6 @@ public class ReferralService implements
 
   private String createLongText(String countySpecificCode, String textDescription,
       MessageBuilder messageBuilder) {
-
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);
 

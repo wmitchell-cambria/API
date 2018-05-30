@@ -130,7 +130,6 @@ public class R04464CrossReportLawEnforcementDue {
       Set<Allegation> allegations, Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports,
       Referral referral, Calendar dueDate) {
     for (Allegation allegation : allegations) {
-
       boolean needReminderCreated =
           needsReminderCreated(reminderCreated, persistedReporter, allegation);
 
@@ -184,4 +183,5 @@ public class R04464CrossReportLawEnforcementDue {
     LOGGER.info("crossReportForLawEnforcmentDue reminder is created");
     return reminderCreated;
   }
+
 }

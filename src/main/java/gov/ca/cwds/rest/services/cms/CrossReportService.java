@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 
 /**
- * Business layer object to work on {@link CrossReport}
+ * Business layer object to work on {@link CrossReport}.
  * 
  * @author CWDS API Team
  */
@@ -28,6 +28,7 @@ public class CrossReportService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(CrossReportService.class);
 
   private CrossReportDao crossReportDao;
+
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RICrossReport riCrossReport;
 
@@ -51,7 +52,6 @@ public class CrossReportService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.CrossReport find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.CrossReport persistedCrossReport =
         crossReportDao.find(primaryKey);
     if (persistedCrossReport != null) {

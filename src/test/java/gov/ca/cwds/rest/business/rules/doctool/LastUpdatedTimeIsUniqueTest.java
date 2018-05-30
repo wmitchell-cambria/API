@@ -127,6 +127,7 @@ public class LastUpdatedTimeIsUniqueTest
   @Override
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("0X5");
 
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);

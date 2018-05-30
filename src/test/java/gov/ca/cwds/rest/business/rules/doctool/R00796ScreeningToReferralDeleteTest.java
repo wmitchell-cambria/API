@@ -131,6 +131,7 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
   @Override
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 

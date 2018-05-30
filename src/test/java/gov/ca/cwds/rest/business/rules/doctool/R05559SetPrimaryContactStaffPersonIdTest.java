@@ -180,7 +180,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest extends Doofenshmirtz<Clie
   @Override
   @Before
   public void setup() throws Exception {
-    setup();
+    super.setup();
     new TestingRequestExecutionContext("02f");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 

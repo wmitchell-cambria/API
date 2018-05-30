@@ -25,20 +25,17 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDaoImpl;
-import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.CaseLoad;
@@ -135,9 +132,6 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
-  private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
   private ReporterDao reporterDao;
@@ -174,21 +168,19 @@ public class R00797SensitiveReferralAssignmentTest extends Doofenshmirtz<ClientA
   @Override
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("02f");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    clientDao = mock(ClientDao.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    referralClientDao = mock(ReferralClientDao.class);
     riReferralClient = mock(RIReferralClient.class);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
         laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
 
-    allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
 

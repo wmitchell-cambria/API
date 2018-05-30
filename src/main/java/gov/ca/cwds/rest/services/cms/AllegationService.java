@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.cms;
 
-import gov.ca.cwds.rest.business.rules.R06505ZippyAllegationStorage;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -14,13 +13,14 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.rest.api.domain.cms.PostedAllegation;
+import gov.ca.cwds.rest.business.rules.R06505ZippyAllegationStorage;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 
 /**
- * Business layer object to work on {@link Allegation}
+ * Business layer object to work on {@link Allegation}.
  *
  * @author CWDS API Team
  */
@@ -30,15 +30,15 @@ public class AllegationService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(AllegationService.class);
 
   private AllegationDao allegationDao;
-  // Used to implicitly check for referential Integrity. Better to find way to make explicit
-  @SuppressWarnings("unused")
+
+  // Used to implicitly check for referential Integrity. Better to find way to make explicit.
   private RIAllegation riAllegation;
 
   /**
    * Constructor
    *
-   * @param allegationDao The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Allegation}
-   * objects.
+   * @param allegationDao The {@link Dao} handling
+   *        {@link gov.ca.cwds.data.persistence.cms.Allegation} objects.
    * @param riAllegation the ri for allegation
    */
   @Inject
@@ -102,7 +102,7 @@ public class AllegationService implements
    * {@inheritDoc}
    *
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
-   * gov.ca.cwds.rest.api.Request)
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Allegation update(String primaryKey,

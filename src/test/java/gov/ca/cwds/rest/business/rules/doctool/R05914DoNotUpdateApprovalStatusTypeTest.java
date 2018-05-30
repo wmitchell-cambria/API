@@ -16,21 +16,17 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.AddressDao;
-import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
 import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
 import gov.ca.cwds.data.cms.CaseLoadDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.LongTextDaoImpl;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
@@ -100,6 +96,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
   private LongTextService longTextService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -110,10 +107,6 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private ReferralDao referralDao;
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
-  private AllegationDao allegationDao;
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   private CrossReportDao crossReportDao;
   private ReporterDao reporterDao;
@@ -141,7 +134,6 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
   private MessageBuilder messageBuilder;
   private ClientRelationshipDao clientRelationshipDao;
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -151,16 +143,15 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @Override
-  @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     longTextDao = mock(LongTextDaoImpl.class);
     longTextService = new LongTextService(longTextDao);
 
-    referralDao = mock(ReferralDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
@@ -179,16 +170,12 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
-    clientDao = mock(ClientDao.class);
-    staffpersonDao = mock(StaffPersonDao.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
     clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    referralClientDao = mock(ReferralClientDao.class);
     nonLACountyTriggers = mock(NonLACountyTriggers.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
@@ -197,7 +184,6 @@ public class R05914DoNotUpdateApprovalStatusTypeTest extends Doofenshmirtz<Clien
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
         laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
 
-    allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
 
