@@ -49,7 +49,7 @@ public class ScreeningResourceTest {
   @Test
   public void testCreate() throws Exception {
     Screening screening = new Screening("abc", "screening", "reference", "screeningDecision",
-        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5");
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
     int actualStatus =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(screening, MediaType.APPLICATION_JSON)).getStatus();
@@ -63,7 +63,7 @@ public class ScreeningResourceTest {
    */
   @Test
   public void testCreateInvalid() throws Exception {
-    Screening screening = new Screening("", "", "", "", "", "", LocalDateTime.now(), null, "0X5");
+    Screening screening = new Screening("", "", "", "", "", "", LocalDateTime.now(), null, "0X5", "");
     int actualStatus =
         inMemoryResource.client().target(ROOT_RESOURCE).request().accept(MediaType.APPLICATION_JSON)
             .post(Entity.entity(screening, MediaType.APPLICATION_JSON)).getStatus();
@@ -77,7 +77,7 @@ public class ScreeningResourceTest {
   @Test
   public void testUpdate() throws Exception {
     Screening screening = new Screening("abc", "screening", "reference", "screeningDecision",
-        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5");
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "ssb");
 
     int actualStatus = inMemoryResource.client().target(ROOT_RESOURCE + "abc").request()
         .accept(MediaType.APPLICATION_JSON)
@@ -93,7 +93,7 @@ public class ScreeningResourceTest {
    */
   @Test
   public void testUpdateInvalid() throws Exception {
-    Screening screening = new Screening("", "", "", "", "", "", LocalDateTime.now(), null, "0X5");
+    Screening screening = new Screening("", "", "", "", "", "", LocalDateTime.now(), null, "0X5", "");
 
     int actualStatus = inMemoryResource.client().target(ROOT_RESOURCE + "abc").request()
         .accept(MediaType.APPLICATION_JSON)

@@ -129,6 +129,9 @@ public class ScreeningEntity implements PersistentObject {
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<ParticipantEntity> participants = new HashSet<>();
 
+  @Column(name = "report_type")
+  private String reportType;
+
   /**
    * Default constructor
    *
@@ -166,12 +169,13 @@ public class ScreeningEntity implements PersistentObject {
    * @param contactAddress The contact address
    * @param participants The list of participants
    * @param assigneeStaffId The staffId of assignee
+   * @param reportType report type
    */
   public ScreeningEntity(String id, String reference, LocalDateTime startedAt, LocalDateTime endedAt,
       String incidentCounty, LocalDate incidentDate, String locationType, String communicationMethod,
       String name, String responseTime, String screeningDecision, String screeningDecisionDetail,
       String narrative, Address contactAddress, String assigneeStaffId,
-      Set<ParticipantEntity> participants) {
+      Set<ParticipantEntity> participants, String reportType) {
     super();
     this.id = id;
     this.reference = reference;
@@ -188,6 +192,7 @@ public class ScreeningEntity implements PersistentObject {
     this.safetyAlerts = new String[1];
     this.assigneeStaffId = assigneeStaffId;
     this.participants = participants;
+    this.reportType = reportType;
   }
 
   /**
@@ -498,6 +503,14 @@ public class ScreeningEntity implements PersistentObject {
 
   public void setParticipants(Set<ParticipantEntity> participants) {
     this.participants = participants;
+  }
+
+  public String getReportType() {
+    return reportType;
+  }
+
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
   }
 
   /**

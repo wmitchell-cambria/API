@@ -105,7 +105,7 @@ public class ScreeningSummaryTest {
     ScreeningEntity screeningEntity =
         new ScreeningEntity(null, referrence, startedAt, endedAt, incidentCounty,
             incidentDate, locationType, communicationMethod, name, responseTime, screeningDecision,
-            null, narrative, screeningAddress, null, participantEntities);
+            null, narrative, screeningAddress, null, participantEntities, "ssb");
 
     ScreeningSummary screeningSummary = new ScreeningSummary(screeningEntity, simpleAllegations);
     assertThat(screeningSummary.getName(), is(equalTo(screeningEntity.getName())));

@@ -20,6 +20,7 @@
   "access_restrictions": "acc",
   "restrictions_rationale": "res",
   "report_narrative": "tsrgdhr",
+  "report_type": "csec",
   "safety_alerts": [
     "Dangerous Environment",
     "Hostile"
