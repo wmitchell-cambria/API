@@ -19,7 +19,7 @@ import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.rest.api.domain.Csec;
+import gov.ca.cwds.rest.core.FerbConstants;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +51,6 @@ import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
-import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.Role;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -211,7 +210,9 @@ public class ParticipantServiceTest {
 
   @Test
   public void testCsecIsUpdated() {
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().createScreeningToReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC).createScreeningToReferral();
+
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     verify(csecHistoryService).updateCsecHistoriesByClientId(
@@ -242,6 +243,64 @@ public class ParticipantServiceTest {
   }
 
   @Test
+  public void testCsecIsNotUpdatedForNotSupportedReportType() {
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType("").createScreeningToReferral();
+
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+
+    verify(csecHistoryService, times(0)).updateCsecHistoriesByClientId(any(), any());
+  }
+
+  @Test
+  public void testCsecIsNull() {
+    Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
+    victimParticipant.setCsecs(null);
+
+    checkCsecEmptyMessage(victimParticipant);
+  }
+
+  @Test
+  public void testCsecIsEmpty() {
+    Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
+    victimParticipant.setCsecs(new ArrayList<>());
+
+    checkCsecEmptyMessage(victimParticipant);
+  }
+
+  private void checkCsecEmptyMessage(Participant victimParticipant) {
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
+
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC)
+        .setParticipants(participants).createScreeningToReferral();
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+
+    assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
+        .collect(Collectors.toList())
+        .contains("CSEC data is empty"));
+  }
+
+  @Test
+  public void testCsecStartDateIsNotFound() {
+    Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
+    victimParticipant.getCsecs().get(0).setStartDate(null);
+
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
+
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC)
+        .setParticipants(participants).createScreeningToReferral();
+    participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
+
+    assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
+        .collect(Collectors.toList())
+        .contains("CSEC start date is not found for code: -2"));
+  }
+
+  @Test
   public void testCsecCodeIdIsNotFound() {
     Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
     victimParticipant.getCsecs().get(0).setCsecCodeId(null);
@@ -249,8 +308,9 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().
-        setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC)
+        .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
@@ -266,8 +326,9 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().
-        setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC)
+        .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
@@ -285,8 +346,9 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder().
-        setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.CSEC)
+        .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())

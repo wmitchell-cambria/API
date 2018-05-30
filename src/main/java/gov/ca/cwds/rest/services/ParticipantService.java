@@ -8,6 +8,7 @@ import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.core.FerbConstants;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -85,16 +86,16 @@ public class ParticipantService implements CrudsService {
 
   /**
    * Constructor
-   * 
-   * @param clientService clientService
-   * @param referralClientService referralClientService
-   * @param reporterService reporterService
-   * @param childClientService childClientService
-   * @param clientAddressService clientAddressService
-   * @param validator validator
+   *
+   * @param clientService             clientService
+   * @param referralClientService     referralClientService
+   * @param reporterService           reporterService
+   * @param childClientService        childClientService
+   * @param clientAddressService      clientAddressService
+   * @param validator                 validator
    * @param clientScpEthnicityService clientScpEthnicityService
-   * @param caseDao caseDao
-   * @param referralClientDao referralClientDao
+   * @param caseDao                   caseDao
+   * @param referralClientDao         referralClientDao
    */
   @Inject
   public ParticipantService(ClientService clientService,
@@ -125,9 +126,9 @@ public class ParticipantService implements CrudsService {
 
   /**
    * @param screeningToReferral - screeningToReferral
-   * @param dateStarted - dateStarted
-   * @param referralId - referralId
-   * @param messageBuilder - messageBuilder
+   * @param dateStarted         - dateStarted
+   * @param referralId          - referralId
+   * @param messageBuilder      - messageBuilder
    * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
@@ -163,7 +164,7 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
-              && !ParticipantValidator.selfReported(incomingParticipant));
+          && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
         saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
             role);
@@ -205,7 +206,7 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs());
+        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(), screeningToReferral.getReportType());
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -406,7 +407,7 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder, List<Csec> csecs) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder, List<Csec> csecs, String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -414,6 +415,29 @@ public class ParticipantService implements CrudsService {
       exsistingChild = this.childClientService.create(childClient);
     }
 
+    if (FerbConstants.ReportType.CSEC.equals(reportType) && validateCsec(csecs, messageBuilder)) {
+      saveOrUpdateCsec(clientId, csecs, messageBuilder);
+    }
+
+    return exsistingChild;
+  }
+
+  private boolean validateCsec(List<Csec> csecs, MessageBuilder messageBuilder) {
+    if (csecs == null || csecs.isEmpty()) {
+      messageBuilder.addError("CSEC data is empty", ErrorMessage.ErrorType.VALIDATION);
+      return false;
+    }
+    for (Csec csec : csecs) {
+      if (null == csec.getStartDate()) {
+        messageBuilder.addError("CSEC start date is not found for code: " + csec.getCsecCodeId(),
+            ErrorMessage.ErrorType.VALIDATION);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private void saveOrUpdateCsec(String clientId, List<Csec> csecs, MessageBuilder messageBuilder) {
     List<CsecHistory> csecHistories = new ArrayList<>();
     for (Csec csec : csecs) {
       String csecCodeId = csec.getCsecCodeId();
@@ -444,8 +468,6 @@ public class ParticipantService implements CrudsService {
     }
 
     csecHistoryService.updateCsecHistoriesByClientId(clientId, csecHistories);
-
-    return exsistingChild;
   }
 
   /*

@@ -92,7 +92,7 @@ public class ScreeningTransformer {
         FILED_WITH_LAW_ENFORCEMENT, RESPONSIBLE_AGENCY, limitedAccessCode,
         screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
         screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
-        crossReports, allegations);
+        crossReports, allegations, screening.getReportType());
 
   }
 
