@@ -345,6 +345,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     final List<CmsDocumentBlobSegment> blobs = new ArrayList<>();
     File src = null;
     File tgt = null;
+
+    // NEXT: pass memory reference or object instead of a temporary file.
+    // If nothing else, create a RAM drive for temporary files.
     try {
       src = File.createTempFile("src", ".doc");
       src.deleteOnExit();

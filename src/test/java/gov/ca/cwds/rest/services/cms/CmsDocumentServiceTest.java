@@ -3,17 +3,13 @@ package gov.ca.cwds.rest.services.cms;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,23 +144,6 @@ public class CmsDocumentServiceTest extends Doofenshmirtz<CmsDocument> {
     CmsDocument doc = new CmsDocument();
     List<CmsDocumentBlobSegment> blobs = new ArrayList<CmsDocumentBlobSegment>();
     target.insertBlobs(doc, blobs);
-  }
-
-  @Test
-  public void getConnection_A$() throws Exception {
-    Connection actual = target.getConnection();
-    Connection expected = null;
-    assertThat(actual, is(not(0)));
-  }
-
-  @Test
-  public void getConnection_A$_T$SQLException() throws Exception {
-    try {
-      when(sessionFactoryImplementor.getSessionFactoryOptions()).thenThrow(SQLException.class);
-      target.getConnection();
-      fail("Expected exception was not thrown!");
-    } catch (SQLException e) {
-    }
   }
 
   @Test
