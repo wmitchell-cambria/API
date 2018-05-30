@@ -33,6 +33,7 @@
       <column name="restrictions_date" valueDate="2018-03-26"/>
       <column name="indexable" value="false"/>
       <column name="curr_loc_of_children" value="Home with father mother"/>
+      <column name="report_type" value="ssb"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="714"/>
@@ -59,6 +60,7 @@
       <column name="restrictions_date"/>
       <column name="indexable" valueBoolean="true"/>
       <column name="curr_loc_of_children"/>
+      <column name="report_type" value="ssb"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="750"/>
@@ -85,6 +87,7 @@
       <column name="restrictions_date"/>
       <column name="indexable" valueBoolean="true"/>
       <column name="curr_loc_of_children"/>
+      <column name="report_type" value="ssb"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="862"/>
@@ -111,6 +114,7 @@
       <column name="restrictions_date"/>
       <column name="indexable"/>
       <column name="curr_loc_of_children"/>
+      <column name="report_type" value="ssb"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="885"/>
@@ -137,6 +141,7 @@
       <column name="restrictions_date"/>
       <column name="indexable"/>
       <column name="curr_loc_of_children"/>
+      <column name="report_type" value="ssb"/>
     </insert>
   </changeSet>
 </databaseChangeLog>

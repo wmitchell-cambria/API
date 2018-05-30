@@ -29,11 +29,12 @@ public class ScreeningEntityBuilder {
   private Address contactAddress;
   private String assigneeStaffId = DEFAULT_ASSIGNEE_STAFF_ID;
   private Set<ParticipantEntity> participants = new HashSet<>();
+  private String reportType = "ssb";
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
         locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
-        narrative, contactAddress, assigneeStaffId, participants);
+        narrative, contactAddress, assigneeStaffId, participants, reportType);
   }
 
   public ScreeningEntityBuilder setId(String id) {
