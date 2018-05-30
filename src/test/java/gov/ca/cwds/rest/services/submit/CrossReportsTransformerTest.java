@@ -15,6 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
 import gov.ca.cwds.fixture.GovernmentAgencyResourceBuilder;
@@ -33,6 +35,12 @@ public class CrossReportsTransformerTest {
   private Map<String, IntakeLov> nsCodeToNsLovMap;
   private Map<String, IntakeLov> cmsSysIdToNsLovMap;
   private CrossReportIntake crossReportIntake;
+
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
 
   @Rule
@@ -72,8 +80,7 @@ public class CrossReportsTransformerTest {
     Set<CrossReportIntake> nsCrossReports =
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
-    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports,
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports);
     assertEquals(actual, expected);
   }
 
@@ -87,8 +94,7 @@ public class CrossReportsTransformerTest {
     Set<CrossReportIntake> nsCrossReports =
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
-    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports,
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports);
     assertEquals(actual, expected);
   }
 
@@ -97,14 +103,13 @@ public class CrossReportsTransformerTest {
     crossReportIntake.setMethod("Electronic Report");
     crossReportIntake.setCountyId(null);
 
-    CrossReport crossReport = new CrossReportResourceBuilder().setCountyId("34")
+    CrossReport crossReport = new CrossReportResourceBuilder()
         .setInformDate("2017-03-15T00:00:00.000Z").setCountyId(null).createCrossReport();
 
     Set<CrossReportIntake> nsCrossReports =
         Stream.of(crossReportIntake).collect(Collectors.toSet());
     Set<CrossReport> expected = Stream.of(crossReport).collect(Collectors.toSet());
-    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports,
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    Set<CrossReport> actual = new CrossReportsTransformer().transform(nsCrossReports);
     assertEquals(actual, expected);
   }
 }

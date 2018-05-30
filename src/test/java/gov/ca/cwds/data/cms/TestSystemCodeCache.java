@@ -33,7 +33,7 @@ public class TestSystemCodeCache implements SystemCodeCache {
           null, null);
     }
     if (1101 == systemCodeId.intValue()) {
-      return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", "34",
+      return new SystemCode(systemCodeId.shortValue(), null, null, null, "Sacramento", "34", null,
           null, null);
     }
     return null;

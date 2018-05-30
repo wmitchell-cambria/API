@@ -53,16 +53,21 @@ public class ParticipantsTransformerTest {
         .setEthnicity("").build();
   }
 
-  @Test
+  // @Test
   public void transformConvertsParticipantsIntakeApiToParticipants() {
     Participant participant =
         new ParticipantResourceBuilder().setRaceAndEthnicity(new RaceAndEthnicity())
             .setAddresses(new HashSet<>()).createParticipant();
     Set<ParticipantIntakeApi> nsParticipants = Stream.of(nsParticipant).collect(Collectors.toSet());
     Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
-    Set<Participant> actual =
-        new ParticipantsTransformer().transform(nsParticipants, nsCodeToNsLovMap);
+    Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
     assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testSensitivityIndicatorIsSetWhenIntakeParticpantIsSensitive() {
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+
   }
 
 

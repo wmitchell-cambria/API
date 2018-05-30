@@ -1,12 +1,11 @@
 package gov.ca.cwds.rest.services.submit;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 
 /**
  * Business layer object to transform an NS {@link AddressIntakeApi } to an {@link Address}
@@ -15,17 +14,24 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
  */
 public class AddressTransformer {
 
-  public Address transform(AddressIntakeApi addressIntake,
-      Map<String, IntakeLov> nsCodeToNsLovMap) {
-    Integer state = StringUtils.isNotBlank(addressIntake.getState())
-        ? nsCodeToNsLovMap.get(addressIntake.getState()).getLegacySystemCodeId().intValue()
+  /**
+   * @param addressIntake - addressIntake
+   * @return the {@link Address}
+   */
+  public Address transform(AddressIntakeApi addressIntake) {
+
+    Integer state = StringUtils.isNotBlank(addressIntake.getState()) ? IntakeCodeCache.global()
+        .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.STATE_CODE, addressIntake.getState())
+        .intValue() : null;
+    Integer addressType = StringUtils.isNotBlank(addressIntake.getType())
+        ? IntakeCodeCache.global()
+            .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.ADDRESS_TYPE,
+                addressIntake.getType())
+            .intValue()
         : null;
-    Integer type =
-        StringUtils.isNotBlank(addressIntake.getType()) ? Integer.valueOf(addressIntake.getType())
-            : null;
     return new Address(addressIntake.getLegacySourceTable(), addressIntake.getLegacyId(),
         addressIntake.getStreetAddress(), addressIntake.getCity(), state, addressIntake.getZip(),
-        type, addressIntake.getLegacyDescriptor());
+        addressType, addressIntake.getLegacyDescriptor());
   }
 
 }

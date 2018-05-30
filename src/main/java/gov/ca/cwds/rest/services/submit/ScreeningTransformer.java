@@ -1,19 +1,20 @@
 package gov.ca.cwds.rest.services.submit;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 
 /**
@@ -31,45 +32,42 @@ public class ScreeningTransformer {
   private static final Short APPROVAL_STATUS =
       SystemCodeCache.global().getSystemCodeId("Request Not Submitted", "APV_STC");
 
+  /**
+   * @param screening - screening
+   * @param loggedInStaffId - loggedInStaffId
+   * @param loggedInStaffCounty - loggedInStaffCounty
+   * @return the screening
+   */
   public ScreeningToReferral transform(Screening screening, String loggedInStaffId,
-      String loggedInStaffCounty, Map<String, IntakeLov> nsLovMap,
-      Map<String, IntakeLov> cmsSysIdToNsLovMap) {
+      String loggedInStaffCounty) {
     screening.setAssigneeStaffId(loggedInStaffId);
-    return createScreeningToReferralWithDefaults(screening, loggedInStaffCounty, nsLovMap,
-        cmsSysIdToNsLovMap);
+    return createScreeningToReferralWithDefaults(screening, loggedInStaffCounty);
   }
 
   private ScreeningToReferral createScreeningToReferralWithDefaults(Screening screening,
-      String loggedInStaffCounty, Map<String, IntakeLov> nsCodeToNsLovMap,
-      Map<String, IntakeLov> cmsSysIdToNsLovMap) {
+      String loggedInStaffCounty) {
     Set<Allegation> allegations =
-        new AllegationsTransformer().transform(screening.getAllegations(), nsCodeToNsLovMap);
-    String communicationMethod = screening.getCommunicationMethod();
-    Short communicationMethodSysId = StringUtils.isNotBlank(communicationMethod)
-        ? nsCodeToNsLovMap.get(communicationMethod).getLegacySystemCodeId().shortValue()
-        : null;
-    String responseTime = screening.getScreeningDecisionDetail();
-    Short responseTimeSysId = StringUtils.isNotBlank(responseTime)
-        ? nsCodeToNsLovMap.get(responseTime).getLegacySystemCodeId().shortValue()
-        : null;
+        new AllegationsTransformer().transform(screening.getAllegations());
+    Short communicationMethodSysId = setCommunicationMethod(screening);
+    Short responseTimeSysId = setReferralResponse(screening);
     String limitedAccessCode = StringUtils.isNotBlank(screening.getAccessRestrictions())
         ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
             .getCmsDescription()
         : "N";
     Date limitedAccessDate = setLimitedAccesDate(screening);
     Address address = (screening.getIncidentAddress() != null)
-        ? new AddressTransformer().transform(screening.getIncidentAddress(), nsCodeToNsLovMap)
+        ? new AddressTransformer().transform(screening.getIncidentAddress())
         : null;
-    Set<Participant> participants =
-        (screening.getParticipantIntakeApis() != null) ? new ParticipantsTransformer()
-            .transform(screening.getParticipantIntakeApis(), nsCodeToNsLovMap) : null;
+    Set<Participant> participants = (screening.getParticipantIntakeApis() != null)
+        ? new ParticipantsTransformer().transform(screening.getParticipantIntakeApis())
+        : null;
 
-    Set<CrossReport> crossReports =
-        (screening.getCrossReports() != null) ? new CrossReportsTransformer()
-            .transform(screening.getCrossReports(), nsCodeToNsLovMap, cmsSysIdToNsLovMap) : null;
+    Set<CrossReport> crossReports = (screening.getCrossReports() != null)
+        ? new CrossReportsTransformer().transform(screening.getCrossReports())
+        : null;
 
-    return new ScreeningToReferral(Integer.parseInt(screening.getId()), LEGACY_SOURCE_TABLE,
-        screening.getReferralId(),
+    return new ScreeningToReferral(Integer.parseInt(screening.getId()),
+        LegacyTable.REFERRAL.getName(), screening.getReferralId(),
         DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt())),
         screening.getIncidentCounty(), screening.getIncidentDate(), screening.getLocationType(),
         communicationMethodSysId, CURRENT_LOCATION_OF_CHILDREN, screening.getName(),
@@ -82,6 +80,20 @@ public class ScreeningTransformer {
         screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
         screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
         crossReports, allegations);
+  }
+
+  private Short setReferralResponse(Screening screening) {
+    String responseTime = screening.getScreeningDecisionDetail();
+    return StringUtils.isNotBlank(responseTime) ? IntakeCodeCache.global()
+        .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.REFERRAL_RESPONSE, responseTime)
+        : null;
+  }
+
+  private Short setCommunicationMethod(Screening screening) {
+    return StringUtils.isNotBlank(screening.getCommunicationMethod())
+        ? IntakeCodeCache.global().getLegacySystemCodeForIntakeCode(
+            SystemCodeCategoryId.COMMUNICATION_METHOD, screening.getCommunicationMethod())
+        : null;
   }
 
   private Date setLimitedAccesDate(Screening screening) {
