@@ -57,7 +57,7 @@ public enum CalendarEnum {
 
     CalendarEnum calendarEnum = null;
     for (CalendarEnum ce : CalendarEnum.values()) {
-      if (ce.getName().equals(calendar.trim())) {
+      if (ce.getDescription().equals(calendar.trim())) {
         calendarEnum = ce;
         break;
       }

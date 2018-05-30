@@ -70,10 +70,11 @@ public class ParticipantsTransformer {
   }
 
   private String setApproximateAgeUnit(ParticipantIntakeApi p) {
+    String ageUnit = null;
     if (StringUtils.isNotBlank(p.getApproximateAgeUnits())) {
-      CalendarEnum.lookUpByDescription(p.getApproximateAgeUnits());
+      ageUnit = CalendarEnum.lookUpByDescription(p.getApproximateAgeUnits()).getName();
     }
-    return null;
+    return ageUnit;
   }
 
   private String setSensitivityIndicator(ParticipantIntakeApi p) {

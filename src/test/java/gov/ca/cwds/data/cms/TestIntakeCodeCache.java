@@ -44,8 +44,11 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
         && "Electronic Report".contains(intakeCode)) {
       return 2095;
     }
-    if (SystemCodeCategoryId.LANGUAGE_CODE.contains(metaId) && "Cambodian".contains(intakeCode)) {
-      return 1251;
+    if (SystemCodeCategoryId.LANGUAGE_CODE.contains(metaId) && "English".contains(intakeCode)) {
+      return 1253;
+    }
+    if (SystemCodeCategoryId.LANGUAGE_CODE.contains(metaId) && "Russian".contains(intakeCode)) {
+      return 1271;
     }
     if (SystemCodeCategoryId.INJURY_HARM_TYPE.contains(metaId)
         && "General neglect".contains(intakeCode)) {

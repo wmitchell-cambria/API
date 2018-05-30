@@ -23,12 +23,9 @@ public class AddressTransformer {
     Integer state = StringUtils.isNotBlank(addressIntake.getState()) ? IntakeCodeCache.global()
         .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.STATE_CODE, addressIntake.getState())
         .intValue() : null;
-    Integer addressType = StringUtils.isNotBlank(addressIntake.getType())
-        ? IntakeCodeCache.global()
-            .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.ADDRESS_TYPE,
-                addressIntake.getType())
-            .intValue()
-        : null;
+    Integer addressType =
+        StringUtils.isNotBlank(addressIntake.getType()) ? Integer.valueOf(addressIntake.getType())
+            : null;
     return new Address(addressIntake.getLegacySourceTable(), addressIntake.getLegacyId(),
         addressIntake.getStreetAddress(), addressIntake.getCity(), state, addressIntake.getZip(),
         addressType, addressIntake.getLegacyDescriptor());
