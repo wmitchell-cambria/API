@@ -35,7 +35,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
         new ConcurrentHashMap<>();
 
     public void register(RequestExecutionContextCallback callback) {
-      callbacks.put(callback.key(), callback);
+      callbacks.putIfAbsent(callback.key(), callback);
     }
 
     public void startRequest(RequestExecutionContext ctx) {
@@ -65,7 +65,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    */
   static void register(RequestExecutionContext ctx) {
     pegged.set(ctx);
-    callbackRegistry.endRequest(ctx);
+    callbackRegistry.startRequest(ctx);
   }
 
   /**
@@ -74,7 +74,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
   static void remove() {
     final RequestExecutionContext ctx = pegged.get();
     pegged.remove();
-    callbackRegistry.startRequest(ctx);
+    callbackRegistry.endRequest(ctx);
   }
 
   /**

@@ -41,19 +41,20 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   /**
-   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with the default constructor.
+   * Creates a new <b>@XAUnitOfWork</b>-aware proxy of a class with the default constructor.
    *
    * @param clazz the specified class definition
    * @param <T> the type of the class
    * @return a new proxy
    * @throws CaresXAException on database error
+   * @see #create(Class, Class[], Object[])
    */
   public <T> T create(Class<T> clazz) throws CaresXAException {
     return create(clazz, new Class<?>[] {}, new Object[] {});
   }
 
   /**
-   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with an one-parameter constructor.
+   * Creates a new <b>@XAUnitOfWork</b>-aware proxy of a class with an one-parameter constructor.
    *
    * @param clazz the specified class definition
    * @param constructorParamType the type of the constructor parameter
@@ -61,6 +62,7 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @param <T> the type of the class
    * @return a new proxy
    * @throws CaresXAException on database error
+   * @see #create(Class, Class[], Object[])
    */
   public <T> T create(Class<T> clazz, Class<?> constructorParamType, Object constructorArguments)
       throws CaresXAException {
@@ -69,7 +71,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   /**
-   * Creates a new <b>@XAUnitOfWork</b> aware proxy of a class with a complex constructor.
+   * Creates a new <b>@XAUnitOfWork</b>-aware proxy of a class by reflection.
    * 
    * <p>
    * In AOP terms, this wrapper method follows the <strong>"around"</strong> protocol by starting

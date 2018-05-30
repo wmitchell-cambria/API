@@ -29,9 +29,9 @@ public class XAUnitOfWorkAspect {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAspect.class);
 
-  private XAUnitOfWork xaUnitOfWork;
+  private final UserTransaction txn = new UserTransactionImp();
 
-  private UserTransaction txn = new UserTransactionImp();
+  private XAUnitOfWork xaUnitOfWork;
 
   private ImmutableMap<String, SessionFactory> sessionFactories;
 
@@ -109,7 +109,6 @@ public class XAUnitOfWorkAspect {
    * Close open sessions, set transaction to null.
    */
   public void onFinish() {
-    txn = null;
     closeSessions();
   }
 
