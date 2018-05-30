@@ -39,11 +39,12 @@ public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
     if (intakeCodes == null || intakeCodes.isEmpty()) {
       return new HashMap<>();
     }
-    @SuppressWarnings("unchecked") final Query<IntakeLOVCodeEntity> query = this.getSessionFactory()
-        .getCurrentSession()
+    @SuppressWarnings("unchecked")
+    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
         .setParameter("intakeCodes", intakeCodes);
     return query.list().stream()
         .collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
   }
+
 }

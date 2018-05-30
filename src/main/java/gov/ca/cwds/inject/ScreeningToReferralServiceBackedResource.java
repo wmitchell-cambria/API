@@ -21,4 +21,3 @@ import com.google.inject.BindingAnnotation;
 public @interface ScreeningToReferralServiceBackedResource {
 
 }
-

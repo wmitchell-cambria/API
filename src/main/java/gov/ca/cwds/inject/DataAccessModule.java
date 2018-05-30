@@ -94,6 +94,7 @@ import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.ns.LanguageDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.data.ns.ParticipantAddressesDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
@@ -115,6 +116,7 @@ import gov.ca.cwds.data.ns.xa.XaNsAllegationDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsCrossReportDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsCsecDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsIntakeLOVCodeDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsPaperTrailDaoImpl;
@@ -446,21 +448,14 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsStaffPersonDaoImpl.class);
 
     // NS:
-    // bind(CsecDao.class);
-    // bind(AgencyDao.class);
-    // bind(AllegationIntakeDao.class);
-    // bind(ParticipantDao.class);
-    // bind(PhoneNumberDao.class);
     bind(LanguageDao.class);
     bind(PersonAddressDao.class);
     bind(PersonPhoneDao.class);
     bind(PersonLanguageDao.class);
-    bind(PersonEthnicityDao.class);
-    bind(EthnicityDao.class);
-    bind(PersonRaceDao.class);
-    bind(RaceDao.class);
-    bind(IntakeLOVCodeDao.class);
-    bind(IntakeLovDao.class);
+    bind(PersonEthnicityDao.class); // obsolete table?
+    bind(EthnicityDao.class); // obsolete table?
+    bind(PersonRaceDao.class); // obsolete table?
+    bind(RaceDao.class); // obsolete table?
 
     // NS XA:
     bind(AddressDao.class).to(XaNsAddressDaoImpl.class);
@@ -470,8 +465,9 @@ public class DataAccessModule extends AbstractModule {
     bind(AllegationIntakeDao.class).to(XaNsAllegationIntakeDaoImpl.class);
     bind(gov.ca.cwds.data.ns.CrossReportDao.class).to(XaNsCrossReportDaoImpl.class);
     bind(CsecDao.class).to(XaNsCsecDaoImpl.class);
-    bind(XaNsIntakeLovDaoImpl.class);
-    bind(XaNsLegacyDescriptorDaoImpl.class);
+    bind(IntakeLOVCodeDao.class).to(XaNsIntakeLOVCodeDaoImpl.class);
+    bind(IntakeLovDao.class).to(XaNsIntakeLovDaoImpl.class);
+    bind(LegacyDescriptorDao.class).to(XaNsLegacyDescriptorDaoImpl.class);
     bind(PaperTrailDao.class).to(XaNsPaperTrailDaoImpl.class);
     bind(ParticipantAddressesDao.class).to(XaNsParticipantAddressesDaoImpl.class);
     bind(ParticipantDao.class).to(XaNsParticipantDaoImpl.class);
