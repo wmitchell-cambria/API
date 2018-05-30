@@ -279,6 +279,7 @@ public class ReferralService implements
         strsMessageBuilder.addMessageAndLog(message, new ServiceException(message), LOGGER);
       }
     }
+
     return referralId;
   }
 
@@ -354,7 +355,6 @@ public class ReferralService implements
     }
     return foundCode;
   }
-
 
   private void createReferralAddress(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
@@ -434,7 +434,6 @@ public class ReferralService implements
       MessageBuilder messageBuilder) {
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);
-
     messageBuilder.addDomainValidationError(validator.validate(longText));
 
     return postedLongText.getId();
@@ -497,15 +496,14 @@ public class ReferralService implements
     if (drmsTemplate != null) {
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
-      // Make Word doc from Template with new DOC_HANDLE etc.
+      // Make Word doc from Template with new DOC_HANDLE, etc.
+      final Date now = RequestExecutionContext.instance().getRequestStartTime();
+      final String docAuth = RequestExecutionContext.instance().getUserId();
 
-      Date now = new Date();
-      String docAuth = RequestExecutionContext.instance().getUserId();
-
-      SecureRandom random = new SecureRandom();
-      String docHandle = DocUtils.generateDocHandle(now, docAuth);
-      Short segments = 1;
-      Long docLength = 1L;
+      final SecureRandom random = new SecureRandom();
+      final String docHandle = DocUtils.generateDocHandle(now, docAuth);
+      final Short segments = 1;
+      final Long docLength = 1L;
 
       // TO1DO ??? The server name through which the document was added.
       String docServ = "AUTOCRTD";
@@ -531,7 +529,6 @@ public class ReferralService implements
 
       PostedDrmsDocument posted = drmsDocumentService.create(document);
       screenerNarrativeId = posted.getId();
-
     }
 
     return screenerNarrativeId;
