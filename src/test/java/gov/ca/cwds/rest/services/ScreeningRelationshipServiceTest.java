@@ -12,6 +12,8 @@ import gov.ca.cwds.data.persistence.ns.Relationship;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
 import java.io.Serializable;
 import java.util.Date;
+
+import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,18 +23,23 @@ public class ScreeningRelationshipServiceTest {
   private Relationship relationshipEntity;
   private Serializable serialized;
   private RelationshipDao relationshipDao;
+  private RelationshipMapper relationshipMapper;
 
   @Before
   public void setup(){
     relationshipDao = mock(RelationshipDao.class);
-    service = new ScreeningRelationshipService(relationshipDao);
+    relationshipMapper = RelationshipMapper.INSTANCE;
+    service = new ScreeningRelationshipService(relationshipDao, relationshipMapper);
     relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(), new Date());
-    relationship = new ScreeningRelationship("456", "XYZ", "SS2", 190);
+    relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190);
   }
 
   @Test
-  public void shouldReturnNullWhenFindIsCalled(){
-    assertNull(service.find(serialized));
+  public void shouldReturnScreeningRelationshipWhenFindIsCalled(){
+    when(relationshipDao.find(any())).thenReturn(relationshipEntity);
+    String id = "123";
+    assertEquals(service.find(id), relationship);
+    verify(relationshipDao).find(isA(String.class));
   }
 
   @Test

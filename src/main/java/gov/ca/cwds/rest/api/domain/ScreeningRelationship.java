@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Objects;
+
 public class ScreeningRelationship extends ReportingDomain implements Request {
   @JsonProperty("id")
   @ApiModelProperty(required = true, readOnly = false, value = "Screening Relationship Id",
@@ -85,5 +87,21 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     builder.append(",\n");
     builder.append('}');
     return builder.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ScreeningRelationship that = (ScreeningRelationship) o;
+    return relationshipType == that.relationshipType &&
+            Objects.equals(id, that.id) &&
+            Objects.equals(clientId, that.clientId) &&
+            Objects.equals(relativeId, that.relativeId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, clientId, relativeId, relationshipType);
   }
 }
