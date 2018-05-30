@@ -48,10 +48,8 @@ import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
-import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
@@ -131,8 +129,6 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
         laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
 
-    allegationDao = mock(AllegationDao.class);
-    riAllegation = mock(RIAllegation.class);
     allegationService = new AllegationService(allegationDao, riAllegation);
 
     allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
@@ -146,13 +142,8 @@ public class R00796ScreeningToReferralDeleteTest extends Doofenshmirtz<ClientAdd
 
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
-
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
-    clientAddressDao = mock(ClientAddressDao.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
-    riClientAddress = mock(RIClientAddress.class);
     clientAddressService =
         new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
