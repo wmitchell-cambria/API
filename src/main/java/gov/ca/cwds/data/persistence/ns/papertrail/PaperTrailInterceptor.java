@@ -81,7 +81,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-
     if (entity instanceof HasPaperTrail) {
       insertsTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }
@@ -92,7 +91,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-
     if (entity instanceof HasPaperTrail) {
       updatesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }
@@ -103,7 +101,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
-
     if (entity instanceof HasPaperTrail) {
       deletesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }

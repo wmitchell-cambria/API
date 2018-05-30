@@ -82,8 +82,6 @@ import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
 import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.data.ns.CsecDao;
@@ -94,15 +92,12 @@ import gov.ca.cwds.data.ns.LanguageDao;
 import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.PersonAddressDao;
-import gov.ca.cwds.data.ns.PersonDao;
 import gov.ca.cwds.data.ns.PersonEthnicityDao;
 import gov.ca.cwds.data.ns.PersonLanguageDao;
 import gov.ca.cwds.data.ns.PersonPhoneDao;
 import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
-import gov.ca.cwds.data.ns.ScreeningAddressDao;
-import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAgencyDaoImpl;
@@ -112,9 +107,11 @@ import gov.ca.cwds.data.ns.xa.XaNsCrossReportDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsCsecDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsPaperTrailDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsParticipantAddressesDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsParticipantDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsParticipantPhoneNumbersDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsPersonDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsPhoneNumbersDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
@@ -436,13 +433,13 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsStaffPersonDaoImpl.class);
 
     // NS:
-    bind(AddressDao.class);
-    bind(AddressesDao.class);
+    // bind(AddressDao.class);
+    // bind(AddressesDao.class);
     bind(CsecDao.class);
 
-    bind(PersonDao.class);
-    bind(ScreeningDao.class);
-    bind(ScreeningAddressDao.class);
+    // bind(PersonDao.class);
+    // bind(ScreeningDao.class);
+    // bind(ScreeningAddressDao.class);
     bind(AgencyDao.class);
     bind(gov.ca.cwds.data.ns.CrossReportDao.class);
     bind(AllegationIntakeDao.class);
@@ -458,7 +455,7 @@ public class DataAccessModule extends AbstractModule {
     bind(RaceDao.class);
     bind(IntakeLOVCodeDao.class);
     bind(IntakeLovDao.class);
-    bind(PaperTrailDao.class);
+    // bind(PaperTrailDao.class);
 
     // NS XA:
     bind(XaNsAddressDaoImpl.class);
@@ -470,9 +467,11 @@ public class DataAccessModule extends AbstractModule {
     bind(XaNsCsecDaoImpl.class);
     bind(XaNsIntakeLovDaoImpl.class);
     bind(XaNsLegacyDescriptorDaoImpl.class);
+    bind(PaperTrailDao.class).to(XaNsPaperTrailDaoImpl.class);
     bind(XaNsParticipantAddressesDaoImpl.class);
     bind(XaNsParticipantDaoImpl.class);
     bind(XaNsParticipantPhoneNumbersDaoImpl.class);
+    bind(XaNsPersonDaoImpl.class);
     bind(XaNsPhoneNumbersDaoImpl.class);
     bind(XaNsScreeningAddressDaoImpl.class);
     bind(XaNsScreeningDaoImpl.class);
