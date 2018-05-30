@@ -62,6 +62,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationPerpetratorHistoryDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAssignmentUnitDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseAssignmentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseDaoImpl;
@@ -388,7 +389,6 @@ public class DataAccessModule extends AbstractModule {
     bind(AddressUcDao.class);
     bind(AllegationDao.class);
     bind(AllegationPerpetratorHistoryDao.class);
-    bind(AssignmentDao.class);
     bind(AttorneyDao.class);
     bind(ChildClientDao.class);
     bind(ClientCollateralDao.class);
@@ -415,6 +415,7 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsAddressUcDaoImpl.class);
     bind(XaCmsAllegationDaoImpl.class);
     bind(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    bind(AssignmentDao.class).to(XaCmsAssignmentDaoImpl.class);
     bind(AssignmentUnitDao.class).to(XaCmsAssignmentUnitDaoImpl.class);
     bind(CaseDao.class).to(XaCmsCaseDaoImpl.class);
     bind(CaseLoadDao.class).to(XaCmsCaseLoadDaoImpl.class);
