@@ -6,7 +6,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Screening;
@@ -27,9 +26,6 @@ public class ScreeningSubmitService implements CrudsService {
 
   @Inject
   private ScreeningService screeningService;
-
-  @Inject
-  private IntakeLovDao intakeLovDao;
 
   @Inject
   private ScreeningToReferralService screeningToReferralService;

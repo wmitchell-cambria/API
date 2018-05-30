@@ -22,8 +22,8 @@ import org.mockito.MockitoAnnotations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.fixture.ScreeningResourceBuilder;
 import gov.ca.cwds.rest.api.Response;
@@ -53,8 +53,6 @@ public class ScreeningSubmitServiceTest {
   @Mock
   private ScreeningService screenigService;
   @Mock
-  private IntakeLovDao intakeLovDao;
-  @Mock
   private ScreeningToReferralService screeningToReferralService;
   @Mock
   private StaffPersonService staffPersonService;
@@ -66,6 +64,8 @@ public class ScreeningSubmitServiceTest {
    * Initialize system code cache
    */
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
 
   @SuppressWarnings("javadoc")
@@ -103,8 +103,6 @@ public class ScreeningSubmitServiceTest {
     intakeLovs.add(intakeLovInPerson);
     intakeLovs.add(intakeLovCountyCode);
     intakeLovs.add(intakeLovResponseTime);
-
-    when(intakeLovDao.findAll()).thenReturn(intakeLovs);
 
     ScreeningToReferral screeningToReferral = mock(ScreeningToReferral.class);
     when(screeningToReferral.getReferralId()).thenReturn("ABC1234567");

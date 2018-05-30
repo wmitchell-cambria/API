@@ -36,7 +36,7 @@ public class CrossReportsTransformer {
           : null;
 
       SystemCode systemCode = StringUtils.isNotBlank(nsCrossReport.getCountyId())
-          ? SystemCodeCache.global().getSystemCode(Integer.parseInt(nsCrossReport.getCountyId()))
+          ? SystemCodeCache.global().getSystemCode(Integer.valueOf(nsCrossReport.getCountyId()))
           : null;
       String county = systemCode != null ? systemCode.getLogicalId() : null;
 
