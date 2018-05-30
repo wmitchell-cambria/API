@@ -63,7 +63,7 @@ public class ParticipantsTransformer {
           p.getNameSuffix(), gender, ssn, dob, primaryLanguage, secondayLanguage,
           Integer.parseInt(p.getScreeningId()), reporterConfidentialWaiver, reporterEmployerName,
           clientStaffPersonAdded, setSensitivityIndicator(p), p.getApproximateAge(),
-          setApproximateAgeUnit(p), p.getRoles(), addresses, raceAndEthnicity);
+          setApproximateAgeUnit(p), p.getRoles(), addresses, raceAndEthnicity, p.getCsecs());
       participants.add(participant);
     }
     return participants;

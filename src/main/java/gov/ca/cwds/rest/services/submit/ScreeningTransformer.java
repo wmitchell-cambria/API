@@ -52,7 +52,7 @@ public class ScreeningTransformer {
     Short responseTimeSysId = setReferralResponse(screening);
     String limitedAccessCode = StringUtils.isNotBlank(screening.getAccessRestrictions())
         ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
-            .getCmsDescription()
+        .getCmsDescription()
         : "N";
     Date limitedAccessDate = setLimitedAccesDate(screening);
     Address address = (screening.getIncidentAddress() != null)
@@ -86,6 +86,7 @@ public class ScreeningTransformer {
         screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
         screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
         crossReports, allegations, screening.getReportType());
+  }
 
   private Short setReferralResponse(Screening screening) {
     String responseTime = screening.getScreeningDecisionDetail();
