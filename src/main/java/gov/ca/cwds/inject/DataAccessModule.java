@@ -405,7 +405,7 @@ public class DataAccessModule extends AbstractModule {
     bind(DrmsDocumentDao.class);
     bind(DrmsDocumentTemplateDao.class);
     bind(ExternalInterfaceDao.class);
-    bind(GovernmentOrganizationCrossReportDao.class);
+    // bind(GovernmentOrganizationCrossReportDao.class);
     bind(IndividualDeliveredServiceDao.class);
     bind(LawEnforcementDao.class);
     bind(LongTextDaoImpl.class);
@@ -414,9 +414,9 @@ public class DataAccessModule extends AbstractModule {
     bind(ReferralAssignmentDao.class);
     bind(ReferralClientDao.class);
     bind(ReferralClientDeliveredServiceDao.class);
-    bind(ReferralDao.class);
-    bind(ReporterDao.class);
-    bind(StaffPersonDao.class);
+    // bind(ReferralDao.class);
+    // bind(ReporterDao.class);
+    // bind(StaffPersonDao.class);
     bind(StateIdDao.class);
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
@@ -441,23 +441,23 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsDrmsDocumentDaoImpl.class);
     bind(XaCmsLongTextDaoImpl.class);
     bind(XaCmsReferralClientDaoImpl.class);
-    bind(XaCmsReferralDaoImpl.class);
-    bind(XaCmsReporterDaoImpl.class);
+    bind(ReferralDao.class).to(XaCmsReferralDaoImpl.class);
+    bind(ReporterDao.class).to(XaCmsReporterDaoImpl.class);
     bind(XaCmsSsaName3DaoImpl.class);
     bind(StaffPersonDao.class).to(XaCmsStaffPersonDaoImpl.class);
     bind(GovernmentOrganizationDao.class).to(XaCmsGovernmentOrganizationDaoImpl.class);
     bind(GovernmentOrganizationCrossReportDao.class)
         .to(XaCmsGovernmentOrganizationCrossReportDaoImpl.class);
 
-    // NS:
+    // NS: obsolete Postgres tables??
     bind(LanguageDao.class);
     bind(PersonAddressDao.class);
     bind(PersonPhoneDao.class);
     bind(PersonLanguageDao.class);
-    bind(PersonEthnicityDao.class); // obsolete table?
-    bind(EthnicityDao.class); // obsolete table?
-    bind(PersonRaceDao.class); // obsolete table?
-    bind(RaceDao.class); // obsolete table?
+    bind(PersonEthnicityDao.class);
+    bind(EthnicityDao.class);
+    bind(PersonRaceDao.class);
+    bind(RaceDao.class);
 
     // NS XA:
     bind(AddressDao.class).to(XaNsAddressDaoImpl.class);
