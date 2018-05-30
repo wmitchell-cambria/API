@@ -91,13 +91,15 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
     ScreeningRelationship that = (ScreeningRelationship) o;
-    return relationshipType == that.relationshipType &&
-            Objects.equals(id, that.id) &&
-            Objects.equals(clientId, that.clientId) &&
-            Objects.equals(relativeId, that.relativeId);
+    return relationshipType == that.relationshipType
+        && Objects.equals(id, that.id)
+        && Objects.equals(clientId, that.clientId)
+        && Objects.equals(relativeId, that.relativeId);
   }
 
   @Override

@@ -1,0 +1,13 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Intake Team" id="relationship_data">
+        <insert tableName="relationships">
+            <column name="id" value="1"/>
+            <column name="relation" value="190"/>
+            <column name="client" value="9C7kKgc0CN"/>
+            <column name="relative" value="6YtTyyc0ND"/>
+            <column name="created_at" valueDate="2018-03-28 22:47:04.869985"/>
+            <column name="updated_at" valueDate="2018-03-28 22:47:04.869985"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

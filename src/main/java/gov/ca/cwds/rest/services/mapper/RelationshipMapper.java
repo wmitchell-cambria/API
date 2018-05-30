@@ -5,6 +5,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+@FunctionalInterface
 @Mapper
 @SuppressWarnings("squid:S1214")
 public interface RelationshipMapper {

@@ -34,5 +34,6 @@
   <include file="data/legacy_descriptors_data.xml" relativeToChangelogFile="true"/>
   <include file="data/csec_data.xml" relativeToChangelogFile="true"/>
   <include file="data/safely_surr_babies_data.xml" relativeToChangelogFile="true"/>
+  <include file="data/relationships_data.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

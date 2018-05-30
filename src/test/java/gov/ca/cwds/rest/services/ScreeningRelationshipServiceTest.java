@@ -43,6 +43,14 @@ public class ScreeningRelationshipServiceTest {
   }
 
   @Test
+  public void shouldReturnNullWhenNotFound(){
+    when(relationshipDao.find(any())).thenReturn(null);
+    String id = "123";
+    assertNull(service.find(id));
+    verify(relationshipDao).find(isA(String.class));
+  }
+
+  @Test
   public void shouldReturnNullWhenDeleteIsCalled(){
     assertNull(service.delete(serialized));
   }

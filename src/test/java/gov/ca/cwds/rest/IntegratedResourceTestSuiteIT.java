@@ -9,6 +9,7 @@ import gov.ca.cwds.rest.resources.hoi.HoiReferralResourceIRT;
 import gov.ca.cwds.rest.resources.hoi.HoiScreeningResourceIRT;
 import gov.ca.cwds.rest.resources.hoi.HoiUsingClientIdResourceIRT;
 import gov.ca.cwds.rest.resources.hoi.InvolvementHistoryResourceIRT;
+import gov.ca.cwds.rest.resources.relationship.ScreeningRelationshipResourceIRT;
 import gov.ca.cwds.test.support.BaseDropwizardApplication;
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -24,7 +25,8 @@ import org.junit.runners.Suite;
     HoiUsingClientIdResourceIRT.class,
     InvolvementHistoryResourceIRT.class,
     ScreeningIntakeResourceIRT.class,
-    ParticipantIntakeApiResourceIRT.class
+    ParticipantIntakeApiResourceIRT.class,
+    ScreeningRelationshipResourceIRT.class
 })
 public class IntegratedResourceTestSuiteIT {
 
