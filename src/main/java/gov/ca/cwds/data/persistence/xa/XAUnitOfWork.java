@@ -1,5 +1,7 @@
 package gov.ca.cwds.data.persistence.xa;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -11,9 +13,13 @@ import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 
 /**
- * Ferb annotation identifies XA transactions. When attribute {@link #transactional()} is set to
- * true (the default), then execute an XA transaction across all participating XA datasources.
- * Callers may optionally specify datasources by name in the {@link #value()} attribute.
+ * Ferb annotation identifies XA transactions, distributed, two-phase commits across datasources.
+ * 
+ * <p>
+ * When attribute {@link #transactional()} is set to true (the default), then execute an XA
+ * transaction across all participating XA datasources. Callers may optionally specify datasources
+ * by name in the {@link #value()} attribute.
+ * </p>
  * 
  * @author CWDS API Team
  */
@@ -62,6 +68,6 @@ public @interface XAUnitOfWork {
    * 
    * @return array of Hibernate bundle names
    */
-  String[] value() default {"cms", "ns"};
+  String[] value() default {DATASOURCE_XA_CMS, DATASOURCE_XA_NS};
 
 }

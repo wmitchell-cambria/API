@@ -49,9 +49,6 @@ public class RICrossReport implements ApiReferentialCheck<CrossReport> {
   private static final String REFERRAL_ID_MISSING_ERROR =
       "CrossReport => Referral with given Identifier is not present in database";
 
-  /**
-   * Default.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(RICrossReport.class);

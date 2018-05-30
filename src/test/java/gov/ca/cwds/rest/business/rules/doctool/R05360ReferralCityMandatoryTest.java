@@ -17,6 +17,7 @@ import org.junit.rules.ExpectedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -24,7 +25,6 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * 
@@ -33,20 +33,18 @@ import io.dropwizard.jackson.Jackson;
 @SuppressWarnings("unused")
 public class R05360ReferralCityMandatoryTest {
 
-  private ScreeningToReferralService screeningToReferralService;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-  private MessageBuilder messageBuilder;
-  private Validator validator;
+  private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
   public static final Short STATE_OF_CALIFORNIA_COUNTY_CODE = Short.valueOf("1126");
 
+  private ScreeningToReferralService screeningToReferralService;
+  private MessageBuilder messageBuilder;
+  private Validator validator;
 
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @SuppressWarnings("javadoc")
   @Before
   public void setup() throws Exception {
     messageBuilder = new MessageBuilder();
@@ -68,8 +66,6 @@ public class R05360ReferralCityMandatoryTest {
    * 
    * @throws Exception on general error
    */
-
-
   @Test
   public void shouldBeValidAddressWithBothStreetNameAndNumber() {
     Address address = new CmsAddressResourceBuilder().setStreetNumber("1234")
@@ -82,14 +78,14 @@ public class R05360ReferralCityMandatoryTest {
 
   @Test
   public void shouldOneErrorMessageInvalidCounty() {
-    Address address = new CmsAddressResourceBuilder().setGovernmentEntityCd(STATE_OF_CALIFORNIA_COUNTY_CODE).buildCmsAddress();
+    Address address = new CmsAddressResourceBuilder()
+        .setGovernmentEntityCd(STATE_OF_CALIFORNIA_COUNTY_CODE).buildCmsAddress();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(address));
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     assertThat(validationErrors.size(), is(equalTo(1)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotBeValidAddressWithStreetNameOnly() {
     Address address = new CmsAddressResourceBuilder().setStreetNumber("1234")
@@ -101,7 +97,6 @@ public class R05360ReferralCityMandatoryTest {
         is(Boolean.TRUE));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotBeValidAddressWithStreetnumberOnly() {
     Address address = new CmsAddressResourceBuilder().setStreetNumber("1234").setStreetName("")
@@ -112,10 +107,8 @@ public class R05360ReferralCityMandatoryTest {
     assertThat(
         errorContainsMessage(validationErrors, "streetName is required since streetNumber is set"),
         is(Boolean.TRUE));
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldBeValidReporterWithBothStreetNameAndNumber() {
     Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABC")
@@ -126,7 +119,6 @@ public class R05360ReferralCityMandatoryTest {
     assertThat(validationErrors.size(), is(equalTo(0)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotBeValidReporterWithStreetNameOnly() {
     Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABC")
@@ -140,7 +132,6 @@ public class R05360ReferralCityMandatoryTest {
         is(Boolean.TRUE));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotBeValidReporterWithStreetnumberOnly() {
     Reporter reporter = new ReporterResourceBuilder().setReferralId("1234567ABC").setStreetName("")

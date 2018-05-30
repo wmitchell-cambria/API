@@ -101,7 +101,7 @@ public class XAUnitOfWorkAwareProxyFactory {
         try {
           aspect.beforeStart(xaUnitOfWork); // before annotated method
           final Object result = proceed.invoke(self, args); // call annotated method
-          aspect.afterEnd(); // after method
+          aspect.afterEnd(); // after annotated method
           return result;
         } catch (InvocationTargetException e) {
           LOGGER.error("XA ERROR! InvocationTargetException: {}", e.getCause(), e);

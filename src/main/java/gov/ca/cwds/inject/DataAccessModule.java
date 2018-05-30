@@ -1,5 +1,11 @@
 package gov.ca.cwds.inject;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS_REP;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_NS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +59,13 @@ import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDao;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDao;
+import gov.ca.cwds.data.cms.xa.XaCmsCountyOwnershipDao;
+import gov.ca.cwds.data.cms.xa.XaCmsCountyTriggerDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
@@ -263,7 +276,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "cms";
+          return DATASOURCE_CMS;
         }
       };
 
@@ -277,7 +290,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "ns";
+          return DATASOURCE_NS;
         }
       };
 
@@ -290,7 +303,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "rs";
+          return DATASOURCE_CMS_REP;
         }
       };
 
@@ -306,7 +319,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "xa_cms";
+          return DATASOURCE_XA_CMS;
         }
       };
 
@@ -322,7 +335,7 @@ public class DataAccessModule extends AbstractModule {
 
     @Override
     public String name() {
-      return "xa_ns";
+      return DATASOURCE_XA_NS;
     }
   };
 
@@ -393,6 +406,13 @@ public class DataAccessModule extends AbstractModule {
 
     // CMS XA:
     bind(XaCmsAddressDao.class);
+    bind(XaCmsAddressUcDao.class);
+    bind(XaCmsClientRelationshipDao.class);
+    bind(XaCmsCountyOwnershipDao.class);
+    bind(XaCmsCountyTriggerDao.class);
+    bind(XaCmsReferralClientDao.class);
+    bind(XaCmsReferralDao.class);
+    bind(XaCmsSsaName3Dao.class);
     bind(XaCmsStaffPersonDao.class);
 
     // NS:

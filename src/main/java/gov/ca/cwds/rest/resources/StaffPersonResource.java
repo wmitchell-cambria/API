@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_STAFF_PERSONS;
 
 import javax.ws.rs.Consumes;
@@ -12,10 +13,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.StaffPersonsServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -56,10 +57,9 @@ public class StaffPersonResource {
    * Finds an {@link StaffPerson} by id.
    * 
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

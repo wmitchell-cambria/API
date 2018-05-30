@@ -44,6 +44,7 @@ import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.cms.Allegation;
 import gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory;
 import gov.ca.cwds.data.persistence.cms.Assignment;
@@ -106,7 +107,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * 
@@ -114,7 +114,7 @@ import io.dropwizard.jackson.Jackson;
  */
 public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+  private static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   private ScreeningToReferralService screeningToReferralService;
 

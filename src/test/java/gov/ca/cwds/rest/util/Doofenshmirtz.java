@@ -50,16 +50,54 @@ import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.ObjectMapperUtils;
+import gov.ca.cwds.data.cms.AllegationDao;
+import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.CaseLoadDao;
+import gov.ca.cwds.data.cms.ChildClientDao;
+import gov.ca.cwds.data.cms.ClientAddressDao;
+import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.DrmsDocumentDao;
+import gov.ca.cwds.data.cms.LongTextDao;
+import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
+import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.LACountyTrigger;
+import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.xa.XaUpperCaseTables;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
+import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
+import gov.ca.cwds.rest.services.cms.AllegationService;
+import gov.ca.cwds.rest.services.cms.AssignmentService;
+import gov.ca.cwds.rest.services.cms.ChildClientService;
+import gov.ca.cwds.rest.services.cms.ClientAddressService;
+import gov.ca.cwds.rest.services.cms.ClientService;
+import gov.ca.cwds.rest.services.cms.CrossReportService;
+import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.ReferralClientService;
+import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 
 /**
  * <a href="http://phineasandferb.wikia.com/wiki/Heinz_Doofenshmirtz">Heinz Doofenshmirtz</a> is the
@@ -77,13 +115,13 @@ import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
  */
 public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest {
 
-  protected static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
+  protected static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
 
-  private static Validator validator;
-  private static SystemCodeCache systemCodeCache;
+  protected static Validator validator;
+  protected static SystemCodeCache systemCodeCache;
 
   public SessionFactoryImplementor sessionFactoryImplementor;
   public org.hibernate.SessionFactory sessionFactory;
@@ -104,6 +142,49 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public SystemCodeDao systemCodeDao;
   public SystemMetaDao systemMetaDao;
 
+  protected XaCmsReferralDao referralDao;
+  protected XaCmsStaffPersonDao staffpersonDao;
+  protected XaNonLACountyTriggers nonLACountyTriggers;
+  protected XaCmsAddressDao addressDao;
+  protected XaCmsSsaName3Dao ssaName3Dao;
+  protected XaUpperCaseTables upperCaseTables;
+
+  protected AllegationDao allegationDao;
+  protected AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
+  protected AssignmentDao assignmentDao;
+  protected AssignmentUnitDao assignmentUnitDao;
+  protected CaseDao caseDao;
+  protected CaseLoadDao caseLoadDao;
+  protected ChildClientDao childClientDao;
+  protected ClientAddressDao clientAddressDao;
+  protected ClientDao clientDao;
+  protected ClientRelationshipDao clientRelationshipDao;
+  protected CrossReportDao crossReportDao;
+  protected CwsOfficeDao cwsOfficeDao;
+  protected DrmsDocumentDao drmsDocumentDao;
+  protected LongTextDao longTextDao;
+  protected ReferralClientDao referralClientDao;
+  protected ReporterDao reporterDao;
+  protected TriggerTablesDao triggerTablesDao;
+  protected LACountyTrigger laCountyTrigger;
+
+  protected AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
+  protected AllegationService allegationService;
+  protected AssignmentService assignmentService;
+  protected ChildClientService childClientService;
+  protected ClientAddressService clientAddressService;
+  protected ClientService clientService;
+  protected CrossReportService crossReportService;
+  protected LongTextService longTextService;
+  protected ParticipantService participantService;
+  protected ReferralClientService referralClientService;
+  protected ReporterService reporterService;
+
+  protected XaCmsReferralService referralService;
+  protected XaCmsAddressService addressService;
+
+  protected MessageBuilder messageBuilder;
+
   Subject mockSubject;
   PrincipalCollection principalCollection;
   RequestExecutionContext ctx;
@@ -122,6 +203,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     SystemCodeCache.global().getAllSystemCodes();
 
     // Authentication, authorization:
+    messageBuilder = mock(MessageBuilder.class);
     mockSubject = mock(Subject.class);
     principalCollection = mock(PrincipalCollection.class);
 
@@ -216,6 +298,33 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
+
+    referralDao = mock(XaCmsReferralDao.class);
+    staffpersonDao = mock(XaCmsStaffPersonDao.class);
+    ssaName3Dao = mock(XaCmsSsaName3Dao.class);
+    upperCaseTables = mock(XaUpperCaseTables.class);
+    addressDao = mock(XaCmsAddressDao.class);
+    nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
+
+    allegationDao = mock(AllegationDao.class);
+    allegationPerpetratorHistoryDao = mock(AllegationPerpetratorHistoryDao.class);
+    assignmentUnitDao = mock(AssignmentUnitDao.class);
+    caseDao = mock(CaseDao.class);
+    caseLoadDao = mock(CaseLoadDao.class);
+    childClientDao = mock(ChildClientDao.class);
+    clientAddressDao = mock(ClientAddressDao.class);
+    clientDao = mock(ClientDao.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
+    crossReportDao = mock(CrossReportDao.class);
+    cwsOfficeDao = mock(CwsOfficeDao.class);
+    drmsDocumentDao = mock(DrmsDocumentDao.class);
+    laCountyTrigger = mock(LACountyTrigger.class);
+    longTextDao = mock(LongTextDao.class);
+    referralClientDao = mock(ReferralClientDao.class);
+    reporterDao = mock(ReporterDao.class);
+    triggerTablesDao = mock(TriggerTablesDao.class);
+
+    addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();

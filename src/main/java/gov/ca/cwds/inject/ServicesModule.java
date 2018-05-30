@@ -81,6 +81,14 @@ public class ServicesModule extends AbstractModule {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServicesModule.class);
 
   /**
+   * AOP method interception for DropWizard annotation {@link UnitOfWork}.
+   * 
+   * <p>
+   * Note that {@link UnitOfWork} gets a <strong>new connection</strong> every time an annotated
+   * method is encountered. By definition, this annotation is not re-entrant and does not
+   * participate in existing transactions on the same request.
+   * </p>
+   * 
    * @author CWDS API Team
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {

@@ -128,7 +128,8 @@ import io.dropwizard.jackson.Jackson;
  * @author CWDS API Team
  */
 @SuppressWarnings("unused")
-public class ScreeningToReferralServiceTest extends Doofenshmirtz {
+public class ScreeningToReferralServiceTest
+    extends Doofenshmirtz<gov.ca.cwds.data.persistence.cms.Client> {
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 

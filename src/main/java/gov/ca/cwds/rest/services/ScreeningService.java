@@ -124,12 +124,13 @@ public class ScreeningService implements CrudsService {
   }
 
   private ScreeningDashboardList getScreeningsOfUser(String staffId) {
-    List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
-    List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
+    final List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
+    final List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
+
     for (ScreeningWrapper screening : screenings) {
-      ScreeningDashboard thisScreening = new ScreeningDashboard(screening);
-      screeningDashboard.add(thisScreening);
+      screeningDashboard.add(new ScreeningDashboard(screening));
     }
+
     return new ScreeningDashboardList(screeningDashboard);
   }
 
@@ -226,43 +227,43 @@ public class ScreeningService implements CrudsService {
     if (screeningEntity == null) {
       throw new ServiceException("Screening with id=" + id + " is not found");
     }
-    Screening screening = screeningMapper.map(screeningEntity);
 
-    String screeningId = screeningEntity.getId();
-
-    List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
-    Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
+    final Screening screening = screeningMapper.map(screeningEntity);
+    final String screeningId = screeningEntity.getId();
+    final List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
+    final Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
     screening.getAllegations().addAll(allegations);
 
-    List<CrossReportEntity> crossReportEntities = crossReportDao.findByScreeningId(screeningId);
-    Set<CrossReportIntake> crossReports = crossReportMapper.map(crossReportEntities);
+    final List<CrossReportEntity> crossReportEntities =
+        crossReportDao.findByScreeningId(screeningId);
+    final Set<CrossReportIntake> crossReports = crossReportMapper.map(crossReportEntities);
     screening.getCrossReports().addAll(crossReports);
 
     for (CrossReportIntake crossReport : crossReports) {
-      List<GovernmentAgencyEntity> agencyEntities =
+      final List<GovernmentAgencyEntity> agencyEntities =
           agencyDao.findByCrossReportId(crossReport.getId());
-      Set<gov.ca.cwds.rest.api.domain.GovernmentAgency> agencies = agencyMapper.map(agencyEntities);
+      final Set<gov.ca.cwds.rest.api.domain.GovernmentAgency> agencies =
+          agencyMapper.map(agencyEntities);
       crossReport.getAgencies().addAll(agencies);
     }
 
-    List<ScreeningAddressEntity> screeningAddressEntities =
+    final List<ScreeningAddressEntity> screeningAddressEntities =
         screeningAddressDao.findByScreeningId(screeningId);
     if (screeningAddressEntities.size() > 1) {
       throw new ServiceException("Screening should have no more then 1 address");
     }
+
     for (ScreeningAddressEntity screeningAddressEntity : screeningAddressEntities) {
-      Addresses addressEntity = addressesDao.find(screeningAddressEntity.getAddressId());
-      AddressIntakeApi address = addressMapper.map(addressEntity);
-      screening.setIncidentAddress(address);
+      screening.setIncidentAddress(
+          addressMapper.map(addressesDao.find(screeningAddressEntity.getAddressId())));
     }
 
-    List<ParticipantEntity> participantEntities =
+    final List<ParticipantEntity> participantEntities =
         participantIntakeApiService.getByScreeningId(screeningId);
 
     for (ParticipantEntity participantEntity : participantEntities) {
-      ParticipantIntakeApi participantIntakeApi =
-          participantIntakeApiService.find(participantEntity.getId());
-      screening.getParticipantIntakeApis().add(participantIntakeApi);
+      screening.getParticipantIntakeApis()
+          .add(participantIntakeApiService.find(participantEntity.getId()));
     }
 
     return screening;
@@ -388,14 +389,15 @@ public class ScreeningService implements CrudsService {
   }
 
   private void createOrUpdateAddresses(Screening screening) {
-    AddressIntakeApi address = screening.getIncidentAddress();
+    final AddressIntakeApi address = screening.getIncidentAddress();
     if (address == null) {
       return;
     }
-    Addresses addressEntity = addressMapper.map(address);
+
+    final Addresses addressEntity = addressMapper.map(address);
     if (addressEntity.getId() == null) {
-      Addresses createdAddress = addressesDao.create(addressEntity);
-      ScreeningAddressEntity screeningAddressesEntity = new ScreeningAddressEntity();
+      final Addresses createdAddress = addressesDao.create(addressEntity);
+      final ScreeningAddressEntity screeningAddressesEntity = new ScreeningAddressEntity();
       screeningAddressesEntity.setScreeningId(screening.getId());
       screeningAddressesEntity.setAddressId(createdAddress.getId());
       address.setId(String.valueOf(addressEntity.getId()));
@@ -406,7 +408,7 @@ public class ScreeningService implements CrudsService {
   }
 
   private void createOrUpdateParticipants(Screening screening) {
-    Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
+    final Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
 
     for (ParticipantIntakeApi participantIntakeApi : screening.getParticipantIntakeApis()) {
       String participantIntakeApiId = participantIntakeApi.getId();

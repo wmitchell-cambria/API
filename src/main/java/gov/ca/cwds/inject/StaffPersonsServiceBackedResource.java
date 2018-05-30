@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 import com.google.inject.BindingAnnotation;
 
 /**
- * Annotation for binding to our a service backed staff person resource
+ * Annotation for binding to our a service-backed staff person resource.
  * 
  * @author CWDS API Team
  */

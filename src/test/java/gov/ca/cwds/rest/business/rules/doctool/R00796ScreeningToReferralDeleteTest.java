@@ -26,16 +26,16 @@ import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDao;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralDao;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDao;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.Reminders;
-import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.xa.XaUpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
@@ -101,8 +101,11 @@ public class R00796ScreeningToReferralDeleteTest {
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private XaCmsReferralDao referralDao;
-  private XaCmsStaffPersonDao staffpersonDao;
+  private XaCmsStaffPersonDao staffPersonDao;
   private XaCmsAddressDao addressDao;
+  private XaCmsSsaName3Dao ssaName3Dao;
+  private XaUpperCaseTables upperCaseTables;
+
   private XaNonLACountyTriggers nonLACountyTriggers;
 
   private ClientDao clientDao;
@@ -117,9 +120,7 @@ public class R00796ScreeningToReferralDeleteTest {
   private LACountyTrigger laCountyTrigger;
   private TriggerTablesDao triggerTablesDao;
   private AssignmentDao assignmentDao;
-  private SsaName3Dao ssaName3Dao;
   private Reminders reminders;
-  private UpperCaseTables upperCaseTables;
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private CaseLoadDao caseLoadDao;
@@ -137,27 +138,30 @@ public class R00796ScreeningToReferralDeleteTest {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     referralDao = mock(XaCmsReferralDao.class);
+    staffPersonDao = mock(XaCmsStaffPersonDao.class);
+    ssaName3Dao = mock(XaCmsSsaName3Dao.class);
+    addressDao = mock(XaCmsAddressDao.class);
+
+    upperCaseTables = mock(XaUpperCaseTables.class);
+
     nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
 
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
-    staffpersonDao = mock(XaCmsStaffPersonDao.class);
+    staffPersonDao = mock(XaCmsStaffPersonDao.class);
     riReferral = mock(RIReferral.class);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
+        triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
         drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
         riReferral);
 
     clientDao = mock(ClientDao.class);
-    staffpersonDao = mock(XaCmsStaffPersonDao.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
-    ssaName3Dao = mock(SsaName3Dao.class);
-    upperCaseTables = mock(UpperCaseTables.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
 
-    clientService = new ClientService(clientDao, staffpersonDao, triggerTablesDao,
+    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
         nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
 
     referralClientDao = mock(ReferralClientDao.class);
@@ -165,7 +169,7 @@ public class R00796ScreeningToReferralDeleteTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riReferralClient = mock(RIReferralClient.class);
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
-        laCountyTrigger, triggerTablesDao, staffpersonDao, riReferralClient);
+        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
 
     allegationDao = mock(AllegationDao.class);
     riAllegation = mock(RIAllegation.class);
@@ -184,7 +188,6 @@ public class R00796ScreeningToReferralDeleteTest {
     riReporter = mock(RIReporter.class);
     reporterService = new ReporterService(reporterDao, riReporter);
 
-    addressDao = mock(XaCmsAddressDao.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
 
     clientAddressDao = mock(ClientAddressDao.class);
@@ -192,7 +195,7 @@ public class R00796ScreeningToReferralDeleteTest {
     triggerTablesDao = mock(TriggerTablesDao.class);
     riClientAddress = mock(RIClientAddress.class);
     clientAddressService =
-        new ClientAddressService(clientAddressDao, staffpersonDao, triggerTablesDao,
+        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
     longTextDao = mock(LongTextDao.class);
@@ -209,7 +212,7 @@ public class R00796ScreeningToReferralDeleteTest {
     cwsOfficeDao = mock(CwsOfficeDao.class);
     messageBuilder = mock(MessageBuilder.class);
 
-    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffpersonDao,
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
         triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
         assignmentUnitDao, cwsOfficeDao, messageBuilder);
 

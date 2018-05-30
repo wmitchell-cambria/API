@@ -23,7 +23,6 @@ import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -47,7 +46,7 @@ import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
- * Business layer object to work on {@link Address}
+ * Business layer object to work on {@link Participant}.
  *
  * @author CWDS API Team
  */
@@ -117,21 +116,22 @@ public class ParticipantService implements CrudsService {
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
       String dateStarted, String referralId, MessageBuilder messageBuilder) {
-    ClientParticipants clientParticipants = new ClientParticipants();
+    final ClientParticipants clientParticipants = new ClientParticipants();
+    final Set<Participant> participants = screeningToReferral.getParticipants();
 
-    Set<Participant> participants = screeningToReferral.getParticipants();
     for (Participant incomingParticipant : participants) {
       if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
         String message = " Participant contains incompatible roles ";
         messageBuilder.addMessageAndLog(message, LOGGER);
-        // next participant
-        continue;
+        continue; // next participant
       }
+
       String sexAtBirth = "";
       if (!incomingParticipant.getGender().isEmpty()) {
         sexAtBirth = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
-      Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
+
+      final Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
       processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
           clientParticipants, incomingParticipant, sexAtBirth, roles);
     } // next participant
@@ -219,7 +219,7 @@ public class ParticipantService implements CrudsService {
      * reporter or self-reported
      */
     try {
-      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
+      final Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
           screeningToReferral.getIncidentCounty(), messageBuilder);
       incomingParticipant.setLegacyId(savedReporter.getReferralId());
       incomingParticipant.setLegacySourceTable(LegacyTable.REPORTER.getName());
@@ -306,13 +306,14 @@ public class ParticipantService implements CrudsService {
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
           incomingParticipant.getGender(), incomingParticipant.getSsn(), primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode, incomingParticipant.getDateOfBirth());
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode,
+          incomingParticipant.getDateOfBirth());
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
-      String message =
-          String.format("Unable to update client %s %s. Client has been modified by another process.",
-              incomingParticipant.getFirstName(), incomingParticipant.getLastName());
+      String message = String.format(
+          "Unable to update client %s %s. Client has been modified by another process.",
+          incomingParticipant.getFirstName(), incomingParticipant.getLastName());
       messageBuilder.addMessageAndLog(message, LOGGER);
     }
   }
