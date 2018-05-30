@@ -15,6 +15,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.util.FerbDateUtils;
 
 /**
  * {@link NsPersistentObject} representing SafelySurrenderedBabies
@@ -133,13 +134,13 @@ public class SafelySurrenderedBabiesEntity implements PersistentObject, Serializ
 
 
   public Date getMedQuestionaireReturnDate() {
-    return medQuestionaireReturnDate;
+    return FerbDateUtils.freshDate(medQuestionaireReturnDate);
   }
 
 
 
   public void setMedQuestionaireReturnDate(Date medQuestionaireReturnDate) {
-    this.medQuestionaireReturnDate = medQuestionaireReturnDate;
+    this.medQuestionaireReturnDate = FerbDateUtils.freshDate(medQuestionaireReturnDate);
   }
 
 

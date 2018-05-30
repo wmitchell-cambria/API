@@ -15,7 +15,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class SafelySurenderedBabies {
+public class SafelySurenderedBabies extends DomainObject {
+
+  private static final long serialVersionUID = -5667060392833194010L;
 
   @JsonProperty("surrendered_by")
   @ApiModelProperty(example = "Unknown")
