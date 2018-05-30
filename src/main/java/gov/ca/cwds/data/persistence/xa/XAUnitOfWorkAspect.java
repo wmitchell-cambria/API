@@ -54,7 +54,7 @@ public class XAUnitOfWorkAspect {
    */
   public void beforeStart(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
     if (xaUnitOfWork == null) {
-      LOGGER.error("XA beforeStart(): no annotation");
+      LOGGER.error("XA beforeStart: no annotation");
       return;
     }
     this.xaUnitOfWork = xaUnitOfWork;
@@ -73,12 +73,12 @@ public class XAUnitOfWorkAspect {
    */
   public void afterEnd() throws CaresXAException {
     if (sessions.isEmpty()) {
-      LOGGER.warn("XA afterEnd(): no sessions");
+      LOGGER.warn("XA afterEnd: no sessions");
       return;
     }
 
     try {
-      LOGGER.debug("XA afterEnd(): commit");
+      LOGGER.debug("XA afterEnd: commit");
       commitTransaction();
     } catch (Exception e) {
       rollbackTransaction();
@@ -93,11 +93,11 @@ public class XAUnitOfWorkAspect {
    */
   public void onError() throws CaresXAException {
     if (sessions.isEmpty()) {
-      LOGGER.warn("XA onError(): no sessions");
+      LOGGER.warn("XA onError: no sessions");
       return;
     }
 
-    LOGGER.warn("XA onError(): rollback");
+    LOGGER.warn("XA onError: rollback");
     try {
       rollbackTransaction();
     } finally {

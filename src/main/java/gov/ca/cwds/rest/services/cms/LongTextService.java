@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on {@link LongText}
+ * Business layer object to work on {@link LongText}.
  * 
  * @author CWDS API Team
  */
@@ -48,7 +48,6 @@ public class LongTextService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.LongText find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.LongText persistedLongText = longTextDao.find(primaryKey);
     if (persistedLongText != null) {
       return new gov.ca.cwds.rest.api.domain.cms.LongText(persistedLongText);
@@ -77,7 +76,6 @@ public class LongTextService implements
    */
   @Override
   public PostedLongText create(gov.ca.cwds.rest.api.domain.cms.LongText request) {
-
     gov.ca.cwds.rest.api.domain.cms.LongText longText = request;
 
     try {

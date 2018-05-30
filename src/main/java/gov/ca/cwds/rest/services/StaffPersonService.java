@@ -6,7 +6,6 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
-import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 
@@ -35,7 +34,6 @@ public class StaffPersonService implements TypedCrudsService<String, StaffPerson
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
-  @XAUnitOfWork
   @Override
   public gov.ca.cwds.rest.api.domain.PostedStaffPerson find(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.StaffPerson persistedStaffPerson =

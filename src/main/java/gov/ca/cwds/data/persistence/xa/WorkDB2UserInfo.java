@@ -43,7 +43,6 @@ public class WorkDB2UserInfo implements Work {
       db2conn.setDB2ClientUser(staffId);
 
       // ALTERNATIVE: call proc SYSPROC.WLM_SET_CLIENT_INFO.
-
     }
   }
 
