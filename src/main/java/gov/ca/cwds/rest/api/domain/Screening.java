@@ -147,6 +147,8 @@ public class Screening extends ReportingDomain implements Request, Response {
   @ApiModelProperty(value = "Participants")
   private Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
 
+  @JsonProperty("report_type")
+  private String reportType;
 
   /**
    * default constructor
@@ -165,11 +167,12 @@ public class Screening extends ReportingDomain implements Request, Response {
    * @param startedAt - startedAt
    * @param referralId referral id, if provided
    * @param assigneeStaffId - assignee Id
+   * @param reportType report type
    */
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,
       String screeningDecisionDetail, String assignee, String startedAt, String referralId,
-      String assigneeStaffId) {
+      String assigneeStaffId, String reportType) {
     super();
     this.id = id;
     this.name = name;
@@ -180,6 +183,7 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.startedAt = startedAt;
     this.referralId = referralId;
     this.assigneeStaffId = assigneeStaffId;
+    this.reportType = reportType;
   }
 
   /**
@@ -409,7 +413,13 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.participantIntakeApis = participantIntakeApis;
   }
 
+  public String getReportType() {
+    return reportType;
+  }
 
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
+  }
 
   /**
    * @return the currentLocationOfChildren

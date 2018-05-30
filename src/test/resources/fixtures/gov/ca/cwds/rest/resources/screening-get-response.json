@@ -20,6 +20,7 @@
   "restrictions_date": "2018-03-26",
   "restrictions_rationale": "res",
   "report_narrative": "tsrgdhr",
+  "report_type": "ssb",
   "safety_alerts": [
     "Dangerous Environment",
     "Hostile"
