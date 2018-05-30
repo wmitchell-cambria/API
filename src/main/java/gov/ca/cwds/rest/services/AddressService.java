@@ -11,8 +11,8 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
-import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
-import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
@@ -30,8 +30,8 @@ public class AddressService implements CrudsService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AddressService.class);
 
-  private XaNsAddressDao addressDao;
-  private XaNsAddressesDao xaNsAddressDao;
+  private XaNsAddressDaoImpl addressDao;
+  private XaNsAddressesDaoImpl xaNsAddressDao;
   private XaCmsAddressDaoImpl xaCmsAddressDao;
 
   /**
@@ -43,7 +43,7 @@ public class AddressService implements CrudsService {
    * @param xaCmsAddressDao {@link Dao} for XA (two-phase commit) transactions for CMS (DB2)
    */
   @Inject
-  public AddressService(XaNsAddressDao xaNsddressDao, XaNsAddressesDao xaNsAddressDao,
+  public AddressService(XaNsAddressDaoImpl xaNsddressDao, XaNsAddressesDaoImpl xaNsAddressDao,
       XaCmsAddressDaoImpl xaCmsAddressDao) {
     this.addressDao = xaNsddressDao;
     this.xaNsAddressDao = xaNsAddressDao;

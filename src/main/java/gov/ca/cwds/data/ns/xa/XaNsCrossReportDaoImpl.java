@@ -12,7 +12,7 @@ import gov.ca.cwds.inject.XaNsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class XaNsCrossReportDao extends CrossReportDao {
+public class XaNsCrossReportDaoImpl extends CrossReportDao {
 
   /**
    * Constructor
@@ -20,7 +20,7 @@ public class XaNsCrossReportDao extends CrossReportDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsCrossReportDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsCrossReportDaoImpl(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

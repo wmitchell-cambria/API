@@ -4,23 +4,23 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
 /**
- * Screening DAO takes an XA session factory for distributed transactions.
+ * Address DAO takes an XA session factory for distributed transactions.
  * 
  * @author CWDS API Team
  */
-public class XaNsScreeningDao extends ScreeningDao {
+public class XaNsAddressDaoImpl extends AddressDao {
 
   /**
    * Constructor
-   *
+   * 
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsScreeningDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsAddressDaoImpl(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

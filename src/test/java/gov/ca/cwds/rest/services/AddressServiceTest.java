@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
-import gov.ca.cwds.data.ns.xa.XaNsAddressDao;
-import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.rest.api.Request;
@@ -46,8 +46,8 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
 
   private static final ObjectMapper MY_MAPPER = Jackson.newObjectMapper();
 
-  XaNsAddressDao xaNsAddressDao;
-  XaNsAddressesDao xaNsAddressesDao;
+  XaNsAddressDaoImpl xaNsAddressDao;
+  XaNsAddressesDaoImpl xaNsAddressesDao;
   XaCmsAddressDaoImpl xaCmsAddressDao;
   AddressService target;
 
@@ -61,8 +61,8 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   public void setup() throws Exception {
     super.setup();
 
-    xaNsAddressDao = mock(XaNsAddressDao.class);
-    xaNsAddressesDao = mock(XaNsAddressesDao.class);
+    xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
+    xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
     xaCmsAddressDao = mock(XaCmsAddressDaoImpl.class);
 
     // public AddressService(AddressDao addressDao, XaNsAddressesDao xaNsAddressDao, XaCmsAddressDao

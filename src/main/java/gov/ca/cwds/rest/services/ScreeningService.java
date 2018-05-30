@@ -21,12 +21,12 @@ import com.google.inject.name.Named;
 
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
-import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
-import gov.ca.cwds.data.ns.xa.XaNsAgencyDao;
-import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDao;
-import gov.ca.cwds.data.ns.xa.XaNsCrossReportDao;
-import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDao;
-import gov.ca.cwds.data.ns.xa.XaNsScreeningDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAgencyDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsCrossReportDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.AllegationEntity;
 import gov.ca.cwds.data.persistence.ns.CrossReportEntity;
@@ -67,22 +67,22 @@ public class ScreeningService implements CrudsService {
 
   // NS DAO's:
   @Inject
-  private XaNsAllegationIntakeDao allegationDao;
+  private XaNsAllegationIntakeDaoImpl allegationDao;
 
   @Inject
-  private XaNsAddressesDao addressesDao;
+  private XaNsAddressesDaoImpl addressesDao;
 
   @Inject
-  private XaNsScreeningAddressDao screeningAddressDao;
+  private XaNsScreeningAddressDaoImpl screeningAddressDao;
 
   @Inject
-  private XaNsAgencyDao agencyDao;
+  private XaNsAgencyDaoImpl agencyDao;
 
   @Inject
-  private XaNsCrossReportDao crossReportDao;
+  private XaNsCrossReportDaoImpl crossReportDao;
 
   @Inject
-  private XaNsScreeningDao screeningDao;
+  private XaNsScreeningDaoImpl screeningDao;
 
   @Inject
   private ParticipantIntakeApiService participantIntakeApiService;
@@ -431,7 +431,7 @@ public class ScreeningService implements CrudsService {
     this.esDao = esDao;
   }
 
-  void setScreeningDao(XaNsScreeningDao screeningDao) {
+  void setScreeningDao(XaNsScreeningDaoImpl screeningDao) {
     this.screeningDao = screeningDao;
   }
 

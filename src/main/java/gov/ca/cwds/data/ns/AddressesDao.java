@@ -12,7 +12,7 @@ import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.inject.NsSessionFactory;
 
 /**
- * Postgres Address DAO.
+ * Postgres Addresses DAO.
  *
  * @author CWDS API Team
  */

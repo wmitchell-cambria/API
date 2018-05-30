@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.xa.XaNsAddressesDao;
-import gov.ca.cwds.data.ns.xa.XaNsAllegationDao;
-import gov.ca.cwds.data.ns.xa.XaNsCsecDao;
-import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDao;
-import gov.ca.cwds.data.ns.xa.XaNsParticipantAddressesDao;
-import gov.ca.cwds.data.ns.xa.XaNsParticipantDao;
-import gov.ca.cwds.data.ns.xa.XaNsParticipantPhoneNumbersDao;
-import gov.ca.cwds.data.ns.xa.XaNsPhoneNumbersDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsCsecDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsParticipantPhoneNumbersDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsPhoneNumbersDaoImpl;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.Allegation;
 import gov.ca.cwds.data.persistence.ns.CsecEntity;
@@ -51,31 +51,31 @@ public class ParticipantIntakeApiService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantIntakeApiService.class);
 
   @Inject
-  private XaNsParticipantDao participantDao;
+  private XaNsParticipantDaoImpl participantDao;
 
   @Inject
-  private XaNsAllegationDao allegationDao;
+  private XaNsAllegationDaoImpl allegationDao;
 
   @Inject
-  private XaNsLegacyDescriptorDao legacyDescriptorDao;
+  private XaNsLegacyDescriptorDaoImpl legacyDescriptorDao;
 
   @Inject
-  private XaNsAddressesDao addressesDao;
+  private XaNsAddressesDaoImpl addressesDao;
 
   @Inject
-  private XaNsParticipantAddressesDao participantAddressesDao;
+  private XaNsParticipantAddressesDaoImpl participantAddressesDao;
 
   @Inject
   private AddressIntakeApiService addressIntakeApiService;
 
   @Inject
-  private XaNsPhoneNumbersDao phoneNumbersDao;
+  private XaNsPhoneNumbersDaoImpl phoneNumbersDao;
 
   @Inject
-  private XaNsParticipantPhoneNumbersDao participantPhoneNumbersDao;
+  private XaNsParticipantPhoneNumbersDaoImpl participantPhoneNumbersDao;
 
   @Inject
-  private XaNsCsecDao csecDao;
+  private XaNsCsecDaoImpl csecDao;
 
   @Inject
   private CsecMapper csecMapper;

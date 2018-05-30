@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.ns.ParticipantPhoneNumbersDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
-public class XaNsParticipantPhoneNumbersDao extends ParticipantPhoneNumbersDao {
+public class XaNsParticipantPhoneNumbersDaoImpl extends ParticipantPhoneNumbersDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaNsParticipantPhoneNumbersDao extends ParticipantPhoneNumbersDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsParticipantPhoneNumbersDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsParticipantPhoneNumbersDaoImpl(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

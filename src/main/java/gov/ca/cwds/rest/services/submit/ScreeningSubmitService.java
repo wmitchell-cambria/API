@@ -9,7 +9,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDao;
+import gov.ca.cwds.data.ns.xa.XaNsIntakeLovDaoImpl;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -33,7 +33,7 @@ public class ScreeningSubmitService implements CrudsService {
   private ScreeningService screeningService;
 
   @Inject
-  private XaNsIntakeLovDao intakeLovDao;
+  private XaNsIntakeLovDaoImpl intakeLovDao;
 
   @Inject
   private ScreeningToReferralService screeningToReferralService;

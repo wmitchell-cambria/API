@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.ns.AllegationDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.inject.XaNsSessionFactory;
 
-public class XaNsAllegationDao extends AllegationDao {
+public class XaNsAllegationIntakeDaoImpl extends AllegationIntakeDao {
 
   /**
    * Constructor
@@ -15,7 +15,7 @@ public class XaNsAllegationDao extends AllegationDao {
    * @param sessionFactory The session factory
    */
   @Inject
-  public XaNsAllegationDao(@XaNsSessionFactory SessionFactory sessionFactory) {
+  public XaNsAllegationIntakeDaoImpl(@XaNsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 
