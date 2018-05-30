@@ -44,7 +44,7 @@ public class ScreeningTransformerTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   @Before
   public void setup() throws Exception {
@@ -55,14 +55,14 @@ public class ScreeningTransformerTest {
     IntakeLov intakeLovStateCa = mock(IntakeLov.class);
     when(intakeLovStateCa.getLegacySystemCodeId()).thenReturn(new Long(1828));
 
-    nsCodeToNsLovMap = new HashMap<String, IntakeLov>();
+    nsCodeToNsLovMap = new HashMap<>();
     nsCodeToNsLovMap.put("in_person", intakeLovInPerson);
     nsCodeToNsLovMap.put("evaluate_out", intakeLovResponseTime);
     nsCodeToNsLovMap.put("CA", intakeLovStateCa);
 
     IntakeLov intakeLov = mock(IntakeLov.class);
     when(intakeLov.getLegacyLogicalCode()).thenReturn("34");
-    cmsSysIdToNsLovMap = new HashMap<String, IntakeLov>();
+    cmsSysIdToNsLovMap = new HashMap<>();
     cmsSysIdToNsLovMap.put("1101", intakeLov);
 
     screening = new ScreeningResourceBuilder().build();
@@ -70,11 +70,11 @@ public class ScreeningTransformerTest {
 
   @Test
   public void transformConvertsScreeningToScreeningToReferral() {
-    Set<CrossReport> crossReports = new HashSet<CrossReport>();
-    Set<Allegation> allegations = new HashSet<Allegation>();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<CrossReport> crossReports = new HashSet<>();
+    Set<Allegation> allegations = new HashSet<>();
+    Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
-        .setEndedAt("2017-01-01T00:00:00.000Z").setStartedAt("2017-01-01T00:00:00.000Z")
+        .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
         .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)
@@ -91,11 +91,11 @@ public class ScreeningTransformerTest {
 
   @Test
   public void transformConvertsScreeningToScreeningToReferralWhenCommunicationMethodNull() {
-    Set<CrossReport> crossReports = new HashSet<CrossReport>();
-    Set<Allegation> allegations = new HashSet<Allegation>();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<CrossReport> crossReports = new HashSet<>();
+    Set<Allegation> allegations = new HashSet<>();
+    Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
-        .setEndedAt("2017-01-01T00:00:00.000Z").setStartedAt("2017-01-01T00:00:00.000Z")
+        .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
         .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod(null)
@@ -113,11 +113,11 @@ public class ScreeningTransformerTest {
 
   @Test
   public void transformConvertsScreeningToScreeningToReferralWhenScreeningDecisionDetailBlank() {
-    Set<CrossReport> crossReports = new HashSet<CrossReport>();
-    Set<Allegation> allegations = new HashSet<Allegation>();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<CrossReport> crossReports = new HashSet<>();
+    Set<Allegation> allegations = new HashSet<>();
+    Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
-        .setEndedAt("2017-01-01T00:00:00.000Z").setStartedAt("2017-01-01T00:00:00.000Z")
+        .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
         .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime(null)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)
@@ -143,11 +143,11 @@ public class ScreeningTransformerTest {
     Address address = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace", "Springfield",
         1828, "93838", 28, legacyDescriptor);
 
-    Set<CrossReport> crossReports = new HashSet<CrossReport>();
-    Set<Allegation> allegations = new HashSet<Allegation>();
-    Set<String> safetyAlerts = new HashSet<String>();
+    Set<CrossReport> crossReports = new HashSet<>();
+    Set<Allegation> allegations = new HashSet<>();
+    Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
-        .setEndedAt("2017-01-01T00:00:00.000Z").setStartedAt("2017-01-01T00:00:00.000Z")
+        .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
         .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)

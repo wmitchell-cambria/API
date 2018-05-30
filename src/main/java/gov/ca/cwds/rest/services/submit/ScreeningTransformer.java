@@ -73,11 +73,16 @@ public class ScreeningTransformer {
 
     return new ScreeningToReferral((long) Integer.parseInt(screening.getId()), LEGACY_SOURCE_TABLE,
         screening.getReferralId(),
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt())),
-        screening.getIncidentCounty(), screening.getIncidentDate(), screening.getLocationType(),
+        screening.getEndedAt() == null ?
+            null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt().toString())),
+        screening.getIncidentCounty(),
+        screening.getIncidentDate() == null ?
+            null : screening.getIncidentDate().toString(),
+        screening.getLocationType(),
         communicationMethodSysId, CURRENT_LOCATION_OF_CHILDREN, screening.getName(),
         screening.getReportNarrative(), screening.getReference(), responseTimeSysId,
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt())),
+        screening.getStartedAt() == null ?
+            null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt().toString())),
         screening.getAssignee(), screening.getAssigneeStaffId(),
         screening.getAdditionalInformation(), screening.getScreeningDecision(),
         screening.getScreeningDecisionDetail(), APPROVAL_STATUS, FAMILY_AWARENESS,

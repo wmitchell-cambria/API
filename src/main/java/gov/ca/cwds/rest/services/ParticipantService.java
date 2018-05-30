@@ -1,5 +1,13 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
+import gov.ca.cwds.rest.api.domain.Csec;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,6 +75,13 @@ public class ParticipantService implements CrudsService {
   private ClientScpEthnicityService clientScpEthnicityService;
   private CaseDao caseDao;
   private ReferralClientDao referralClientDao;
+
+  @Inject
+  private CsecHistoryService csecHistoryService;
+  @Inject
+  private SexualExploitationTypeDao sexualExploitationTypeDao;
+  @Inject
+  private IntakeLOVCodeDao intakeLOVCodeDao;
 
   /**
    * Constructor
@@ -190,7 +205,7 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder);
+        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs());
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -391,13 +406,45 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder, List<Csec> csecs) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
       messageBuilder.addDomainValidationError(validator.validate(childClient));
       exsistingChild = this.childClientService.create(childClient);
     }
+
+    List<CsecHistory> csecHistories = new ArrayList<>();
+    for (Csec csec : csecs) {
+      String csecCodeId = csec.getCsecCodeId();
+      if (csecCodeId == null) {
+        messageBuilder.addError("There is no CSEC code id provided for client with id: " + clientId,
+            ErrorMessage.ErrorType.VALIDATION);
+      } else {
+        IntakeLOVCodeEntity intakeLOVCodeEntity = intakeLOVCodeDao.find(Long.valueOf(csecCodeId));
+        SexualExploitationType sexualExploitationType = null;
+        if (intakeLOVCodeEntity == null) {
+          messageBuilder.addError("LOV code is not found for CSEC code id: " + csecCodeId,
+              ErrorMessage.ErrorType.VALIDATION);
+        } else {
+          sexualExploitationType = sexualExploitationTypeDao.find(intakeLOVCodeEntity.getLgSysId().shortValue());
+        }
+        if (sexualExploitationType == null) {
+          messageBuilder.addError("Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
+              ErrorMessage.ErrorType.VALIDATION);
+        } else {
+          CsecHistory csecHistory = new CsecHistory();
+          csecHistory.setSexualExploitationType(sexualExploitationType);
+          csecHistory.setChildClient(clientId);
+          csecHistory.setStartDate(csec.getStartDate());
+          csecHistory.setEndDate(csec.getEndDate());
+          csecHistories.add(csecHistory);
+        }
+      }
+    }
+
+    csecHistoryService.updateCsecHistoriesByClientId(clientId, csecHistories);
+
     return exsistingChild;
   }
 
@@ -472,5 +519,17 @@ public class ParticipantService implements CrudsService {
             LimitedAccessType.getByValue(screeningToReferral.getLimitedAccessCode()), caseDao,
             referralClientDao);
     r04466ClientSensitivityIndicator.execute();
+  }
+
+  void setCsecHistoryService(CsecHistoryService csecHistoryService) {
+    this.csecHistoryService = csecHistoryService;
+  }
+
+  void setSexualExploitationTypeDao(SexualExploitationTypeDao sexualExploitationTypeDao) {
+    this.sexualExploitationTypeDao = sexualExploitationTypeDao;
+  }
+
+  void setIntakeLOVCodeDao(IntakeLOVCodeDao intakeLOVCodeDao) {
+    this.intakeLOVCodeDao = intakeLOVCodeDao;
   }
 }

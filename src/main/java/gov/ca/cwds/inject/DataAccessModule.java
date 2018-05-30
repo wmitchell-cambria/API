@@ -1,5 +1,6 @@
 package gov.ca.cwds.inject;
 
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.ns.CsecDao;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,7 +123,8 @@ public class DataAccessModule extends AbstractModule {
 
   // CMS:
   private final ImmutableList<Class<?>> cmsEntities = ImmutableList.<Class<?>>builder()
-      .add(gov.ca.cwds.data.legacy.cms.entity.Client.class,
+      .add(gov.ca.cwds.data.legacy.cms.entity.CsecHistory.class,
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
@@ -141,6 +143,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
           gov.ca.cwds.data.persistence.cms.Address.class,
           gov.ca.cwds.data.persistence.cms.Allegation.class,
@@ -355,6 +358,7 @@ public class DataAccessModule extends AbstractModule {
     bind(AllegationPerpetratorHistoryDao.class);
     bind(ClientUcDao.class);
     bind(ChildClientDao.class);
+    bind(SexualExploitationTypeDao.class);
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
     bind(DrmsDocumentDao.class);

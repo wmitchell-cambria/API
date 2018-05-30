@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class ParticipantsTransformerTest {
   public void transformConvertsParticipantsIntakeApiToParticipants() {
     Participant participant =
         new ParticipantResourceBuilder().setRaceAndEthnicity(new RaceAndEthnicity())
-            .setAddresses(new HashSet<>()).createParticipant();
+            .setAddresses(new HashSet<>()).setCsecs(new ArrayList<>()).createParticipant();
     Set<ParticipantIntakeApi> nsParticipants = Stream.of(nsParticipant).collect(Collectors.toSet());
     Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
     Set<Participant> actual =

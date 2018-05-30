@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,16 +68,12 @@ public class Screening extends ReportingDomain implements Request, Response {
   private String assigneeStaffId;
 
   @JsonProperty("started_at")
-  @ApiModelProperty(value = "Screening Start Date", example = "1992-06-18")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-  @Date(format = "yyyy-MM-dd")
-  private String startedAt;
+  @ApiModelProperty(value = "Screening Start Date", example = "2018-03-29T16:11:59")
+  private LocalDateTime startedAt;
 
   @JsonProperty("ended_at")
-  @ApiModelProperty(value = "Screening End Date", example = "1992-06-19")
-  @Type(type = "date")
-  @Date(format = "yyyy-MM-dd")
-  private String endedAt;
+  @ApiModelProperty(value = "Screening End Date", example = "2018-03-30T16:11:37")
+  private LocalDateTime endedAt;
 
   @JsonProperty("additional_information")
   @ApiModelProperty("Additional screening information")
@@ -88,8 +85,7 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   @JsonProperty("incident_date")
   @ApiModelProperty(value = "Incident Date", example = "1992-05-18")
-  @Date(format = "yyyy-MM-dd", required = false)
-  private String incidentDate;
+  private LocalDate incidentDate;
 
   @JsonProperty("indexable")
   @ApiModelProperty(value = "Indexable", example = "true")
@@ -168,7 +164,7 @@ public class Screening extends ReportingDomain implements Request, Response {
    */
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,
-      String screeningDecisionDetail, String assignee, String startedAt, String referralId,
+      String screeningDecisionDetail, String assignee, LocalDateTime startedAt, String referralId,
       String assigneeStaffId) {
     super();
     this.id = id;
@@ -227,7 +223,7 @@ public class Screening extends ReportingDomain implements Request, Response {
   /**
    * @return the startedAt
    */
-  public String getStartedAt() {
+  public LocalDateTime getStartedAt() {
     return startedAt;
   }
 
@@ -277,15 +273,15 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.assigneeStaffId = assigneeStaffId;
   }
 
-  public void setStartedAt(String startedAt) {
+  public void setStartedAt(LocalDateTime startedAt) {
     this.startedAt = startedAt;
   }
 
-  public String getEndedAt() {
+  public LocalDateTime getEndedAt() {
     return endedAt;
   }
 
-  public void setEndedAt(String endedAt) {
+  public void setEndedAt(LocalDateTime endedAt) {
     this.endedAt = endedAt;
   }
 
@@ -305,11 +301,11 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.incidentCounty = incidentCounty;
   }
 
-  public String getIncidentDate() {
+  public LocalDate getIncidentDate() {
     return incidentDate;
   }
 
-  public void setIncidentDate(String incidentDate) {
+  public void setIncidentDate(LocalDate incidentDate) {
     this.incidentDate = incidentDate;
   }
 

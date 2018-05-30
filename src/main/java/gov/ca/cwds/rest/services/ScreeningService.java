@@ -328,7 +328,7 @@ public class ScreeningService implements CrudsService {
       } else {
         AllegationEntity managedAllegationEntity = allegationDao.find(allegationEntity.getId());
         if (managedAllegationEntity == null) {
-          throw new ServiceException("Cannot update cross report that doesn't exist. id = "
+          throw new ServiceException("Cannot update allegation that doesn't exist. id = "
               + allegationEntity.getId());
         }
         allegationEntity.setCreatedAt(managedAllegationEntity.getCreatedAt());

@@ -379,7 +379,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "jr", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     String genderCode = "male";
     String dateStarted = "now";
@@ -445,7 +445,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     String genderCode = "male";
     String dateStarted = "now";
@@ -2239,7 +2239,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 

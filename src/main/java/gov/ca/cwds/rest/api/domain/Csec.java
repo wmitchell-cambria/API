@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * CWDS API Team
@@ -66,5 +68,15 @@ public class Csec extends ReportingDomain {
 
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 }
