@@ -203,7 +203,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void rollbackTransaction() throws CaresXAException {
     if (!xaUnitOfWork.transactional()) {
-      LOGGER.debug("XA ROLLBACK TRANSACTION: unit of work not transactional");
+      LOGGER.trace("XA ROLLBACK TRANSACTION: unit of work not transactional");
       return;
     }
 
