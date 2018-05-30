@@ -24,4 +24,10 @@ public class ScreeningRelationshipResourceTest {
     relationsshipResource.create(relationship);
     verify(resourceDelegate).create(relationship);
   }
+
+  @Test
+  public void whenFindIsInvolvedThenWeShouldCallService(){
+    relationsshipResource.get("1");
+    verify(resourceDelegate).get("1");
+  }
 }

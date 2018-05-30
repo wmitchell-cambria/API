@@ -16,6 +16,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.GET;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.http.HttpStatus;
@@ -67,5 +69,19 @@ public class ScreeningRelationshipResource {
   public Response create( @Valid @ApiParam(hidden = false, required = true)
       ScreeningRelationship screeningRelationship) {
     return resourceDelegate.create(screeningRelationship);
+  }
+
+  @UnitOfWork(value = "ns")
+  @GET
+  @Path("/{id}")
+  @ApiResponses(value = {@ApiResponse(code = HttpStatus.SC_BAD_REQUEST, message = "Unable to process JSON"),
+          @ApiResponse(code = HttpStatus.SC_UNAUTHORIZED, message = "Not Authorized"),
+          @ApiResponse(code = HttpStatus.SC_NOT_ACCEPTABLE, message = "Accept Header not supported"),
+          @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Relationship not found")})
+  @ApiOperation(value = "Find Relationship by id", code = HttpStatus.SC_OK,
+          response = ScreeningRelationship.class)
+  public Response get(@PathParam("id") @ApiParam(required = true,
+          value = "The id of the Relationship to find") String id) {
+    return resourceDelegate.get(id);
   }
 }
