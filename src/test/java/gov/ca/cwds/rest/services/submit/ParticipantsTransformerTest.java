@@ -1,13 +1,10 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.fixture.ParticipantIntakeApiResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Participant;
@@ -32,7 +29,11 @@ import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 @SuppressWarnings("javadoc")
 public class ParticipantsTransformerTest {
 
-  private Map<String, IntakeLov> nsCodeToNsLovMap;
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
+
   ParticipantIntakeApi nsParticipant;
 
   @Rule
@@ -40,16 +41,6 @@ public class ParticipantsTransformerTest {
 
   @Before
   public void setup() throws Exception {
-    IntakeLov intakeLovEnglish = mock(IntakeLov.class);
-    when(intakeLovEnglish.getLegacySystemCodeId()).thenReturn(new Long(1253));
-    IntakeLov intakeLovRussian = mock(IntakeLov.class);
-    when(intakeLovRussian.getLegacySystemCodeId()).thenReturn(new Long(1271));
-    IntakeLov intakeLovStateCa = mock(IntakeLov.class);
-    when(intakeLovStateCa.getLegacySystemCodeId()).thenReturn(new Long(1828));
-    nsCodeToNsLovMap = new HashMap<String, IntakeLov>();
-    nsCodeToNsLovMap.put("English", intakeLovEnglish);
-    nsCodeToNsLovMap.put("Russian", intakeLovRussian);
-    nsCodeToNsLovMap.put("CA", intakeLovStateCa);
     nsParticipant = new ParticipantIntakeApiResourceBuilder().setLegacyDescriptor(null).setRaces("")
         .setEthnicity("").build();
   }
@@ -61,10 +52,8 @@ public class ParticipantsTransformerTest {
             .setAddresses(new HashSet<>()).setCsecs(new ArrayList<>()).createParticipant();
     Set<ParticipantIntakeApi> nsParticipants = Stream.of(nsParticipant).collect(Collectors.toSet());
     Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
-    Set<Participant> actual =
-        new ParticipantsTransformer().transform(nsParticipants, nsCodeToNsLovMap);
+    Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
     assertEquals(actual, expected);
   }
-
 
 }

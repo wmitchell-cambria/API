@@ -1,10 +1,7 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -14,6 +11,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.fixture.AddressIntakeApiResourceBuilder;
@@ -40,6 +40,10 @@ public class ScreeningTransformerTest {
   private Map<String, IntakeLov> cmsSysIdToNsLovMap;
   private Screening screening;
 
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -48,34 +52,18 @@ public class ScreeningTransformerTest {
 
   @Before
   public void setup() throws Exception {
-    IntakeLov intakeLovInPerson = mock(IntakeLov.class);
-    when(intakeLovInPerson.getLegacySystemCodeId()).thenReturn(new Long(408));
-    IntakeLov intakeLovResponseTime = mock(IntakeLov.class);
-    when(intakeLovResponseTime.getLegacySystemCodeId()).thenReturn(new Long(1519));
-    IntakeLov intakeLovStateCa = mock(IntakeLov.class);
-    when(intakeLovStateCa.getLegacySystemCodeId()).thenReturn(new Long(1828));
-
-    nsCodeToNsLovMap = new HashMap<>();
-    nsCodeToNsLovMap.put("in_person", intakeLovInPerson);
-    nsCodeToNsLovMap.put("evaluate_out", intakeLovResponseTime);
-    nsCodeToNsLovMap.put("CA", intakeLovStateCa);
-
-    IntakeLov intakeLov = mock(IntakeLov.class);
-    when(intakeLov.getLegacyLogicalCode()).thenReturn("34");
-    cmsSysIdToNsLovMap = new HashMap<>();
-    cmsSysIdToNsLovMap.put("1101", intakeLov);
-
     screening = new ScreeningResourceBuilder().build();
   }
 
   @Test
-  public void transformConvertsScreeningToScreeningToReferral() {
+  public void transformConvertsScreeningToScreeningToReferral() throws JsonProcessingException {
     Set<CrossReport> crossReports = new HashSet<>();
     Set<Allegation> allegations = new HashSet<>();
     Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
         .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
-        .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
+        .setIncidentDate("2017-01-01")..setLegacySourceTable("REFERL_T").setLimitedAccessDate(null)
+        .setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)
         .setAdditionalInformation("additional information")
@@ -83,8 +71,7 @@ public class ScreeningTransformerTest {
         .setParticipants(null).setCrossReports(crossReports).setAddress(null)
         .setAllegations(allegations).setSafetyAlerts(safetyAlerts).setSafetyAlertInformationn(null)
         .createScreeningToReferral();
-    ScreeningToReferral actual = new ScreeningTransformer().transform(screening, "0X5", "34",
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    ScreeningToReferral actual = new ScreeningTransformer().transform(screening, "0X5", "34");
 
     assertEquals(actual, expected);
   }
@@ -96,7 +83,8 @@ public class ScreeningTransformerTest {
     Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
         .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
-        .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
+        .setIncidentDate("2017-01-01").setLegacySourceTable("REFERL_T").setLimitedAccessDate(null)
+        .setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod(null)
         .setAdditionalInformation("additional information")
@@ -118,7 +106,8 @@ public class ScreeningTransformerTest {
     Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
         .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
-        .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime(null)
+        .setIncidentDate("2017-01-01").setLegacySourceTable("REFERL_T").setLimitedAccessDate(null)
+        .setResponseTime(null)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)
         .setAdditionalInformation("additional information")
@@ -148,7 +137,8 @@ public class ScreeningTransformerTest {
     Set<String> safetyAlerts = new HashSet<>();
     ScreeningToReferral expected = new ScreeningToReferralResourceBuilder()
         .setEndedAt("2017-01-03T00:00:00.000Z").setStartedAt("2017-01-02T00:00:00.000Z")
-        .setIncidentDate("2017-01-01").setLimitedAccessDate(null).setResponseTime((short) 1519)
+        .setIncidentDate("2017-01-01").setLegacySourceTable("REFERL_T").setLimitedAccessDate(null)
+        .setResponseTime((short) 1519)
         .setScreeningDecisionDetail("evaluate_out").setLimitedAccessAgency("34")
         .setLimitedAccessCode("N").setCommunicationMethod((short) 408)
         .setAdditionalInformation("additional information")
@@ -157,11 +147,9 @@ public class ScreeningTransformerTest {
         .setAllegations(allegations).setSafetyAlerts(safetyAlerts).setSafetyAlertInformationn(null)
         .createScreeningToReferral();
     Screening screening = new ScreeningResourceBuilder().setIncidentAddress(nsAddress).build();
-    ScreeningToReferral actual = new ScreeningTransformer().transform(screening, "0X5", "34",
-        nsCodeToNsLovMap, cmsSysIdToNsLovMap);
+    ScreeningToReferral actual = new ScreeningTransformer().transform(screening, "0X5", "34");
 
     assertEquals(actual, expected);
   }
-
 
 }

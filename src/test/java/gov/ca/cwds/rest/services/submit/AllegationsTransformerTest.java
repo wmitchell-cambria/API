@@ -1,12 +1,8 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,7 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.fixture.AllegationResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Allegation;
 import gov.ca.cwds.rest.api.domain.AllegationIntake;
@@ -29,18 +25,18 @@ import gov.ca.cwds.rest.api.domain.AllegationIntake;
 @SuppressWarnings("javadoc")
 public class AllegationsTransformerTest {
 
-  private Map<String, IntakeLov> nsCodeToNsLovMap;
   AllegationIntake allegationIntake;
+
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setup() throws Exception {
-    IntakeLov intakeLovGeneralNeglect = mock(IntakeLov.class);
-    when(intakeLovGeneralNeglect.getLegacySystemCodeId()).thenReturn(new Long(2178));
-    nsCodeToNsLovMap = new HashMap<String, IntakeLov>();
-    nsCodeToNsLovMap.put("General neglect", intakeLovGeneralNeglect);
 
     Set<String> types = Stream.of("General neglect").collect(Collectors.toSet());
     allegationIntake = new AllegationIntake();
@@ -51,7 +47,6 @@ public class AllegationsTransformerTest {
     allegationIntake.setTypes(types);
     allegationIntake.setCounty("34");
     allegationIntake.setVictimPersonId(new Long(5432));
-
   }
 
   @Test
@@ -59,8 +54,7 @@ public class AllegationsTransformerTest {
     Allegation allegation = new AllegationResourceBuilder().createAllegation();
     Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
     Set<Allegation> expected = Stream.of(allegation).collect(Collectors.toSet());
-    Set<Allegation> actual =
-        new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
+    Set<Allegation> actual = new AllegationsTransformer().transform(nsAllegations);
 
     assertEquals(actual, expected);
   }
@@ -70,8 +64,7 @@ public class AllegationsTransformerTest {
     allegationIntake.setTypes(new HashSet<String>());
     Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
     Set<Allegation> expected = new HashSet<Allegation>();
-    Set<Allegation> actual =
-        new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
+    Set<Allegation> actual = new AllegationsTransformer().transform(nsAllegations);
 
     assertEquals(actual, expected);
   }
@@ -83,8 +76,7 @@ public class AllegationsTransformerTest {
         new AllegationResourceBuilder().setInjuryHarmType(null).createAllegation();
     Set<AllegationIntake> nsAllegations = Stream.of(allegationIntake).collect(Collectors.toSet());
     Set<Allegation> expected = Stream.of(allegation).collect(Collectors.toSet());
-    Set<Allegation> actual =
-        new AllegationsTransformer().transform(nsAllegations, nsCodeToNsLovMap);
+    Set<Allegation> actual = new AllegationsTransformer().transform(nsAllegations);
 
     assertEquals(actual, expected);
   }
