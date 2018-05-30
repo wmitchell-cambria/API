@@ -47,10 +47,8 @@ import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
-import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
-import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
@@ -83,7 +81,6 @@ public class LastUpdatedTimeIsUniqueTest
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
 
-  private CmsDocumentService cmsDocumentService;
   private DrmsDocumentService drmsDocumentService;
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
 
@@ -115,8 +112,6 @@ public class LastUpdatedTimeIsUniqueTest
     super.setup();
     new TestingRequestExecutionContext("0X5");
 
-    longTextService = new LongTextService(longTextDao);
-    cmsDocumentService = mock(CmsDocumentService.class);
     drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 

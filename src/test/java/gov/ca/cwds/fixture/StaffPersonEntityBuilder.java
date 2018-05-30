@@ -7,9 +7,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class StaffPersonEntityBuilder {
 
   String id = "q1p";

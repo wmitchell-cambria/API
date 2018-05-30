@@ -62,7 +62,10 @@ import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationPerpetratorHistoryDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentUnitDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCaseDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseLoadDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsChildClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
@@ -416,7 +419,10 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsAddressUcDaoImpl.class);
     bind(XaCmsAllegationDaoImpl.class);
     bind(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    bind(XaCmsAssignmentUnitDaoImpl.class);
+    bind(XaCmsCaseDaoImpl.class);
     bind(XaCmsCaseLoadDaoImpl.class);
+    bind(XaCmsChildClientDaoImpl.class);
     bind(XaCmsClientAddressDaoImpl.class);
     bind(XaCmsClientDaoImpl.class);
     bind(XaCmsClientRelationshipDaoImpl.class);
@@ -433,15 +439,8 @@ public class DataAccessModule extends AbstractModule {
     bind(XaCmsStaffPersonDaoImpl.class);
 
     // NS:
-    // bind(AddressDao.class);
-    // bind(AddressesDao.class);
     bind(CsecDao.class);
-
-    // bind(PersonDao.class);
-    // bind(ScreeningDao.class);
-    // bind(ScreeningAddressDao.class);
     bind(AgencyDao.class);
-    bind(gov.ca.cwds.data.ns.CrossReportDao.class);
     bind(AllegationIntakeDao.class);
     bind(ParticipantDao.class);
     bind(PhoneNumberDao.class);
@@ -455,7 +454,6 @@ public class DataAccessModule extends AbstractModule {
     bind(RaceDao.class);
     bind(IntakeLOVCodeDao.class);
     bind(IntakeLovDao.class);
-    // bind(PaperTrailDao.class);
 
     // NS XA:
     bind(XaNsAddressDaoImpl.class);
@@ -463,7 +461,7 @@ public class DataAccessModule extends AbstractModule {
     bind(XaNsAgencyDaoImpl.class);
     bind(XaNsAllegationDaoImpl.class);
     bind(XaNsAllegationIntakeDaoImpl.class);
-    bind(XaNsCrossReportDaoImpl.class);
+    bind(gov.ca.cwds.data.ns.CrossReportDao.class).to(XaNsCrossReportDaoImpl.class);
     bind(XaNsCsecDaoImpl.class);
     bind(XaNsIntakeLovDaoImpl.class);
     bind(XaNsLegacyDescriptorDaoImpl.class);
@@ -476,6 +474,7 @@ public class DataAccessModule extends AbstractModule {
     bind(XaNsScreeningAddressDaoImpl.class);
     bind(XaNsScreeningDaoImpl.class);
 
+    // Virtual triggers:
     bind(PaperTrailInterceptor.class);
 
     // Trigger Tables:

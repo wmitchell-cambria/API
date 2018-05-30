@@ -23,7 +23,7 @@ import gov.ca.cwds.rest.services.StaffPersonService;
 
 /**
  * Business layer object to work on submit a {@link Screening}. Create a {@link ScreeningToReferral}
- * and Update the {@link Screening } with the Referral Id.
+ * and Update the {@link Screening} with the Referral Id.
  * 
  * @author CWDS API Team
  */
@@ -57,7 +57,7 @@ public class ScreeningSubmitService implements CrudsService {
     final String userCountyCode =
         staffPersonService.find(RequestExecutionContext.instance().getStaffId()).getCountyCode();
 
-    // NEXT: abstract this out and cache these values
+    // NEXT: abstract this out and cache these values.
     final Map<String, IntakeLov> nsCodeToNsLovMap = new HashMap<>();
     final Map<String, IntakeLov> cmsSysIdToNsLovMap = new HashMap<>();
     final List<IntakeLov> intakeLovs = intakeLovDao.findAll();

@@ -84,7 +84,9 @@ import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.cms.Reporter;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -344,6 +346,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // =================
     // DAO's:
     // =================
+
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
 
@@ -369,7 +372,12 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     upperCaseTables = mock(XaUpperCaseTables.class);
 
-    final Reporter reporter = new Reporter();
+    final StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+
+    final Reporter reporter = new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N",
+        null, " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828,
+        "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
     when(reporterDao.create(any(Reporter.class))).thenReturn(reporter);
 
     laCountyTrigger = mock(LACountyTrigger.class);
@@ -389,6 +397,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // =================
     // SERVICES:
     // =================
+
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -419,6 +428,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
+
+    longTextService = new LongTextService(longTextDao);
+    cmsDocumentService = mock(CmsDocumentService.class);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
