@@ -1,110 +1,130 @@
 {
-  "id" : 2,
-  "legacy_source_table" : "",
-  "legacy_id" : "",
-  "ended_at" : "2016-08-03T01:00:00.000Z",
-  "incident_county":"34",
-  "incident_date" : "2016-08-02",
-  "location_type" : "Foster Home",
+  "id": 2,
+  "legacy_source_table": "",
+  "legacy_id": "",
+  "ended_at": "2016-08-03T01:00:00.000Z",
+  "incident_county": "34",
+  "incident_date": "2016-08-02",
+  "location_type": "Foster Home",
   "approval_status": 118,
   "family_awareness": false,
   "filed_with_law_enforcement": false,
   "responsible_agency": "C",
-  "communication_method" : 409,
-  "current_location_of_children" : "current location of children",
-  "name" : "The Rocky Horror Show",
-  "report_narrative" : "Narrative 123 test",
-  "reference" : "123ABC",
-  "response_time" : 1520,
-  "started_at" : "2016-08-03T01:00:00.000Z",
-  "assignee" : "Michael Bastow",
-  "assignee_staff_id":"0X5",
-  "additional_information" : "addtional information",
-  "screening_decision" : "Screening Descision",
-  "screening_decision_detail" : "Detail",
+  "communication_method": 409,
+  "current_location_of_children": "current location of children",
+  "name": "The Rocky Horror Show",
+  "report_narrative": "Narrative 123 test",
+  "reference": "123ABC",
+  "response_time": 1520,
+  "started_at": "2016-08-03T01:00:00.000Z",
+  "assignee": "Michael Bastow",
+  "assignee_staff_id": "0X5",
+  "additional_information": "addtional information",
+  "screening_decision": "Screening Descision",
+  "screening_decision_detail": "Detail",
   "limited_access_code": "S",
   "limited_access_description": "",
-  "limited_access_agency":"23",
-  "limited_access_date":null,
-  "address" : {
-   "legacy_source_table" : "",
-   "legacy_id" : "",
-    "street_address" : "123 Main",
-    "city" : "Sacramento",
+  "limited_access_agency": "23",
+  "limited_access_date": null,
+  "address": {
+    "legacy_source_table": "",
+    "legacy_id": "",
+    "street_address": "123 Main",
+    "city": "Sacramento",
     "state": 1828,
-    "zip" : 95757,
+    "zip": 95757,
     "type": 32
   },
-  "participants" : [ {
-    "id" : 5432,
-    "legacy_source_table" : "CLIENT_T",
-    "legacy_id" : "1234567ABC",
-     "legacy_descriptor": {
+  "participants": [
+    {
+      "id": 5432,
+      "legacy_source_table": "CLIENT_T",
+      "legacy_id": "1234567ABC",
+      "legacy_descriptor": {
         "legacy_id": null,
-         "legacy_ui_id": null,
-         "legacy_last_updated": null,
-         "legacy_table_name": null,
-         "legacy_table_description": null
+        "legacy_ui_id": null,
+        "legacy_last_updated": null,
+        "legacy_table_name": null,
+        "legacy_table_description": null
       },
-    "first_name" : "John",
-    "middle_name" : "T",
-    "last_name" : "Smith",
-    "name_suffix" : "",
-    "gender" : "M",
-    "ssn" : "123456789",
-    "date_of_birth" : "2001-03-15",
-    "primary_language": 1253,
-    "secondary_language": 1271,
-    "client_staff_person_added":false,
-    "reporter_confidential_waiver": false,
-    "reporter_employer_name": "Employer Name",
-    "screening_id" : 12345,
-    "limited_access_code": "N",
-    "approximate_age": "12",
-    "approximate_age_units": "Y",
-    "roles" : [ "Victim" ],
-    "addresses" : [ {
-      "legacy_source_table" : "",
-      "legacy_id" : "",
-      "street_address" : "123 First St",
-      "city" : "San Jose",
-      "state": 1828,
-      "zip" : 94321,
-      "type": 32,
-       "legacy_descriptor": {
-                "legacy_id": null,
-                "legacy_ui_id": null,
-                "legacy_last_updated": null,
-                "legacy_table_name": null,
-                "legacy_table_description": null
-           }
-    } ],
-    "race_ethnicity":{  
-            "race_codes":[  
-              841
-            ],
-            "unable_to_determine_code":"A",
-            "hispanic_codes":[  
-               3164
-            ],
-            "hispanic_orgin_code":"X",
-            "hispanic_unable_to_determine_code":"A"
-         }
-  } ],
-  "cross_reports" : [ {
-    "id" : "",
-    "legacy_source_table" : "",
-    "legacy_id" : "",
-    "method" : 2095,
-    "inform_date" : "2017-03-15",
-    "county_id":"1101"
-  } ],
-  "allegations" : [ {
-    "legacy_source_table" : "ALLGTN_T",
-    "legacy_id" : "1234567ABC",
-    "victim_person_id" : 5432,
-    "perpetrator_person_id" : 2,
-    "type" : 2178,
-    "county" : "34"
-  } ]
+      "first_name": "John",
+      "middle_name": "T",
+      "last_name": "Smith",
+      "name_suffix": "",
+      "gender": "M",
+      "ssn": "123456789",
+      "date_of_birth": "2001-03-15",
+      "primary_language": 1253,
+      "secondary_language": 1271,
+      "client_staff_person_added": false,
+      "reporter_confidential_waiver": false,
+      "reporter_employer_name": "Employer Name",
+      "screening_id": 12345,
+      "limited_access_code": "N",
+      "approximate_age": "12",
+      "approximate_age_units": "Y",
+      "roles": [
+        "Victim"
+      ],
+      "addresses": [
+        {
+          "legacy_source_table": "",
+          "legacy_id": "",
+          "street_address": "123 First St",
+          "city": "San Jose",
+          "state": 1828,
+          "zip": 94321,
+          "type": 32,
+          "legacy_descriptor": {
+            "legacy_id": null,
+            "legacy_ui_id": null,
+            "legacy_last_updated": null,
+            "legacy_table_name": null,
+            "legacy_table_description": null
+          }
+        }
+      ],
+      "race_ethnicity": {
+        "race_codes": [
+          841
+        ],
+        "unable_to_determine_code": "A",
+        "hispanic_codes": [
+          3164
+        ],
+        "hispanic_orgin_code": "X",
+        "hispanic_unable_to_determine_code": "A"
+      },
+      "csec": [
+        {
+          "id": "-1",
+          "participant_id": "-3",
+          "csec_code_id": "-2",
+          "start_date": "2018-05-28",
+          "end_date": "2018-05-29"
+        }
+      ]
+    }
+  ],
+  "cross_reports": [
+    {
+      "id": "",
+      "legacy_source_table": "",
+      "legacy_id": "",
+      "method": 2095,
+      "inform_date": "2017-03-15",
+      "county_id": "1101"
+    }
+  ],
+  "allegations": [
+    {
+      "legacy_source_table": "ALLGTN_T",
+      "legacy_id": "1234567ABC",
+      "victim_person_id": 5432,
+      "perpetrator_person_id": 2,
+      "type": 2178,
+      "county": "34"
+    }
+  ],
+  "report_type": "ssb"
 }

@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture;
 
+import gov.ca.cwds.rest.api.domain.Csec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -42,6 +44,7 @@ public class ParticipantIntakeApiResourceBuilder {
   Boolean sealed = false;
   Boolean sensitive = false;
   LegacyDescriptor legacyDescriptor = new LegacyDescriptor();;
+  List<Csec> csec = new ArrayList<>();;
 
   /**
    * @return the ParticipantIntakeApi
@@ -250,6 +253,11 @@ public class ParticipantIntakeApiResourceBuilder {
   public ParticipantIntakeApiResourceBuilder setLegacyDescriptor(
       LegacyDescriptor legacyDescriptor) {
     this.legacyDescriptor = legacyDescriptor;
+    return this;
+  }
+
+  public ParticipantIntakeApiResourceBuilder setCsec(List<Csec> csec) {
+    this.csec = csec;
     return this;
   }
 

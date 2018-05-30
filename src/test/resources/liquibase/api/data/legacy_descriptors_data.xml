@@ -52,6 +52,36 @@
       <column name="describable_id" valueNumeric="25"/>
     </insert>
     <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="55"/>
+      <column name="legacy_id" value="6YtTyyc0ND"/>
+      <column name="legacy_ui_id" value="0372-7697-7418-2001439"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="2002-11-21T07:46:30.298-0800"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="42"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="57"/>
+      <column name="legacy_id" value="D4aDcoM75C"/>
+      <column name="legacy_ui_id" value="0742-6027-8947-4027230"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="1998-03-21T09:33:29.928-0800"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="43"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
+      <column name="id" valueNumeric="59"/>
+      <column name="legacy_id" value="FGisWCk0Ki"/>
+      <column name="legacy_ui_id" value="0867-3248-1136-6001284"/>
+      <column name="legacy_table_name" value="CLIENT_T"/>
+      <column name="legacy_table_description" value="Client"/>
+      <column name="legacy_last_updated" value="2002-09-05T11:04:31.672-0700"/>
+      <column name="describable_type" value="Participant"/>
+      <column name="describable_id" valueNumeric="44"/>
+    </insert>
+    <insert tableName="legacy_descriptors">
       <column name="id" valueNumeric="124"/>
       <column name="legacy_id" value="4MITEVl00c"/>
       <column name="legacy_ui_id" value="0247-6288-0598-5000038"/>

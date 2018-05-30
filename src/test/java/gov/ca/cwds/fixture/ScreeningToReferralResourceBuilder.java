@@ -54,7 +54,8 @@ public class ScreeningToReferralResourceBuilder {
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports;
   private Set<gov.ca.cwds.rest.api.domain.Allegation> allegations;
   private SafetyAlerts safetyAlerts;
- 
+  private String reportType;
+
   public ScreeningToReferralResourceBuilder() {
     address = new AddressResourceBuilder().createAddress();
     Participant victim = new ParticipantResourceBuilder()
@@ -409,6 +410,11 @@ public class ScreeningToReferralResourceBuilder {
     return this;
   }
 
+  public ScreeningToReferralResourceBuilder setReportType(String reportType) {
+    this.reportType = reportType;
+    return this;
+  }
+
   public ScreeningToReferral createScreeningToReferral() {
     return new ScreeningToReferral(id, legacySourceTable, referralId, endedAt, incidentCounty,
         incidentDate, locationType, communicationMethod, currentLocationOfChildren, name,
@@ -418,6 +424,6 @@ public class ScreeningToReferralResourceBuilder {
         limitedAccessDescription, limitedAccessAgency, limitedAccessDate, safetyAlerts.getAlerts(), 
         safetyAlerts.getAlertInformation(),
         address, participants,
-        crossReports, allegations);
+        crossReports, allegations, reportType);
   }
 }

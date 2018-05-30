@@ -1,13 +1,13 @@
 {
-  "id" : "5432",
-  "legacy_source_table" : "CLIENT_T",
-  "legacy_id" : "1234567ABC",
+  "id": "5432",
+  "legacy_source_table": "CLIENT_T",
+  "legacy_id": "1234567ABC",
   "legacy_descriptor": {
     "legacy_id": null,
-     "legacy_ui_id": null,
-     "legacy_last_updated": null,
-     "legacy_table_name": null,
-     "legacy_table_description": null
+    "legacy_ui_id": null,
+    "legacy_last_updated": null,
+    "legacy_table_name": null,
+    "legacy_table_description": null
   },
   "first_name": "John",
   "middle_name": "T",
@@ -25,36 +25,45 @@
   "limited_access_code": "N",
   "approximate_age": "12",
   "approximate_age_units": "Y",
-  "roles" : [
-  	"Victim"
-  	],
-  	"addresses" : [
-  		{
-            "legacy_source_table" : "",
-            "legacy_id" : "",
-  			"street_address" : "123 First St",
-  			"state": 1828,
-  			"city" : "San Jose",
-  			"zip" : "94321",
-  			"type": 32,
-  			"legacy_descriptor": {
-                "legacy_id": null,
-                "legacy_ui_id": null,
-                "legacy_last_updated": null,
-                "legacy_table_name": null,
-                "legacy_table_description": null
-           }
-  		}
+  "roles": [
+    "Victim"
+  ],
+  "addresses": [
+    {
+      "legacy_source_table": "",
+      "legacy_id": "",
+      "street_address": "123 First St",
+      "state": 1828,
+      "city": "San Jose",
+      "zip": "94321",
+      "type": 32,
+      "legacy_descriptor": {
+        "legacy_id": null,
+        "legacy_ui_id": null,
+        "legacy_last_updated": null,
+        "legacy_table_name": null,
+        "legacy_table_description": null
+      }
+    }
+  ],
+  "race_ethnicity": {
+    "race_codes": [
+      841
     ],
-  	    "race_ethnicity":{  
-            "race_codes":[  
-              841
-            ],
-            "unable_to_determine_code":"A",
-            "hispanic_codes":[  
-               3164
-            ],
-            "hispanic_orgin_code":"X",
-            "hispanic_unable_to_determine_code":"A"
-         }
+    "unable_to_determine_code": "A",
+    "hispanic_codes": [
+      3164
+    ],
+    "hispanic_orgin_code": "X",
+    "hispanic_unable_to_determine_code": "A"
+  },
+  "csec": [
+    {
+      "id": "-1",
+      "participant_id": "-3",
+      "csec_code_id": "-2",
+      "start_date": "2018-05-28",
+      "end_date": "2018-05-29"
+    }
+  ]
 }

@@ -52,7 +52,7 @@ public class ScreeningTransformer {
     Short responseTimeSysId = setReferralResponse(screening);
     String limitedAccessCode = StringUtils.isNotBlank(screening.getAccessRestrictions())
         ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
-            .getCmsDescription()
+        .getCmsDescription()
         : "N";
     Date limitedAccessDate = setLimitedAccesDate(screening);
     Address address = (screening.getIncidentAddress() != null)
@@ -66,20 +66,26 @@ public class ScreeningTransformer {
         ? new CrossReportsTransformer().transform(screening.getCrossReports())
         : null;
 
-    return new ScreeningToReferral(Integer.parseInt(screening.getId()),
-        LegacyTable.REFERRAL.getName(), screening.getReferralId(),
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt())),
-        screening.getIncidentCounty(), screening.getIncidentDate(), screening.getLocationType(),
+    String screeningIncidentDate = screening.getIncidentDate() == null ?
+        null : screening.getIncidentDate().toString();
+    String screeningStartDate = screening.getStartedAt() == null ?
+        null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt().toString()));
+    String screeningEndDate = screening.getEndedAt() == null ?
+        null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt().toString()));
+
+    return new ScreeningToReferral(Integer.parseInt(screening.getId()), LegacyTable.REFERRAL.getName(),
+        screening.getReferralId(), screeningEndDate,
+        screening.getIncidentCounty(), screeningIncidentDate, screening.getLocationType(),
         communicationMethodSysId, CURRENT_LOCATION_OF_CHILDREN, screening.getName(),
         screening.getReportNarrative(), screening.getReference(), responseTimeSysId,
-        DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt())),
+        screeningStartDate,
         screening.getAssignee(), screening.getAssigneeStaffId(),
         screening.getAdditionalInformation(), screening.getScreeningDecision(),
         screening.getScreeningDecisionDetail(), APPROVAL_STATUS, FAMILY_AWARENESS,
         FILED_WITH_LAW_ENFORCEMENT, RESPONSIBLE_AGENCY, limitedAccessCode,
         screening.getRestrictionsRationale(), loggedInStaffCounty, limitedAccessDate,
         screening.getSafetyAlerts(), screening.getSafetyInformation(), address, participants,
-        crossReports, allegations);
+        crossReports, allegations, screening.getReportType());
   }
 
   private Short setReferralResponse(Screening screening) {

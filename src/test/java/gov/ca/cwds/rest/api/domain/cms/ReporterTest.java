@@ -3,13 +3,8 @@ package gov.ca.cwds.rest.api.domain.cms;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -20,9 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -32,18 +24,15 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -232,7 +221,7 @@ public class ReporterTest {
         new LegacyDescriptor(), firstName, middleName, lastName, suffix, "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
-        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -301,7 +290,7 @@ public class ReporterTest {
         new LegacyDescriptor(), firstName, middleName, lastName, "jr", "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, approximateAge,
-        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        approximateAgeUnits, new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     String countyCode = "countyCode";
     Short stateCode = new Short("0");
@@ -352,7 +341,7 @@ public class ReporterTest {
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
-        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -376,7 +365,7 @@ public class ReporterTest {
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
-        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -399,7 +388,7 @@ public class ReporterTest {
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
-        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");
@@ -423,7 +412,7 @@ public class ReporterTest {
         new LegacyDescriptor(), "firstName", "middleName", "lastName", "jr", "gender", "ssn",
         "date_of_birth", primaryLanguage, secondaryLanguage, 8L, reporterConfidentialWaiver,
         reporterEmployerName, clientStaffPersonAdded, sensitivityIndicator, "12", "Y",
-        new HashSet<>(), new HashSet<>(), raceAndEthnicity);
+        new HashSet<>(), new HashSet<>(), raceAndEthnicity, null);
 
     Reporter reporter =
         Reporter.createWithDefaults("referralId", true, address, participant, "countyCode");

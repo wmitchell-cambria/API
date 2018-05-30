@@ -76,6 +76,7 @@ public class ScreeningToReferralTest {
 
   Short communicationMethod = 409;
   String currentLocationOfChildren = "current location of children";
+  String reportType = "ssb";
 
   private Short responseTime = (short) 1520;
 
@@ -148,7 +149,7 @@ public class ScreeningToReferralTest {
         "0X5", "addtional information", "Screening Descision", "Detail", approvalStatus,
         familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(),
         safetyAlerts.getAlertInformation(), address,
-        participants, crossReports, allegations));
+        participants, crossReports, allegations, reportType));
 
     String serialized = MAPPER.writeValueAsString(
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
@@ -198,7 +199,7 @@ public class ScreeningToReferralTest {
         responseTime, "2016-08-03T01:00:00.000Z", "Michael Bastow", "0X5", "addtional information",
         "Screening Descision", "Detail", approvalStatus, familyAwarness, filedWithLawEnforcement,
         responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(),
-        address, participants, crossReports, allegations);
+        address, participants, crossReports, allegations, reportType);
 
     ScreeningToReferral deserialized =
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),

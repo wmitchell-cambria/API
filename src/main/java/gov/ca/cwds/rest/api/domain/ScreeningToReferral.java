@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiModelProperty;
   "screening_decision_detail", "approval_status", "family_awareness", 
   "filed_with_law_enforcement", "responsible_agency", "limited_access_code",
   "limited_access_description", "limited_access_agency", "limited_access_date",
-  "alerts", "alert_information", "address", "participants", "cross_reports", "allegations"})
+  "alerts", "alert_information", "address", "participants", "cross_reports", "allegations", "report_type"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
@@ -246,6 +246,10 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @AtRiskAllegation
   private Set<Allegation> allegations;
 
+  @JsonProperty("report_type")
+  private String reportType;
+
+
   @SuppressWarnings("javadoc")
   public ScreeningToReferral() {
     super();
@@ -296,7 +300,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
       java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
       Address address, Set<Participant> participants, Set<CrossReport> crossReports,
-      Set<Allegation> allegations) {
+      Set<Allegation> allegations, String reportType) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -331,6 +335,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.participants = participants;
     this.crossReports = crossReports;
     this.allegations = allegations;
+    this.reportType = reportType;
   }
 
   /**
@@ -577,6 +582,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @SuppressWarnings("javadoc")
   public Set<CrossReport> getCrossReports() {
     return crossReports;
+  }
+
+  public String getReportType() {
+    return reportType;
+  }
+
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
   }
 
   /**
