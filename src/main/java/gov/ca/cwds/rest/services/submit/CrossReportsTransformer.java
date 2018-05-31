@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
@@ -28,6 +29,9 @@ public class CrossReportsTransformer {
     Set<CrossReport> crossReports = new HashSet<>();
     for (CrossReportIntake nsCrossReport : crossReportsIntake) {
 
+      Set<GovernmentAgency> governmentAgencyIntakes = nsCrossReport.getAgencies() != null
+          ? new GovernmentAgencyTransformer().transform(nsCrossReport.getAgencies())
+          : null;
       Integer method = StringUtils.isNotBlank(nsCrossReport.getMethod())
           ? IntakeCodeCache.global()
               .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.CROSS_REPORT_METHOD,
@@ -44,7 +48,7 @@ public class CrossReportsTransformer {
           .cookISO8601Timestamp(DomainChef.uncookDateString(nsCrossReport.getInformDate()));
       crossReports.add(new CrossReport(nsCrossReport.getId(), nsCrossReport.getLegacySourceTable(),
           nsCrossReport.getLegacyId(), nsCrossReport.isFiledOutOfState(), method, informDate,
-          county, nsCrossReport.getAgencies()));
+          county, governmentAgencyIntakes));
     }
     return crossReports;
   }

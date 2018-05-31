@@ -1,28 +1,20 @@
 package gov.ca.cwds.rest.services.submit;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.fixture.CrossReportResourceBuilder;
-import gov.ca.cwds.fixture.GovernmentAgencyResourceBuilder;
 import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
-import gov.ca.cwds.rest.api.domain.GovernmentAgency;
+import gov.ca.cwds.rest.api.domain.GovernmentAgencyIntake;
 
 /***
  * 
@@ -32,8 +24,6 @@ import gov.ca.cwds.rest.api.domain.GovernmentAgency;
 @SuppressWarnings("javadoc")
 public class CrossReportsTransformerTest {
 
-  private Map<String, IntakeLov> nsCodeToNsLovMap;
-  private Map<String, IntakeLov> cmsSysIdToNsLovMap;
   private CrossReportIntake crossReportIntake;
 
   /**
@@ -42,23 +32,11 @@ public class CrossReportsTransformerTest {
   private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
   @Before
   public void setup() throws Exception {
-    IntakeLov intakeLovElectronicReport = mock(IntakeLov.class);
-    when(intakeLovElectronicReport.getLegacySystemCodeId()).thenReturn(new Long(2095));
-    nsCodeToNsLovMap = new HashMap<String, IntakeLov>();
-    nsCodeToNsLovMap.put("Electronic Report", intakeLovElectronicReport);
-    IntakeLov intakeLov = mock(IntakeLov.class);
-    when(intakeLov.getLegacyLogicalCode()).thenReturn("34");
-    cmsSysIdToNsLovMap = new HashMap<String, IntakeLov>();
-    cmsSysIdToNsLovMap.put("1101", intakeLov);
-
-    Set<GovernmentAgency> agencies =
-        Stream.of(new GovernmentAgencyResourceBuilder().build()).collect(Collectors.toSet());
+    Set<GovernmentAgencyIntake> agencies =
+        Stream.of(new GovernmentAgencyIntake("12", "Ad4ATcY00E", "LAW_ENFORCEMENT"))
+            .collect(Collectors.toSet());
     crossReportIntake = new CrossReportIntake();
     crossReportIntake.setId("");
     crossReportIntake.setLegacyId("");

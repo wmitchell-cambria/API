@@ -3,7 +3,7 @@ package gov.ca.cwds.rest.services.submit;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,10 +47,53 @@ public class ParticipantsTransformerTest {
 
   @Test
   public void transformConvertsParticipantsIntakeApiToParticipants() {
-    Participant participant =
-        new ParticipantResourceBuilder().setRaceAndEthnicity(new RaceAndEthnicity())
-            .setAddresses(new HashSet<>()).setCsecs(new ArrayList<>()).createParticipant();
+    Participant participant = new ParticipantResourceBuilder().setCsecs(new ArrayList<>())
+        .setRaceAndEthnicity(new RaceAndEthnicity()).setAddresses(new HashSet<>())
+        .createParticipant();
     Set<ParticipantIntakeApi> nsParticipants = Stream.of(nsParticipant).collect(Collectors.toSet());
+    Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
+    Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
+    assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testToConvertOnlyPrimartLanaguageIsPresent() {
+    ParticipantIntakeApi participantIntakeApi =
+        new ParticipantIntakeApiResourceBuilder().setLanguages(Arrays.asList("English"))
+            .setLegacyDescriptor(null).setRaces("").setEthnicity("").build();
+    Participant participant = new ParticipantResourceBuilder().setSecondaryLanguage((short) 0)
+        .setCsecs(new ArrayList<>()).setRaceAndEthnicity(new RaceAndEthnicity())
+        .setAddresses(new HashSet<>()).createParticipant();
+    Set<ParticipantIntakeApi> nsParticipants =
+        Stream.of(participantIntakeApi).collect(Collectors.toSet());
+    Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
+    Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
+    assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testToConvertSealed() {
+    ParticipantIntakeApi participantIntakeApi = new ParticipantIntakeApiResourceBuilder()
+        .setSealed(true).setLegacyDescriptor(null).setRaces("").setEthnicity("").build();
+    Participant participant = new ParticipantResourceBuilder().setSensitivityIndicator("R")
+        .setCsecs(new ArrayList<>()).setRaceAndEthnicity(new RaceAndEthnicity())
+        .setAddresses(new HashSet<>()).createParticipant();
+    Set<ParticipantIntakeApi> nsParticipants =
+        Stream.of(participantIntakeApi).collect(Collectors.toSet());
+    Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
+    Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
+    assertEquals(actual, expected);
+  }
+
+  @Test
+  public void testToConvertSensitiveIndicator() {
+    ParticipantIntakeApi participantIntakeApi = new ParticipantIntakeApiResourceBuilder()
+        .setSensitive(true).setLegacyDescriptor(null).setRaces("").setEthnicity("").build();
+    Participant participant = new ParticipantResourceBuilder().setSensitivityIndicator("S")
+        .setCsecs(new ArrayList<>()).setRaceAndEthnicity(new RaceAndEthnicity())
+        .setAddresses(new HashSet<>()).createParticipant();
+    Set<ParticipantIntakeApi> nsParticipants =
+        Stream.of(participantIntakeApi).collect(Collectors.toSet());
     Set<Participant> expected = Stream.of(participant).collect(Collectors.toSet());
     Set<Participant> actual = new ParticipantsTransformer().transform(nsParticipants);
     assertEquals(actual, expected);

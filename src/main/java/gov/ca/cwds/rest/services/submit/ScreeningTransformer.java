@@ -24,7 +24,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
  */
 public class ScreeningTransformer {
 
-  private static final String LEGACY_SOURCE_TABLE = "";
   private static final String CURRENT_LOCATION_OF_CHILDREN = null;
   private static final String RESPONSIBLE_AGENCY = "C";
   private static final Boolean FAMILY_AWARENESS = Boolean.FALSE;
@@ -52,7 +51,7 @@ public class ScreeningTransformer {
     Short responseTimeSysId = setReferralResponse(screening);
     String limitedAccessCode = StringUtils.isNotBlank(screening.getAccessRestrictions())
         ? (AccessRestrictions.findByNsDescription(screening.getAccessRestrictions().toLowerCase()))
-        .getCmsDescription()
+            .getCmsDescription()
         : "N";
     Date limitedAccessDate = setLimitedAccesDate(screening);
     Address address = (screening.getIncidentAddress() != null)
@@ -66,20 +65,21 @@ public class ScreeningTransformer {
         ? new CrossReportsTransformer().transform(screening.getCrossReports())
         : null;
 
-    String screeningIncidentDate = screening.getIncidentDate() == null ?
-        null : screening.getIncidentDate().toString();
-    String screeningStartDate = screening.getStartedAt() == null ?
-        null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt().toString()));
-    String screeningEndDate = screening.getEndedAt() == null ?
-        null : DomainChef.cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt().toString()));
+    String screeningIncidentDate =
+        screening.getIncidentDate() == null ? null : screening.getIncidentDate().toString();
+    String screeningStartDate = screening.getStartedAt() == null ? null
+        : DomainChef
+            .cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt().toString()));
+    String screeningEndDate = screening.getEndedAt() == null ? null
+        : DomainChef
+            .cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt().toString()));
 
-    return new ScreeningToReferral(Integer.parseInt(screening.getId()), LegacyTable.REFERRAL.getName(),
-        screening.getReferralId(), screeningEndDate,
+    return new ScreeningToReferral(Integer.parseInt(screening.getId()),
+        LegacyTable.REFERRAL.getName(), screening.getReferralId(), screeningEndDate,
         screening.getIncidentCounty(), screeningIncidentDate, screening.getLocationType(),
         communicationMethodSysId, CURRENT_LOCATION_OF_CHILDREN, screening.getName(),
         screening.getReportNarrative(), screening.getReference(), responseTimeSysId,
-        screeningStartDate,
-        screening.getAssignee(), screening.getAssigneeStaffId(),
+        screeningStartDate, screening.getAssignee(), screening.getAssigneeStaffId(),
         screening.getAdditionalInformation(), screening.getScreeningDecision(),
         screening.getScreeningDecisionDetail(), APPROVAL_STATUS, FAMILY_AWARENESS,
         FILED_WITH_LAW_ENFORCEMENT, RESPONSIBLE_AGENCY, limitedAccessCode,
