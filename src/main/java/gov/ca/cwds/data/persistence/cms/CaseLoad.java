@@ -15,13 +15,14 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * {@link CmsPersistentObject} class representing a Case Load Entity
+ * {@link CmsPersistentObject} class representing a Case Load.
  * 
  * @author CWDS API Team
  */
@@ -66,6 +67,7 @@ public class CaseLoad extends CmsPersistentObject {
 
   @NotNull
   @Size(min = 1, max = 30)
+  @ColumnTransformer(read = "trim(IDENTFR_NM)")
   @Column(name = "IDENTFR_NM")
   private String identifierName;
 

@@ -92,6 +92,7 @@ import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
@@ -176,7 +177,8 @@ public class DataAccessModule extends AbstractModule {
 
   // CMS:
   private final ImmutableList<Class<?>> cmsEntities = ImmutableList.<Class<?>>builder()
-      .add(gov.ca.cwds.data.legacy.cms.entity.Client.class,
+      .add(gov.ca.cwds.data.legacy.cms.entity.CsecHistory.class,
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
@@ -255,7 +257,8 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
-          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class)
+          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType.class)
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
@@ -288,6 +291,7 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
       gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
       gov.ca.cwds.data.persistence.ns.Relationship.class,
+      gov.ca.cwds.data.persistence.ns.SafelySurrenderedBabiesEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();
@@ -404,6 +408,7 @@ public class DataAccessModule extends AbstractModule {
     bind(OtherCaseReferralDrmsDocumentDao.class);
     bind(OtherClientNameDao.class);
     bind(ReferralClientDeliveredServiceDao.class);
+    bind(SexualExploitationTypeDao.class);
     bind(StateIdDao.class);
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
