@@ -18,8 +18,7 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext.Parameter;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Business layer object to update External Interface Tables
- * 
+ * Business layer object to update External Interface Tables.
  *
  * @author CWDS API Team
  */
@@ -64,10 +63,9 @@ public class ExternalInterfaceTables {
     }
   }
 
-
   /**
    * @param assignment Assignment creates the external interface with the assignment Id
-   * @param operType crud operation type
+   * @param operType CRUD operation type
    */
   public void createExtInterAssignment(Assignment assignment, String operType) {
     ExternalInterface externalInterface = new ExternalInterface();
@@ -89,7 +87,6 @@ public class ExternalInterfaceTables {
   /**
    * @param primaryKey the primary key
    * @param sourceTable the source table name
-   * 
    */
   public void createExtInterForDelete(Serializable primaryKey, String sourceTable) {
     ExternalInterface externalInterface = new ExternalInterface();
@@ -109,8 +106,8 @@ public class ExternalInterfaceTables {
   }
 
   /**
-   * @param referralId - referralId
-   * @param operType - operype
+   * @param referralId - referral id
+   * @param operType - operation type
    */
   public void createExternalInterfaceReferral(String referralId, String operType) {
     ExternalInterface externalInterface = new ExternalInterface();
@@ -135,4 +132,5 @@ public class ExternalInterfaceTables {
     requestExecutionContext.put(Parameter.SEQUENCE_EXTERNAL_TABLE, seqNumUpdated);
     return seqNumUpdated;
   }
+
 }

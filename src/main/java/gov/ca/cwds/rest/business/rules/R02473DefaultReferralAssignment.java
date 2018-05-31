@@ -20,15 +20,15 @@ import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 /**
  * <p>
  * BUSINESS RULE: "R - 02473 Default Referral Assignment"
+ * </p>
  * 
+ * <p>
  * The initial assignment to a referral defaults to the caseLoad of the worker entering the referral
  * into the application (when that staff person has only one active caseLoad which is not on hold.)
- * <p>
+ * </p>
  * 
- * @author CWS-NS2
- * 
+ * @author CWDS API Team
  * @see Assignment
- *
  */
 public class R02473DefaultReferralAssignment implements RuleAction {
 
