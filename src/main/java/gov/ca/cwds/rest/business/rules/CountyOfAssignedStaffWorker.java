@@ -11,8 +11,8 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 
 /**
+ * County Of Assigned Staff Worker validation.
  * 
- * County Of Assigned Staff Worker validation
  * <p>
  * The incident county and the assignee's county should be the same to ensure that the referral that
  * is created in legacy can be edited
@@ -37,7 +37,7 @@ public class CountyOfAssignedStaffWorker implements RuleValidator {
   public boolean isValid() {
     final StaffPerson assignedStaffWorker =
         validatedStaffPerson(referral.getPrimaryContactStaffPersonId());
-    LOGGER.debug("assigned staff worker county: {}, referral county: {}",
+    LOGGER.info("assigned staff worker county: {}, referral county: {}",
         assignedStaffWorker.getCountyCode(), referral.getCountySpecificCode());
     return (assignedStaffWorker.getCountyCode().equals(referral.getCountySpecificCode()));
   }
