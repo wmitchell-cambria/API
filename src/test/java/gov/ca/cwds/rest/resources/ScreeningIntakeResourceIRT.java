@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.AllegationIntake;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.Csec;
-import gov.ca.cwds.rest.api.domain.GovernmentAgency;
+import gov.ca.cwds.rest.api.domain.GovernmentAgencyIntake;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.Screening;
 
@@ -47,8 +47,8 @@ public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
     CrossReportIntake crossReport = screening.getCrossReports().iterator().next();
     expectedResponse = expectedResponse.replace("${cross_report_id}", crossReport.getId());
 
-    Set<GovernmentAgency> agencies = crossReport.getAgencies();
-    for (GovernmentAgency agency : agencies) {
+    Set<GovernmentAgencyIntake> agencies = crossReport.getAgencies();
+    for (GovernmentAgencyIntake agency : agencies) {
       if ("DISTRICT_ATTORNEY".equals(agency.getType())) {
         expectedResponse = expectedResponse.replace("${agency1_id}", agency.getId());
       }
