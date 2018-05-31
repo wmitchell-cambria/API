@@ -225,11 +225,11 @@ public class ParticipantIntakeApiService implements CrudsService {
           "Entity ParticipantEntity with id = [" + primaryKey + "] was not found."));
     }
 
-    createOrUpdateCsecs(participantIntakeApi, participantEntityManaged);
-    createOrUpdateSafelySurrenderedBabies(participantIntakeApi, participantEntityManaged);
-
     participantEntityManaged =
         participantDao.update(participantEntityManaged.updateFrom(participantIntakeApi));
+
+    createOrUpdateCsecs(participantIntakeApi, participantEntityManaged);
+    createOrUpdateSafelySurrenderedBabies(participantIntakeApi, participantEntityManaged);
 
     // Update Participant Addresses & PhoneNumbers
     Set<AddressIntakeApi> addressIntakeApiSet =
@@ -330,23 +330,23 @@ public class ParticipantIntakeApiService implements CrudsService {
 
       SafelySurrenderedBabiesEntity existingSafelySurrenderedBabiesEntity =
           safelySurrenderedBabiesDao.find(participantId);
-
-      SafelySurrenderedBabiesEntity safelySurrenderedBabiesEntity =
-          safelySurrenderedBabiesMapper.map(safelySurenderedBabies);
-      safelySurrenderedBabiesEntity.setParticipantId(participantId);
-
       SafelySurrenderedBabiesEntity createdOrUpdatedSafelySurrenderedBabiesEntity = null;
 
       if (existingSafelySurrenderedBabiesEntity == null) {
+        SafelySurrenderedBabiesEntity safelySurrenderedBabiesEntity =
+            safelySurrenderedBabiesMapper.map(safelySurenderedBabies);
+        safelySurrenderedBabiesEntity.setParticipantId(participantId);
         createdOrUpdatedSafelySurrenderedBabiesEntity =
             safelySurrenderedBabiesDao.create(safelySurrenderedBabiesEntity);
         safelySurenderedBabies.setParticipantId(
             String.valueOf(createdOrUpdatedSafelySurrenderedBabiesEntity.getParticipantId()));
       } else {
+        SafelySurrenderedBabiesEntity safelySurrenderedBabiesEntity = safelySurrenderedBabiesMapper
+            .map(safelySurenderedBabies, existingSafelySurrenderedBabiesEntity);
+        safelySurrenderedBabiesEntity.setParticipantId(participantId);
         createdOrUpdatedSafelySurrenderedBabiesEntity =
             safelySurrenderedBabiesDao.update(safelySurrenderedBabiesEntity);
       }
-
       participantEntityManaged
           .setSafelySurrenderedBabies(createdOrUpdatedSafelySurrenderedBabiesEntity);
     }

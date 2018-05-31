@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.mapper;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import gov.ca.cwds.data.persistence.ns.SafelySurrenderedBabiesEntity;
@@ -16,5 +17,9 @@ public interface SafelySurrenderedBabiesMapper {
 
   @InheritInverseConfiguration
   SafelySurrenderedBabiesEntity map(SafelySurenderedBabies safelySurrenderedBabies);
+
+  @InheritInverseConfiguration
+  SafelySurrenderedBabiesEntity map(SafelySurenderedBabies safelySurrenderedBabies,
+      @MappingTarget SafelySurrenderedBabiesEntity safelySurrenderedBabiesEntity);
 
 }
