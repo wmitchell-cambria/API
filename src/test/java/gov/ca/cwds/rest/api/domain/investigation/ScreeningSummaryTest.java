@@ -7,6 +7,8 @@ import static org.hamcrest.Matchers.is;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -86,15 +88,15 @@ public class ScreeningSummaryTest {
       throws JsonParseException, JsonMappingException, IOException {
 
     String referrence = "screeing referrence";
-    Date endedAt = new Date();
+    LocalDateTime endedAt = LocalDateTime.now();
     String incidentCounty = "20";
-    Date incidentDate = new Date();
+    LocalDate incidentDate = LocalDate.now();
     String locationType = "";
     String communicationMethod = "1234";
     String name = "screening name";
     String responseTime = "2345";
     String screeningDecision = "3456";
-    Date startedAt = new Date();
+    LocalDateTime startedAt = LocalDateTime.now();
     String narrative = "screening narrative";
     Address screeningAddress = new Address();
     Set<ParticipantEntity> participantEntities = new HashSet<>();
@@ -115,7 +117,7 @@ public class ScreeningSummaryTest {
     assertThat(screeningSummary.getId(), is(equalTo(screeningEntity.getId())));
     assertThat(screeningSummary.getSafetyInformation(),
         is(equalTo(screeningEntity.getSafetyInformation())));
-    assertThat(screeningSummary.getStartedAt(), is(equalTo(screeningEntity.getStartedAt())));
+    assertThat(new java.sql.Timestamp(screeningSummary.getStartedAt().getTime()).toLocalDateTime(), is(equalTo(screeningEntity.getStartedAt())));
     assertThat(screeningSummary.getAllegations(), is(equalTo(simpleAllegations)));
   }
 

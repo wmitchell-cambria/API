@@ -8,21 +8,29 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
 import java.io.Serializable;
 import java.util.Date;
+import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ScreeningRelationshipService implements CrudsService {
   private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningRelationshipService.class);
   private RelationshipDao relationshipDao;
+  private RelationshipMapper relationshipMapper;
 
   @Inject
-  public ScreeningRelationshipService(RelationshipDao relationshipDao){
+  public ScreeningRelationshipService(RelationshipDao relationshipDao, RelationshipMapper relationshipMapper){
     super();
     this.relationshipDao = relationshipDao;
+    this.relationshipMapper = relationshipMapper;
   }
 
   @Override
   public Response find(Serializable serializable) {
+    assert serializable instanceof String;
+    Relationship entity = relationshipDao.find(serializable);
+    if (entity != null){
+      return relationshipMapper.map(entity);
+    }
     return null;
   }
 

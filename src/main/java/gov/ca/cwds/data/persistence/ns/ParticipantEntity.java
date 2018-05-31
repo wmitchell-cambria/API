@@ -20,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
@@ -135,6 +136,11 @@ public class ParticipantEntity
   @JoinColumn(name = "participant_id", insertable = false, updatable = false)
   @OrderBy("id")
   private List<CsecEntity> csecs = new ArrayList<>();
+
+  @HashCodeExclude
+  @OneToOne(cascade = CascadeType.DETACH)
+  @JoinColumn(name = "id")
+  private SafelySurrenderedBabiesEntity safelySurrenderedBabies;
 
   /**
    * Default constructor
@@ -334,6 +340,15 @@ public class ParticipantEntity
 
   public void setCsecs(List<CsecEntity> csecs) {
     this.csecs = csecs;
+  }
+
+
+  public SafelySurrenderedBabiesEntity getSafelySurrenderedBabies() {
+    return safelySurrenderedBabies;
+  }
+
+  public void setSafelySurrenderedBabies(SafelySurrenderedBabiesEntity safelySurrenderedBabies) {
+    this.safelySurrenderedBabies = safelySurrenderedBabies;
   }
 
   public void setRoles(String[] roles) {

@@ -1,5 +1,7 @@
 package gov.ca.cwds.fixture;
 
+import gov.ca.cwds.rest.api.domain.Csec;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -39,6 +41,7 @@ public class ParticipantResourceBuilder {
   Set<String> roles;
   Set<gov.ca.cwds.rest.api.domain.Address> addresses;
   RaceAndEthnicity raceAndEthnicity;
+  List<Csec> csecs;
 
   /**
    * 
@@ -60,6 +63,8 @@ public class ParticipantResourceBuilder {
         .setZip("94321")
         .createAddress();
     this.addresses = new HashSet<>(Arrays.asList(address));
+    csecs = new ArrayList<>();
+    csecs.add(new CsecBuilder().createCsec());
   }
 
   /**
@@ -304,6 +309,11 @@ public class ParticipantResourceBuilder {
     return this;
   }
 
+  public ParticipantResourceBuilder setCsecs(List<Csec> csecs) {
+    this.csecs = csecs;
+    return this;
+  }
+
   /**
    * @return the Participant
    */
@@ -312,6 +322,6 @@ public class ParticipantResourceBuilder {
         lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage, secondaryLanguage, screeningId,
         reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
         sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
-        raceAndEthnicity);
+        raceAndEthnicity, csecs);
   }
 }

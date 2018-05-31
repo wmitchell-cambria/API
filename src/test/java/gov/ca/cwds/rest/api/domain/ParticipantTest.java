@@ -8,9 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -35,10 +31,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * @author CWDS API Team
@@ -71,6 +65,7 @@ public class ParticipantTest {
   private Set<String> roles = new HashSet<>();
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
+  private List<Csec> csecs = new ArrayList<>();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private Validator validator;
@@ -142,7 +137,7 @@ public class ParticipantTest {
         firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
         secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
-        addresses, raceAndEthnicity);
+        addresses, raceAndEthnicity, csecs);
 
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getLegacySourceTable(), is(equalTo(legacySourceTable)));
@@ -166,6 +161,7 @@ public class ParticipantTest {
     assertThat(domain.getRoles(), is(equalTo(roles)));
     assertThat(domain.getAddresses(), is(equalTo(addresses)));
     assertThat(domain.getRaceAndEthnicity(), is(equalTo(raceAndEthnicity)));
+    assertThat(domain.getCsecs(), is(equalTo(csecs)));
   }
 
   @Test
@@ -370,7 +366,7 @@ public class ParticipantTest {
           firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
           secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
           clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
-          addresses, raceAndEthnicity);
+          addresses, raceAndEthnicity, null);
     } catch (Exception e) {
       e.printStackTrace();
     }

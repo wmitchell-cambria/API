@@ -3,6 +3,7 @@ package gov.ca.cwds.rest.services;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,8 @@ import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.services.submit.IntakeCodeConveter;
 
 /**
  * Intake code cache Implementation
@@ -67,11 +70,29 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
     return intakeLov;
   }
 
-  // This method will be implemented with the convertor story
   @Override
-  public IntakeLov getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
-    return null;
+  public Short getLegacySystemCodeForIntakeCode(String metaId, String intakeCode) {
+    Short sysId = null;
+    List<IntakeLov> intakeLovs = getAllLegacySystemCodesForMeta(metaId);
+    Optional<IntakeLov> intakeLovOptional = intakeLovs.stream()
+        .filter(intakeLov -> intakeLov.getIntakeCode().equals(intakeCode)).findFirst();
+    if (intakeLovOptional.isPresent()) {
+      sysId = intakeLovOptional.get().getLegacySystemCodeId().shortValue();
+    }
 
+    return sysId;
+  }
+
+  @Override
+  public Short getLegacySystemCodeForRaceAndEthnicity(String metaId, String intakeCode) {
+    Short sysId = null;
+    String legacyDescripion = StringUtils.isNotBlank(intakeCode)
+        ? IntakeCodeConveter.findLegacyDescpretion(intakeCode).getLegacyValue()
+        : null;
+    if (StringUtils.isNotBlank(legacyDescripion) && StringUtils.isNotBlank(metaId)) {
+      sysId = SystemCodeCache.global().getSystemCodeId(legacyDescripion, metaId);
+    }
+    return sysId;
   }
 
   /**

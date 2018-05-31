@@ -7,8 +7,8 @@
   "screening_decision_detail": "3_days",
   "assignee": "Testing CWDS - State of California",
   "assignee_staff_id": "0X5",
-  "started_at": "2018-03-29T16:11:59.476Z",
-  "ended_at": "2018-03-30T16:11:37.279Z",
+  "started_at": "2018-03-29T16:11:59.476",
+  "ended_at": "2018-03-30T16:11:37.279",
   "additional_information": "add",
   "incident_county": "99",
   "incident_date": "2018-03-29",
@@ -37,14 +37,14 @@
       "county_id": "1101",
       "agencies": [
         {
-          "id": "10",
-          "code": "Tet1MxS00E",
-          "type": "DISTRICT_ATTORNEY"
-        },
-        {
           "id": "9",
           "code": "OCyM47F00J",
           "type": "LAW_ENFORCEMENT"
+        },
+        {
+          "id": "10",
+          "code": "Tet1MxS00E",
+          "type": "DISTRICT_ATTORNEY"
         }
       ]
     }
@@ -54,7 +54,7 @@
     "id": "79",
     "legacy_id": "79VrmIT00c",
     "legacy_source_table": "ADDRS_T",
-    "type": "Other",
+    "type": "29",
     "street_address": "erfsgd",
     "city": "Sacramento",
     "state": "CA",
@@ -66,8 +66,8 @@
       "victim_person_id": 42,
       "perpetrator_person_id": 43,
       "types": [
-        "General Neglect",
-        "Physical Abuse"
+        "General neglect",
+        "Physical abuse"
       ]
     }
   ],
@@ -90,7 +90,7 @@
           "id": "142",
           "legacy_id": "79VrmIT00c",
           "legacy_source_table": "ADDRS_T",
-          "type": "Other",
+          "type": "29",
           "street_address": "erfsgd101",
           "city": "Sacramento",
           "state": "CA",
@@ -136,8 +136,25 @@
           "end_date": "2018-03-31"
         }
       ],
+        "safelySurenderedBabies": {
+        "surrendered_by": "Unknown",
+        "relation_to_child": "525",
+        "bracelet_id": "1234",
+        "parent_guardian_given_bracelet_id": "U",
+        "parent_guardian_provided_med_questionaire": "U",
+        "med_questionaire_return_date": "1992-05-18",
+        "comments": "Mother surrendered the baby",
+        "participant_child": "42"
+      },
       "sealed": false,
-      "sensitive": false
+      "sensitive": false,
+      "legacy_descriptor": {
+        "legacy_id": "6YtTyyc0ND",
+        "legacy_ui_id": "0372-7697-7418-2001439",
+        "legacy_last_updated": "2002-11-21T07:46:30.298-0800",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
     },
     {
       "id": "43",
@@ -156,7 +173,7 @@
           "id": "143",
           "legacy_id": "79VrmIT00c",
           "legacy_source_table": "ADDRS_T",
-          "type": "Other",
+          "type": "29",
           "street_address": "erfsgd102",
           "city": "Sacramento",
           "state": "CA",
@@ -186,8 +203,25 @@
         }
       ],
       "csec": [],
+        "safelySurenderedBabies": {
+        "surrendered_by": "Unknown",
+        "relation_to_child": "525",
+        "bracelet_id": "1234",
+        "parent_guardian_given_bracelet_id": "U",
+        "parent_guardian_provided_med_questionaire": "U",
+        "med_questionaire_return_date": "1992-05-18",
+        "comments": "Mother surrendered the baby",
+        "participant_child": "43"
+      },
       "sealed": false,
-      "sensitive": false
+      "sensitive": false,
+      "legacy_descriptor": {
+        "legacy_id": "D4aDcoM75C",
+        "legacy_ui_id": "0742-6027-8947-4027230",
+        "legacy_last_updated": "1998-03-21T09:33:29.928-0800",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
     },
     {
       "id": "44",
@@ -214,7 +248,14 @@
       "phone_numbers": [],
       "csec": [],
       "sealed": false,
-      "sensitive": false
+      "sensitive": false,
+      "legacy_descriptor": {
+        "legacy_id": "FGisWCk0Ki",
+        "legacy_ui_id": "0867-3248-1136-6001284",
+        "legacy_last_updated": "2002-09-05T11:04:31.672-0700",
+        "legacy_table_name": "CLIENT_T",
+        "legacy_table_description": "Client"
+      }
     }
   ]
 }

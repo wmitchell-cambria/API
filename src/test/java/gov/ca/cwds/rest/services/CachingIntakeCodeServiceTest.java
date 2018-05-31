@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -13,9 +14,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
@@ -25,6 +26,11 @@ import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
  *
  */
 public class CachingIntakeCodeServiceTest {
+
+  /**
+   * Initialize intake code cache
+   */
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
   private CachingIntakeCodeService cachingIntakeCodeService;
   private static IntakeLovDao intakeLovDao;
@@ -50,7 +56,6 @@ public class CachingIntakeCodeServiceTest {
    */
   @Test
   public void instantiation() {
-
     CachingIntakeCodeService target = new CachingIntakeCodeService(intakeLovDao, 1);
     assertThat(target, notNullValue());
 
@@ -59,7 +64,6 @@ public class CachingIntakeCodeServiceTest {
   /**
    * 
    */
-  @Ignore
   @Test
   public void testToGetValidLegacyId() {
     IntakeLov intakeLov = new IntakeLov(1251L, "lang_tpc", "Cambodian", "19", false, "LANG_TPC", "",
@@ -68,12 +72,12 @@ public class CachingIntakeCodeServiceTest {
         null, "language", "English", "English");
     List<IntakeLov> lovList = Arrays.asList(intakeLov, intakeLov1);
 
-    when(intakeLovDao.findAll()).thenReturn(lovList);
+    when(intakeLovDao.findByLegacyMetaId(any(String.class))).thenReturn(lovList);
     cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
-    IntakeLov actualLovCode = cachingIntakeCodeService
+    Short actualLovCode = cachingIntakeCodeService
         .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.LANGUAGE_CODE, "Cambodian");
     Assert.assertNotNull(actualLovCode);
-    assertThat(actualLovCode.getLegacySystemCodeId(), is(equalTo(1251L)));
+    assertThat(actualLovCode, is(equalTo((short) 1251)));
   }
 
   /**
@@ -83,7 +87,7 @@ public class CachingIntakeCodeServiceTest {
   public void testToWhenCacheNull() {
     when(intakeLovDao.findByLegacyMetaId(null)).thenReturn(new ArrayList<>());
     cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
-    IntakeLov actualLovCode = cachingIntakeCodeService
+    Short actualLovCode = cachingIntakeCodeService
         .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.LANGUAGE_CODE, "112kfjn");
     Assert.assertNull(actualLovCode);
   }
@@ -97,15 +101,15 @@ public class CachingIntakeCodeServiceTest {
         null, "language", "Cambodian", "Cambodian");
     IntakeLov intakeLov1 = new IntakeLov(1253L, "lang_tpc", "English", "07", false, "LANG_TPC", "",
         null, "language", "English", "English");
-    List<IntakeLov> lovList = new ArrayList<>(Arrays.asList(intakeLov));
+    List<IntakeLov> lovList = new ArrayList<>(Arrays.asList(intakeLov, intakeLov1));
 
-    // when(intakeLovDao.findByLegacyMetaId(SystemCodeCategoryId.LANGUAGE_CODE)).thenReturn(lovList);
+    when(intakeLovDao.findByLegacyMetaId(SystemCodeCategoryId.LANGUAGE_CODE)).thenReturn(lovList);
     cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
     when(intakeLovDao.findByLegacyMetaId(SystemCodeCategoryId.LANGUAGE_CODE)).thenReturn(lovList);
     List<IntakeLov> actualLovCode =
         cachingIntakeCodeService.getAllLegacySystemCodesForMeta(SystemCodeCategoryId.LANGUAGE_CODE);
     Assert.assertNotNull(actualLovCode);
-    assertThat(actualLovCode.size(), is(equalTo(1)));
+    assertThat(actualLovCode.size(), is(equalTo(2)));
   }
 
   /**
