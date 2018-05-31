@@ -390,7 +390,6 @@ public class DataAccessModule extends AbstractModule {
     bind(AllegationDao.class);
     bind(AllegationPerpetratorHistoryDao.class);
     bind(AttorneyDao.class);
-    bind(ChildClientDao.class);
     bind(ClientCollateralDao.class);
     bind(ClientDao.class);
     bind(ClientRelationshipDao.class);
@@ -421,6 +420,7 @@ public class DataAccessModule extends AbstractModule {
     bind(CaseLoadDao.class).to(XaCmsCaseLoadDaoImpl.class);
     bind(CaseAssignmentDao.class).to(XaCmsCaseAssignmentDaoImpl.class);
     bind(CmsDocumentDao.class).to(XaCmsDocumentDaoImpl.class);
+    bind(ChildClientDao.class).to(XaCmsChildClientDaoImpl.class);
     bind(XaCmsChildClientDaoImpl.class);
     bind(XaCmsClientAddressDaoImpl.class);
     bind(XaCmsClientDaoImpl.class);
