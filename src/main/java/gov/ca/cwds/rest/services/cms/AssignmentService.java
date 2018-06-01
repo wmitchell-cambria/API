@@ -133,7 +133,6 @@ public class AssignmentService implements
    */
   @Override
   public PostedAssignment create(gov.ca.cwds.rest.api.domain.cms.Assignment request) {
-
     try {
       Assignment managed = new Assignment(
           CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), request,
@@ -208,7 +207,6 @@ public class AssignmentService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Assignment update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.Assignment request) {
-
     try {
       Assignment managed =
           new Assignment(primaryKey, request, RequestExecutionContext.instance().getStaffId(),
