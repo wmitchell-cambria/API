@@ -66,6 +66,7 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAllegationPerpetratorHistoryDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAssignmentUnitDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCaseLoadDaoImpl;
@@ -184,9 +185,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected XaCmsReporterDaoImpl reporterDao;
   protected XaCmsReferralClientDaoImpl referralClientDao;
   protected XaCmsClientAddressDaoImpl clientAddressDao;
-
   protected XaCmsDocumentDaoImpl cmsDocumentDao;
   protected XaUpperCaseTables upperCaseTables;
+  protected XaCmsStaffPersonDaoImpl staffpersonDao;
 
   protected AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   protected AssignmentDao assignmentDao;
@@ -358,6 +359,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
 
+    staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     addressDao = mock(XaCmsAddressDaoImpl.class);
     allegationDao = mock(XaCmsAllegationDaoImpl.class);
     allegationPerpetratorHistoryDao = mock(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
@@ -380,6 +382,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
     staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     upperCaseTables = mock(XaUpperCaseTables.class);
+    laCountyTrigger = mock(LACountyTrigger.class);
+    triggerTablesDao = mock(TriggerTablesDao.class);
+    assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
 
     final StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
     when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
@@ -388,9 +393,6 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
         null, " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828,
         "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
     when(reporterDao.create(any(Reporter.class))).thenReturn(reporter);
-
-    laCountyTrigger = mock(LACountyTrigger.class);
-    triggerTablesDao = mock(TriggerTablesDao.class);
 
     riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
     riAllegation = mock(RIAllegation.class);
@@ -417,6 +419,10 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(cmsDocumentDao.create(any(CmsDocument.class))).thenReturn(doc);
     when(cmsDocumentDao.getSessionFactory()).thenReturn(sessionFactoryImplementor);
 
+    drmsDocumentDao = mock(DrmsDocumentDao.class);
+    drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -442,13 +448,11 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
         new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
             laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
 
+    longTextService = new LongTextService(longTextDao);
     childClientService = new ChildClientService(childClientDao, riChildClient);
-
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
-
-    longTextService = new LongTextService(longTextDao);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,

@@ -22,6 +22,12 @@ import com.atomikos.icatch.jta.UserTransactionImp;
  * {@link XAUnitOfWorkAspect#beforeStart(XAUnitOfWork)}, call the annotated method, and finish with
  * {@link XAUnitOfWorkAspect#afterEnd()}.
  * </p>
+ * 
+ * <p>
+ * {@link XAUnitOfWork} annotations may be nested. This aspect automatically adds nested
+ * {@link XAUnitOfWork} to the XA transaction and opens sessions for datasources not already
+ * included.
+ * </p>
  *
  * @author CWDS API Team
  */
@@ -93,7 +99,7 @@ public class XAUnitOfWorkAspect {
    * @throws CaresXAException on database error
    */
   public void joinTransaction(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
-
+    // TODO: open sessions for any datasources not already opened.
   }
 
   /**
