@@ -74,6 +74,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDocumentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsLongTextDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
@@ -182,6 +183,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected XaCmsReferralClientDaoImpl referralClientDao;
   protected XaCmsClientAddressDaoImpl clientAddressDao;
 
+  protected XaCmsDocumentDaoImpl cmsDocumentDao;
   protected XaUpperCaseTables upperCaseTables;
 
   protected AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
@@ -358,6 +360,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     caseLoadDao = mock(XaCmsCaseLoadDaoImpl.class);
     childClientDao = mock(XaCmsChildClientDaoImpl.class);
     clientAddressDao = mock(XaCmsClientAddressDaoImpl.class);
+    cmsDocumentDao = mock(XaCmsDocumentDaoImpl.class);
     clientDao = mock(XaCmsClientDaoImpl.class);
     clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
     crossReportDao = mock(XaCmsCrossReportDaoImpl.class);

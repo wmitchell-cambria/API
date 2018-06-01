@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -18,7 +17,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import gov.ca.cwds.data.cms.CmsDocumentDao;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.CmsDocumentBlobSegment;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
@@ -27,7 +25,6 @@ public class CmsDocumentServiceTest extends Doofenshmirtz<CmsDocument> {
 
   private static final String DEFAULT_DOC_ID = "0131351421120020*JONESMF 00004";
 
-  CmsDocumentDao dao;
   CmsDocumentService target;
   Query<CmsDocument> q;
   CmsDocument doc;
@@ -38,19 +35,18 @@ public class CmsDocumentServiceTest extends Doofenshmirtz<CmsDocument> {
   @Override
   public void setup() throws Exception {
     super.setup();
-    // dao = new CmsDocumentDao(sessionFactoryImplementor);
-    dao = mock(CmsDocumentDao.class);
-    target = new CmsDocumentService(dao);
+    target = new CmsDocumentService(cmsDocumentDao);
     q = queryInator();
 
-    doc = readPersistedObject();
-    when(dao.find(any(CmsDocument.class))).thenReturn(doc);
-    when(dao.find(any(String.class))).thenReturn(doc);
-    when(dao.create(any(CmsDocument.class))).thenReturn(doc);
-    when(dao.getSessionFactory()).thenReturn(sessionFactoryImplementor);
+    doc = readPersistedDocument();
+    when(cmsDocumentDao.grabSession()).thenReturn(session);
+    when(cmsDocumentDao.find(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.find(any(String.class))).thenReturn(doc);
+    when(cmsDocumentDao.create(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.getSessionFactory()).thenReturn(sessionFactoryImplementor);
   }
 
-  protected CmsDocument readPersistedObject() throws IOException {
+  protected CmsDocument readPersistedDocument() throws IOException {
     return MAPPER.readValue(
         "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"PKWare02\",\"blobSegments\":[]}",
         CmsDocument.class);
@@ -135,7 +131,7 @@ public class CmsDocumentServiceTest extends Doofenshmirtz<CmsDocument> {
 
   @Test
   public void deleteBlobs_A$String() throws Exception {
-    String docId = "0131351421120020*JONESMF ";
+    String docId = DEFAULT_DOC_ID;
     target.deleteBlobs(docId);
   }
 
@@ -148,7 +144,7 @@ public class CmsDocumentServiceTest extends Doofenshmirtz<CmsDocument> {
 
   @Test
   public void delete_A$String() throws Exception {
-    String primaryKey = "0131351421120020*JONESMF ";
+    String primaryKey = DEFAULT_DOC_ID;
     gov.ca.cwds.rest.api.domain.cms.CmsDocument actual = target.delete(primaryKey);
     CmsDocument expected = null;
     assertThat(actual, is(equalTo(expected)));
