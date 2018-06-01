@@ -30,7 +30,6 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.cms.DrmsDocument;
 import gov.ca.cwds.data.persistence.cms.ReferralClient;
-import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.AddressEntityBuilder;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
@@ -62,8 +61,6 @@ import gov.ca.cwds.rest.util.Doofenshmirtz;
  * @author CWDS API Team
  */
 public class R07577CreateDummyDocsForReferralTest extends Doofenshmirtz<ClientAddress> {
-
-  private StaffPerson staffPerson;
 
   private gov.ca.cwds.data.persistence.cms.Referral referral;
 

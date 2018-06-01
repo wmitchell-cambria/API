@@ -243,6 +243,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected ScreeningToReferralService screeningToReferralService;
 
   protected MessageBuilder messageBuilder;
+  protected StaffPerson staffPerson;
 
   Subject mockSubject;
   PrincipalCollection principalCollection;
@@ -389,8 +390,10 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     triggerTablesDao = mock(TriggerTablesDao.class);
     assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
 
-    final StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
+    // staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
+    staffPerson = new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
     when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("52");
 
     final Reporter reporter = new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N",
         null, " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828,
