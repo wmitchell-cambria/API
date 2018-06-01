@@ -156,7 +156,6 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
 
-  protected static Validator validator;
   protected static SystemCodeCache systemCodeCache;
 
   public SessionFactoryImplementor sessionFactoryImplementor;
@@ -175,6 +174,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public Settings settings;
   PreparedStatement prepStmt;
 
+  protected Validator validator;
   protected ScreeningToReferralResourceBuilder defaultReferralBuilder;
 
   public SystemCodeDao systemCodeDao;
@@ -259,7 +259,6 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   @BeforeClass
   public static void setupClass() {
     systemCodeCache = new TestSystemCodeCache();
-    validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
   @Before
@@ -268,6 +267,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     // Authentication, authorization:
     messageBuilder = mock(MessageBuilder.class);

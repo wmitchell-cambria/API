@@ -51,9 +51,13 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.CrossReport;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ClientParticipants;
 import gov.ca.cwds.rest.services.ParticipantService;
+import gov.ca.cwds.rest.services.ScreeningToReferralService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
@@ -82,6 +86,18 @@ public class R07577CreateDummyDocsForReferralTest extends Doofenshmirtz<ClientAd
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("52");
 
     participantService = mock(ParticipantService.class);
+    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+
+    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
+        triggerTablesDao, staffpersonDao, assignmentService, validator, cmsDocumentService,
+        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
+        riReferral);
+
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**
