@@ -2,6 +2,7 @@ package gov.ca.cwds.data.persistence.xa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.UserTransaction;
 
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * AOP aspect supports annotation {@link XAUnitOfWork}.
@@ -31,7 +31,7 @@ public class XAUnitOfWorkAspect {
 
   private final UserTransaction txn = new UserTransactionImp();
 
-  private final ImmutableMap<String, SessionFactory> sessionFactories;
+  private final Map<String, SessionFactory> sessionFactories;
 
   private final List<Session> sessions = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class XAUnitOfWorkAspect {
    * 
    * @param sessionFactories - all datasources to participate in the XA transaction
    */
-  public XAUnitOfWorkAspect(ImmutableMap<String, SessionFactory> sessionFactories) {
+  public XAUnitOfWorkAspect(Map<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
   }
 
@@ -84,6 +84,16 @@ public class XAUnitOfWorkAspect {
       rollbackTransaction();
       throw e;
     }
+  }
+
+  /**
+   * Add a nested {@link XAUnitOfWork} to the transaction and open sessions for datasources not
+   * already included.
+   * 
+   * @throws CaresXAException on database error
+   */
+  public void joinTransaction(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
+
   }
 
   /**
@@ -136,7 +146,7 @@ public class XAUnitOfWorkAspect {
     configureSession(session);
     sessions.add(session);
 
-    // Add user info to DB2 connections.
+    // Add user info to DB2 connections. Harmless for other connections.
     session.doWork(new WorkDB2UserInfo());
     return session;
   }
@@ -158,7 +168,7 @@ public class XAUnitOfWorkAspect {
   }
 
   protected void closeSession(Session session) {
-    if (session != null) {
+    if (session != null && (session.isOpen() || session.isDirty())) {
       LOGGER.debug("XA CLOSE SESSION");
       session.close();
     }
@@ -236,7 +246,7 @@ public class XAUnitOfWorkAspect {
     }
   }
 
-  public ImmutableMap<String, SessionFactory> getSessionFactories() {
+  public Map<String, SessionFactory> getSessionFactories() {
     return sessionFactories;
   }
 

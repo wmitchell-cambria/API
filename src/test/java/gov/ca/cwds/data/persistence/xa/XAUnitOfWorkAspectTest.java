@@ -7,6 +7,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Map;
+
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
@@ -180,8 +182,8 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
 
   @Test
   public void getSessionFactories_A$() throws Exception {
-    ImmutableMap<String, SessionFactory> actual = target.getSessionFactories();
-    ImmutableMap<String, SessionFactory> expected = this.sessionFactories;
+    Map<String, SessionFactory> actual = target.getSessionFactories();
+    Map<String, SessionFactory> expected = this.sessionFactories;
     assertThat(actual, is(equalTo(expected)));
   }
 
