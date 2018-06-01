@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -34,13 +34,12 @@ import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
-public class AddressServiceTest {
+public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persistence.cms.Address> {
 
   private AddressService addressService;
   private AddressDao addressDao;
@@ -48,12 +47,13 @@ public class AddressServiceTest {
   private UpperCaseTables upperCaseTables;
   private Validator validator;
 
-
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+  @Override
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("0X5");
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     addressService = mock(AddressService.class);
@@ -211,7 +211,6 @@ public class AddressServiceTest {
     } catch (ServiceException e) {
       assertEquals("Address ID cannot be empty", e.getMessage());
     }
-
   }
 
   @Test
