@@ -91,6 +91,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsStateIdDaoImpl;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
@@ -405,12 +406,12 @@ public class DataAccessModule extends AbstractModule {
     bind(OtherClientNameDao.class);
     bind(ReferralClientDeliveredServiceDao.class);
     bind(SexualExploitationTypeDao.class);
-    bind(StateIdDao.class);
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
     bind(TickleDao.class);
 
     // CMS XA:
+    bind(StateIdDao.class).to(XaCmsStateIdDaoImpl.class);
     bind(AllegationPerpetratorHistoryDao.class).to(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
     bind(ClientRelationshipDao.class).to(XaCmsClientRelationshipDaoImpl.class);
     bind(ClientScpEthnicityDao.class).to(XaCmsClientScpEthnicityDaoImpl.class);
