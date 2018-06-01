@@ -202,6 +202,9 @@ public class TestSystemCodeCache implements SystemCodeCache {
         && "Request Not Submitted".equals(arg0)) {
       return 118;
     }
+    if (SystemCodeCategoryId.ETHNICITY.equals(arg1) && "Mexican".equals(arg0)) {
+      return 3164;
+    }
     return null;
   }
 }

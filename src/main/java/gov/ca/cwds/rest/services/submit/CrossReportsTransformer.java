@@ -9,7 +9,6 @@ import gov.ca.cwds.rest.api.domain.CrossReport;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.GovernmentAgency;
-import gov.ca.cwds.rest.api.domain.GovernmentAgencyIntake;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
@@ -32,9 +31,8 @@ public class CrossReportsTransformer {
     for (CrossReportIntake nsCrossReport : crossReportsIntake) {
 
       Set<GovernmentAgency> governmentAgency = new HashSet<>();
-      for (GovernmentAgencyIntake agencyIntake : nsCrossReport.getAgencies()) {
-        governmentAgency.add(governmentAgencyIntake.transform(agencyIntake));
-      }
+      nsCrossReport.getAgencies().stream().forEach(
+          agencyaIntake -> governmentAgency.add(governmentAgencyIntake.transform(agencyaIntake)));
       Integer method = setCommuncationMethod(nsCrossReport);
       SystemCode systemCode = StringUtils.isNotBlank(nsCrossReport.getCountyId())
           ? SystemCodeCache.global().getSystemCode(Integer.valueOf(nsCrossReport.getCountyId()))

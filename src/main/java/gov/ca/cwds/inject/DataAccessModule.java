@@ -1,7 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
-import gov.ca.cwds.data.ns.CsecDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,6 +58,7 @@ import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
