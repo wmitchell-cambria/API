@@ -138,8 +138,8 @@ public class ParticipantEntity
   private List<CsecEntity> csecs = new ArrayList<>();
 
   @HashCodeExclude
-  @OneToOne(cascade = CascadeType.DETACH)
-  @JoinColumn(name = "id")
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id", insertable = false, updatable = false)
   private SafelySurrenderedBabiesEntity safelySurrenderedBabies;
 
   /**
