@@ -90,6 +90,7 @@ import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
@@ -169,6 +170,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public ProcedureCall proc;
   public Settings settings;
   PreparedStatement prepStmt;
+
+  protected ScreeningToReferralResourceBuilder defaultReferralBuilder;
 
   public SystemCodeDao systemCodeDao;
   public SystemMetaDao systemMetaDao;
@@ -408,6 +411,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // =================
     // SERVICES:
     // =================
+
+    defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
 
     cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
     docQuery = queryInator(this, null);

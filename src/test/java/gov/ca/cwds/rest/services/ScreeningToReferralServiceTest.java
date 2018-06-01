@@ -33,10 +33,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 
-import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
-import gov.ca.cwds.data.cms.ChildClientDao;
-import gov.ca.cwds.data.cms.DrmsDocumentDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
@@ -79,18 +77,18 @@ import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
-import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
 import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
@@ -105,21 +103,6 @@ public class ScreeningToReferralServiceTest
   private final String validReferralId = "X2WXo678Ac";
 
   private ScreeningToReferralResourceBuilder defaultReferralBuilder;
-
-  private ClientService clientService;
-  private ReferralClientService referralClientService;
-  private AllegationService allegationService;
-  private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
-  private CrossReportService crossReportService;
-  private ReporterService reporterService;
-  private AddressService addressService;
-  private ClientAddressService clientAddressService;
-  private ChildClientService childClientService;
-  private LongTextService longTextService;
-  private AssignmentService assignmentService;
-
-  private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  private ChildClientDao childClientDao;
 
   private Participant defaultVictim;
   private Participant defaultReporter;
@@ -150,9 +133,9 @@ public class ScreeningToReferralServiceTest
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
 
-    DrmsDocumentDao drmsDocumentDao = mock(DrmsDocumentDao.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
     reminders = mock(Reminders.class);
+
+    clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
 
     lastUpdateDate = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .parseDateTime("2010-03-14T13:33:12.456-0700");
@@ -182,9 +165,9 @@ public class ScreeningToReferralServiceTest
     ChildClient childClient = mock(ChildClient.class);
     when(childClientService.create(any())).thenReturn(childClient);
 
-    addressService = mock(AddressService.class);
-    allegationService = mock(AllegationService.class);
+    addressService = mock(XaCmsAddressService.class);
 
+    allegationService = mock(AllegationService.class);
     gov.ca.cwds.data.persistence.cms.Allegation allegation = new AllegationEntityBuilder().build();
     PostedAllegation postedAllegation = new PostedAllegation(allegation);
     when(allegationService.create(any())).thenReturn(postedAllegation);
@@ -211,8 +194,7 @@ public class ScreeningToReferralServiceTest
     LongTextService longTextService = mock(LongTextService.class);
     when(longTextService.create(any())).thenReturn(longText);
 
-    final ScreeningToReferral screeningToReferral =
-        defaultReferralBuilder.createScreeningToReferral();
+    ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
     referralService = mock(XaCmsReferralService.class);
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
@@ -229,6 +211,16 @@ public class ScreeningToReferralServiceTest
     defaultMandatedReporter = new ParticipantResourceBuilder().createReporterParticipant();
 
     defaultPerpetrator = new ParticipantResourceBuilder().createPerpParticipant();
+
+    messageBuilder = new MessageBuilder();
+
+    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, messageBuilder, allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
+
   }
 
   @Test(expected = NotImplementedException.class)
@@ -1019,7 +1011,7 @@ public class ScreeningToReferralServiceTest
     Address perpLegacyAddress = new Address().createWithDefaults(perpAddress);
     Set perpLegacyAddresses = new HashSet<>();
     perpAddresses.add(perpLegacyAddress);
-    addressService = mock(AddressService.class);
+
     when(addressService.find(nonExistentVictimAddressId)).thenReturn(victimLegacyAddress);
     when(addressService.find(nonExistantPerpAddressId)).thenReturn(perpLegacyAddress);
 
