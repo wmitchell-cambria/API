@@ -73,6 +73,7 @@ public class ParticipantService implements CrudsService {
   private ChildClientService childClientService;
   private ClientAddressService clientAddressService;
   private ClientScpEthnicityService clientScpEthnicityService;
+
   private CaseDao caseDao;
   private ReferralClientDao referralClientDao;
 
@@ -211,8 +212,7 @@ public class ParticipantService implements CrudsService {
         processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(),
             screeningToReferral.getReportType());
       } catch (ServiceException e) {
-        String message = e.getMessage();
-        messageBuilder.addMessageAndLog(message, e, LOGGER);
+        messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
         // next role
       }
     }
@@ -225,8 +225,7 @@ public class ParticipantService implements CrudsService {
       // addresses associated with a client
       processClientAddress(incomingParticipant, referralId, clientId, messageBuilder);
     } catch (ServiceException e) {
-      String message = e.getMessage();
-      messageBuilder.addMessageAndLog(message, e, LOGGER);
+      messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
       // next role
     }
   }
@@ -244,8 +243,7 @@ public class ParticipantService implements CrudsService {
       incomingParticipant.setLegacySourceTable(LegacyTable.REPORTER.getName());
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedReporter.getLastUpdatedTime());
     } catch (ServiceException e) {
-      String message = e.getMessage();
-      messageBuilder.addMessageAndLog(message, e, LOGGER);
+      messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
       // next role
       return true;
     }
@@ -358,18 +356,17 @@ public class ParticipantService implements CrudsService {
   private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
       MessageBuilder messageBuilder, Participant incomingParticipant, String sexAtBirth) {
     String clientId;
-
-    List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
-    Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
-    List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
-    boolean childClientIndicatorVar =
+    final List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
+    final Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
+    final List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+    final boolean childClientIndicatorVar =
         new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
-
-    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
+    final Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
         primaryRaceCode, childClientIndicatorVar);
 
     /*
-     * IMPORTANT: A referral client record must be added after updating client sensitivity indicator
+     * IMPORTANT: A referral client record must be added *AFTER* updating the client sensitivity
+     * indicator.
      */
     executeR04466ClientSensitivityIndicator(client, screeningToReferral);
 
@@ -388,7 +385,7 @@ public class ParticipantService implements CrudsService {
     gov.ca.cwds.rest.api.domain.Address reporterAddress = null;
 
     if (ip.getAddresses() != null) {
-      Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
+      final Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
 
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
         if (address != null) {
@@ -399,10 +396,10 @@ public class ParticipantService implements CrudsService {
       }
     }
 
-    Boolean mandatedReporterIndicator = ParticipantValidator.roleIsMandatedReporter(role);
+    final Boolean mandatedReporterIndicator = ParticipantValidator.roleIsMandatedReporter(role);
     Reporter theReporter = reporterService.find(referralId);
     if (theReporter == null) {
-      Reporter reporter = Reporter.createWithDefaults(referralId, mandatedReporterIndicator,
+      final Reporter reporter = Reporter.createWithDefaults(referralId, mandatedReporterIndicator,
           reporterAddress, ip, countySpecificCode);
 
       messageBuilder.addDomainValidationError(validator.validate(reporter));
@@ -482,7 +479,6 @@ public class ParticipantService implements CrudsService {
    */
   private Participant processClientAddress(Participant clientParticipant, String referralId,
       String clientId, MessageBuilder messageBuilder) {
-
     return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
         messageBuilder);
   }
@@ -525,15 +521,15 @@ public class ParticipantService implements CrudsService {
   }
 
   private List<Short> getAllRaceCodes(RaceAndEthnicity raceAndEthnicity) {
-    List<Short> allRaceCodes = new ArrayList<>();
+    final List<Short> allRaceCodes = new ArrayList<>();
 
     if (raceAndEthnicity != null) {
-      List<Short> raceCodes = raceAndEthnicity.getRaceCode();
+      final List<Short> raceCodes = raceAndEthnicity.getRaceCode();
       if (raceCodes != null) {
         allRaceCodes.addAll(raceCodes);
       }
 
-      List<Short> hispanicCodes = raceAndEthnicity.getHispanicCode();
+      final List<Short> hispanicCodes = raceAndEthnicity.getHispanicCode();
       if (hispanicCodes != null) {
         allRaceCodes.addAll(hispanicCodes);
       }
@@ -561,4 +557,5 @@ public class ParticipantService implements CrudsService {
   void setIntakeLOVCodeDao(IntakeLOVCodeDao intakeLOVCodeDao) {
     this.intakeLOVCodeDao = intakeLOVCodeDao;
   }
+
 }

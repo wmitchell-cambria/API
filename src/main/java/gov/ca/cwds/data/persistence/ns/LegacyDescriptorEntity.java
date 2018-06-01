@@ -3,9 +3,8 @@ package gov.ca.cwds.data.persistence.ns;
 import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_IDS_AND_TYPE;
 import static gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.FIND_BY_DESCRIBABLE_ID_AND_TYPE;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
-import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,13 +12,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedQuery;
 import org.joda.time.format.DateTimeFormat;
 
+import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
+
 /**
- * {@link PersistentObject} representing Legacy Descriptor in NS
+ * {@link PersistentObject} representing Legacy Descriptor in NS.
  *
  * @author CWDS API Team
  */
@@ -31,8 +34,12 @@ import org.joda.time.format.DateTimeFormat;
 @Table(name = "legacy_descriptors")
 public class LegacyDescriptorEntity implements PersistentObject {
 
-  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
-  public static final String FIND_BY_DESCRIBABLE_IDS_AND_TYPE = "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdsAndType";
+  private static final long serialVersionUID = 1L;
+
+  public static final String FIND_BY_DESCRIBABLE_ID_AND_TYPE =
+      "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdAndType";
+  public static final String FIND_BY_DESCRIBABLE_IDS_AND_TYPE =
+      "gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.findByDescribableIdsAndType";
   public static final String DESCRIBABLE_TYPE_ADDRESS = "Address";
   public static final String DESCRIBABLE_TYPE_PARTICIPANT = "Participant";
 
@@ -152,4 +159,5 @@ public class LegacyDescriptorEntity implements PersistentObject {
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }

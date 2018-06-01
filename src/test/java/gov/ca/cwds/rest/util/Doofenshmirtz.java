@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,14 +90,21 @@ import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
+import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
+import gov.ca.cwds.rest.api.domain.LimitedAccessType;
+import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -261,6 +270,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     systemCodeCache = new TestSystemCodeCache();
   }
 
+  @SuppressWarnings("unchecked")
   @Before
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -450,7 +460,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
 
     cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
-    docQuery = queryInator(this, null);
+    T t = null;
+    docQuery = queryInator(this, Arrays.asList(t).toArray());
 
     doc = readPersistedDocument();
     when(cmsDocumentDao.grabSession()).thenReturn(session);
@@ -462,6 +473,25 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     drmsDocumentDao = mock(DrmsDocumentDao.class);
     drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(createCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
+
+    Participant victim =
+        new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createVictimParticipant();
+    Participant perp =
+        new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createPerpParticipant();
+
+    Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0, true);
+    gov.ca.cwds.data.persistence.cms.Client savedClient =
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5",
+            new java.util.Date());
+    savedClient.setLastUpdatedTime(new java.util.Date());
+    when(clientDao.find(any(String.class))).thenReturn(savedClient);
+    when(clientDao.update(any(gov.ca.cwds.data.persistence.cms.Client.class)))
+        .thenReturn(savedClient);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(createReferralClients(LimitedAccessType.NONE, LimitedAccessType.NONE));
 
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
@@ -567,6 +597,26 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   @SuppressWarnings("unchecked")
   protected Query<T> queryInator(T... values) {
     return Doofenshmirtz.<T>queryInator(this, values);
+  }
+
+  private CmsCase[] createCases(LimitedAccessType firstCaseLimitedAccessCode,
+      LimitedAccessType secondCaseLimitedAccessCode) {
+    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
+    cmsCases[0].setLimitedAccessCode(firstCaseLimitedAccessCode.getValue());
+    cmsCases[1].setLimitedAccessCode(secondCaseLimitedAccessCode.getValue());
+    return cmsCases;
+  }
+
+  private ReferralClient[] createReferralClients(LimitedAccessType firstReferralLimitedAccessCode,
+      LimitedAccessType secondReferralLimitedAccessCode) {
+    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
+    referralClients[0].setReferral(new Referral());
+    referralClients[0].getReferral()
+        .setLimitedAccessCode(firstReferralLimitedAccessCode.getValue());
+    referralClients[1].setReferral(new Referral());
+    referralClients[1].getReferral()
+        .setLimitedAccessCode(secondReferralLimitedAccessCode.getValue());
+    return referralClients;
   }
 
 }

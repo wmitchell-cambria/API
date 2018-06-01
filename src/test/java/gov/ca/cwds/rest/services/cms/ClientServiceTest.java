@@ -57,10 +57,9 @@ import gov.ca.cwds.rest.services.ServiceException;
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class ClientServiceTest {
+
   private ClientService clientService;
   private ClientDao clientDao;
   private StaffPersonDao staffpersonDao;
@@ -181,7 +180,6 @@ public class ClientServiceTest {
     }
   }
 
-
   // create test
   @Test
   public void testCreateReturnsPostedClass() throws Exception {
@@ -204,7 +202,6 @@ public class ClientServiceTest {
     when(clientDao.find(any(String.class))).thenReturn(toCreate);
     PostedClient postedClient = clientService.findInboundId("Aaeae9r0F4");
     assertThat(postedClient.getExistingClientId(), is(equalTo("Aaeae9r0F4")));
-
   }
 
   @Test
@@ -230,7 +227,6 @@ public class ClientServiceTest {
     assertThat(postedClient, is(notNullValue()));
   }
 
-
   @Test
   public void testCreateReturnsCorrectEntity() throws Exception {
     String id = "Aaeae9r0F4";
@@ -255,7 +251,6 @@ public class ClientServiceTest {
     } catch (ServiceException e) {
       assertEquals("Client ID cannot be empty", e.getMessage());
     }
-
   }
 
   @Test
@@ -269,11 +264,10 @@ public class ClientServiceTest {
     } catch (ServiceException e) {
       assertEquals("Client ID cannot be empty", e.getMessage());
     }
-
   }
 
   /*
-   * Test for checking the new Client Id generated and lenght is 10
+   * Test for checking the new Client Id generated and length is 10.
    */
   @Test
   public void createReturnsGeneratedId() throws Exception {

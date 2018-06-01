@@ -291,7 +291,6 @@ public class ScreeningToReferralService implements CrudsService {
       String crossReportId, Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports,
       CrossReport crossReport, Boolean outStateLawEnforcementIndicator,
       String outStateLawEnforcementAddr) {
-
     if (StringUtils.isBlank(crossReport.getLegacyId())) {
       persistCrossReport(screeningToReferral, referralId, crossReportId, resultCrossReports,
           crossReport, outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
@@ -303,7 +302,6 @@ public class ScreeningToReferralService implements CrudsService {
             " Legacy Id on Cross Report does not correspond to an existing CMS/CWS Cross Report ";
         ServiceException se = new ServiceException(message);
         logError(message, se);
-
       }
     }
   }
@@ -378,7 +376,6 @@ public class ScreeningToReferralService implements CrudsService {
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
       Map<Long, String> perpatratorClient, Map<Long, String> victimClient) {
-
     Set<Allegation> processedAllegations = new HashSet<>();
     Set<Allegation> allegations;
     String victimClientId = "";
@@ -435,7 +432,6 @@ public class ScreeningToReferralService implements CrudsService {
     if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
       persistAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
           allegationDispositionType, allegation);
-
     } else {
       gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
           this.allegationService.find(allegation.getLegacyId());
@@ -492,7 +488,6 @@ public class ScreeningToReferralService implements CrudsService {
   private void persistAllegation(ScreeningToReferral scr, String referralId,
       Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
       final Short allegationDispositionType, Allegation allegation) {
-
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
@@ -527,7 +522,7 @@ public class ScreeningToReferralService implements CrudsService {
             DomainChef.cookDate(RequestExecutionContext.instance().getRequestStartTime()));
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
-    this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
+    allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
 
 }

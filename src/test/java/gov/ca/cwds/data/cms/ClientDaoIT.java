@@ -34,8 +34,8 @@ import io.dropwizard.jackson.Jackson;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ClientDaoIT {
+
   static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
   @Rule

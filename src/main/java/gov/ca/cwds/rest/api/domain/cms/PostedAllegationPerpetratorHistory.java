@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,15 +10,14 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * {@link Response} adding an id to the {@link AllegationPerpetratorHistory}
+ * {@link Response} adding an id to the {@link AllegationPerpetratorHistory}.
  * 
  * @author CWDS API Team
  */
 public class PostedAllegationPerpetratorHistory extends AllegationPerpetratorHistory {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 
@@ -60,7 +60,7 @@ public class PostedAllegationPerpetratorHistory extends AllegationPerpetratorHis
 
   @Override
   public int hashCode() {
-
     return Objects.hash(super.hashCode(), id);
   }
+
 }

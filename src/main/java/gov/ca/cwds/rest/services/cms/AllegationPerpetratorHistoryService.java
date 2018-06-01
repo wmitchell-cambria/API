@@ -19,7 +19,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
 
 /**
- * Business layer object to work on {@link AllegationPerpetratorHistory}
+ * Business layer object to work on {@link AllegationPerpetratorHistory}.
  * 
  * @author CWDS API Team
  */
@@ -30,6 +30,7 @@ public class AllegationPerpetratorHistoryService implements
       LoggerFactory.getLogger(AllegationPerpetratorHistoryService.class);
 
   private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
+
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
 
@@ -46,7 +47,6 @@ public class AllegationPerpetratorHistoryService implements
       RIAllegationPerpetratorHistory riAllegationPerpetratorHistory) {
     this.allegationPerpetratorHistoryDao = allegationPerpetratorHistoryDao;
     this.riAllegationPerpetratorHistory = riAllegationPerpetratorHistory;
-
   }
 
   /**
@@ -56,7 +56,6 @@ public class AllegationPerpetratorHistoryService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory persistedAllegationPerpetratorHistory =
         allegationPerpetratorHistoryDao.find(primaryKey);
     if (persistedAllegationPerpetratorHistory != null) {
@@ -73,7 +72,6 @@ public class AllegationPerpetratorHistoryService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory delete(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory persistedAllegationPerpetratorHistory =
         allegationPerpetratorHistoryDao.delete(primaryKey);
     if (persistedAllegationPerpetratorHistory != null) {
@@ -102,14 +100,11 @@ public class AllegationPerpetratorHistoryService implements
 
       managed = allegationPerpetratorHistoryDao.create(managed);
       return new PostedAllegationPerpetratorHistory(managed);
-    } catch (
-
-    EntityExistsException e) {
+    } catch (EntityExistsException e) {
       LOGGER.info("AllegationPerpetratorHistory already exists : {}",
           allegationPerpetratoryHistory);
       throw new ServiceException(e);
     }
-
   }
 
   /**
@@ -121,7 +116,6 @@ public class AllegationPerpetratorHistoryService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory request) {
-
     gov.ca.cwds.rest.api.domain.cms.AllegationPerpetratorHistory allegationPerpetratorHistory =
         request;
 
