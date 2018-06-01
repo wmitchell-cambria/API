@@ -100,12 +100,14 @@ public class HOIScreeningService
         screeningDao.findScreeningsByClientIds(hsd.getClientIds());
     hsd.getScreeningEntities().addAll(screeningEntities);
 
-    Map<String, Set<ParticipantEntity>> participantEntitiesMap = participantDao.findByScreeningIds(
-        screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
+    final Map<String, Set<ParticipantEntity>> participantEntitiesMap =
+        participantDao.findByScreeningIds(
+            screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
 
-    Set<String> counties = new HashSet<>();
-    Set<String> participantIds = new HashSet<>();
-    Collection<String> assigneeStaffIds = new HashSet<>();
+    final Set<String> counties = new HashSet<>();
+    final Set<String> participantIds = new HashSet<>();
+    final Collection<String> assigneeStaffIds = new HashSet<>();
+
     for (ScreeningEntity screeningEntity : screeningEntities) {
       if (participantEntitiesMap.containsKey(screeningEntity.getId())) {
         screeningEntity.setParticipants(participantEntitiesMap.get(screeningEntity.getId()));

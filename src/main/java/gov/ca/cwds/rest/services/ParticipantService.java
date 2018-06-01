@@ -1,14 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
-import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
-import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.rest.api.domain.Csec;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
-import gov.ca.cwds.rest.core.FerbConstants;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,10 +15,17 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
+import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -40,11 +38,13 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
 import gov.ca.cwds.rest.business.rules.R00834AgeUnitRestriction;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
+import gov.ca.cwds.rest.core.FerbConstants;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -78,23 +78,25 @@ public class ParticipantService implements CrudsService {
 
   @Inject
   private CsecHistoryService csecHistoryService;
+
   @Inject
   private SexualExploitationTypeDao sexualExploitationTypeDao;
+
   @Inject
   private IntakeLOVCodeDao intakeLOVCodeDao;
 
   /**
    * Constructor
    *
-   * @param clientService             clientService
-   * @param referralClientService     referralClientService
-   * @param reporterService           reporterService
-   * @param childClientService        childClientService
-   * @param clientAddressService      clientAddressService
-   * @param validator                 validator
+   * @param clientService clientService
+   * @param referralClientService referralClientService
+   * @param reporterService reporterService
+   * @param childClientService childClientService
+   * @param clientAddressService clientAddressService
+   * @param validator validator
    * @param clientScpEthnicityService clientScpEthnicityService
-   * @param caseDao                   caseDao
-   * @param referralClientDao         referralClientDao
+   * @param caseDao caseDao
+   * @param referralClientDao referralClientDao
    */
   @Inject
   public ParticipantService(ClientService clientService,
@@ -125,9 +127,9 @@ public class ParticipantService implements CrudsService {
 
   /**
    * @param screeningToReferral - screeningToReferral
-   * @param dateStarted         - dateStarted
-   * @param referralId          - referralId
-   * @param messageBuilder      - messageBuilder
+   * @param dateStarted - dateStarted
+   * @param referralId - referralId
+   * @param messageBuilder - messageBuilder
    * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
@@ -164,7 +166,7 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
-          && !ParticipantValidator.selfReported(incomingParticipant));
+              && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
         saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
             role);
@@ -206,7 +208,8 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(), screeningToReferral.getReportType());
+        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(),
+            screeningToReferral.getReportType());
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -408,7 +411,8 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder, List<Csec> csecs, String reportType) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder,
+      List<Csec> csecs, String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -452,10 +456,12 @@ public class ParticipantService implements CrudsService {
           messageBuilder.addError("LOV code is not found for CSEC code id: " + csecCodeId,
               ErrorMessage.ErrorType.VALIDATION);
         } else {
-          sexualExploitationType = sexualExploitationTypeDao.find(intakeLOVCodeEntity.getLgSysId().shortValue());
+          sexualExploitationType =
+              sexualExploitationTypeDao.find(intakeLOVCodeEntity.getLgSysId().shortValue());
         }
         if (sexualExploitationType == null) {
-          messageBuilder.addError("Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
+          messageBuilder.addError(
+              "Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
               ErrorMessage.ErrorType.VALIDATION);
         } else {
           CsecHistory csecHistory = new CsecHistory();
