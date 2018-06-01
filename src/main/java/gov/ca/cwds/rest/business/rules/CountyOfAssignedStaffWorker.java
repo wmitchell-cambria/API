@@ -11,7 +11,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 
 /**
- * County Of Assigned Staff Worker validation.
+ * Validate the county of the Assigned Staff Worker.
  * 
  * <p>
  * The incident county and the assignee's county should be the same to ensure that the referral that

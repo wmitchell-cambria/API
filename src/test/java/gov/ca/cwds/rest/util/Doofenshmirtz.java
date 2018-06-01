@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
@@ -84,6 +85,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -227,6 +229,10 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   protected XaCmsReferralService referralService;
   protected XaCmsAddressService addressService;
   protected CmsDocumentService cmsDocumentService;
+
+  protected Query<CmsDocument> docQuery;
+  protected CmsDocument doc;
+
   protected DrmsDocumentService drmsDocumentService;
   protected DrmsDocumentTemplateService drmsDocumentTemplateService;
 
@@ -401,6 +407,16 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     // SERVICES:
     // =================
 
+    cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
+    docQuery = queryInator(this, null);
+
+    doc = readPersistedDocument();
+    when(cmsDocumentDao.grabSession()).thenReturn(session);
+    when(cmsDocumentDao.find(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.find(any(String.class))).thenReturn(doc);
+    when(cmsDocumentDao.create(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.getSessionFactory()).thenReturn(sessionFactoryImplementor);
+
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -433,7 +449,6 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
         clientScpEthnicityService, caseDao, referralClientDao);
 
     longTextService = new LongTextService(longTextDao);
-    cmsDocumentService = mock(CmsDocumentService.class);
 
     referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
         triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
@@ -450,32 +465,32 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     SystemCodeCache.global().getAllSystemCodes();
   }
 
-  /**
-   * Pass variable arguments of type T.
-   * 
-   * @param values any number of T values
-   * @return mock Hibernate Query of type T
-   */
+  protected CmsDocument readPersistedDocument() throws IOException {
+    return MAPPER.readValue(
+        "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"PKWare02\",\"blobSegments\":[]}",
+        CmsDocument.class);
+  }
+
   @SuppressWarnings("unchecked")
-  protected Query<T> queryInator(T... values) {
+  protected static <T> Query queryInator(Doofenshmirtz<?> villain, T... values) {
     final Query<T> q = Mockito.mock(Query.class);
     if (values != null && values.length != 0) {
       final T t = ArrayUtils.toArray(values)[0];
-      when(session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class))).thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
+      when(villain.session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
+      when(villain.session.get(any(String.class), any(Serializable.class))).thenReturn(t);
+      when(villain.session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
+      when(villain.session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
-      when(session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
+      when(villain.session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
+      when(villain.session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
     }
 
     final List<T> list = new ArrayList<>();
-    when(sessionFactory.getCurrentSession()).thenReturn(session);
-    when(session.getNamedQuery(any())).thenReturn(q);
+    when(villain.sessionFactory.getCurrentSession()).thenReturn(villain.session);
+    when(villain.session.getNamedQuery(any())).thenReturn(q);
     when(q.list()).thenReturn(list);
 
     when(q.setHibernateFlushMode(any(FlushMode.class))).thenReturn(q);
@@ -497,6 +512,17 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(results.get()).thenReturn(new Object[0]);
 
     return q;
+  }
+
+  /**
+   * Pass variable arguments of type T.
+   * 
+   * @param values any number of T values
+   * @return mock Hibernate Query of type T
+   */
+  @SuppressWarnings("unchecked")
+  protected Query<T> queryInator(T... values) {
+    return Doofenshmirtz.<T>queryInator(this, values);
   }
 
 }
