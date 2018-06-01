@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
 
 import gov.ca.cwds.data.cms.TestIntakeCodeCache;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.ParticipantIntakeApiResourceBuilder;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -23,6 +24,7 @@ public class RaceAndEthnicityTransformerTest {
    * Initialize intake code cache
    */
   private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   /**
    * Test to check race and ethnicity transformed successfully
@@ -96,6 +98,22 @@ public class RaceAndEthnicityTransformerTest {
         new RaceAndEthnicityTransformer().transform(participantsIntake);
     assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("Y")));
     assertThat(raceAndEthnicity.getHispanicCode(), is(nullValue()));
+  }
+
+  /**
+   * Test when hispanic code is Yes and ethnicity detail is "Mexican", then hispanicOriginCode is
+   * set "Y" and hispanic code to 3164
+   */
+  @Test
+  public void testWhenHispanicIsYesAndEthnicityDeatilMexian() {
+    ParticipantIntakeApi participantsIntake = new ParticipantIntakeApiResourceBuilder()
+        .setRaces(null).setEthnicity("{\n" + "  \"hispanic_latino_origin\": \"Yes\",\n"
+            + "  \"ethnicity_detail\": [\"Mexican\"]\n" + "}")
+        .build();
+    RaceAndEthnicity raceAndEthnicity =
+        new RaceAndEthnicityTransformer().transform(participantsIntake);
+    assertThat(raceAndEthnicity.getHispanicOriginCode(), is(equalTo("Y")));
+    assertThat(raceAndEthnicity.getHispanicCode().get(0), is(equalTo((short) 3164)));
   }
 
   /**

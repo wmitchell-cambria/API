@@ -16,6 +16,7 @@ import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -168,8 +169,8 @@ public class RaceAndEthnicityTransformer {
       RaceAndEthnicity raceAndEthnicity, List<Short> hispanicCodes) {
     raceAndEthnicity.setHispanicOriginCode(YES);
     if (!intakeEthnicity.ethnicityDetail.isEmpty()) {
-      hispanicCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity(
-          SystemCodeCategoryId.ETHNICITY, intakeEthnicity.getEthnicityDetail().get(0)));
+      hispanicCodes.add(SystemCodeCache.global().getSystemCodeId(
+          intakeEthnicity.getEthnicityDetail().get(0), SystemCodeCategoryId.ETHNICITY));
       raceAndEthnicity.setHispanicCode(hispanicCodes);
     }
   }

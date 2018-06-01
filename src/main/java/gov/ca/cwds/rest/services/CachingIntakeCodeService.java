@@ -86,11 +86,12 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   @Override
   public Short getLegacySystemCodeForRaceAndEthnicity(String metaId, String intakeCode) {
     Short sysId = null;
-    String legacyDescripion = StringUtils.isNotBlank(intakeCode)
-        ? IntakeCodeConveter.findLegacyDescpretion(intakeCode).getLegacyValue()
-        : null;
-    if (StringUtils.isNotBlank(legacyDescripion) && StringUtils.isNotBlank(metaId)) {
-      sysId = SystemCodeCache.global().getSystemCodeId(legacyDescripion, metaId);
+    IntakeCodeConveter intakeCodeConveter =
+        StringUtils.isNotBlank(intakeCode) ? IntakeCodeConveter.findLegacyDescpretion(intakeCode)
+            : null;
+    if (intakeCodeConveter != null && StringUtils.isNotBlank(intakeCodeConveter.getLegacyValue())
+        && StringUtils.isNotBlank(metaId)) {
+      sysId = SystemCodeCache.global().getSystemCodeId(intakeCodeConveter.getLegacyValue(), metaId);
     }
     return sysId;
   }
