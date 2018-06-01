@@ -85,11 +85,15 @@ import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
+import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
@@ -242,6 +246,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
   protected ScreeningToReferralService screeningToReferralService;
 
+  protected XaNsAddressDaoImpl xaNsAddressDao;
+  protected XaNsAddressesDaoImpl xaNsAddressesDao;
+
   protected MessageBuilder messageBuilder;
   protected StaffPerson staffPerson;
 
@@ -274,6 +281,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     setSubject(mockSubject);
 
     // Request context:
+    new RequestExecutionContextImplTest().setup();
     RequestExecutionContextImplTest.startRequest();
     ctx = RequestExecutionContext.instance();
 
@@ -363,6 +371,9 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
 
+    xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
+    xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
+
     staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     addressDao = mock(XaCmsAddressDaoImpl.class);
     allegationDao = mock(XaCmsAllegationDaoImpl.class);
@@ -389,6 +400,27 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
     assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
+
+    Addresses adr1 = new Addresses(DEFAULT_PARTICIPANT_ID, "123 main street", "Elk Grove", "1838",
+        "95757", "32", DEFAULT_CLIENT_ID, "ADDRS_T");
+    when(xaNsAddressesDao.find(any())).thenReturn(adr1);
+    when(xaNsAddressesDao.create(any())).thenReturn(adr1);
+    when(xaNsAddressesDao.update(any())).thenReturn(adr1);
+
+    gov.ca.cwds.data.persistence.ns.Address adr2 = new gov.ca.cwds.data.persistence.ns.Address(10L,
+        "123 main street", "Elk Grove", "1838", "95757", "32");
+    when(xaNsAddressDao.find(any())).thenReturn(adr2);
+    when(xaNsAddressDao.create(any())).thenReturn(adr2);
+
+    gov.ca.cwds.rest.api.domain.cms.Address addressDomain =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+
+    gov.ca.cwds.data.persistence.cms.Address adrCms = new gov.ca.cwds.data.persistence.cms.Address(
+        DEFAULT_CLIENT_ID, addressDomain, "ABC", new java.util.Date());
+
+    when(addressDao.find(any())).thenReturn(adrCms);
+    when(addressDao.update(any())).thenReturn(adrCms);
+    when(addressDao.create(any())).thenReturn(adrCms);
 
     // staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
     staffPerson = new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
