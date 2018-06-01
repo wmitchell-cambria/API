@@ -1,7 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
-import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import java.util.Properties;
 
 import javax.validation.Validation;
@@ -16,6 +14,7 @@ import com.google.inject.Provides;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
+import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
 import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
