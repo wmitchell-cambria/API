@@ -53,11 +53,13 @@ import gov.ca.cwds.data.cms.ReferralAssignmentDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
+import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
+import gov.ca.cwds.data.cms.XaCmsClientScpEthnicityDaoImpl;
 import gov.ca.cwds.data.cms.XaCmsClientUcDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsAddressUcDaoImpl;
@@ -392,11 +394,8 @@ public class DataAccessModule extends AbstractModule {
   @Override
   protected void configure() {
     // CMS:
-    bind(AllegationPerpetratorHistoryDao.class);
     bind(AttorneyDao.class);
     bind(ClientCollateralDao.class);
-    bind(ClientRelationshipDao.class);
-    bind(ClientScpEthnicityDao.class);
     bind(CmsDocReferralClientDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
     bind(DeliveredServiceDao.class);
@@ -412,7 +411,11 @@ public class DataAccessModule extends AbstractModule {
     bind(TickleDao.class);
 
     // CMS XA:
+    bind(AllegationPerpetratorHistoryDao.class).to(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    bind(ClientRelationshipDao.class).to(XaCmsClientRelationshipDaoImpl.class);
+    bind(ClientScpEthnicityDao.class).to(XaCmsClientScpEthnicityDaoImpl.class);
     bind(gov.ca.cwds.data.cms.AddressDao.class).to(XaCmsAddressDaoImpl.class);
+    bind(SsaName3Dao.class).to(XaCmsSsaName3DaoImpl.class);
     bind(AddressUcDao.class).to(XaCmsAddressUcDaoImpl.class);
     bind(ClientUcDao.class).to(XaCmsClientUcDaoImpl.class);
     bind(ExternalInterfaceDao.class).to(XaCmsExternalInterfaceDaoImpl.class);
