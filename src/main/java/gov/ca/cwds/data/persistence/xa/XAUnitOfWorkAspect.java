@@ -1,8 +1,7 @@
 package gov.ca.cwds.data.persistence.xa;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.transaction.UserTransaction;
 
@@ -40,7 +39,7 @@ public class XAUnitOfWorkAspect {
 
   private final Map<String, SessionFactory> sessionFactories;
 
-  private final List<Session> sessions = new ArrayList<>();
+  private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
   private XAUnitOfWork xaUnitOfWork;
 
@@ -100,7 +99,7 @@ public class XAUnitOfWorkAspect {
    * @throws CaresXAException on database error
    */
   public void joinTransaction(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
-    // TODO: open sessions for any datasources not already opened.
+    // TODO1: Open sessions for any datasources not already opened.
   }
 
   /**
@@ -140,22 +139,31 @@ public class XAUnitOfWorkAspect {
    * @param sessionFactory - open a session for this datasource
    * @return session current session for this datasource
    */
-  protected Session grabSession(SessionFactory sessionFactory) {
-    LOGGER.trace("XA grabSession()!");
+  protected Session grabSession(String key, SessionFactory sessionFactory) {
     Session session;
-    try {
-      session = sessionFactory.getCurrentSession();
-    } catch (HibernateException e) {
-      LOGGER.trace("No current session. Open a new one. {}", e.getMessage(), e);
-      session = sessionFactory.openSession();
+    if (sessions.containsKey(key)) {
+      session = sessions.get(key);
+    } else {
+      LOGGER.trace("XA grabSession()!");
+      try {
+        session = sessionFactory.getCurrentSession();
+      } catch (HibernateException e) {
+        LOGGER.trace("No current session. Open a new one. {}", e.getMessage(), e);
+        session = sessionFactory.openSession();
+      }
+
+      configureSession(session);
+      sessions.put(key, session);
+
+      // Add user info to DB2 connections. Harmless for other connections.
+      session.doWork(new WorkDB2UserInfo());
     }
 
-    configureSession(session);
-    sessions.add(session);
-
-    // Add user info to DB2 connections. Harmless for other connections.
-    session.doWork(new WorkDB2UserInfo());
     return session;
+  }
+
+  protected boolean hasTransactionalAnnotation() {
+    return this.xaUnitOfWork.transactional();
   }
 
   /**
@@ -163,7 +171,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void openSessions() {
     LOGGER.debug("XA OPEN SESSIONS!");
-    sessionFactories.values().stream().forEach(this::grabSession);
+    sessionFactories.entrySet().stream().forEach(e -> grabSession(e.getKey(), e.getValue()));
   }
 
   /**
@@ -171,7 +179,7 @@ public class XAUnitOfWorkAspect {
    */
   protected void closeSessions() {
     LOGGER.debug("XA CLOSE SESSIONS!");
-    sessions.stream().forEach(this::closeSession);
+    sessions.values().stream().forEach(this::closeSession);
   }
 
   protected void closeSession(Session session) {
@@ -199,8 +207,8 @@ public class XAUnitOfWorkAspect {
    * @throws CaresXAException on database error
    */
   protected void beginTransaction() throws CaresXAException {
-    if (!xaUnitOfWork.transactional()) {
-      LOGGER.debug("XA BEGIN TRANSACTION: unit of work is not transactional");
+    if (!hasTransactionalAnnotation()) {
+      LOGGER.trace("XA BEGIN TRANSACTION: unit of work is not transactional");
       return;
     }
 
@@ -220,7 +228,7 @@ public class XAUnitOfWorkAspect {
    * @throws CaresXAException on database error
    */
   protected void rollbackTransaction() throws CaresXAException {
-    if (!xaUnitOfWork.transactional()) {
+    if (!hasTransactionalAnnotation()) {
       LOGGER.trace("XA ROLLBACK TRANSACTION: unit of work not transactional");
       return;
     }

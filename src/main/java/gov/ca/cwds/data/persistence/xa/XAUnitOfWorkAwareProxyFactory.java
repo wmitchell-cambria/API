@@ -1,12 +1,12 @@
 package gov.ca.cwds.data.persistence.xa;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.inject.FerbHibernateBundle;
 import javassist.util.proxy.Proxy;
@@ -25,18 +25,16 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAwareProxyFactory.class);
 
-  private final ImmutableMap<String, SessionFactory> sessionFactories;
+  private final Map<String, SessionFactory> sessionFactories;
 
   private final XAUnitOfWorkAspectFactory factory;
 
   public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
-    final ImmutableMap.Builder<String, SessionFactory> sessionFactoriesBuilder =
-        ImmutableMap.builder();
+    sessionFactories = new ConcurrentHashMap<>();
     for (FerbHibernateBundle bundle : bundles) {
-      sessionFactoriesBuilder.put(bundle.name(), bundle.getSessionFactory());
+      sessionFactories.put(bundle.name(), bundle.getSessionFactory());
     }
 
-    sessionFactories = sessionFactoriesBuilder.build();
     factory = new ReentrantXAUnitOfWorkAspectFactory(sessionFactories);
   }
 

@@ -1,19 +1,18 @@
 package gov.ca.cwds.fixture;
 
-import gov.ca.cwds.rest.api.domain.Csec;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 
+
 /**
- * 
  * @author CWDS API Team
  */
 public class ParticipantResourceBuilder {
@@ -56,12 +55,9 @@ public class ParticipantResourceBuilder {
         new RaceAndEthnicity(racecodes, "A", hispaniccodes, "X", "A");
     this.raceAndEthnicity = raceAndEthnicity;
 
-    gov.ca.cwds.rest.api.domain.Address address = new AddressResourceBuilder()
-        .setStreetAddress("123 First St")
-        .setCity("San Jose")
-        .setState(1828)
-        .setZip("94321")
-        .createAddress();
+    gov.ca.cwds.rest.api.domain.Address address =
+        new AddressResourceBuilder().setStreetAddress("123 First St").setCity("San Jose")
+            .setState(1828).setZip("94321").createAddress();
     this.addresses = new HashSet<>(Arrays.asList(address));
     csecs = new ArrayList<>();
     csecs.add(new CsecBuilder().createCsec());
@@ -324,4 +320,5 @@ public class ParticipantResourceBuilder {
         sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
         raceAndEthnicity, csecs);
   }
+
 }

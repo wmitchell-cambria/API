@@ -1,10 +1,9 @@
 package gov.ca.cwds.data.persistence.xa;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.hibernate.SessionFactory;
-
-import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextCallback;
@@ -25,11 +24,11 @@ public class ReentrantXAUnitOfWorkAspectFactory
 
   private static final long serialVersionUID = 1L;
 
-  private final ImmutableMap<String, SessionFactory> sessionFactories;
+  private final Map<String, SessionFactory> sessionFactories;
 
   private final ThreadLocal<XAUnitOfWorkAspect> local = new ThreadLocal<>();
 
-  public ReentrantXAUnitOfWorkAspectFactory(ImmutableMap<String, SessionFactory> sessionFactories) {
+  public ReentrantXAUnitOfWorkAspectFactory(Map<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
     RequestExecutionContextRegistry.registerCallback(this);
   }
@@ -49,7 +48,7 @@ public class ReentrantXAUnitOfWorkAspectFactory
     local.set(null); // clear the current thread
   }
 
-  protected XAUnitOfWorkAspect make(ImmutableMap<String, SessionFactory> someSessionFactories) {
+  protected XAUnitOfWorkAspect make(Map<String, SessionFactory> someSessionFactories) {
     XAUnitOfWorkAspect ret = local.get();
     if (ret == null) {
       ret = new XAUnitOfWorkAspect(someSessionFactories);

@@ -18,6 +18,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableMap;
 
 import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
@@ -117,7 +118,7 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
 
   @Test
   public void grabSession_A$SessionFactory() throws Exception {
-    Session actual = target.grabSession(sessionFactory);
+    Session actual = target.grabSession(Api.DATASOURCE_XA_CMS, sessionFactory);
     Session expected = session;
     assertThat(actual, is(equalTo(expected)));
   }

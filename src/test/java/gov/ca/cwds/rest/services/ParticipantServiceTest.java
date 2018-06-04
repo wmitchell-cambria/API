@@ -12,14 +12,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
-import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
-import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
-import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
-import gov.ca.cwds.rest.core.FerbConstants;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +19,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import java.util.stream.Collectors;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -37,13 +29,20 @@ import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatcher;
 
+import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
@@ -64,6 +63,7 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
 import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
+import gov.ca.cwds.rest.core.FerbConstants;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
@@ -73,7 +73,6 @@ import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
-import org.mockito.ArgumentMatcher;
 
 /**
  * @author CWDS API Team
@@ -128,20 +127,14 @@ public class ParticipantServiceTest {
   public void setup() {
     LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
     legacyDescriptor.setLastUpdated(DateTime.now());
-    defaultVictim = new ParticipantResourceBuilder()
-        .setLegacyId("")
-        .setLegacyDescriptor(legacyDescriptor)
-        .createVictimParticipant();
+    defaultVictim = new ParticipantResourceBuilder().setLegacyId("")
+        .setLegacyDescriptor(legacyDescriptor).createVictimParticipant();
     defaultReporter = new ParticipantResourceBuilder()
-        .setRoles((new HashSet<>(Arrays.asList("Mandated Reporter"))))
-        .setLegacyId("")
+        .setRoles((new HashSet<>(Arrays.asList("Mandated Reporter")))).setLegacyId("")
         .createReporterParticipant();
-    defaultMandatedReporter = new ParticipantResourceBuilder()
-        .setLegacyId("")
-        .createReporterParticipant();
-    defaultPerpetrator = new ParticipantResourceBuilder()
-        .setLegacyId("")
-        .createPerpParticipant();
+    defaultMandatedReporter =
+        new ParticipantResourceBuilder().setLegacyId("").createReporterParticipant();
+    defaultPerpetrator = new ParticipantResourceBuilder().setLegacyId("").createPerpParticipant();
 
     clientService = mock(ClientService.class);
     gov.ca.cwds.data.persistence.cms.Client savedEntityClient =
@@ -193,7 +186,7 @@ public class ParticipantServiceTest {
     when(intakeLOVCodeDao.find(-2L)).thenReturn(intakeLOVCodeEntity);
 
     sexualExploitationTypeDao = mock(SexualExploitationTypeDao.class);
-    SexualExploitationType sexualExploitationType =  new SexualExploitationType();
+    SexualExploitationType sexualExploitationType = new SexualExploitationType();
     sexualExploitationType.setFkMeta("testFkMeta");
     sexualExploitationType.setShortDescription("testShortDescription");
     when(sexualExploitationTypeDao.find((short) -5)).thenReturn(sexualExploitationType);
@@ -215,40 +208,36 @@ public class ParticipantServiceTest {
 
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
-    verify(csecHistoryService).updateCsecHistoriesByClientId(
-        argThat(new ArgumentMatcher<String>() {
-          @Override
-          public boolean matches(String clientId) {
-            assertEquals("1234567ABC", clientId);
-            return true;
-          }
-        }),
-        argThat(new ArgumentMatcher<List<CsecHistory>>() {
-          @Override
-          public boolean matches(List<CsecHistory> csecs) {
-            assertNotNull(csecs);
-            assertEquals(1, csecs.size());
-            CsecHistory csecHistory = csecs.get(0);
-            assertNotNull(csecHistory);
-            assertEquals("1234567ABC", csecHistory.getChildClient());
-            assertEquals(LocalDate.parse("2018-05-28"), csecHistory.getStartDate());
-            assertEquals(LocalDate.parse("2018-05-29"), csecHistory.getEndDate());
-            SexualExploitationType sexualExploitationType = csecHistory.getSexualExploitationType();
-            assertNotNull(sexualExploitationType);
-            assertEquals("testFkMeta", sexualExploitationType.getFkMeta());
-            assertEquals("testShortDescription", sexualExploitationType.getShortDescription());
-            return true;
-          }
-        }));
+    verify(csecHistoryService).updateCsecHistoriesByClientId(argThat(new ArgumentMatcher<String>() {
+      @Override
+      public boolean matches(String clientId) {
+        assertEquals("1234567ABC", clientId);
+        return true;
+      }
+    }), argThat(new ArgumentMatcher<List<CsecHistory>>() {
+      @Override
+      public boolean matches(List<CsecHistory> csecs) {
+        assertNotNull(csecs);
+        assertEquals(1, csecs.size());
+        CsecHistory csecHistory = csecs.get(0);
+        assertNotNull(csecHistory);
+        assertEquals("1234567ABC", csecHistory.getChildClient());
+        assertEquals(LocalDate.parse("2018-05-28"), csecHistory.getStartDate());
+        assertEquals(LocalDate.parse("2018-05-29"), csecHistory.getEndDate());
+        SexualExploitationType sexualExploitationType = csecHistory.getSexualExploitationType();
+        assertNotNull(sexualExploitationType);
+        assertEquals("testFkMeta", sexualExploitationType.getFkMeta());
+        assertEquals("testShortDescription", sexualExploitationType.getShortDescription());
+        return true;
+      }
+    }));
   }
 
   @Test
   public void testCsecIsNotUpdatedForNotSupportedReportType() {
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType("").createScreeningToReferral();
-
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType("").createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
-
     verify(csecHistoryService, times(0)).updateCsecHistoriesByClientId(any(), any());
   }
 
@@ -272,14 +261,13 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType(FerbConstants.ReportType.CSEC)
-        .setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.CSEC)
+            .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
-        .collect(Collectors.toList())
-        .contains("CSEC data is empty"));
+        .collect(Collectors.toList()).contains("CSEC data is empty"));
   }
 
   @Test
@@ -290,14 +278,13 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType(FerbConstants.ReportType.CSEC)
-        .setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.CSEC)
+            .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
-        .collect(Collectors.toList())
-        .contains("CSEC start date is not found for code: -2"));
+        .collect(Collectors.toList()).contains("CSEC start date is not found for code: -2"));
   }
 
   @Test
@@ -308,9 +295,9 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType(FerbConstants.ReportType.CSEC)
-        .setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.CSEC)
+            .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
@@ -326,14 +313,13 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType(FerbConstants.ReportType.CSEC)
-        .setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.CSEC)
+            .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
-        .collect(Collectors.toList())
-        .contains("LOV code is not found for CSEC code id: -1000"));
+        .collect(Collectors.toList()).contains("LOV code is not found for CSEC code id: -1000"));
   }
 
   @Test
@@ -346,9 +332,9 @@ public class ParticipantServiceTest {
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
 
-    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
-        .setReportType(FerbConstants.ReportType.CSEC)
-        .setParticipants(participants).createScreeningToReferral();
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.CSEC)
+            .setParticipants(participants).createScreeningToReferral();
     participantService.saveParticipants(referral, dateStarted, referralId, messageBuilder);
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
@@ -404,7 +390,6 @@ public class ParticipantServiceTest {
         expectedErrorMessage, message);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldUpdateClientWhenClientIdIsPresent() throws Exception {
     String victimClientLegacyId = "ABC123DSAF";
@@ -435,13 +420,10 @@ public class ParticipantServiceTest {
     verify(clientService).update(eq(victim.getLegacyId()), any());
   }
 
-
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailWhenVictimHasIncompatiableRoles_AnonymousVictim() throws Exception {
     Participant reporterVictim = new ParticipantResourceBuilder()
-        .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Victim")))
-        .setLegacyId("")
+        .setRoles(new HashSet<>(Arrays.asList("Anonymous Reporter", "Victim"))).setLegacyId("")
         .createParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(reporterVictim, defaultPerpetrator));
@@ -500,7 +482,6 @@ public class ParticipantServiceTest {
         expectedErrorMessage, message);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailWhenVictimIsIncompatiableRoles_VictimPerpetrator() throws Exception {
     Participant perpVictim = new ParticipantResourceBuilder()
@@ -521,7 +502,6 @@ public class ParticipantServiceTest {
         expectedErrorMessage, message);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailWhenReporterHasIncompatiableRoles_AnonymousReporterFail() throws Exception {
     Participant anonymousNonMandatedReporter = new ParticipantResourceBuilder()
@@ -543,7 +523,6 @@ public class ParticipantServiceTest {
         expectedErrorMessage, message);
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testClientDoesNotExistFail() throws Exception {
     String badLegacyId = "IUKNOWNIDI";
@@ -568,13 +547,10 @@ public class ParticipantServiceTest {
     verify(clientService, never()).update(eq(badLegacyId), any());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveReporterIfAddressIsNull() throws Exception {
-
-    Participant reporter = new ParticipantResourceBuilder()
-        .setLegacyId("")
-        .createReporterParticipant();
+    Participant reporter =
+        new ParticipantResourceBuilder().setLegacyId("").createReporterParticipant();
     reporter.setAddresses(null);
     Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, defaultVictim));
 
@@ -585,16 +561,12 @@ public class ParticipantServiceTest {
     assertEquals("Expected no error to have been recorded", 0, messageBuilder.getMessages().size());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testMultipleVictimSuccess() throws Exception {
-    Participant victim1 =
-        new ParticipantResourceBuilder().setFirstName("Sally")
-            .setLegacyId("")
-            .createVictimParticipant();
-    Participant victim2 =
-        new ParticipantResourceBuilder().setFirstName("Fred")
-            .setLegacyId("").createVictimParticipant();
+    Participant victim1 = new ParticipantResourceBuilder().setFirstName("Sally").setLegacyId("")
+        .createVictimParticipant();
+    Participant victim2 = new ParticipantResourceBuilder().setFirstName("Fred").setLegacyId("")
+        .createVictimParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(victim1, victim2, defaultReporter, defaultVictim));
     int numberOfClientsThatAreNotReporters = 3;
@@ -614,12 +586,8 @@ public class ParticipantServiceTest {
     Set roles = new HashSet<>();
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.SELF_REPORTED_ROLE.getType());
-    Participant selfReporter =
-        new ParticipantResourceBuilder()
-            .setFirstName("Sally")
-            .setRoles(roles)
-            .setLegacyId("")
-            .createParticipant();
+    Participant selfReporter = new ParticipantResourceBuilder().setFirstName("Sally")
+        .setRoles(roles).setLegacyId("").createParticipant();
     Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -634,18 +602,13 @@ public class ParticipantServiceTest {
 
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotProcessAnonymousReporter() {
     Set roles = new HashSet<>();
     roles.add(Role.VICTIM_ROLE.getType());
     roles.add(Role.ANONYMOUS_REPORTER_ROLE.getType());
-    Participant selfReporter =
-        new ParticipantResourceBuilder()
-            .setFirstName("Sally")
-            .setRoles(roles)
-            .setLegacyId("")
-            .createParticipant();
+    Participant selfReporter = new ParticipantResourceBuilder().setFirstName("Sally")
+        .setRoles(roles).setLegacyId("").createParticipant();
     Set<Participant> participants = new HashSet<>(Arrays.asList(selfReporter));
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -659,10 +622,8 @@ public class ParticipantServiceTest {
     assertEquals("Expected to have in compatible role error",
         messageBuilder.getMessages().get(0).getMessage().trim(),
         "Participant contains incompatible roles");
-
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldUpdatePerpetratorWhenAlreadyExists() throws Exception {
     String victimId = "VICTIM__ID";
@@ -714,26 +675,18 @@ public class ParticipantServiceTest {
     verify(clientService).update(eq(existingPerpId), any());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldReturnErrorMessageWhenUnableToSaveClient() throws Exception {
     String existingPerpId = "1234567ABC";
     Participant reporter =
-        new ParticipantResourceBuilder().setFirstName("Barney")
-            .setLastName("Rubble")
-            .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter")))
-            .createParticipant();
+        new ParticipantResourceBuilder().setFirstName("Barney").setLastName("Rubble")
+            .setRoles(new HashSet<>(Arrays.asList("Non-mandated Reporter"))).createParticipant();
     LegacyDescriptor descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     reporter.setLegacyDescriptor(descriptor);
-    Participant perp = new ParticipantResourceBuilder()
-        .setLegacyId(existingPerpId)
-        .setFirstName("Fred")
-        .setLastName("Flintsone")
-        .setRoles(new HashSet<>(Arrays.asList("Perpetrator")))
-        .createParticipant();
-    Participant victim = new ParticipantResourceBuilder()
-        .setLegacyId("")
-        .createVictimParticipant();
+    Participant perp = new ParticipantResourceBuilder().setLegacyId(existingPerpId)
+        .setFirstName("Fred").setLastName("Flintsone")
+        .setRoles(new HashSet<>(Arrays.asList("Perpetrator"))).createParticipant();
+    Participant victim = new ParticipantResourceBuilder().setLegacyId("").createVictimParticipant();
     descriptor = new LegacyDescriptor("", "", lastUpdateDate, "", "");
     perp.setLegacyDescriptor(descriptor);
     Set<Participant> participants = new HashSet<>(Arrays.asList(reporter, perp, victim));

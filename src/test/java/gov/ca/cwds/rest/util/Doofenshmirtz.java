@@ -98,6 +98,7 @@ import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
@@ -506,6 +507,12 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
         laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
+
+    gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
+        new AllegationPerpetratorHistoryEntityBuilder().build();
+    when(allegationPerpetratorHistoryDao
+        .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
+            .thenReturn(allegationPerpHistoryToCreate);
 
     allegationService = new AllegationService(allegationDao, riAllegation);
     allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
