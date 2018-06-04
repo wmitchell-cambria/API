@@ -23,7 +23,6 @@ import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.ParticipantIntakeApiServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -80,7 +79,7 @@ public class ParticipantIntakeApiResource {
    * @param id The id of the {@link ParticipantIntakeApi}
    * @return {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -97,7 +96,7 @@ public class ParticipantIntakeApiResource {
    * @param participant The {@link ParticipantIntakeApi}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -119,7 +118,7 @@ public class ParticipantIntakeApiResource {
    * @param participant {@link ParticipantIntakeApi}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

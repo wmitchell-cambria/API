@@ -53,7 +53,7 @@ import gov.ca.cwds.data.persistence.ns.PaperTrail;
  * </tr>
  * </table>
  * 
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class PaperTrailInterceptor extends EmptyInterceptor {
 
@@ -107,6 +107,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     super.onDelete(entity, id, state, propertyNames, types);
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public void preFlush(Iterator entities) {
     processPaperTrail();
@@ -116,18 +117,15 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   private void processPaperTrail() {
     try {
       for (Entry<String, Object> entry : insertsTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(CREATE, entity);
+        createPaperTrail(CREATE, (HasPaperTrail) entry.getValue());
       }
 
       for (Entry<String, Object> entry : updatesTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(UPDATE, entity);
+        createPaperTrail(UPDATE, (HasPaperTrail) entry.getValue());
       }
 
       for (Entry<String, Object> entry : deletesTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(DESTROY, entity);
+        createPaperTrail(DESTROY, (HasPaperTrail) entry.getValue());
       }
 
     } finally {
