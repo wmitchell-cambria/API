@@ -103,7 +103,6 @@ public class IntakeLovResource {
    */
   @XAUnitOfWork
   @GET
-  // @Path("/all")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 400, message = "Unable to parse parameters")})

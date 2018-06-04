@@ -87,7 +87,6 @@ public final class KeyJNI {
    * in shared library. <strong>DO NOT CHANGE!</strong>
    * </p>
    */
-  @SuppressWarnings("javadoc")
   public static final class KeyDetail {
     public String key; // NOSONAR
     public String staffId; // NOSONAR

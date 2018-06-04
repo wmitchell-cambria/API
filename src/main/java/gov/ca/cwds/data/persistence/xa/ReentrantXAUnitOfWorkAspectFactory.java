@@ -30,7 +30,8 @@ public class ReentrantXAUnitOfWorkAspectFactory
 
   public ReentrantXAUnitOfWorkAspectFactory(Map<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
-    RequestExecutionContextRegistry.registerCallback(this);
+    RequestExecutionContextRegistry.registerCallback(this); // Notify this instance when request
+                                                            // start or end
   }
 
   @Override

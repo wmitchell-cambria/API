@@ -1,4 +1,4 @@
-package gov.ca.cwds.data.persistence.xa;
+package gov.ca.cwds.data.cms.xa;
 
 import org.hibernate.SessionFactory;
 

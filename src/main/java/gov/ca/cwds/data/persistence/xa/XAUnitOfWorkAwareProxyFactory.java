@@ -77,7 +77,7 @@ public class XAUnitOfWorkAwareProxyFactory {
    * method, and finishing with {@link XAUnitOfWorkAspect#afterEnd()}.
    * </p>
    *
-   * @param clazz the specified class definition
+   * @param clazz the specified class definition, typically a REST resource
    * @param constructorParamTypes the types of the constructor parameters
    * @param constructorArguments the arguments passed to the constructor
    * @param <T> the type of the class

@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CLIENT;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class ClientRelationshipResource {
    * @param id the id
    * @return client relationships
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @GET
   @Path("/{id}/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -80,7 +79,7 @@ public class ClientRelationshipResource {
    * @param clientIds the list of client id's to return relationships for
    * @return A list of client relationships
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @GET
   @Path("/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

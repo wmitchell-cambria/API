@@ -16,6 +16,11 @@ import org.hibernate.FlushMode;
  * Ferb annotation identifies XA transactions, distributed, two-phase commits across datasources.
  * 
  * <p>
+ * This annotation is intended for methods only, since methods are Java's defacto AOP join point. It
+ * would make sense to put this annotation on a member field or constructor.
+ * </p>
+ * 
+ * <p>
  * When attribute {@link #transactional()} is set to true (the default), then execute an XA
  * transaction across all participating XA datasources. Callers may optionally specify datasources
  * by name in the {@link #value()} attribute.
