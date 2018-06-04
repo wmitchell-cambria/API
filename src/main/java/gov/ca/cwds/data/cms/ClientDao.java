@@ -34,9 +34,9 @@ public class ClientDao extends BaseDaoImpl<Client> {
   }
 
   /**
-   * Find Clients by id-s
+   * Find Clients by id's
    *
-   * @param ids Set of Client id-s
+   * @param ids Set of Client id's
    * @return map where key is a Client id and value is a Client itself
    */
   public Map<String, Client> findClientsByIds(Collection<String> ids) {

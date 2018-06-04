@@ -15,6 +15,11 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
 import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
 
+/**
+ * Business layer object services {@link Relationship}.
+ * 
+ * @author CWDS API Team
+ */
 public class ScreeningRelationshipService implements CrudsService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningRelationshipService.class);
@@ -47,10 +52,10 @@ public class ScreeningRelationshipService implements CrudsService {
 
   @Override
   public Response create(Request request) {
-    ScreeningRelationship relationship = (ScreeningRelationship) request;
-    Relationship entity = new Relationship(null, relationship.getClientId(),
-        relationship.getRelativeId(), relationship.getRelationshipType(), new Date(), new Date());
-    entity = relationshipDao.create(entity);
+    final ScreeningRelationship relationship = (ScreeningRelationship) request;
+    final Relationship entity = relationshipDao
+        .create(new Relationship(null, relationship.getClientId(), relationship.getRelativeId(),
+            relationship.getRelationshipType(), new Date(), new Date()));
     relationship.setId(entity.getId());
     LOGGER.debug("saved relationship {}", relationship);
     return relationship;
