@@ -19,7 +19,11 @@
   <include file="liquibase/data/201805151038_lov_csec_data.xml"/>
   <include file="liquibase/data/201805151135_create_tbl_ssb.sql"/>
   <include file="liquibase/data/201805161035_insert_ssb_lov.sql"/>
-  
+  <include file="liquibase/data/201805211406_delete_intake_lov_code.sql"/>
+  <include file="liquibase/data/201805251138_lov_report_type.xml"/>
+  <include file="liquibase/data/201805251518-delete_intake_lov_code.sql"/>
+  <include file="liquibase/data/201806011244_remove_fk_and_convert_to_intake_lov_code.xml"/>
+  <include file="liquibase/data/201806011245_restore_pk_in_intake_lov_code.xml"/>
 
   <include file="data/screening_data.xml" relativeToChangelogFile="true"/>
   <include file="data/addresses_data.xml" relativeToChangelogFile="true"/>

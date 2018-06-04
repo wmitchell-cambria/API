@@ -122,14 +122,14 @@
       "csec": [
         {
           "id": "1",
-          "csec_code_id": "519",
+          "csec_code_id": "At Risk",
           "start_date": "2018-03-30",
           "end_date": "2018-03-31"
         }
       ],
-        "safelySurenderedBabies": {
+      "safelySurenderedBabies": {
         "surrendered_by": "Unknown",
-        "relation_to_child": "525",
+        "relation_to_child": "Parents",
         "bracelet_id": "1234",
         "parent_guardian_given_bracelet_id": "U",
         "parent_guardian_provided_med_questionaire": "U",

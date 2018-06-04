@@ -39,7 +39,7 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
   public static void beforeClass() throws LiquibaseException {
     ApiConfiguration configuration = application.getConfiguration();
 
-    new gov.ca.cwds.test.support.DatabaseHelper( configuration.getNsDataSourceFactory().getUrl(),
+    new gov.ca.cwds.test.support.DatabaseHelper(configuration.getNsDataSourceFactory().getUrl(),
         configuration.getNsDataSourceFactory().getUser(),
         configuration.getNsDataSourceFactory().getPassword())
         .runScript("liquibase/api/api_intake_ns_database_master.xml");
