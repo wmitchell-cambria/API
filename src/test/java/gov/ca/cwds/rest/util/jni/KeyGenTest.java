@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import gov.ca.cwds.data.legacy.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
 
 /**
@@ -62,7 +63,7 @@ import gov.ca.cwds.rest.util.jni.KeyJNI.KeyDetail;
  */
 public class KeyGenTest {
 
-  private static final int GOOD_KEY_LEN = 10;
+  private static final int GOOD_KEY_LEN = CmsPersistentObject.CMS_ID_LEN;
 
   private KeyJNI inst;
 
