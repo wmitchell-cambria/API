@@ -8,7 +8,7 @@ import java.time.LocalDate;
  */
 public class CsecBuilder {
   private String id = "-1";
-  private String csecCodeId = "-2";
+  private String csecCodeId = "At Risk";
   private String participantId = "-3";
   private LocalDate startDate = LocalDate.parse("2018-05-28");
   private LocalDate setEndDate = LocalDate.parse("2018-05-29");

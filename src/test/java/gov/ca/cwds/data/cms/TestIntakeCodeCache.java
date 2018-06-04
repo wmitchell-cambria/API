@@ -62,6 +62,10 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
         && "in_person".contains(intakeCode)) {
       return 408;
     }
+    if (SystemCodeCategoryId.COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN.contains(metaId)
+        && "At Risk".contains(intakeCode)) {
+      return 6867;
+    }
     return null;
   }
 
