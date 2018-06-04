@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
-import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
+import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Allegation;
@@ -65,8 +65,8 @@ public class ScreeningToReferralService implements CrudsService {
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  private XaCmsReferralDaoImpl referralDao;
-  private XaCmsClientRelationshipDaoImpl clientRelationshipDao;
+  private ReferralDao referralDao;
+  private ClientRelationshipDao clientRelationshipDao;
 
   /**
    * Constructor
@@ -86,11 +86,11 @@ public class ScreeningToReferralService implements CrudsService {
   @Inject
   public ScreeningToReferralService(XaCmsReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
-      ParticipantService participantService, Validator validator, XaCmsReferralDaoImpl referralDao,
+      ParticipantService participantService, Validator validator, ReferralDao referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
       GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
-      XaCmsClientRelationshipDaoImpl clientRelationshipDao) {
+      ClientRelationshipDao clientRelationshipDao) {
     super();
     this.clientRelationshipDao = clientRelationshipDao;
     this.referralService = referralService;

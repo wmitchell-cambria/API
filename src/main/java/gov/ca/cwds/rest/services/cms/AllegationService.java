@@ -39,7 +39,7 @@ public class AllegationService implements
    *
    * @param allegationDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.Allegation} objects.
-   * @param riAllegation the ri for allegation
+   * @param riAllegation referential integrity for allegations
    */
   @Inject
   public AllegationService(AllegationDao allegationDao, RIAllegation riAllegation) {
@@ -93,7 +93,7 @@ public class AllegationService implements
       managed = allegationDao.create(managed);
       return new PostedAllegation(managed);
     } catch (EntityExistsException e) {
-      LOGGER.info("Allegation already exists : {}", allegation);
+      LOGGER.warn("Allegation already exists : {}", allegation);
       throw new ServiceException(e);
     }
   }
@@ -115,7 +115,7 @@ public class AllegationService implements
       managed = allegationDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.Allegation(managed);
     } catch (EntityNotFoundException e) {
-      LOGGER.info("Allegation not found : {}", allegation);
+      LOGGER.warn("Allegation not found : {}", allegation);
       throw new ServiceException(e);
     }
   }

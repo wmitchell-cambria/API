@@ -88,7 +88,7 @@ public class ClientCollateralService
       managed = clientCollateralDao.create(managed);
       return new PostedClientCollateral(managed);
     } catch (EntityExistsException e) {
-      LOGGER.info("ClientCollateral already exists : {}", clientCollateral);
+      LOGGER.warn("ClientCollateral already exists : {}", clientCollateral);
       throw new ServiceException(e);
     }
   }

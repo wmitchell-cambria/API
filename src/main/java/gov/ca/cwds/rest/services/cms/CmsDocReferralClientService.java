@@ -54,7 +54,7 @@ public class CmsDocReferralClientService
         dao.listDocReferralClient(key);
     if (docs != null) {
       retval = new CmsDocReferralClient(docs);
-      CmsDocument blobDoc = docDao.find(key);
+      final CmsDocument blobDoc = docDao.find(key);
       if (blobDoc != null) {
         retval.getCmsDocument().setContent(docDao.decompressDoc(blobDoc));
       }

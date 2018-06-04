@@ -139,41 +139,41 @@ public class ResourcesModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(ApplicationResource.class);
-    bind(SwaggerResource.class);
     bind(AddressResource.class);
-    bind(ParticipantIntakeApiResource.class);
-    bind(PersonResource.class);
-    bind(ScreeningResource.class);
-    bind(ScreeningSubmitResource.class);
-    bind(ScreeningIntakeResource.class);
-    bind(ScreeningDashboardResource.class);
+    bind(ApplicationResource.class);
+    bind(AuthorizationResource.class);
+    bind(ClientCollateralResource.class);
     bind(CmsDocReferralClientResource.class);
     bind(CmsDocumentResource.class);
     bind(CmsNSReferralResource.class);
-    bind(ScreeningToReferralResource.class);
-    bind(ScreeningRelationshipResource.class);
-    bind(ClientCollateralResource.class);
-    bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
-    bind(DeliveredServiceResource.class);
     bind(ContactResource.class);
-    bind(HistoryOfInvolvementResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
+    bind(DeliveredServiceResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.AllegationListResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.CrossReportResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.CrossReportListResource.class);
-    bind(RelationshipListResource.class);
-    bind(PeopleResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.CrossReportResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
+    bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
     bind(GovernmentOrganizationResource.class);
-    bind(SafetyAlertsResource.class);
-    bind(InvolvementHistoryResource.class);
-    bind(HoiReferralResource.class);
+    bind(HistoryOfInvolvementResource.class);
     bind(HoiCaseResource.class);
+    bind(HoiReferralResource.class);
     bind(HoiScreeningResource.class);
-    bind(AuthorizationResource.class);
     bind(HoiUsingClientIdResource.class);
+    bind(InvolvementHistoryResource.class);
+    bind(ParticipantIntakeApiResource.class);
+    bind(PeopleResource.class);
+    bind(PersonResource.class);
+    bind(RelationshipListResource.class);
+    bind(SafetyAlertsResource.class);
+    bind(ScreeningDashboardResource.class);
+    bind(ScreeningIntakeResource.class);
+    bind(ScreeningRelationshipResource.class);
+    bind(ScreeningResource.class);
+    bind(ScreeningSubmitResource.class);
+    bind(ScreeningToReferralResource.class);
+    bind(SwaggerResource.class);
   }
 
   @Provides

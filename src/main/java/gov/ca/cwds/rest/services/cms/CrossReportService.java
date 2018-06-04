@@ -37,7 +37,7 @@ public class CrossReportService implements
    * 
    * @param crossReportDao The {@link Dao} handling
    *        {@link gov.ca.cwds.data.persistence.cms.CrossReport} objects.
-   * @param riCrossReport the ri for cross report
+   * @param riCrossReport referential integrity for cross report
    */
   @Inject
   public CrossReportService(CrossReportDao crossReportDao, RICrossReport riCrossReport) {
@@ -92,7 +92,7 @@ public class CrossReportService implements
       managed = crossReportDao.create(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityExistsException e) {
-      LOGGER.info("CrossReport already exists : {}", crossReport);
+      LOGGER.warn("CrossReport already exists : {}", crossReport);
       throw new ServiceException("CrossReport already exists : {}" + crossReport, e);
     }
   }
@@ -115,7 +115,7 @@ public class CrossReportService implements
       managed = crossReportDao.update(managed);
       return new gov.ca.cwds.rest.api.domain.cms.CrossReport(managed);
     } catch (EntityNotFoundException e) {
-      LOGGER.info("CrossReport not found : {}", crossReport);
+      LOGGER.warn("CrossReport not found : {}", crossReport);
       throw new ServiceException(e);
     }
   }

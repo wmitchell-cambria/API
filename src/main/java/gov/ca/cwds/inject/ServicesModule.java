@@ -187,6 +187,7 @@ public class ServicesModule extends AbstractModule {
     bind(AddressService.class);
     bind(AllegationService.class);
     bind(AssignmentService.class);
+    bind(AuthorizationService.class);
     bind(ClientCollateralService.class);
     bind(ClientRelationshipService.class);
     bind(CmsDocReferralClientService.class);
@@ -195,30 +196,30 @@ public class ServicesModule extends AbstractModule {
     bind(CmsReferralService.class);
     bind(ContactService.class);
     bind(CrossReportService.class);
+    bind(CsecHistoryService.class);
     bind(DeliveredService.class);
     bind(DeliveredToIndividualService.class);
     bind(DrmsDocumentService.class);
     bind(DrmsDocumentTemplateService.class);
-    bind(OtherCaseReferralDrmsDocumentService.class);
     bind(GovernmentOrganizationCrossReportService.class);
+    bind(HOICaseService.class);
+    bind(HOIReferralService.class);
+    bind(InvolvementHistoryService.class);
     bind(LegacyKeyService.class);
+    bind(OtherCaseReferralDrmsDocumentService.class);
     bind(PersonService.class);
     bind(ReferralClientService.class);
     bind(ReferralService.class);
     bind(ReporterService.class);
+    bind(ScreeningRelationshipService.class);
     bind(ScreeningService.class);
     bind(ScreeningSubmitService.class);
     bind(ScreeningToReferral.class);
     bind(StaffPersonIdRetriever.class);
     bind(StaffPersonService.class);
     bind(TickleService.class);
-    bind(HOIReferralService.class);
-    bind(InvolvementHistoryService.class);
-    bind(HOICaseService.class);
-    bind(AuthorizationService.class);
-    bind(ScreeningRelationshipService.class);
-    bind(CsecHistoryService.class);
 
+    // NEXT: Schedule for removal??
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
@@ -289,7 +290,7 @@ public class ServicesModule extends AbstractModule {
   @Provides
   public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
     LOGGER.debug("provide intakeCode service");
-    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
+    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days -- NEXT: soft-code me
     return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache);
   }
 
@@ -314,4 +315,5 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
+
 }

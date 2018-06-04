@@ -411,58 +411,45 @@ public class DataAccessModule extends AbstractModule {
     bind(SystemMetaDao.class);
 
     // CMS XA:
-    bind(TickleDao.class).to(XaCmsTickleDaoImpl.class);
-    bind(StateIdDao.class).to(XaCmsStateIdDaoImpl.class);
-    bind(AllegationPerpetratorHistoryDao.class).to(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
-    bind(ClientRelationshipDao.class).to(XaCmsClientRelationshipDaoImpl.class);
-    bind(ClientScpEthnicityDao.class).to(XaCmsClientScpEthnicityDaoImpl.class);
-    bind(gov.ca.cwds.data.cms.AddressDao.class).to(XaCmsAddressDaoImpl.class);
-    bind(SsaName3Dao.class).to(XaCmsSsaName3DaoImpl.class);
     bind(AddressUcDao.class).to(XaCmsAddressUcDaoImpl.class);
-    bind(ClientUcDao.class).to(XaCmsClientUcDaoImpl.class);
-    bind(ExternalInterfaceDao.class).to(XaCmsExternalInterfaceDaoImpl.class);
-    bind(XaCmsAddressDaoImpl.class);
-    bind(XaCmsAddressUcDaoImpl.class);
     bind(AllegationDao.class).to(XaCmsAllegationDaoImpl.class);
-    bind(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    bind(AllegationPerpetratorHistoryDao.class).to(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
     bind(AssignmentDao.class).to(XaCmsAssignmentDaoImpl.class);
     bind(AssignmentUnitDao.class).to(XaCmsAssignmentUnitDaoImpl.class);
+    bind(CaseAssignmentDao.class).to(XaCmsCaseAssignmentDaoImpl.class);
     bind(CaseDao.class).to(XaCmsCaseDaoImpl.class);
     bind(CaseLoadDao.class).to(XaCmsCaseLoadDaoImpl.class);
-    bind(CaseAssignmentDao.class).to(XaCmsCaseAssignmentDaoImpl.class);
-    bind(CmsDocumentDao.class).to(XaCmsDocumentDaoImpl.class);
     bind(ChildClientDao.class).to(XaCmsChildClientDaoImpl.class);
     bind(ClientDao.class).to(XaCmsClientDaoImpl.class);
-    bind(XaCmsChildClientDaoImpl.class);
-    bind(XaCmsClientAddressDaoImpl.class);
-    bind(XaCmsClientDaoImpl.class);
-    bind(XaCmsClientRelationshipDaoImpl.class);
-    bind(XaCmsCountyOwnershipDaoImpl.class);
-    bind(XaCmsCountyTriggerDaoImpl.class);
+    bind(ClientRelationshipDao.class).to(XaCmsClientRelationshipDaoImpl.class);
+    bind(ClientScpEthnicityDao.class).to(XaCmsClientScpEthnicityDaoImpl.class);
+    bind(ClientUcDao.class).to(XaCmsClientUcDaoImpl.class);
+    bind(CmsDocumentDao.class).to(XaCmsDocumentDaoImpl.class);
     bind(CrossReportDao.class).to(XaCmsCrossReportDaoImpl.class);
     bind(CwsOfficeDao.class).to(XaCmsCwsOfficeDaoImpl.class);
     bind(DrmsDocumentDao.class).to(XaCmsDrmsDocumentDaoImpl.class);
     bind(DrmsDocumentTemplateDao.class).to(XaCmsDrmsDocumentTemplateDaoImpl.class);
+    bind(ExternalInterfaceDao.class).to(XaCmsExternalInterfaceDaoImpl.class);
+    bind(gov.ca.cwds.data.cms.AddressDao.class).to(XaCmsAddressDaoImpl.class);
+    bind(GovernmentOrganizationDao.class).to(XaCmsGovernmentOrganizationDaoImpl.class);
     bind(LongTextDaoImpl.class).to(XaCmsLongTextDaoImpl.class);
     bind(ReferralAssignmentDao.class).to(XaCmsReferralAssignmentDaoImpl.class);
     bind(ReferralClientDao.class).to(XaCmsReferralClientDaoImpl.class);
     bind(ReferralDao.class).to(XaCmsReferralDaoImpl.class);
     bind(ReporterDao.class).to(XaCmsReporterDaoImpl.class);
-    bind(XaCmsSsaName3DaoImpl.class);
+    bind(SsaName3Dao.class).to(XaCmsSsaName3DaoImpl.class);
     bind(StaffPersonDao.class).to(XaCmsStaffPersonDaoImpl.class);
-    bind(GovernmentOrganizationDao.class).to(XaCmsGovernmentOrganizationDaoImpl.class);
+    bind(StateIdDao.class).to(XaCmsStateIdDaoImpl.class);
+    bind(TickleDao.class).to(XaCmsTickleDaoImpl.class);
+    bind(XaCmsAddressUcDaoImpl.class);
+    bind(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    bind(XaCmsClientAddressDaoImpl.class);
+    bind(XaCmsClientDaoImpl.class);
+    bind(XaCmsClientRelationshipDaoImpl.class);
+    bind(XaCmsCountyOwnershipDaoImpl.class);
+    bind(XaCmsCountyTriggerDaoImpl.class);
     bind(GovernmentOrganizationCrossReportDao.class)
         .to(XaCmsGovernmentOrganizationCrossReportDaoImpl.class);
-
-    // NS: obsolete Postgres tables??
-    bind(LanguageDao.class);
-    bind(PersonAddressDao.class);
-    bind(PersonPhoneDao.class);
-    bind(PersonLanguageDao.class);
-    bind(PersonEthnicityDao.class);
-    bind(EthnicityDao.class);
-    bind(PersonRaceDao.class);
-    bind(RaceDao.class);
 
     // NS XA:
     bind(AddressDao.class).to(XaNsAddressDaoImpl.class);
@@ -484,6 +471,16 @@ public class DataAccessModule extends AbstractModule {
     bind(ScreeningAddressDao.class).to(XaNsScreeningAddressDaoImpl.class);
     bind(ScreeningDao.class).to(XaNsScreeningDaoImpl.class);
 
+    // NS: obsolete Postgres tables??
+    bind(LanguageDao.class);
+    bind(PersonAddressDao.class);
+    bind(PersonPhoneDao.class);
+    bind(PersonLanguageDao.class);
+    bind(PersonEthnicityDao.class);
+    bind(EthnicityDao.class);
+    bind(PersonRaceDao.class);
+    bind(RaceDao.class);
+
     // Virtual triggers:
     bind(PaperTrailInterceptor.class);
 
@@ -500,7 +497,7 @@ public class DataAccessModule extends AbstractModule {
     bind(Reminders.class);
 
     // System code loader DAO:
-    bind(ApiSystemCodeDao.class).to(SystemCodeDaoFileImpl.class);
+    bind(ApiSystemCodeDao.class).to(SystemCodeDaoFileImpl.class); // obsolete?
 
     // Referential integrity:
     bind(RIClientCollateral.class);

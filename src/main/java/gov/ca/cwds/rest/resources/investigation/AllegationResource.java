@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.investigation;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
 
 import javax.validation.Valid;
@@ -16,11 +17,11 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.InvestigationAllegationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.Allegation;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -64,7 +65,7 @@ public class AllegationResource {
    * @param allegation - The allegation to create
    * @return - The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @POST
   @Path("/{id}/allegations")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -90,7 +91,7 @@ public class AllegationResource {
    * @param allegationToUpdate - allegation to update
    * @return - updated allegations
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @PUT
   @Path("/{id}/allegations/{allegation_id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

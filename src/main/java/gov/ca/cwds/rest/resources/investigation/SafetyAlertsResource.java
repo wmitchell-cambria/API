@@ -45,6 +45,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SafetyAlertsResource {
+
   private TypedResourceDelegate<String, SafetyAlerts> typedResourceDelegate;
 
   /**
@@ -82,7 +83,7 @@ public class SafetyAlertsResource {
    * Create an {@link AllegationList}.
    *
    * @param id - CMS Id of the Referral or Case the Safety Alerts are for
-   * @param safetyAlerts - The salfety alerts to create
+   * @param safetyAlerts - The safety alerts to create
    * @return - The {@link Response}
    */
   @UnitOfWork(value = "cms")

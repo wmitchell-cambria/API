@@ -94,11 +94,12 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
     if (deliveredServiceEntity == null) {
       return null;
     }
-    LastUpdatedBy lastUpdatedBy =
-        deliveredService.getTheLastUpdatedByStaffPerson(deliveredServiceEntity);
-    String note = deliveredService.combineDetailTextAndContinuation(deliveredServiceEntity);
 
-    Set<IndividualDeliveredService> peopleInIndividualDeliveredService =
+    final LastUpdatedBy lastUpdatedBy =
+        deliveredService.getTheLastUpdatedByStaffPerson(deliveredServiceEntity);
+    final String note = deliveredService.combineDetailTextAndContinuation(deliveredServiceEntity);
+
+    final Set<IndividualDeliveredService> peopleInIndividualDeliveredService =
         deliveredToIndividualService.getPeopleInIndividualDeliveredService(deliveredServiceEntity);
 
     return new Contact(deliveredServiceEntity, lastUpdatedBy, note,
@@ -143,12 +144,12 @@ public class ContactService implements TypedCrudsService<String, ContactReferral
    * @param contactId the Contact Id
    */
   private boolean isContactIdValid(String referralId, String contactId) {
-
     ReferralClientDeliveredServiceEntity[] referralClientDeliveredServiceEntities =
         referralClientDeliveredService.findByReferralId(referralId);
     if (referralClientDeliveredServiceEntities.length == 0) {
       return false;
     }
+
     for (ReferralClientDeliveredServiceEntity referralClientDeliveredServiceEntity : referralClientDeliveredServiceEntities) {
       if (referralClientDeliveredServiceEntity.getReferralClientDeliveredServiceEmbeddable()
           .getDeliveredServiceId().equals(contactId)) {

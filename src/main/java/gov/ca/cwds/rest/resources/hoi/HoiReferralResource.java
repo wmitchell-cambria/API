@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
 
-import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -15,11 +15,12 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
+import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.hoi.HOIReferralService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -61,7 +62,7 @@ public class HoiReferralResource {
    * @param clientIds - clientIds
    * @return the hoi referrals
    */
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true, transactional = false)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
@@ -70,8 +71,8 @@ public class HoiReferralResource {
       response = HOIReferral[].class)
   public Response get(@QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
       value = "List of Client Id-s") List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients = hoiReferralService
-        .handleFind(new HOIRequest(clientIds));
+    gov.ca.cwds.rest.api.Response clients =
+        hoiReferralService.handleFind(new HOIRequest(clientIds));
     return new ResponseConverter().withDataResponse(clients);
   }
 

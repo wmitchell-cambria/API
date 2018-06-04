@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CLIENT;
 
-import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,9 +14,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
+import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -58,6 +60,7 @@ public class HoiUsingClientIdResource {
    * @param clientIds the clientId
    * @return the response
    */
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true, transactional = false)
   @GET
   @Path("/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -67,8 +70,9 @@ public class HoiUsingClientIdResource {
       response = InvolvementHistory.class)
   public javax.ws.rs.core.Response get(@QueryParam("clientIds") @ApiParam(required = true,
       name = "clientIds", value = "The id's of the clients") final List<String> clientIds) {
-    gov.ca.cwds.rest.api.Response clients = involvementHistoryService
-        .findInvolvementHistoryByClientIds(clientIds);
+    gov.ca.cwds.rest.api.Response clients =
+        involvementHistoryService.findInvolvementHistoryByClientIds(clientIds);
     return new ResponseConverter().withDataResponse(clients);
   }
+
 }

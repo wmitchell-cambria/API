@@ -129,19 +129,19 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private void loadRelationshipsByClients(Collection<String> clientIds, HOICasesData hcd) {
-    Map<String, Collection<ClientRelationship>> relationshipsByPrimaryClients =
+    final Map<String, Collection<ClientRelationship>> relationshipsByPrimaryClients =
         clientRelationshipDao.findByPrimaryClientIds(clientIds);
     hcd.setRelationshipsByPrimaryClients(relationshipsByPrimaryClients);
 
-    Map<String, Collection<ClientRelationship>> relationshipsBySecondaryClients =
+    final Map<String, Collection<ClientRelationship>> relationshipsBySecondaryClients =
         clientRelationshipDao.findBySecondaryClientIds(clientIds);
     hcd.setRelationshipsBySecondaryClients(relationshipsBySecondaryClients);
 
-    Collection<ClientRelationship> allRelationshipsByPrimaryClients = new ArrayList<>();
+    final Collection<ClientRelationship> allRelationshipsByPrimaryClients = new ArrayList<>();
     relationshipsByPrimaryClients.values().forEach(allRelationshipsByPrimaryClients::addAll);
     hcd.setAllRelationshipsByPrimaryClients(allRelationshipsByPrimaryClients);
 
-    Collection<ClientRelationship> allRelationshipsBySecondaryClients = new ArrayList<>();
+    final Collection<ClientRelationship> allRelationshipsBySecondaryClients = new ArrayList<>();
     relationshipsBySecondaryClients.values().forEach(allRelationshipsBySecondaryClients::addAll);
     hcd.setAllRelationshipsBySecondaryClients(allRelationshipsBySecondaryClients);
   }
