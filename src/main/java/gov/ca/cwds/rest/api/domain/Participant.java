@@ -2,7 +2,9 @@ package gov.ca.cwds.rest.api.domain;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -169,6 +171,9 @@ public class Participant extends ReportingDomain implements Request, Response {
   private RaceAndEthnicity raceAndEthnicity;
 
   @JsonIgnore
+  private List<Csec> csecs = new ArrayList<>();
+
+  @JsonIgnore
   private boolean perpetrator;
 
   @JsonIgnore
@@ -191,16 +196,16 @@ public class Participant extends ReportingDomain implements Request, Response {
    * @param legacySourceTable - legacy source table name
    * @param clientId - the legacy clientId
    * @param legacyDescriptor legacy descriptor
-   * @param screeningId The screening Id
    * @param firstName The first Name
    * @param middleName The middle Name
    * @param lastName The last Name
    * @param nameSuffix The participants suffix Name
    * @param gender The Gender
-   * @param dateOfBirth The date Of Birth
    * @param ssn The social security number
+   * @param dateOfBirth The date Of Birth
    * @param primaryLanguage primary language
    * @param secondaryLanguage secondary language
+   * @param screeningId The screening Id
    * @param reporterConfidentialWaiver Confidential Waiver indicator for reporter
    * @param reporterEmployerName Reporter Employer Name
    * @param clientStaffPersonAdded Client Staff person Added indicator
@@ -210,6 +215,7 @@ public class Participant extends ReportingDomain implements Request, Response {
    * @param roles The roles of the participant
    * @param addresses The addresses of the participant
    * @param raceAndEthnicity The race And Ethnicity
+   * @param csecs CSEC list
    * @throws ServiceException throw any exception
    */
   @JsonCreator
@@ -231,7 +237,8 @@ public class Participant extends ReportingDomain implements Request, Response {
       @JsonProperty("approximate_age") String approximateAge,
       @JsonProperty("approximate_age_units") String approximateAgeUnits,
       @JsonProperty("roles") Set<String> roles, @JsonProperty("addresses") Set<Address> addresses,
-      @JsonProperty("race_ethnicity") RaceAndEthnicity raceAndEthnicity) {
+      @JsonProperty("race_ethnicity") RaceAndEthnicity raceAndEthnicity,
+      @JsonProperty("csec") List<Csec> csecs) {
     super();
     this.id = id;
     this.legacySourceTable = legacySourceTable;
@@ -256,6 +263,7 @@ public class Participant extends ReportingDomain implements Request, Response {
     this.clientStaffPersonAdded = clientStaffPersonAdded;
     this.sensitivityIndicator = sensitivityIndicator;
     this.raceAndEthnicity = raceAndEthnicity;
+    this.csecs = csecs;
 
     try {
       victim = ParticipantValidator.hasVictimRole(this);
@@ -493,6 +501,14 @@ public class Participant extends ReportingDomain implements Request, Response {
    */
   public boolean isReporter() {
     return reporter;
+  }
+
+  public List<Csec> getCsecs() {
+    return csecs;
+  }
+
+  public void setCsecs(List<Csec> csecs) {
+    this.csecs = csecs;
   }
 
   /**

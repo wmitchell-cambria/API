@@ -270,6 +270,10 @@ public class Allegation extends ReportingDomain implements Request, Response {
     return allegationType;
   }
 
+  public void setAllegationType(Short allegationType) {
+    this.allegationType = allegationType;
+  }
+
   /**
    * @return the dispositionDescription
    */
@@ -310,6 +314,10 @@ public class Allegation extends ReportingDomain implements Request, Response {
    */
   public String getVictimClientId() {
     return victimClientId;
+  }
+
+  public void setVictimClientId(String victimClientId) {
+    this.victimClientId = victimClientId;
   }
 
   /**

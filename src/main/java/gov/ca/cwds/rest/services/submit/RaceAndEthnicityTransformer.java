@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.services.submit;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.persistence.ns.IntakeLov;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
@@ -76,11 +77,9 @@ public class RaceAndEthnicityTransformer {
 
   /**
    * @param participantsIntake - participantsIntake
-   * @param nsCodeToNsLovMap - nsCodeToNsLovMap
    * @return the raceAndEthnicity
    */
-  public RaceAndEthnicity transform(ParticipantIntakeApi participantsIntake,
-      Map<String, IntakeLov> nsCodeToNsLovMap) {
+  public RaceAndEthnicity transform(ParticipantIntakeApi participantsIntake) {
     List<IntakeRace> intakeRace = null;
     IntakeEthnicity intakeEthnicity = null;
     RaceAndEthnicity raceAndEthnicity = new RaceAndEthnicity();
@@ -96,10 +95,10 @@ public class RaceAndEthnicityTransformer {
         throw new ServiceException(e);
       }
       if (intakeRace != null) {
-        buildRace(nsCodeToNsLovMap, intakeRace, raceAndEthnicity, raceCodes);
+        buildRace(intakeRace, raceAndEthnicity, raceCodes);
       }
       if (intakeEthnicity != null) {
-        buildEthnicity(nsCodeToNsLovMap, intakeEthnicity, raceAndEthnicity, hispanicCodes);
+        buildEthnicity(intakeEthnicity, raceAndEthnicity, hispanicCodes);
       }
     }
     return raceAndEthnicity;
@@ -122,14 +121,14 @@ public class RaceAndEthnicityTransformer {
     return intakeEthnicity;
   }
 
-  private void buildRace(Map<String, IntakeLov> nsCodeToNsLovMap, List<IntakeRace> intakeRace,
-      RaceAndEthnicity raceAndEthnicity, List<Short> raceCodes) {
+  private void buildRace(List<IntakeRace> intakeRace, RaceAndEthnicity raceAndEthnicity,
+      List<Short> raceCodes) {
     for (IntakeRace detail : intakeRace) {
       if (StringUtils.isNotBlank(detail.getRaceDetail())) {
-        raceCodes
-            .add(nsCodeToNsLovMap.get(detail.getRaceDetail()).getLegacySystemCodeId().shortValue());
+        raceCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity(
+            SystemCodeCategoryId.ETHNICITY, detail.getRaceDetail()));
       } else {
-        raceCodes.add(nsCodeToNsLovMap.get(detail.getRace()).getLegacySystemCodeId().shortValue());
+        validateGetRace(raceCodes, detail);
       }
     }
     raceAndEthnicity.setRaceCode(raceCodes);
@@ -138,26 +137,50 @@ public class RaceAndEthnicityTransformer {
     }
   }
 
-  private void buildEthnicity(Map<String, IntakeLov> nsCodeToNsLovMap,
-      IntakeEthnicity intakeEthnicity, RaceAndEthnicity raceAndEthnicity,
+  private void validateGetRace(List<Short> raceCodes, IntakeRace detail) {
+    if ("Abandoned".contains(detail.getRace())) {
+      raceCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity("DSP_RSNC",
+          detail.getRace()));
+    } else {
+      raceCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity(
+          SystemCodeCategoryId.ETHNICITY, detail.getRace()));
+    }
+  }
+
+  private void buildEthnicity(IntakeEthnicity intakeEthnicity, RaceAndEthnicity raceAndEthnicity,
       List<Short> hispanicCodes) {
     if (StringUtils.isBlank(intakeEthnicity.getHispanicLatinoOrigin())) {
       raceAndEthnicity.setHispanicOriginCode(DEFAULT_VALUE);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Yes")) {
-      hispanicCodes.add(nsCodeToNsLovMap.get(intakeEthnicity.getEthnicityDetail().get(0))
-          .getLegacySystemCodeId().shortValue());
-      raceAndEthnicity.setHispanicCode(hispanicCodes);
-      raceAndEthnicity.setHispanicOriginCode(YES);
+      setHispanicCodeForYes(intakeEthnicity, raceAndEthnicity, hispanicCodes);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("No")) {
       raceAndEthnicity.setHispanicOriginCode(NO);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Unknown")) {
       raceAndEthnicity.setHispanicOriginCode(UNKNOWN);
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Abandoned")) {
-      raceAndEthnicity.setHispanicOriginCode("Z");
+      setHispanicOriginForAbandoned(intakeEthnicity, raceAndEthnicity, hispanicCodes);
       raceAndEthnicity.setHispanicUnableToDetermineCode("A");
     } else if (intakeEthnicity.getHispanicLatinoOrigin().contains("Declined to answer")) {
       raceAndEthnicity.setHispanicOriginCode(DECLINED_TO_ANSWER);
     }
+  }
+
+  private void setHispanicCodeForYes(IntakeEthnicity intakeEthnicity,
+      RaceAndEthnicity raceAndEthnicity, List<Short> hispanicCodes) {
+    raceAndEthnicity.setHispanicOriginCode(YES);
+    if (!intakeEthnicity.ethnicityDetail.isEmpty()) {
+      hispanicCodes.add(SystemCodeCache.global().getSystemCodeId(
+          intakeEthnicity.getEthnicityDetail().get(0), SystemCodeCategoryId.ETHNICITY));
+      raceAndEthnicity.setHispanicCode(hispanicCodes);
+    }
+  }
+
+  private void setHispanicOriginForAbandoned(IntakeEthnicity intakeEthnicity,
+      RaceAndEthnicity raceAndEthnicity, List<Short> hispanicCodes) {
+    hispanicCodes.add(IntakeCodeCache.global().getLegacySystemCodeForRaceAndEthnicity("DSP_RSNC",
+        intakeEthnicity.getHispanicLatinoOrigin()));
+    raceAndEthnicity.setHispanicCode(hispanicCodes);
+    raceAndEthnicity.setHispanicOriginCode("Z");
   }
 
 }

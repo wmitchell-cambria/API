@@ -101,7 +101,7 @@ public class ScreeningServiceTest {
   @Test
   public void testCreate() {
     when(indexResponse.status()).thenReturn(RestStatus.CREATED);
-    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5");
+    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5", "");
     Screening actual = screeningService.create(screening);
     assertThat(actual, is(screening));
   }
@@ -109,14 +109,14 @@ public class ScreeningServiceTest {
   @Test
   public void testUpdate() {
     when(indexResponse.status()).thenReturn(RestStatus.OK);
-    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5");
+    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5", "ssb");
     Screening actual = screeningService.update("abc", screening);
     assertThat(actual, is(screening));
   }
 
   @Test
   public void testUpdatePrimaryKeyValueMismatch() {
-    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5");
+    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5", "");
     try {
       screeningService.update("abcd", screening);
       fail("Expected exception");

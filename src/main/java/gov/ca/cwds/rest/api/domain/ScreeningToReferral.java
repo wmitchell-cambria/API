@@ -35,14 +35,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "legacy_source_table",  "legacy_id", "ended_at", "incident_county",
-  "incident_date", "location_type", "communication_method", "current_location_of_children",
-  "name", "report_narrative", "reference", "response_time", "started_at", "assignee",
-  "assignee_staff_id", "additional_information", "screening_decision",
-  "screening_decision_detail", "approval_status", "family_awareness", 
-  "filed_with_law_enforcement", "responsible_agency", "limited_access_code",
-  "limited_access_description", "limited_access_agency", "limited_access_date",
-  "alerts", "alert_information", "address", "participants", "cross_reports", "allegations"})
+@JsonPropertyOrder({"id", "legacy_source_table", "legacy_id", "ended_at", "incident_county",
+    "incident_date", "location_type", "communication_method", "current_location_of_children",
+    "name", "report_narrative", "reference", "response_time", "started_at", "assignee",
+    "assignee_staff_id", "additional_information", "screening_decision",
+    "screening_decision_detail", "approval_status", "family_awareness",
+    "filed_with_law_enforcement", "responsible_agency", "limited_access_code",
+    "limited_access_description", "limited_access_agency", "limited_access_date", "alerts",
+    "alert_information", "address", "participants", "cross_reports", "allegations", "report_type"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
@@ -246,6 +246,10 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @AtRiskAllegation
   private Set<Allegation> allegations;
 
+  @JsonProperty("report_type")
+  private String reportType;
+
+
   @SuppressWarnings("javadoc")
   public ScreeningToReferral() {
     super();
@@ -285,6 +289,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param participants - participants associated with this screening
    * @param crossReports - Cross Report
    * @param allegations - Allegations
+   * @param reportType - reportType
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
       @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
@@ -296,7 +301,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
       java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
       Address address, Set<Participant> participants, Set<CrossReport> crossReports,
-      Set<Allegation> allegations) {
+      Set<Allegation> allegations, String reportType) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -331,6 +336,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.participants = participants;
     this.crossReports = crossReports;
     this.allegations = allegations;
+    this.reportType = reportType;
   }
 
   /**
@@ -577,6 +583,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @SuppressWarnings("javadoc")
   public Set<CrossReport> getCrossReports() {
     return crossReports;
+  }
+
+  public String getReportType() {
+    return reportType;
+  }
+
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
   }
 
   /**

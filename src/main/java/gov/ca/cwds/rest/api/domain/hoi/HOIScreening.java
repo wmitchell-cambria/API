@@ -80,8 +80,10 @@ public class HOIScreening extends ApiObjectIdentity implements ApiTypedIdentifie
     this.name = screeningEntity.getName();
     this.decision = screeningEntity.getScreeningDecision();
     this.decisionDetail = screeningEntity.getScreeningDecisionDetail();
-    this.startDate = screeningEntity.getStartedAt();
-    this.endDate = screeningEntity.getEndedAt();
+    this.startDate = screeningEntity.getStartedAt() == null ?
+        null : java.sql.Timestamp.valueOf(screeningEntity.getStartedAt());
+    this.endDate = screeningEntity.getEndedAt() == null ?
+        null : java.sql.Timestamp.valueOf(screeningEntity.getEndedAt());
   }
 
   @Override
