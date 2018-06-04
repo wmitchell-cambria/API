@@ -16,7 +16,7 @@ import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
 import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
+import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
@@ -34,7 +34,7 @@ public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  XaNsScreeningDaoImpl screeningDao;
+  ScreeningDao screeningDao;
 
   @Inject
   ParticipantDao participantDao;
@@ -73,7 +73,7 @@ public class HOIScreeningService
   }
 
   /**
-   * @param hoiRequest HOI Request containing a list of Client Id-s
+   * @param hoiRequest HOI Request containing a list of Client Id's
    * @return list of HOI Screenings
    */
   @Override
@@ -84,7 +84,6 @@ public class HOIScreeningService
     return new HOIScreeningResponse(buildHoiScreenings(hoiScreeningData));
   }
 
-  // @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(HOIScreeningData hoiScreeningData) {
     fetchDataFromNS(hoiScreeningData);
@@ -96,7 +95,7 @@ public class HOIScreeningService
      * of code back at this spot:<br/>
      * authorizationService&#46;ensureClientAccessAuthorized&#40;clientIds&#41;&#59;
      */
-    Set<ScreeningEntity> screeningEntities =
+    final Set<ScreeningEntity> screeningEntities =
         screeningDao.findScreeningsByClientIds(hsd.getClientIds());
     hsd.getScreeningEntities().addAll(screeningEntities);
 

@@ -2,11 +2,10 @@ package gov.ca.cwds.data.ns;
 
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 
-import gov.ca.cwds.data.BaseDaoImpl;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.SessionFactory;
@@ -14,6 +13,7 @@ import org.hibernate.query.Query;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.BaseDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.inject.NsSessionFactory;
 
@@ -49,19 +49,19 @@ public class ParticipantDao extends BaseDaoImpl<ParticipantEntity> {
   }
 
   /**
-   * @param screeningIds Set of Screening ID-s
+   * @param screeningIds Set of Screening ID's
    * @return map where key is a Screening ID and value is a Set of Participant Entities bound to the
-   * screening
+   *         screening
    */
   public Map<String, Set<ParticipantEntity>> findByScreeningIds(Set<String> screeningIds) {
     if (screeningIds == null || screeningIds.isEmpty()) {
       return new HashMap<>();
     }
-    @SuppressWarnings("unchecked") final Query<ParticipantEntity> query = this.getSessionFactory()
-        .getCurrentSession()
+    @SuppressWarnings("unchecked")
+    final Query<ParticipantEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(FIND_PARTICIPANTS_BY_SCREENING_IDS)
         .setParameter("screeningIds", screeningIds);
-    Map<String, Set<ParticipantEntity>> result = new HashMap<>(screeningIds.size());
+    final Map<String, Set<ParticipantEntity>> result = new HashMap<>(screeningIds.size());
     for (ParticipantEntity participantEntity : query.list()) {
       String screeningId = participantEntity.getScreeningId();
       if (!result.containsKey(screeningId)) {

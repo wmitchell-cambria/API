@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.security.annotations.Authorize;
 
 /**
- * Service to check that logged-in staff person is authorized to access entities.
+ * Service to check that the logged-in staff person is authorized to access entities.
  * 
  * @author CWDS API Team
  */
@@ -79,10 +79,10 @@ public class AuthorizationService
     }
 
     // Check participants
-    Set<ParticipantEntity> participants = screeningEntity.getParticipants();
-    if (participants != null) {
+    final Set<ParticipantEntity> participants = screeningEntity.getParticipants();
+    if (participants != null && !participants.isEmpty()) {
       for (ParticipantEntity participant : participants) {
-        String participantId = participant.getLegacyId();
+        final String participantId = participant.getLegacyId();
         if (StringUtils.isNotBlank(participantId)) {
           ensureClientAccessAuthorized(participantId);
         }

@@ -99,9 +99,9 @@ public class XAUnitOfWorkAwareProxyFactory {
         final XAUnitOfWorkAspect aspect = newAspect();
 
         try {
-          aspect.beforeStart(xaUnitOfWork); // before annotated method
+          aspect.beforeStart(xaUnitOfWork); // BEFORE annotated method
           final Object result = proceed.invoke(self, args); // call annotated method
-          aspect.afterEnd(); // after annotated method
+          aspect.afterEnd(); // AFTER annotated method
           return result;
         } catch (InvocationTargetException e) {
           LOGGER.error("XA ERROR! InvocationTargetException: {}", e.getCause(), e);

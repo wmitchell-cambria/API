@@ -224,16 +224,17 @@ public class ScreeningService implements CrudsService {
     if (screeningEntity == null) {
       throw new ServiceException("Screening with id=" + id + " is not found");
     }
-    Screening screening = screeningMapper.map(screeningEntity);
 
+    Screening screening = screeningMapper.map(screeningEntity);
     String screeningId = screeningEntity.getId();
 
-    List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
-    Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
+    final List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
+    final Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
     screening.getAllegations().addAll(allegations);
 
-    List<CrossReportEntity> crossReportEntities = crossReportDao.findByScreeningId(screeningId);
-    Set<CrossReportIntake> crossReports = crossReportMapper.map(crossReportEntities);
+    final List<CrossReportEntity> crossReportEntities =
+        crossReportDao.findByScreeningId(screeningId);
+    final Set<CrossReportIntake> crossReports = crossReportMapper.map(crossReportEntities);
     screening.getCrossReports().addAll(crossReports);
 
     for (CrossReportIntake crossReport : crossReports) {
@@ -244,7 +245,7 @@ public class ScreeningService implements CrudsService {
       crossReport.getAgencies().addAll(agencies);
     }
 
-    List<ScreeningAddressEntity> screeningAddressEntities =
+    final List<ScreeningAddressEntity> screeningAddressEntities =
         screeningAddressDao.findByScreeningId(screeningId);
     if (screeningAddressEntities.size() > 1) {
       throw new ServiceException("Screening should have no more then 1 address");
@@ -255,7 +256,7 @@ public class ScreeningService implements CrudsService {
       screening.setIncidentAddress(address);
     }
 
-    List<ParticipantEntity> participantEntities =
+    final List<ParticipantEntity> participantEntities =
         participantIntakeApiService.getByScreeningId(screeningId);
 
     for (ParticipantEntity participantEntity : participantEntities) {
