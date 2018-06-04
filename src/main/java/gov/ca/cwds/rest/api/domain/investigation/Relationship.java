@@ -92,7 +92,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
   private Set<RelationshipTo> relatedTo;
 
   /**
-   * 
+   * No-arg ctor.
    */
   public Relationship() {
     super();
