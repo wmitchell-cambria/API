@@ -140,8 +140,7 @@ public class ParticipantService implements CrudsService {
 
     for (Participant incomingParticipant : participants) {
       if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
-        String message = " Participant contains incompatible roles ";
-        messageBuilder.addMessageAndLog(message, LOGGER);
+        messageBuilder.addMessageAndLog(" Participant contains incompatible roles ", LOGGER);
         continue; // next participant
       }
 

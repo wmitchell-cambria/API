@@ -60,7 +60,7 @@ public class ClientRelationshipResource {
    * @param id the id
    * @return client relationships
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @Path("/{id}/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -77,10 +77,10 @@ public class ClientRelationshipResource {
   /**
    * Finds a Relationship for a Client id.
    *
-   * @param clientIds the list of client ids to return relationships for
+   * @param clientIds the list of client id's to return relationships for
    * @return A list of client relationships
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @Path("/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

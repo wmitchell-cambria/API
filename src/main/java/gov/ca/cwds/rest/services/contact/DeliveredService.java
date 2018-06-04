@@ -18,7 +18,7 @@ import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on {@link DeliveredServiceEntity}
+ * Business layer object to work on {@link DeliveredServiceEntity}.
  * 
  * @author CWDS API Team
  */
@@ -47,7 +47,6 @@ public class DeliveredService
   @Override
   public gov.ca.cwds.rest.api.contact.DeliveredServiceDomain create(
       DeliveredServiceDomain request) {
-
     gov.ca.cwds.rest.api.contact.DeliveredServiceDomain deliveredServiceDomain = request;
 
     try {
@@ -62,7 +61,6 @@ public class DeliveredService
       LOGGER.info("deliveredServiceEntity already exists : {}", deliveredServiceDomain);
       throw new ServiceException(e);
     }
-
   }
 
   @Override
