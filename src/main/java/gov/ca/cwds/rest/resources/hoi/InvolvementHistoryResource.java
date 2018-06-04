@@ -38,6 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class InvolvementHistoryResource {
+
   private TypedResourceDelegate<String, InvolvementHistory> typedResourceDelegate;
 
   /**
@@ -58,7 +59,7 @@ public class InvolvementHistoryResource {
    * 
    * @return the response
    */
-  @XAUnitOfWork
+  @XAUnitOfWork(readOnly = true)
   @GET
   @Path("/{id}/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

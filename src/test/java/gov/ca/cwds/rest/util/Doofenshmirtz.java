@@ -477,12 +477,12 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
         .thenReturn(createCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
 
-    Participant victim =
+    final Participant victim =
         new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createVictimParticipant();
-    Participant perp =
+    final Participant perp =
         new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createPerpParticipant();
 
-    Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0, true);
+    final Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0, true);
     gov.ca.cwds.data.persistence.cms.Client savedClient =
         new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5",
             new java.util.Date());
@@ -545,26 +545,26 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
         CmsDocument.class);
   }
 
-  @SuppressWarnings("unchecked")
-  protected static <T> Query queryInator(Doofenshmirtz<?> villain, T... values) {
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  protected static <T> Query queryInator(Doofenshmirtz<?> heinz, T... values) {
     final Query<T> q = Mockito.mock(Query.class);
     if (values != null && values.length != 0) {
       final T t = ArrayUtils.toArray(values)[0];
-      when(villain.session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
-      when(villain.session.get(any(String.class), any(Serializable.class))).thenReturn(t);
-      when(villain.session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
+      when(heinz.session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
+      when(heinz.session.get(any(String.class), any(Serializable.class))).thenReturn(t);
+      when(heinz.session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(villain.session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
+      when(heinz.session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
-      when(villain.session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
+      when(heinz.session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(villain.session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
+      when(heinz.session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
     }
 
     final List<T> list = new ArrayList<>();
-    when(villain.sessionFactory.getCurrentSession()).thenReturn(villain.session);
-    when(villain.session.getNamedQuery(any())).thenReturn(q);
+    when(heinz.sessionFactory.getCurrentSession()).thenReturn(heinz.session);
+    when(heinz.session.getNamedQuery(any())).thenReturn(q);
     when(q.list()).thenReturn(list);
 
     when(q.setHibernateFlushMode(any(FlushMode.class))).thenReturn(q);

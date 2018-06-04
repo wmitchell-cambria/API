@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.transaction.UserTransaction;
 
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -188,7 +189,8 @@ public class XAUnitOfWorkAspect {
   protected void configureSession(Session session) {
     session.setDefaultReadOnly(xaUnitOfWork.readOnly());
     session.setCacheMode(xaUnitOfWork.cacheMode());
-    session.setHibernateFlushMode(xaUnitOfWork.flushMode());
+    session.setHibernateFlushMode(
+        xaUnitOfWork.readOnly() ? FlushMode.MANUAL : xaUnitOfWork.flushMode());
   }
 
   /**
