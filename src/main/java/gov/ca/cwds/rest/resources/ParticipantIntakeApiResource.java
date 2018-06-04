@@ -30,8 +30,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource providing a RESTful interface for {@link ParticipantIntakeApi}. It delegates functions
- * to {@link ParticipantIntakeApiService}.
+ * A resource providing a RESTful interface for {@link ParticipantIntakeApi}. It delegates
+ * operations to {@link ParticipantIntakeApiService}.
  *
  * @author CWDS API Team
  */
@@ -55,7 +55,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Finds an participant by id.
+   * Finds a participant by id.
    *
    * @param id the id
    * @return the response
@@ -74,7 +74,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Delete a participant
+   * Delete a participant.
    *
    * @param id The id of the {@link ParticipantIntakeApi}
    * @return {@link Response}
@@ -91,7 +91,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Create a {@link ParticipantIntakeApi}
+   * Create a {@link ParticipantIntakeApi}.
    *
    * @param participant The {@link ParticipantIntakeApi}
    * @return The {@link Response}
@@ -112,7 +112,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Update a {@link ParticipantIntakeApi}
+   * Update a {@link ParticipantIntakeApi}.
    *
    * @param id the id
    * @param participant {@link ParticipantIntakeApi}
