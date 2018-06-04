@@ -91,7 +91,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Create an {@link ParticipantIntakeApi}
+   * Create a {@link ParticipantIntakeApi}
    *
    * @param participant The {@link ParticipantIntakeApi}
    * @return The {@link Response}
@@ -112,7 +112,7 @@ public class ParticipantIntakeApiResource {
   }
 
   /**
-   * Update an {@link ParticipantIntakeApi}
+   * Update a {@link ParticipantIntakeApi}
    *
    * @param id the id
    * @param participant {@link ParticipantIntakeApi}
