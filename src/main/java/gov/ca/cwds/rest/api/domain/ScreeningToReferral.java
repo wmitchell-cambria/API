@@ -249,8 +249,6 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonProperty("report_type")
   private String reportType;
 
-
-  @SuppressWarnings("javadoc")
   public ScreeningToReferral() {
     super();
   }
@@ -558,7 +556,6 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.alertInformation = alertInformation;
   }
 
-  @SuppressWarnings("javadoc")
   public Address getAddress() {
     return address;
   }
@@ -570,17 +567,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.address = address;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<Participant> getParticipants() {
     return participants;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<Allegation> getAllegations() {
     return allegations;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<CrossReport> getCrossReports() {
     return crossReports;
   }

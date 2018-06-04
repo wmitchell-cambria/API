@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.business.rules;
 
+import static gov.ca.cwds.rest.validation.StartDateTimeValidator.DATE_FORMAT_PATTERN;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
@@ -11,18 +13,20 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
- * 
  * <p>
  * BUSINESS RULE: "R - 00824"
+ * </p>
  * 
+ * <p>
  * IF referralResponseTypeCode is set to Evaluate Out, Approval Status is set to Approved and Client
  * age is below 19
+ * </p>
  * 
- * THEN referralClient - dispositionCode is set to the "A"
  * <p>
+ * THEN referralClient - dispositionCode is set to the "A"
+ * </p>
  * 
  * @author CWDS API Team
- *
  */
 public class R00824SetDispositionCode implements RuleValidator {
 
@@ -72,7 +76,7 @@ public class R00824SetDispositionCode implements RuleValidator {
   private int clientAge() {
     String date = screeningToReferral.getStartedAt().split("T")[0];
     String dob = incomingParticipant.getDateOfBirth();
-    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+    DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT_PATTERN);
     DateTime receivedDate = formatter.parseDateTime(date);
     DateTime clientDob = formatter.parseDateTime(dob);
     return Years.yearsBetween(clientDob, receivedDate).getYears();

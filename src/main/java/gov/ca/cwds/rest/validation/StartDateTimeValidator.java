@@ -15,10 +15,12 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
  * @author CWDS API Team
  */
 public class StartDateTimeValidator {
-  private static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-  private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
-  private static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
-  private static final Logger LOGGER = LoggerFactory.getLogger(StartDateTimeValidator.class);
+
+  public static final String DATE_TIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+  public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
+  public static final String TIME_FORMAT_PATTERN = "HH:mm:ss";
+
+  public static final Logger LOGGER = LoggerFactory.getLogger(StartDateTimeValidator.class);
 
   /**
    * default constructor
@@ -72,4 +74,5 @@ public class StartDateTimeValidator {
   private static void logError(String message, Exception exception) {
     LOGGER.error(message, exception.getMessage());
   }
+
 }

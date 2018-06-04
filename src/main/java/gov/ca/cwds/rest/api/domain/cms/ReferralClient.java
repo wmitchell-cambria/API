@@ -32,9 +32,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class ReferralClient extends ReportingDomain implements Request, Response {
   private static final short DEFAULT_CODE = 0;
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @Size(max = 10)
@@ -116,7 +113,6 @@ public class ReferralClient extends ReportingDomain implements Request, Response
 
   @ApiModelProperty(required = false, readOnly = false)
   private Boolean drugIndicator;
-
 
   /**
    * Construct from all fields.
