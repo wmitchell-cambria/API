@@ -41,8 +41,8 @@ public class ClientDao extends BaseDaoImpl<Client> {
    */
   public Map<String, Client> findClientsByIds(Collection<String> ids) {
     @SuppressWarnings("unchecked")
-    final Query<Client> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
+    final Query<Client> query =
+        grabSession().getNamedQuery(constructNamedQueryName("findByIds")).setParameter("ids", ids);
     return query.list().stream().collect(Collectors.toMap(BaseClient::getId, c -> c));
   }
 

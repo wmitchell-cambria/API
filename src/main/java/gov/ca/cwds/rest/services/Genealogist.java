@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 
 /**
  * Genealogist. Noun. A researcher who discovers a person's hereditary relationships in order to
- * answer the question, "Who's your daddy?"
+ * answer the question, "Who's your daddy?" Or your daddy's daddy's daddy's daddy, etc.
  * 
  * <p>
  * Any clients that the current user is not authorized to view are omitted from results.

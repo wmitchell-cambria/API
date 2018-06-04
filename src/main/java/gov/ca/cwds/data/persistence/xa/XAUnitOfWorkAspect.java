@@ -37,7 +37,7 @@ public class XAUnitOfWorkAspect {
 
   private final UserTransaction txn = new UserTransactionImp();
 
-  private final Map<String, SessionFactory> sessionFactories;
+  private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
 
   private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
@@ -49,7 +49,7 @@ public class XAUnitOfWorkAspect {
    * @param sessionFactories - all datasources to participate in the XA transaction
    */
   public XAUnitOfWorkAspect(Map<String, SessionFactory> sessionFactories) {
-    this.sessionFactories = sessionFactories;
+    this.sessionFactories.putAll(sessionFactories);
   }
 
   /**
@@ -187,6 +187,7 @@ public class XAUnitOfWorkAspect {
   protected void closeSession(Session session) {
     if (session != null && (session.isOpen() || session.isDirty())) {
       LOGGER.debug("XA CLOSE SESSION");
+      session.flush();
       session.close();
     }
   }
