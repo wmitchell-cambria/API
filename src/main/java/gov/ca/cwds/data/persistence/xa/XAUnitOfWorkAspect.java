@@ -96,6 +96,7 @@ public class XAUnitOfWorkAspect {
    * Add a nested {@link XAUnitOfWork} to the transaction and open sessions for datasources not
    * already included.
    * 
+   * @param xaUnitOfWork annotation
    * @throws CaresXAException on database error
    */
   public void joinTransaction(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
@@ -136,6 +137,7 @@ public class XAUnitOfWorkAspect {
    * on the JDBC connection.
    * </p>
    * 
+   * @param key datasource name
    * @param sessionFactory - open a session for this datasource
    * @return session current session for this datasource
    */
