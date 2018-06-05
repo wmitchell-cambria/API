@@ -23,12 +23,11 @@ public class AddressTransformer {
     Integer state = StringUtils.isNotBlank(addressIntake.getState()) ? IntakeCodeCache.global()
         .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.STATE_CODE, addressIntake.getState())
         .intValue() : null;
-    Integer addressType =
-        StringUtils.isNotBlank(addressIntake.getType()) ? Integer.valueOf(addressIntake.getType())
-            : null;
+    Short typeLegacyId = IntakeCodeCache.global()
+        .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.ADDRESS_TYPE, addressIntake.getType());
     return new Address(addressIntake.getLegacySourceTable(), addressIntake.getLegacyId(),
         addressIntake.getStreetAddress(), addressIntake.getCity(), state, addressIntake.getZip(),
-        addressType, addressIntake.getLegacyDescriptor());
+        typeLegacyId == null ? null : typeLegacyId.intValue(), addressIntake.getLegacyDescriptor());
   }
 
 }

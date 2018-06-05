@@ -4,9 +4,9 @@ import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.rest.api.domain.Csec;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.core.FerbConstants;
 import java.io.Serializable;
@@ -81,8 +81,6 @@ public class ParticipantService implements CrudsService {
   private CsecHistoryService csecHistoryService;
   @Inject
   private SexualExploitationTypeDao sexualExploitationTypeDao;
-  @Inject
-  private IntakeLOVCodeDao intakeLOVCodeDao;
 
   /**
    * Constructor
@@ -445,13 +443,15 @@ public class ParticipantService implements CrudsService {
         messageBuilder.addError("There is no CSEC code id provided for client with id: " + clientId,
             ErrorMessage.ErrorType.VALIDATION);
       } else {
-        IntakeLOVCodeEntity intakeLOVCodeEntity = intakeLOVCodeDao.find(Long.valueOf(csecCodeId));
+        Short csecLegacyId = IntakeCodeCache.global().getLegacySystemCodeForIntakeCode(
+            SystemCodeCategoryId.COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN, csecCodeId);
+
         SexualExploitationType sexualExploitationType = null;
-        if (intakeLOVCodeEntity == null) {
+        if (csecLegacyId == null) {
           messageBuilder.addError("LOV code is not found for CSEC code id: " + csecCodeId,
               ErrorMessage.ErrorType.VALIDATION);
         } else {
-          sexualExploitationType = sexualExploitationTypeDao.find(intakeLOVCodeEntity.getLgSysId().shortValue());
+          sexualExploitationType = sexualExploitationTypeDao.find(csecLegacyId);
         }
         if (sexualExploitationType == null) {
           messageBuilder.addError("Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
@@ -549,9 +549,5 @@ public class ParticipantService implements CrudsService {
 
   void setSexualExploitationTypeDao(SexualExploitationTypeDao sexualExploitationTypeDao) {
     this.sexualExploitationTypeDao = sexualExploitationTypeDao;
-  }
-
-  void setIntakeLOVCodeDao(IntakeLOVCodeDao intakeLOVCodeDao) {
-    this.intakeLOVCodeDao = intakeLOVCodeDao;
   }
 }

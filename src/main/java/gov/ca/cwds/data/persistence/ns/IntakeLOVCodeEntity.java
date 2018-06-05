@@ -31,9 +31,6 @@ public class IntakeLOVCodeEntity implements PersistentObject {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @Column(name = "id")
-  private Long id;
-
   @Column(name = "cat_id")
   private Long catId;
 
@@ -59,14 +56,6 @@ public class IntakeLOVCodeEntity implements PersistentObject {
    */
   public IntakeLOVCodeEntity() {
     super();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public Long getCatId() {
@@ -107,7 +96,7 @@ public class IntakeLOVCodeEntity implements PersistentObject {
 
   @Override
   public Serializable getPrimaryKey() {
-    return getId();
+    return getCatId();
   }
 
   /**
