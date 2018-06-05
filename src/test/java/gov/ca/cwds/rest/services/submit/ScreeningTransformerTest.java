@@ -120,7 +120,7 @@ public class ScreeningTransformerTest {
   @Test
   public void transformConvertsScreeningToScreeningToReferralWhenIncidentAddressProvided() {
     LegacyDescriptor legacyDescriptor = new LegacyDescriptorEntityBuilder().build();
-    AddressIntakeApi nsAddress = new AddressIntakeApiResourceBuilder().setType("28")
+    AddressIntakeApi nsAddress = new AddressIntakeApiResourceBuilder().setType("Day Care")
         .setLegacyDescriptor(legacyDescriptor).build();
 
     Address address = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace", "Springfield",

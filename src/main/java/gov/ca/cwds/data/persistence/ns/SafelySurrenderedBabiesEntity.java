@@ -35,7 +35,7 @@ public class SafelySurrenderedBabiesEntity implements PersistentObject, Serializ
   private String surrenderedBy;
 
   @Column(name = "relation_to_child")
-  private Integer relationToChild;
+  private String relationToChild;
 
   @Column(name = "bracelet_id")
   private String braceletId;
@@ -86,13 +86,13 @@ public class SafelySurrenderedBabiesEntity implements PersistentObject, Serializ
 
 
 
-  public Integer getRelationToChild() {
+  public String getRelationToChild() {
     return relationToChild;
   }
 
 
 
-  public void setRelationToChild(Integer relationToChild) {
+  public void setRelationToChild(String relationToChild) {
     this.relationToChild = relationToChild;
   }
 

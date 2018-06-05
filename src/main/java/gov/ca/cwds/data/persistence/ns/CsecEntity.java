@@ -29,7 +29,7 @@ public class CsecEntity implements PersistentObject, Serializable {
   private String participantId;
 
   @Column(name = "csec_code_id")
-  private Integer csecCodeId;
+  private String csecCodeId;
 
   @Column(name = "start_date")
   private LocalDate startDate;
@@ -57,11 +57,11 @@ public class CsecEntity implements PersistentObject, Serializable {
     this.participantId = participantId;
   }
 
-  public Integer getCsecCodeId() {
+  public String getCsecCodeId() {
     return csecCodeId;
   }
 
-  public void setCsecCodeId(Integer csecCodeId) {
+  public void setCsecCodeId(String csecCodeId) {
     this.csecCodeId = csecCodeId;
   }
 

@@ -99,7 +99,7 @@
         {
           "id": "-1",
           "participant_id": "-3",
-          "csec_code_id": "-2",
+          "csec_code_id": "At Risk",
           "start_date": "2018-05-28",
           "end_date": "2018-05-29"
         }

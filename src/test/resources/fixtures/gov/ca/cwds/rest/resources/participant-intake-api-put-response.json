@@ -13,7 +13,7 @@
       "id": "${address_id}",
       "legacy_id": "0ByMpj00CN",
       "legacy_source_table": "ADDRS_T",
-      "type": "32",
+      "type": "Home",
       "street_address": "2300 Erie Hill",
       "city": "San Diego",
       "state": "CA",
@@ -48,44 +48,44 @@
   "csec": [
     {
       "id": "2501",
-      "csec_code_id": "519",
+      "csec_code_id": "At Risk",
       "start_date": "2001-01-01",
       "end_date": "2002-02-02"
     },
     {
       "id": "2502",
-      "csec_code_id": "520",
+      "csec_code_id": "Victim Before Foster Care",
       "start_date": "2001-01-02",
       "end_date": "2002-02-03"
     },
     {
       "id": "2503",
-      "csec_code_id": "521",
+      "csec_code_id": "Victim During Foster Care",
       "start_date": "2001-01-03",
       "end_date": "2002-02-04"
     },
     {
       "id": "2504",
-      "csec_code_id": "522",
+      "csec_code_id": "Victim in Open Case not in Foster Care",
       "start_date": "2001-01-04",
       "end_date": "2002-02-05"
     },
     {
       "id": "2505",
-      "csec_code_id": "523",
+      "csec_code_id": "Victim while Absent from Placement",
       "start_date": "2001-01-05",
       "end_date": "2002-02-06"
     },
     {
       "id": "2506",
-      "csec_code_id": "524",
+      "csec_code_id": "Victim with Closed Case, Rcv ILP Svcs",
       "start_date": "2001-01-06",
       "end_date": "2002-02-07"
     }
   ],
       "safelySurenderedBabies": {
       "surrendered_by": "Unknown",
-      "relation_to_child": "525",
+      "relation_to_child": "Parents",
       "bracelet_id": "1234",
       "parent_guardian_given_bracelet_id": "U",
       "parent_guardian_provided_med_questionaire": "U",

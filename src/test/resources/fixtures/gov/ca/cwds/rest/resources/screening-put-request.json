@@ -54,7 +54,7 @@
     "legacy_id": "79VrmIT00c",
     "legacy_source_table": "ADDRS_T",
     "street_address": "erfsgd",
-    "type": "29",
+    "type": "Homeless",
     "city": "Sacramento",
     "state": "CA",
     "zip": "95833"
@@ -88,7 +88,7 @@
           "id": "142",
           "legacy_id": "79VrmIT00c",
           "legacy_source_table": "ADDRS_T",
-          "type": "29",
+          "type": "Homeless",
           "street_address": "erfsgd101",
           "city": "Sacramento",
           "state": "CA",
@@ -122,14 +122,14 @@
       "csec": [
         {
           "id": "1",
-          "csec_code_id": "519",
+          "csec_code_id": "At Risk",
           "start_date": "2018-03-30",
           "end_date": "2018-03-31"
         }
       ],
-        "safelySurenderedBabies": {
+      "safelySurenderedBabies": {
         "surrendered_by": "Unknown",
-        "relation_to_child": "525",
+        "relation_to_child": "Parents",
         "bracelet_id": "1234",
         "parent_guardian_given_bracelet_id": "U",
         "parent_guardian_provided_med_questionaire": "U",

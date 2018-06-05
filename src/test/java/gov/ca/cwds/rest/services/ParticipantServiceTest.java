@@ -14,11 +14,10 @@ import static org.mockito.Mockito.when;
 
 
 import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.rest.core.FerbConstants;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,6 +34,7 @@ import javax.validation.Validator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -114,12 +114,11 @@ public class ParticipantServiceTest {
   private Client updatedClient = null;
 
   TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
   private String savedAddressId;
 
-  private IntakeLOVCodeDao intakeLOVCodeDao;
   private SexualExploitationTypeDao sexualExploitationTypeDao;
   private CsecHistoryService csecHistoryService;
-  private IntakeLOVCodeEntity intakeLOVCodeEntity;
 
   /**
    *
@@ -187,23 +186,17 @@ public class ParticipantServiceTest {
     referralId = "1234567890";
     timestamp = new Date();
 
-    intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
-    intakeLOVCodeEntity = new IntakeLOVCodeEntity();
-    intakeLOVCodeEntity.setLgSysId(-5L);
-    when(intakeLOVCodeDao.find(-2L)).thenReturn(intakeLOVCodeEntity);
-
     sexualExploitationTypeDao = mock(SexualExploitationTypeDao.class);
     SexualExploitationType sexualExploitationType =  new SexualExploitationType();
     sexualExploitationType.setFkMeta("testFkMeta");
     sexualExploitationType.setShortDescription("testShortDescription");
-    when(sexualExploitationTypeDao.find((short) -5)).thenReturn(sexualExploitationType);
+    when(sexualExploitationTypeDao.find((short) 6867)).thenReturn(sexualExploitationType);
 
     csecHistoryService = mock(CsecHistoryService.class);
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
-    participantService.setIntakeLOVCodeDao(intakeLOVCodeDao);
     participantService.setSexualExploitationTypeDao(sexualExploitationTypeDao);
     participantService.setCsecHistoryService(csecHistoryService);
   }
@@ -297,7 +290,7 @@ public class ParticipantServiceTest {
 
     assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
         .collect(Collectors.toList())
-        .contains("CSEC start date is not found for code: -2"));
+        .contains("CSEC start date is not found for code: At Risk"));
   }
 
   @Test
@@ -339,9 +332,7 @@ public class ParticipantServiceTest {
   @Test
   public void testCsecTypeIsNotFound() {
     Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
-    victimParticipant.getCsecs().get(0).setCsecCodeId("-10");
-
-    intakeLOVCodeEntity.setLgSysId(-1000L);
+    victimParticipant.getCsecs().get(0).setCsecCodeId("is not present in CSEC category");
 
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
