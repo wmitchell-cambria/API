@@ -32,6 +32,7 @@ import org.hibernate.FlushMode;
  *
  * @author CWDS API Team
  */
+@SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL") // they should be injected
 public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
