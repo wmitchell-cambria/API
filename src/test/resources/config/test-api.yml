@@ -139,7 +139,7 @@ elasticsearch:
   peopleIndex:
     elasticsearch.host: ${ES_HOST_PEOPLE:-127.0.0.1}
     elasticsearch.port: ${ES_PORT_PEOPLE:-9200}
-    elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-taborda-dev-es}
+    elasticsearch.cluster: ${ES_CLUSTER_PEOPLE:-elasticsearch}
     elasticsearch.alias: ${ES_ALIAS_PEOPLE:-people}
     elasticsearch.doctype: ${ES_DOCTYPE_PEOPLE:-person}
     elasticsearch.xpack.user: ${XPACK_USER_PEOPLE:-}
@@ -149,7 +149,7 @@ elasticsearch:
   screeningsIndex:
     elasticsearch.host: ${ES_HOST_SCREENINGS:-127.0.0.1}
     elasticsearch.port: ${ES_PORT_SCREENINGS:-9200}
-    elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-taborda-dev-es}
+    elasticsearch.cluster: ${ES_CLUSTER_SCREENINGS:-elasticsearch}
     elasticsearch.alias: ${ES_ALIAS_SCREENINGS:-screenings}
     elasticsearch.doctype: ${ES_DOCTYPE:-screening}
     elasticsearch.xpack.user: ${XPACK_USER_SCREENINGS:-}
