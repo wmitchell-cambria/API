@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
@@ -51,6 +52,9 @@ public interface HOIBaseService extends SensitiveClientOverride {
       try {
         authorizeClient(clientId);
         ret.add(clientId);
+      } catch (HibernateException e) {
+        getLogger().error("authorizeClients: HibernateException! {}", clientId, e);
+        throw e;
       } catch (Exception e) {
         final String msg = String.format("NOT AUTHORIZED TO VIEW CLIENT ID \"%s\"!", clientId);
         RequestExecutionContext.instance().getMessageBuilder().addMessageAndLog(msg, e, getLogger(),

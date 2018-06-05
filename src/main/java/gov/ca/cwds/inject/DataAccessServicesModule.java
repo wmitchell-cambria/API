@@ -8,13 +8,15 @@ import com.google.inject.Key;
 import gov.ca.cwds.cms.data.access.inject.AbstractDataAccessServicesModule;
 
 /**
- * CWDS API Team
+ * Find the appropriate session factory for authorization services from Guice.
+ * 
+ * @author CWDS API Team
  */
 public class DataAccessServicesModule extends AbstractDataAccessServicesModule {
 
   @Override
-  protected SessionFactory getDataAccessSercvicesSessionFactory(Injector injector) {
-    return injector.getInstance(Key.get(SessionFactory.class, CmsSessionFactory.class));
+  protected SessionFactory getDataAccessServicesSessionFactory(Injector injector) {
+    return injector.getInstance(Key.get(SessionFactory.class, XaCmsSessionFactory.class));
   }
 
 }

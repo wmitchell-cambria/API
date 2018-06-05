@@ -474,7 +474,7 @@ public class DataAccessModule extends AbstractModule {
     bind(ScreeningAddressDao.class).to(XaNsScreeningAddressDaoImpl.class);
     bind(ScreeningDao.class).to(XaNsScreeningDaoImpl.class);
 
-    // NS: obsolete Postgres tables??
+    // NS: obsolete Postgres tables.
     bind(LanguageDao.class);
     bind(PersonAddressDao.class);
     bind(PersonPhoneDao.class);
@@ -529,7 +529,7 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @CwsRsSessionFactory
+  @CwsRsSessionFactory // For compatibility with api-core, Perry, and CALS.
   public SessionFactory rsSessionFactory() {
     return xaRsHibernateBundle.getSessionFactory();
   }
