@@ -3,7 +3,7 @@ package gov.ca.cwds.data.ns;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -62,7 +62,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
 
     try {
       final Query query =
-          session.getNamedQuery(namedQueryName).setString("legacyCategoryId", legacyCategoryId);
+          session.getNamedQuery(namedQueryName).setParameter("legacyCategoryId", legacyCategoryId);
       final List<IntakeLov> intakeCodes = query.list();
 
       if (!transactionExists)

@@ -16,6 +16,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.hibernate.FlushMode;
 
 /**
  * Business layer object to work on Screening History Of Involvement.
@@ -26,16 +27,16 @@ public class InvolvementHistoryService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
 
   @Inject
-  ParticipantDao participantDao;
+  private ParticipantDao participantDao;
 
   @Inject
-  HOICaseService hoiCaseService;
+  private HOICaseService hoiCaseService;
 
   @Inject
-  HOIReferralService hoiReferralService;
+  private HOIReferralService hoiReferralService;
 
   @Inject
-  HOIScreeningService hoiScreeningService;
+  private HOIScreeningService hoiScreeningService;
 
   public InvolvementHistoryService() {
     super();
@@ -67,7 +68,7 @@ public class InvolvementHistoryService
         ihd.getHoiScreenings());
   }
 
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  @UnitOfWork(value = "ns", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();
@@ -80,7 +81,7 @@ public class InvolvementHistoryService
     }
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();

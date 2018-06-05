@@ -74,7 +74,7 @@ public class IntakeLovDaoTest {
     IntakeLov intakeLov = new IntakeLov(1251L, "lang_tpc", "Cambodian", "19", false, "LANG_TPC", "",
         null, "language", "Cambodian", "Cambodian");
     when(query.list()).thenReturn(Arrays.asList(intakeLov));
-    when(query.setString(any(String.class), any(String.class))).thenReturn(query);
+    when(query.setParameter(any(String.class), any(String.class))).thenReturn(query);
     IntakeLovDao target = new IntakeLovDao(sessionFactory);
     List<IntakeLov> response = target.findByLegacyMetaId("LANG_TPC");
     assertThat(response, notNullValue());

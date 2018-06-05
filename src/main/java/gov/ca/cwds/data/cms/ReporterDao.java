@@ -1,5 +1,9 @@
 package gov.ca.cwds.data.cms;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import com.google.inject.Inject;
@@ -37,5 +41,22 @@ public class ReporterDao extends BaseDaoImpl<Reporter> {
             "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId")
         .setParameter("referralId", referralId);
     return query.list().toArray(new Reporter[0]);
+  }
+
+  /**
+   * Find Reporters by Referral ID-s
+   *
+   * @param referralIds Set of Referral id-s
+   * @return map where key is a Referral id and value is a the Reporter of the Referral
+   */
+  public Map<String, Reporter> findByReferralIds(Collection<String> referralIds) {
+    if (referralIds == null || referralIds.isEmpty()) {
+      return new HashMap<>();
+    }
+    @SuppressWarnings("unchecked")
+    final Query<Reporter> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery("gov.ca.cwds.data.persistence.cms.Reporter.findByReferralIds")
+        .setParameter("referralIds", referralIds);
+    return query.list().stream().collect(Collectors.toMap(Reporter::getReferralId, r -> r));
   }
 }

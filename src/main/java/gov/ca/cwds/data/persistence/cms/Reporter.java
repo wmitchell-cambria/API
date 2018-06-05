@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -40,6 +41,9 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @NamedQuery(
     name = "gov.ca.cwds.data.persistence.cms.Reporter.findInvestigationReportersByReferralId",
     query = "FROM Reporter WHERE confidentialWaiverIndicator = 'Y' AND referralId = :referralId")
+@NamedQuery(
+    name = "gov.ca.cwds.data.persistence.cms.Reporter.findByReferralIds",
+    query = "FROM Reporter WHERE referralId IN :referralIds")
 @NamedNativeQuery(name = "gov.ca.cwds.data.persistence.cms.Reporter.findPartitionedBuckets",
     query = "select trim(z.RPTR_BDGNO) as RPTR_BDGNO, trim(z.RPTR_CTYNM) as RPTR_CTYNM, "
         + "z.COL_RELC, z.CMM_MTHC, z.CNFWVR_IND, z.FDBACK_DOC, z.RPTR_EMPNM, "
@@ -69,7 +73,7 @@ public class Reporter extends BaseReporter {
    * lawEnforcement and reporterDrmsDocument record.
    * </p>
    */
-  @OneToOne(optional = false)
+  @OneToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
@@ -80,7 +84,7 @@ public class Reporter extends BaseReporter {
    * lawEnforcement and reporterDrmsDocument record.
    * </p>
    */
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKLAW_ENFT", nullable = true, updatable = false, insertable = false)
   private LawEnforcementEntity lawEnforcement;
 
@@ -91,7 +95,7 @@ public class Reporter extends BaseReporter {
    * lawEnforcement and reporterDrmsDocument record.
    * </p>
    */
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FDBACK_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument;
 

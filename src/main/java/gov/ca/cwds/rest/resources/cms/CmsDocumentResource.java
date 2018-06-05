@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.hibernate.FlushMode;
 
 /**
  * A resource providing a RESTful interface for {@link CmsDocument}. It delegates functions to
@@ -68,7 +69,7 @@ public class CmsDocumentResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
+import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
 public class HoiReferralResourceIRT extends HOIBaseTest {
@@ -32,5 +34,11 @@ public class HoiReferralResourceIRT extends HOIBaseTest {
     Response response = target.queryParam("clientIds", "5DK5THO0DW", "SFpVhtC0DW").request()
         .accept(MediaType.APPLICATION_JSON).get();
     return IOUtils.toString((InputStream) response.getEntity(), StandardCharsets.UTF_8);
+  }
+
+  @Test(expected = NotImplementedException.class)
+  public void handleRequestNotImplemented() {
+    new HOIReferralService(null, null, null, null, null, null, null)
+        .handleRequest(new HOIReferral());
   }
 }

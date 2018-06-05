@@ -9,6 +9,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,12 +33,10 @@ import org.junit.rules.ExpectedException;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
-import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCaseEntityBuilder;
@@ -262,7 +262,7 @@ public class HOICaseServiceTest extends Doofenshmirtz<Client> {
   }
 
   @Test
-  public void testUnAuthorizedClient() throws Exception {
+  public void testUnAuthorizedClient() {
     authorizationService = mock(AuthorizationService.class);
     doThrow(AuthorizationException.class).when(authorizationService)
         .ensureClientAccessAuthorized(any(String.class));
