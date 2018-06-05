@@ -37,7 +37,7 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     if (SystemCodeCategoryId.STATE_CODE.contains(metaId) && "CA".contains(intakeCode)) {
       return 1828;
     }
-    if (SystemCodeCategoryId.ADDRESS_TYPE.contains(metaId) && "28".contains(intakeCode)) {
+    if (SystemCodeCategoryId.ADDRESS_TYPE.contains(metaId) && "Day Care".equals(intakeCode)) {
       return 28;
     }
     if (SystemCodeCategoryId.CROSS_REPORT_METHOD.contains(metaId)

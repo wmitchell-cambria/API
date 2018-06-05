@@ -55,7 +55,7 @@
     "legacy_id": "79VrmIT00c",
     "legacy_source_table": "ADDRS_T",
     "street_address": "erfsgd",
-    "type": "29",
+    "type": "Homeless",
     "city": "Sacramento",
     "state": "CA",
     "zip": "95833"
@@ -91,7 +91,7 @@
           "messages": [],
           "legacy_id": "79VrmIT00c",
           "legacy_source_table": "ADDRS_T",
-          "type": "29",
+          "type": "Homeless",
           "street_address": "erfsgd101",
           "city": "Sacramento",
           "state": "CA",

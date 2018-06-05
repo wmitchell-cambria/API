@@ -7,7 +7,7 @@
       <column name="city" value="San Diego"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95223"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id" value="0ByMpj00CN"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -17,7 +17,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -27,7 +27,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -37,7 +37,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -47,7 +47,7 @@
       <column name="city"/>
       <column name="state"/>
       <column name="zip"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -57,7 +57,7 @@
       <column name="city"/>
       <column name="state"/>
       <column name="zip"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -67,7 +67,7 @@
       <column name="city" value="Legal City"/>
       <column name="state" value="CA"/>
       <column name="zip" value="0"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id" value="MhXmWPa0DW"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -77,7 +77,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -87,7 +87,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -97,7 +97,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -107,7 +107,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip"/>
-      <column name="type" value="27"/>
+      <column name="type" value="Work"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -117,7 +117,7 @@
       <column name="city" value="Legal City"/>
       <column name="state" value="CA"/>
       <column name="zip" value="0"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id" value="MhXmWPa0DW"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -127,7 +127,7 @@
       <column name="city" value="sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95819"/>
-      <column name="type" value="29"/>
+      <column name="type" value="Homeless"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -147,7 +147,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip"/>
-      <column name="type" value="27"/>
+      <column name="type" value="Work"/>
       <column name="legacy_id"/>
       <column name="legacy_source_table"/>
     </insert>
@@ -157,7 +157,7 @@
       <column name="city" value="Legal City"/>
       <column name="state" value="CA"/>
       <column name="zip" value="0"/>
-      <column name="type" value="32"/>
+      <column name="type" value="Home"/>
       <column name="legacy_id" value="MhXmWPa0DW"/>
       <column name="legacy_source_table"/>
     </insert>
