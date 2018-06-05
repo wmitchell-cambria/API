@@ -150,10 +150,14 @@ public class ServicesModule extends AbstractModule {
     @XaNsHibernateBundle
     FerbHibernateBundle xaNsHibernateBundle;
 
+    @Inject
+    @CwsRsHibernateBundle
+    FerbHibernateBundle xaRsHibernateBundle;
+
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory =
-          UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
+      proxyFactory = UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle,
+          xaNsHibernateBundle, xaRsHibernateBundle);
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         LOGGER.debug("Before XA annotation");

@@ -333,11 +333,14 @@ public class DataAccessModule extends AbstractModule {
         }
       };
 
-  private final HibernateBundle<ApiConfiguration> rsHibernateBundle =
-      new HibernateBundle<ApiConfiguration>(ImmutableList.of(), new ApiSessionFactoryFactory()) {
+  /**
+   * XA pooled datasource factory for CMS DB2, replicated schema.
+   */
+  private final FerbHibernateBundle xaRsHibernateBundle =
+      new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
         @Override
-        public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getRsDataSourceFactory();
+        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getXaCmsDataSourceFactory();
         }
 
         @Override
@@ -347,7 +350,7 @@ public class DataAccessModule extends AbstractModule {
       };
 
   /**
-   * XA pooled datasource factory for CMS DB2.
+   * XA pooled datasource factory for CMS DB2, transactional schema.
    */
   private final FerbHibernateBundle xaCmsHibernateBundle =
       new FerbHibernateBundle(cmsEntities, new ApiSessionFactoryFactory()) {
@@ -386,7 +389,7 @@ public class DataAccessModule extends AbstractModule {
   public DataAccessModule(Bootstrap<ApiConfiguration> bootstrap) {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
-    bootstrap.addBundle(rsHibernateBundle);
+    bootstrap.addBundle(xaRsHibernateBundle);
     bootstrap.addBundle(xaCmsHibernateBundle);
     bootstrap.addBundle(xaNsHibernateBundle);
   }
@@ -528,7 +531,7 @@ public class DataAccessModule extends AbstractModule {
   @Provides
   @CwsRsSessionFactory
   public SessionFactory rsSessionFactory() {
-    return rsHibernateBundle.getSessionFactory();
+    return xaRsHibernateBundle.getSessionFactory();
   }
 
   @Provides
@@ -545,8 +548,8 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @CwsRsHibernateBundle
-  public HibernateBundle<ApiConfiguration> rsHibernateBundle() {
-    return rsHibernateBundle;
+  public FerbHibernateBundle rsHibernateBundle() {
+    return xaRsHibernateBundle;
   }
 
   @Provides
