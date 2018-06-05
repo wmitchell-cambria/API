@@ -32,29 +32,35 @@ import org.hibernate.FlushMode;
  *
  * @author CWDS API Team
  */
-@SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL") // they should be injected
 public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private ScreeningDao screeningDao;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private ParticipantDao participantDao;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private IntakeLOVCodeDao intakeLOVCodeDao;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private StaffPersonDao staffPersonDao;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private HOIScreeningFactory hoiScreeningFactory;
 
   @Inject
+  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
   private AuthorizationService authorizationService;
 
   private Comparator<HOIScreening> screeningsComparator;
