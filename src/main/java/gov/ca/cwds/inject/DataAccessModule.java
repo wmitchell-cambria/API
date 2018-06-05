@@ -47,6 +47,7 @@ import gov.ca.cwds.data.cms.ReferralAssignmentDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
+import gov.ca.cwds.data.cms.SpecialProjectDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
@@ -205,10 +206,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class,
-          gov.ca.cwds.data.legacy.cms.entity.SpecialProject.class,
-          gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.class,
-          gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies.class,
-          gov.ca.cwds.data.legacy.cms.entity.NonCWSNumber.class)
+          gov.ca.cwds.data.persistence.cms.SpecialProject.class,
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
@@ -384,11 +382,9 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
-    bind(gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao.class);
-    bind(gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao.class);
-    bind(gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao.class);
-    bind(gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao.class);
+    bind(gov.ca.cwds.data.cms.SpecialProjectDao.class);
     bind(XaCmsAddressDao.class);
+    bind(SpecialProjectDao.class);
 
     // NS:
     bind(AddressDao.class);
