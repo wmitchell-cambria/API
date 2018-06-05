@@ -35,11 +35,14 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-@JsonPropertyOrder({"id", "legacySourceTable", "referralId", "endedAt", "incidentCounty",
-    "incidentDate", "locationType", "communicationMethod", "currentLocationOfChildren", "email",
-    "name", "reportNarrative", "reference", "responseTime", "startedAt", "assignee",
-    "assigneeStaffId", "additionalInformation", "screeningDecision", "screeningDecisionDetail",
-    "address", "participants", "crossReports", "allegations"})
+@JsonPropertyOrder({"id", "legacy_source_table", "legacy_id", "ended_at", "incident_county",
+    "incident_date", "location_type", "communication_method", "current_location_of_children",
+    "name", "report_narrative", "reference", "response_time", "started_at", "assignee",
+    "assignee_staff_id", "additional_information", "screening_decision",
+    "screening_decision_detail", "approval_status", "family_awareness",
+    "filed_with_law_enforcement", "responsible_agency", "limited_access_code",
+    "limited_access_description", "limited_access_agency", "limited_access_date", "alerts",
+    "alert_information", "address", "participants", "cross_reports", "allegations", "report_type"})
 @VictimAgeRestriction
 @ValidVictimBirth
 public class ScreeningToReferral extends ReportingDomain implements Request {
@@ -212,6 +215,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private java.util.Date limitedAccessDate;
 
+  @JsonProperty("alerts")
+  @ApiModelProperty(required = false, readOnly = false, value = "Safety Alert Type")
+  private Set<String> alerts;
+
+  @JsonProperty("alert_information")
+  @ApiModelProperty(required = false, readOnly = false, value = "Alert Information")
+  private String alertInformation;
+
   @NotNull
   @ApiModelProperty(required = true, readOnly = false)
   @Valid
@@ -234,6 +245,10 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @Valid
   @AtRiskAllegation
   private Set<Allegation> allegations;
+
+  @JsonProperty("report_type")
+  private String reportType;
+
 
   @SuppressWarnings("javadoc")
   public ScreeningToReferral() {
@@ -268,10 +283,13 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param limitedAccessDescription - limitedAccessDescription
    * @param limitedAccessAgency - limitedAccessAgency
    * @param limitedAccessDate - limitedAccessDate
+   * @param alerts - alerts
+   * @param alertInformation - alertInformation
    * @param address - address associated with participants
    * @param participants - participants associated with this screening
    * @param crossReports - Cross Report
    * @param allegations - Allegations
+   * @param reportType - reportType
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
       @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
@@ -281,8 +299,9 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
       String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
-      java.util.Date limitedAccessDate, Address address, Set<Participant> participants,
-      Set<CrossReport> crossReports, Set<Allegation> allegations) {
+      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
+      Address address, Set<Participant> participants, Set<CrossReport> crossReports,
+      Set<Allegation> allegations, String reportType) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -311,10 +330,13 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.limitedAccessDescription = limitedAccessDescription;
     this.limitedAccessAgency = limitedAccessAgency;
     this.limitedAccessDate = freshDate(limitedAccessDate);
+    this.alerts = alerts;
+    this.alertInformation = alertInformation;
     this.address = address;
     this.participants = participants;
     this.crossReports = crossReports;
     this.allegations = allegations;
+    this.reportType = reportType;
   }
 
   /**
@@ -430,14 +452,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return addtional infoma
+   * @return additional information
    */
   public String getAdditionalInformation() {
     return additionalInformation;
   }
 
   /**
-   * @return - screening decio
+   * @return - screening decision
    */
   public String getScreeningDecision() {
     return screeningDecision;
@@ -465,7 +487,7 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   }
 
   /**
-   * @return crossreport filed with Law Enforecement
+   * @return filedWithLawEnforcement filed with Law Enforcement
    */
   public boolean isFiledWithLawEnforcement() {
     return filedWithLawEnforcement;
@@ -511,6 +533,31 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     return freshDate(limitedAccessDate);
   }
 
+  /**
+   * @return - set of safety alert types
+   */
+  public Set<String> getAlerts() {
+    return alerts;
+  }
+
+  /**
+   * @param alerts - Set of alert codes
+   */
+  public void setAlerts(Set<String> alerts) {
+    this.alerts = alerts;
+  }
+
+  /**
+   * @return - alert information
+   */
+  public String getAlertInformation() {
+    return alertInformation;
+  }
+
+  public void setAlertInformation(String alertInformation) {
+    this.alertInformation = alertInformation;
+  }
+
   @SuppressWarnings("javadoc")
   public Address getAddress() {
     return address;
@@ -536,6 +583,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @SuppressWarnings("javadoc")
   public Set<CrossReport> getCrossReports() {
     return crossReports;
+  }
+
+  public String getReportType() {
+    return reportType;
+  }
+
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
   }
 
   /**

@@ -2,7 +2,9 @@ package gov.ca.cwds.fixture;
 
 import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
-import gov.ca.cwds.rest.api.domain.DomainChef;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,24 +18,25 @@ public class ScreeningEntityBuilder {
   private String id = null;
   private String reference = "screening reference";
   private String incidentCounty = "020";
-  private Date incidentDate;
+  private LocalDate incidentDate;
   private String locationType = "1111";
   private String communicationMethod = "2222";
   private String name = "screening name";
   private String responseTime = "2 day";
   private String screeningDecision = "screening decision";
   private String screeningDecisionDetail = null;
-  private Date startedAt;
-  private Date endedAt;
+  private LocalDateTime startedAt;
+  private LocalDateTime endedAt;
   private String narrative = "screening narrative";
   private Address contactAddress;
   private String assigneeStaffId = DEFAULT_ASSIGNEE_STAFF_ID;
   private Set<ParticipantEntity> participants = new HashSet<>();
+  private String reportType = "ssb";
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
         locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
-        narrative, contactAddress, assigneeStaffId, participants);
+        narrative, contactAddress, assigneeStaffId, participants, reportType);
   }
 
   public ScreeningEntityBuilder setId(String id) {
@@ -47,12 +50,12 @@ public class ScreeningEntityBuilder {
   }
 
   public ScreeningEntityBuilder setEndedAt(Date endedAt) {
-    this.endedAt = endedAt;
+    this.endedAt = new Timestamp(endedAt.getTime()).toLocalDateTime();
     return this;
   }
 
   public ScreeningEntityBuilder setEndedAt(String endedAt) {
-    this.endedAt = DomainChef.uncookDateString(endedAt);
+    this.endedAt = LocalDateTime.parse(endedAt);
     return this;
   }
 
@@ -62,7 +65,7 @@ public class ScreeningEntityBuilder {
   }
 
   public ScreeningEntityBuilder setIncidentDate(Date incidentDate) {
-    this.incidentDate = incidentDate;
+    this.incidentDate = new java.sql.Date(incidentDate.getTime()).toLocalDate();
     return this;
   }
 
@@ -88,12 +91,12 @@ public class ScreeningEntityBuilder {
   }
 
   public ScreeningEntityBuilder setStartedAt(Date startedAt) {
-    this.startedAt = startedAt;
+    this.startedAt = new Timestamp(startedAt.getTime()).toLocalDateTime();
     return this;
   }
 
   public ScreeningEntityBuilder setStartedAt(String startedAt) {
-    this.startedAt = DomainChef.uncookDateString(startedAt);
+    this.startedAt = LocalDateTime.parse(startedAt);
     return this;
   }
 

@@ -41,13 +41,13 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
- * This service handle request from the user to get all the cases involved for the given clientId.
+ * This service handles user requests to get all the cases involved for the given client id.
  * <p>
  *
  * @author CWDS API Team
  */
 public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, HOICaseResponse>
-    implements SensitiveClientOverride {
+    implements HOIBaseService {
 
   private static final long serialVersionUID = 1L;
 
@@ -63,9 +63,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   /**
    * @param caseDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.CmsCase} objects
    * @param clientDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client} objects
-   * @param clientRelationshipDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.ClientRelationship}
+   * @param clientRelationshipDao {@link Dao} handling
+   *        {@link gov.ca.cwds.data.persistence.cms.ClientRelationship}
    * @param staffPersonDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.StaffPerson}
-   * objects
+   *        objects
    * @param authorizationService - authorizationService
    */
   @Inject
@@ -81,39 +82,73 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     this.hoiParentsFactory = new HOIParentsFactory();
   }
 
+  /**
+   * SNAP-49: HOI not shown for client.
+   *
+   * <p>
+   * Sometimes Cases or Referrals link to clients that the current user is not authorized to view
+   * due to sealed/sensitivity restriction, county access privileges, or a short-coming with
+   * authorization rules. The client authorizer throws an UnauthorizedException, then skip that
+   * client and move on. Don't bomb all History of Involvement because the user is not authorized to
+   * view a client's half-sister's foster sibling.
+   * </p>
+   *
+   * @param hoiRequest HOI REST request
+   * @return HOI REST response
+   */
   @Override
   public HOICaseResponse handleFind(HOIRequest hoiRequest) {
-    Collection<String> clientIds = hoiRequest.getClientIds();
+    final Collection<String> clientIds = hoiRequest.getClientIds();
     if (clientIds.isEmpty()) {
       return new HOICaseResponse();
     }
-    if (!developmentOnlyClientSensitivityOverride()) {
-      authorizationService.ensureClientAccessAuthorized(clientIds);
+
+    final List<String> authorizedClients = authorizeClients(clientIds);
+    // TODO rm
+    //if (!developmentOnlyClientSensitivityOverride()) {
+    //  authorizationService.ensureClientAccessAuthorized(clientIds);
+    //}
+    final HOICasesData hcd = new HOICasesData(authorizedClients);
+
+    // TODO refactor so no clientIds variable at all
+    if (!authorizedClients.isEmpty()) {
+      loadRelationshipsByClients(authorizedClients, hcd);
+      hcd.getAllClientIds().addAll(getClientIdsFromRelations(hcd));
+      loadRelationshipsByClients(hcd.getAllClientIds(), hcd);
+      loadClients(hcd);
+      loadCmsCases(hcd);
+
+      List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
+      for (CmsCase cmsCase : hcd.getCmsCases().values()) {
+        cases.add(constructHOICase(cmsCase, hcd));
+      }
+      cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
+      /* todo WTF
+      final Map<String, CmsCase> cmsCases = hcd.getCmsCases();
+      if (cmsCases != null && !cmsCases.isEmpty()) {
+        final List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
+        for (CmsCase cmsCase : hcd.getCmsCases().values()) {
+          cases.add(constructHOICase(cmsCase, hcd));
+        }
+        cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
+        ret = new HOICaseResponse(cases);
+      }
+       */
+
+      return new HOICaseResponse(cases);
+    } else {
+      // todo refactor
+      return new HOICaseResponse();
     }
-
-    HOICasesData hcd = new HOICasesData(clientIds);
-    loadRelationshipsByClients(clientIds, hcd);
-    hcd.getAllClientIds().addAll(getClientIdsFromRelations(hcd));
-    loadRelationshipsByClients(hcd.getAllClientIds(), hcd);
-    loadClients(hcd);
-    loadCmsCases(hcd);
-
-    List<HOICase> cases = new ArrayList<>(hcd.getCmsCases().size());
-    for (CmsCase cmsCase : hcd.getCmsCases().values()) {
-      cases.add(constructHOICase(cmsCase, hcd));
-    }
-    cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
-
-    return new HOICaseResponse(cases);
   }
 
   private void loadRelationshipsByClients(Collection<String> clientIds, HOICasesData hcd) {
-    Map<String, Collection<ClientRelationship>> relationshipsByPrimaryClients = clientRelationshipDao
-        .findByPrimaryClientIds(clientIds);
+    Map<String, Collection<ClientRelationship>> relationshipsByPrimaryClients =
+        clientRelationshipDao.findByPrimaryClientIds(clientIds);
     hcd.setRelationshipsByPrimaryClients(relationshipsByPrimaryClients);
 
-    Map<String, Collection<ClientRelationship>> relationshipsBySecondaryClients = clientRelationshipDao
-        .findBySecondaryClientIds(clientIds);
+    Map<String, Collection<ClientRelationship>> relationshipsBySecondaryClients =
+        clientRelationshipDao.findBySecondaryClientIds(clientIds);
     hcd.setRelationshipsBySecondaryClients(relationshipsBySecondaryClients);
 
     Collection<ClientRelationship> allRelationshipsByPrimaryClients = new ArrayList<>();
@@ -126,14 +161,17 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private void loadClients(HOICasesData hcd) {
-    Collection<String> ids = new HashSet<>(hcd.getAllClientIds());
+    final Collection<String> ids = new HashSet<>(hcd.getAllClientIds());
+    // todo look inside or put it inside the if
     ids.addAll(getClientIdsFromRelations(hcd));
-    hcd.setAllClients(clientDao.findClientsByIds(ids));
+    if (!ids.isEmpty()) {
+      hcd.setAllClients(clientDao.findClientsByIds(ids));
+    }
   }
 
   private Collection<String> getClientIdsFromRelations(HOICasesData hcd) {
-    Collection<String> ids = new HashSet<>();
-    Predicate<ClientRelationship> relationshipFilter = rel -> HOIRelationshipTypeService
+    final Collection<String> ids = new HashSet<>();
+    final Predicate<ClientRelationship> relationshipFilter = rel -> HOIRelationshipTypeService
         .isParentChildOrSiblingRelationshipType(rel.getClientRelationshipType());
     hcd.getAllRelationshipsByPrimaryClients().stream().filter(relationshipFilter)
         .forEach(rel -> ids.add(rel.getSecondaryClientId()));
@@ -143,35 +181,36 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   }
 
   private void loadCmsCases(HOICasesData hcd) {
-    Map<String, CmsCase> cmsCases = caseDao.findByClientIds(hcd.getAllClientIds());
-    Collection<String> staffPersonIds = cmsCases.values().stream().map(CmsCase::getFkstfperst)
-        .collect(Collectors.toSet());
-    Map<String, StaffPerson> staffPersons = staffPersonDao.findByIds(staffPersonIds);
-    cmsCases.values().forEach(c -> c.setStaffPerson(staffPersons.get(c.getFkstfperst())));
-    hcd.setCmsCases(cmsCases);
+    final Map<String, CmsCase> cmsCases = caseDao.findByClientIds(hcd.getAllClientIds());
+    if (!cmsCases.isEmpty()) {
+      final Collection<String> staffPersonIds = cmsCases.values().stream().map(CmsCase::getFkstfperst)
+          .collect(Collectors.toSet());
+      final Map<String, StaffPerson> staffPersons = staffPersonDao.findByIds(staffPersonIds);
+      cmsCases.values().forEach(c -> c.setStaffPerson(staffPersons.get(c.getFkstfperst())));
+      hcd.setCmsCases(cmsCases);
+    }
   }
 
   private HOICase constructHOICase(CmsCase cmsCase, HOICasesData hcd) {
-    Client focusChildClient = hcd.getAllClients().get(cmsCase.getFkchldClt());
+    final Client focusChildClient = hcd.getAllClients().get(cmsCase.getFkchldClt());
     if (focusChildClient == null) {
       throw new ServiceException("Inconsistent CWS/CMS data: there is a case for child client id "
           + cmsCase.getFkchldClt() + " but the client entity is absent.");
     }
 
-    List<HOIRelatedPerson> parents = new ArrayList<>();
+    final List<HOIRelatedPerson> parents = new ArrayList<>();
     parents.addAll(hoiParentsFactory.buildParentsByPrimaryRelationship(focusChildClient, hcd));
     parents.addAll(hoiParentsFactory.buildParentsBySecondaryRelationship(focusChildClient, hcd));
 
-    return new HOICaseFactory()
-        .createHOICase(cmsCase, constructCounty(cmsCase), constructServiceComponent(cmsCase),
-            constructFocusChild(focusChildClient), constructAssignedSocialWorker(cmsCase), parents);
+    return new HOICaseFactory().createHOICase(cmsCase, constructCounty(cmsCase),
+        constructServiceComponent(cmsCase), constructFocusChild(focusChildClient),
+        constructAssignedSocialWorker(cmsCase), parents);
   }
 
   private HOISocialWorker constructAssignedSocialWorker(CmsCase cmsCase) {
-    StaffPerson staffPerson = cmsCase.getStaffPerson();
-
-    String staffId = staffPerson.getId();
-    LegacyDescriptor legacyDescriptor =
+    final StaffPerson staffPerson = cmsCase.getStaffPerson();
+    final String staffId = staffPerson.getId();
+    final LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(staffId, staffId, new DateTime(staffPerson.getLastUpdatedTime()),
             LegacyTable.STAFF_PERSON.getName(), LegacyTable.STAFF_PERSON.getDescription());
 
@@ -186,7 +225,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
 
   private SystemCodeDescriptor constructCounty(CmsCase cmsCase) {
     return new SystemCodeDescriptor(cmsCase.getGovernmentEntityType(),
-        SystemCodeCache.global().getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()));
+        SystemCodeCache.global()
+            .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()) == null ? ""
+                : SystemCodeCache.global()
+                    .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()));
   }
 
   private HOIVictim constructFocusChild(Client client) {
@@ -204,4 +246,17 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     LOGGER.info("HOICaseService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
+
+  // todo wtf
+  @Override
+  public AuthorizationService getAuthorizationService() {
+    return authorizationService;
+  }
+
+  // todo wtf
+  @Override
+  public Logger getLogger() {
+    return LOGGER;
+  }
+
 }

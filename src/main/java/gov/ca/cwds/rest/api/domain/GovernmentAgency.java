@@ -1,12 +1,15 @@
 package gov.ca.cwds.rest.api.domain;
 
+import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 import java.io.Serializable;
+
+import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -29,8 +32,9 @@ public class GovernmentAgency implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
-  @ApiModelProperty(required = true, value = "", example = "1234")
+  @ApiModelProperty(required = true, value = "", example = "ABC1234567")
   @NotEmpty
+  @Size(max = CMS_ID_LEN)
   private String id;
 
   @JsonProperty("type")
@@ -50,8 +54,7 @@ public class GovernmentAgency implements Serializable {
    * @param id - id
    * @param type - type
    */
-  @JsonCreator
-  public GovernmentAgency(@JsonProperty("id") String id, @JsonProperty("type") String type) {
+  public GovernmentAgency(String id, String type) {
     this.id = id;
     this.type = type;
   }
@@ -65,14 +68,6 @@ public class GovernmentAgency implements Serializable {
     return id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-
   /**
    * Get agency type
    * 
@@ -83,6 +78,7 @@ public class GovernmentAgency implements Serializable {
   }
 
   /**
+   * 
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()

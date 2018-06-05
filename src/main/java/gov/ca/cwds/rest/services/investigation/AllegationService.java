@@ -7,7 +7,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.dao.investigation.AllegationsDao;
 import gov.ca.cwds.data.dao.investigation.InjuryBodyDetailDao;
 import gov.ca.cwds.data.dao.investigation.InjuryHarmDetailDao;
 import gov.ca.cwds.data.persistence.cms.InjuryBodyDetail;
@@ -26,22 +25,19 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 
 public class AllegationService implements TypedCrudsService<String, Allegation, Response> {
 
-  private AllegationsDao allegationDao;
   private InjuryBodyDetailDao injuryBodyDetailDao;
   private InjuryHarmDetailDao injuryHarmDetailDao;
 
   private Allegation validAllegation = new AllegationEntityBuilder().build();
 
   /**
-   * @param allegationsDao - allegations data access object
    * @param injuryBodyDetailDao - injury body detail data access object
    * @param injuryHarmDetailDao - injury harm detail data access object
    */
   @Inject
-  public AllegationService(AllegationsDao allegationsDao, InjuryBodyDetailDao injuryBodyDetailDao,
+  public AllegationService(InjuryBodyDetailDao injuryBodyDetailDao,
       InjuryHarmDetailDao injuryHarmDetailDao) {
     super();
-    this.allegationDao = allegationsDao;
     this.injuryBodyDetailDao = injuryBodyDetailDao;
     this.injuryHarmDetailDao = injuryHarmDetailDao;
 

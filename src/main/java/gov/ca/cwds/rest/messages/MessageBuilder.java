@@ -1,8 +1,10 @@
 package gov.ca.cwds.rest.messages;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.EnumMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -13,15 +15,38 @@ import gov.ca.cwds.rest.api.domain.error.ErrorMessage.ErrorType;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueDetailsCreator;
 import gov.ca.cwds.rest.exception.IssueType;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
+ * Facility to relay errors from persistence and service layers back to a domain response.
+ * 
+ * <p>
+ * This implementation is <strong>NOT thread safe!</strong> Construct an instance as needed per
+ * request or use the MessageBuilder provided in
+ * {@link RequestExecutionContext#getMessageBuilder()}.
+ * </p>
+ * 
  * @author CWDS API Team
- *
+ * @see ErrorMessage
  */
 public class MessageBuilder {
 
-  private ArrayList<ErrorMessage> messages = new ArrayList<>();
-  private HashSet<IssueDetails> issues = new HashSet<>();
+  private static final Map<ErrorType, IssueType> errorTypeTranslation;
+
+  /**
+   * Map Ferb ErrorType to IssueType.
+   */
+  static {
+    errorTypeTranslation = new EnumMap<>(ErrorType.class);
+    errorTypeTranslation.put(ErrorType.BUSINESS, IssueType.BUSINESS_VALIDATION);
+    errorTypeTranslation.put(ErrorType.CLIENT_AUTHORIZATION, IssueType.DATA_ACCESS_EXCEPTION);
+    errorTypeTranslation.put(ErrorType.CLIENT_CONTRACT, IssueType.JSON_PROCESSING_EXCEPTION);
+    errorTypeTranslation.put(ErrorType.DATA_ACCESS, IssueType.DATA_ACCESS_EXCEPTION);
+    errorTypeTranslation.put(ErrorType.VALIDATION, IssueType.CONSTRAINT_VALIDATION);
+  }
+
+  private List<ErrorMessage> messages = new ArrayList<>();
+  private Set<IssueDetails> issues = new LinkedHashSet<>();
 
   /**
    * messageBuilder - messageBuilder
@@ -52,18 +77,8 @@ public class MessageBuilder {
     final IssueDetails issue = new IssueDetails();
     this.issues.add(issue);
     issue.setUserMessage(message);
-
-    if (ErrorType.DATA_ACCESS == type) {
-      issue.setType(IssueType.DATA_ACCESS_EXCEPTION);
-    } else if (ErrorType.BUSINESS == type) {
-      issue.setType(IssueType.BUSINESS_VALIDATION);
-    } else if (ErrorType.VALIDATION == type) {
-      issue.setType(IssueType.CONSTRAINT_VALIDATION);
-    } else if (ErrorType.CLIENT_CONTRACT == type) {
-      issue.setType(IssueType.JSON_PROCESSING_EXCEPTION);
-    } else {
-      issue.setType(IssueType.UNEXPECTED_EXCEPTION);
-    }
+    issue.setType(errorTypeTranslation.containsKey(type) ? errorTypeTranslation.get(type)
+        : IssueType.UNEXPECTED_EXCEPTION);
   }
 
   /**
@@ -94,6 +109,12 @@ public class MessageBuilder {
 
   public void addMessageAndLog(String message, Exception exception, org.slf4j.Logger logger) {
     addError(message);
+    logger.error(message, exception.getMessage());
+  }
+
+  public void addMessageAndLog(String message, Exception exception, org.slf4j.Logger logger,
+      ErrorType type) {
+    addError(message, type);
     logger.error(message, exception.getMessage());
   }
 

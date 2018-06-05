@@ -8,9 +8,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +20,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.ws.rs.core.Response;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -35,10 +31,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
-import gov.ca.cwds.rest.core.Api;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 
 /**
  * @author CWDS API Team
@@ -71,6 +65,7 @@ public class ParticipantTest {
   private Set<String> roles = new HashSet<>();
   private Set<Address> addresses = new HashSet<>();
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
+  private List<Csec> csecs = new ArrayList<>();
 
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private Validator validator;
@@ -88,7 +83,6 @@ public class ParticipantTest {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-    Participant validParticipant = this.validParticipant();
     roles.add("Victim");
     racecodes.add((short) 841);
     hispaniccodes.add((short) 3164);
@@ -104,7 +98,9 @@ public class ParticipantTest {
    */
   @Test
   public void serializesToJSON() throws Exception {
-    String expected = MAPPER.writeValueAsString(validParticipant());
+    
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+    String expected = MAPPER.writeValueAsString(participant);
 
     String serialized = MAPPER.writeValueAsString(MAPPER
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class));
@@ -114,11 +110,15 @@ public class ParticipantTest {
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    Participant expected = this.validParticipant();
-
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
+ 
     Participant serialized = MAPPER
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class);
-    assertThat(serialized, is(expected));
+    
+    String p = MAPPER.writeValueAsString(participant);
+    String e = MAPPER.writeValueAsString(serialized);
+    
+    assertThat(serialized, is(participant));
   }
 
   @Test
@@ -137,7 +137,7 @@ public class ParticipantTest {
         firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
         secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
-        addresses, raceAndEthnicity);
+        addresses, raceAndEthnicity, csecs);
 
     assertThat(domain.getId(), is(equalTo(id)));
     assertThat(domain.getLegacySourceTable(), is(equalTo(legacySourceTable)));
@@ -161,6 +161,7 @@ public class ParticipantTest {
     assertThat(domain.getRoles(), is(equalTo(roles)));
     assertThat(domain.getAddresses(), is(equalTo(addresses)));
     assertThat(domain.getRaceAndEthnicity(), is(equalTo(raceAndEthnicity)));
+    assertThat(domain.getCsecs(), is(equalTo(csecs)));
   }
 
   @Test
@@ -338,10 +339,6 @@ public class ParticipantTest {
     return createParticipant(roles);
   }
 
-  private Participant validParticipant() {
-    return createParticipant(roles);
-  }
-
   @Test
   public void shouldNotHaveValidationErrorForValidAgeCodes() {
     List<String> acceptableAgeCodes = Arrays.asList("Y", "M", "W", "D");
@@ -369,7 +366,7 @@ public class ParticipantTest {
           firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
           secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
           clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
-          addresses, raceAndEthnicity);
+          addresses, raceAndEthnicity, null);
     } catch (Exception e) {
       e.printStackTrace();
     }

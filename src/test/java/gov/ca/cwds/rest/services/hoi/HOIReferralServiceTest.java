@@ -42,21 +42,21 @@ import gov.ca.cwds.fixture.ReferralEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferralResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * @author CWDS API Team
- *
  */
-public class HOIReferralServiceTest {
+public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
 
   private ClientDao clientDao;
   private ReferralClientDao referralClientDao;
   private HOIReferralService hoiService;
+  private AuthorizationService authorizationService;
   private HOIRequest request;
 
   /**
@@ -72,16 +72,18 @@ public class HOIReferralServiceTest {
    * 
    * @throws Exception - Exception
    */
+  @Override
   @Before
   public void setup() throws Exception {
-    SystemCodeCache.global().getAllSystemCodes();
+    super.setup();
 
     clientDao = mock(ClientDao.class);
-    Client client1 = new ClientEntityBuilder().setId("1234567ABC").build();
-    Client client2 = new ClientEntityBuilder().setId("2345678ABC").build();
-    Client client3 = new ClientEntityBuilder().setId("P975G53fTh").build();
-    Client client4 = new ClientEntityBuilder().setId("ABC5G53fTh").build();
-    Map<String, Client> clientMap = new HashMap<>();
+    final Client client1 = new ClientEntityBuilder().setId("1234567ABC").build();
+    final Client client2 = new ClientEntityBuilder().setId("2345678ABC").build();
+    final Client client3 = new ClientEntityBuilder().setId("P975G53fTh").build();
+    final Client client4 = new ClientEntityBuilder().setId("ABC5G53fTh").build();
+
+    final Map<String, Client> clientMap = new HashMap<>();
     clientMap.put(client1.getId(), client1);
     clientMap.put(client2.getId(), client2);
     clientMap.put(client3.getId(), client3);
@@ -89,8 +91,9 @@ public class HOIReferralServiceTest {
     when(clientDao.findClientsByIds(any(Set.class))).thenReturn(clientMap);
 
     referralClientDao = mock(ReferralClientDao.class);
-    AuthorizationService authorizationService = new AuthorizationService();
+    authorizationService = new AuthorizationService();
     hoiService = new HOIReferralService(clientDao, referralClientDao, authorizationService);
+
     request = new HOIRequest();
     request.setClientIds(Stream.of("CLIENT-123").collect(Collectors.toSet()));
   }
@@ -207,8 +210,8 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients =
         {referralClient1, referralClient2, referralClient3, referralClient4};
 
-    when(clientDao.find(any(String.class))).thenReturn(new ClientEntityBuilder().setId("1234567ABC")
-        .build());
+    when(clientDao.find(any(String.class)))
+        .thenReturn(new ClientEntityBuilder().setId("1234567ABC").build());
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
     HOIReferralResponse response = hoiService.handleFind(request);
@@ -258,8 +261,8 @@ public class HOIReferralServiceTest {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients =
         {referralClient1, referralClient2};
 
-    when(clientDao.find(any(String.class))).thenReturn(new ClientEntityBuilder().setId("1234567ABC")
-        .build());
+    when(clientDao.find(any(String.class)))
+        .thenReturn(new ClientEntityBuilder().setId("1234567ABC").build());
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
 
     HOIReferralResponse response = hoiService.handleFind(request);
@@ -449,12 +452,60 @@ public class HOIReferralServiceTest {
     hoiService.handleRequest(new HOIReferral());
   }
 
-  @Test(expected = AuthorizationException.class)
+  @Test
   public void testUnAuthorizedClient() {
-    AuthorizationService spyAuthorizationService = spy(new AuthorizationService());
-    doThrow(AuthorizationException.class).when(spyAuthorizationService).ensureClientAccessAuthorized(any(String.class));
-    HOIReferralService target = new HOIReferralService(null, null, spyAuthorizationService);
-    target.handleFind(request);
+    final Client victim = new ClientEntityBuilder().build();
+    victim.setId("1234567ABC");
+
+    final Client perp = new ClientEntityBuilder().build();
+    perp.setId("2345678ABC");
+
+    final Set<Allegation> allegations = new HashSet<>();
+    final Allegation validPersistent = new AllegationEntityBuilder().setVictimClientId("1234567ABC")
+        .setPerpetratorClientId("2345678ABC").build();
+    final gov.ca.cwds.data.persistence.cms.Allegation allegation =
+        new gov.ca.cwds.data.persistence.cms.Allegation("86XV1bG06k",
+            validPersistent.getAbuseEndDate(), validPersistent.getAbuseStartDate(),
+            validPersistent.getAbuseFrequency(), validPersistent.getAbuseFrequencyPeriodCode(),
+            validPersistent.getAbuseLocationDescription(),
+            validPersistent.getAllegationDispositionType(), validPersistent.getAllegationType(),
+            validPersistent.getDispositionDescription(), validPersistent.getDispositionDate(),
+            validPersistent.getInjuryHarmDetailIndicator(),
+            validPersistent.getNonProtectingParentCode(),
+            validPersistent.getStaffPersonAddedIndicator(), validPersistent.getVictimClientId(),
+            validPersistent.getPerpetratorClientId(), validPersistent.getReferralId(),
+            validPersistent.getCountySpecificCode(), validPersistent.getZippyCreatedIndicator(),
+            validPersistent.getPlacementFacilityType(), victim, perp);
+    allegations.add(allegation);
+
+    final StaffPerson staffPerson = new StaffPersonEntityBuilder().build();
+    final Referral referral = new Referral("86XV1bG06k", " ", "N", "N", "D5YRVOm0Ht", (short) 122,
+        " ", (Date) null, (short) 409, "", "", "L3H7sSC0Ht", "", "N", "N", (short) 1118, " ", "N",
+        "N", (Date) null, "Verification (R3)", " ", (Date) null, (Date) null, (short) 1520,
+        (short) 0, (Date) null, (Date) null, "", "", " ", " ", " ", "", "", "0Ht", "0Ht", "51", "N",
+        "N", "N", "N", (Date) null, "C", (short) 0, (Date) null, "", (Date) null, null, allegations,
+        null, null);
+    referral.setStaffPerson(staffPerson);
+
+    final gov.ca.cwds.data.persistence.cms.ReferralClient rc =
+        new gov.ca.cwds.data.persistence.cms.ReferralClient("86XV1bG06k", "1234567ABC", "",
+            (short) 122, (short) 681, "S", null, "N", "N", "", (short) 2, "", "", "Y", "N", "N");
+    rc.setReferral(referral);
+    final gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {rc};
+    when(referralClientDao.findByClientIds(any())).thenReturn(referralClients);
+
+    authorizationService = mock(AuthorizationService.class);
+    doThrow(AuthorizationException.class).when(authorizationService)
+        .ensureClientAccessAuthorized("unauthorizedId");
+
+    request = new HOIRequest();
+    request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
+
+    hoiService = new HOIReferralService(clientDao, referralClientDao, authorizationService);
+    final HOIReferralService spyTarget = spy(hoiService);
+    final HOIReferralResponse response = spyTarget.handleFind(request);
+    assertThat("Expected authorization errors!!",
+        response.hasMessages() && !response.getMessages().isEmpty());
   }
 
 }

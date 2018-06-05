@@ -15,8 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 
@@ -61,7 +59,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
         + "WHERE c.FKREFERL_T >= :min_id and c.FKREFERL_T < :max_id "
         + ") x ) y ) z where z.bucket = :bucket_num for read only",
     resultClass = Reporter.class)
-@SuppressWarnings("serial")
+@SuppressWarnings({"serial", "squid:S3437", "squid:S2160"})
 @Entity
 @Table(name = "REPTR_T")
 @JsonPropertyOrder(alphabetic = true)
@@ -195,8 +193,9 @@ public class Reporter extends BaseReporter {
     this.communicationMethodType = reporter.getCommunicationMethodType();
     this.confidentialWaiverIndicator =
         DomainChef.cookBoolean(reporter.getConfidentialWaiverIndicator());
-    this.drmsMandatedRprtrFeedback = StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback())
-        ? null : reporter.getDrmsMandatedRprtrFeedback();
+    this.drmsMandatedRprtrFeedback =
+        StringUtils.isBlank(reporter.getDrmsMandatedRprtrFeedback()) ? null
+            : reporter.getDrmsMandatedRprtrFeedback();
     this.employerName = reporter.getEmployerName();
     this.feedbackDate = DomainChef.uncookDateString(reporter.getFeedbackDate());
     this.feedbackRequiredIndicator =
@@ -549,30 +548,20 @@ public class Reporter extends BaseReporter {
   public ApiPhoneAware[] getPhones() {
     List<ApiPhoneAware> phones = new ArrayList<>();
     if (this.primaryPhoneNumber != null && primaryPhoneNumber != 0) {
-      String extension = this.primaryPhoneExtensionNumber != null
-          ? this.primaryPhoneExtensionNumber.toString() : null;
+      String extension =
+          this.primaryPhoneExtensionNumber != null ? this.primaryPhoneExtensionNumber.toString()
+              : null;
       phones.add(new ReadablePhone(null, String.valueOf(this.primaryPhoneNumber), extension, null));
     }
 
     if (this.messagePhoneNumber != null && messagePhoneNumber != 0) {
-      phones
-          .add(new ReadablePhone(null,
-              String.valueOf(this.messagePhoneNumber), this.messagePhoneExtensionNumber != null
-                  ? this.messagePhoneExtensionNumber.toString() : null,
-              ApiPhoneAware.PhoneType.Cell));
+      phones.add(new ReadablePhone(null, String.valueOf(this.messagePhoneNumber),
+          this.messagePhoneExtensionNumber != null ? this.messagePhoneExtensionNumber.toString()
+              : null,
+          ApiPhoneAware.PhoneType.Cell));
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
-  }
-
-  @Override
-  public int hashCode() {
-    return HashCodeBuilder.reflectionHashCode(this, false);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

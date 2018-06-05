@@ -1375,10 +1375,12 @@ public class Client extends ReportingDomain implements Request, Response {
    * @param unableToDetermineCode unable to determine code
    * @param hispanicUnableToDetermineCode hispanic unable to determine code
    * @param hispanicOriginCode hispanic origin code
+   * @param birthDate  date of birth
    */
   public void update(String firstName, String middleName, String lastName, String nameSuffix,
       String gender, String ssn, Short raceCode, String unableToDetermineCode,
-      String hispanicUnableToDetermineCode, String hispanicOriginCode) {
+      String hispanicUnableToDetermineCode, String hispanicOriginCode,
+      String birthDate) {
     this.commonFirstName = firstName;
     this.commonLastName = lastName;
     this.commonMiddleName = middleName;
@@ -1389,6 +1391,7 @@ public class Client extends ReportingDomain implements Request, Response {
     this.ethUnableToDetReasonCode = unableToDetermineCode;
     this.hispUnableToDetReasonCode = hispanicUnableToDetermineCode;
     this.hispanicOriginCode = hispanicOriginCode;
+    this.birthDate = birthDate;
   }
 
   public boolean hasSameLastUpdate(Client otherClient) {

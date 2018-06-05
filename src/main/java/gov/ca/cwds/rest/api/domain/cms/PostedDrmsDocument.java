@@ -8,16 +8,15 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * {@link Response} adding an id to the {@link DrmsDocument}
+ * {@link Response} adding an id to the {@link DrmsDocument}.
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings({"squid:S3437", "squid:S2160"})
 public class PostedDrmsDocument extends DrmsDocument {
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 

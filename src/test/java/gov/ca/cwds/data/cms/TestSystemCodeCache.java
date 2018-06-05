@@ -33,7 +33,7 @@ public class TestSystemCodeCache implements SystemCodeCache {
           null, null);
     }
     if (1101 == systemCodeId.intValue()) {
-      return new SystemCode(systemCodeId.shortValue(), null, null, null, "California", "CA", "34",
+      return new SystemCode(systemCodeId.shortValue(), null, null, null, "Sacramento", "34", null,
           null, null);
     }
     return null;
@@ -198,7 +198,13 @@ public class TestSystemCodeCache implements SystemCodeCache {
 
   @Override
   public Short getSystemCodeId(String arg0, String arg1) {
-    // TODO Auto-generated method stub
+    if (SystemCodeCategoryId.APPROVAL_STATUS_TYPE.equals(arg1)
+        && "Request Not Submitted".equals(arg0)) {
+      return 118;
+    }
+    if (SystemCodeCategoryId.ETHNICITY.equals(arg1) && "Mexican".equals(arg0)) {
+      return 3164;
+    }
     return null;
   }
 }

@@ -2,6 +2,8 @@ package gov.ca.cwds.data.persistence.ns;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -52,15 +54,13 @@ public class ScreeningEntity implements PersistentObject {
   private String reference;
 
   @Column(name = "ended_at")
-  @Type(type = "timestamp")
-  private Date endedAt;
+  private LocalDateTime endedAt;
 
   @Column(name = "incident_county")
   private String incidentCounty;
 
   @Column(name = "incident_date")
-  @Type(type = "date")
-  private Date incidentDate;
+  private LocalDate incidentDate;
 
   @Column(name = "location_type")
   private String locationType;
@@ -75,8 +75,7 @@ public class ScreeningEntity implements PersistentObject {
   private String screeningDecision;
 
   @Column(name = "started_at")
-  @Type(type = "timestamp")
-  private Date startedAt;
+  private LocalDateTime startedAt;
 
   @Column(name = "report_narrative")
   private String narrative;
@@ -130,6 +129,9 @@ public class ScreeningEntity implements PersistentObject {
   @OneToMany(mappedBy = "screeningEntity", cascade = CascadeType.ALL)
   private Set<ParticipantEntity> participants = new HashSet<>();
 
+  @Column(name = "report_type")
+  private String reportType;
+
   /**
    * Default constructor
    *
@@ -167,19 +169,20 @@ public class ScreeningEntity implements PersistentObject {
    * @param contactAddress The contact address
    * @param participants The list of participants
    * @param assigneeStaffId The staffId of assignee
+   * @param reportType report type
    */
-  public ScreeningEntity(String id, String reference, Date startedAt, Date endedAt,
-      String incidentCounty, Date incidentDate, String locationType, String communicationMethod,
+  public ScreeningEntity(String id, String reference, LocalDateTime startedAt, LocalDateTime endedAt,
+      String incidentCounty, LocalDate incidentDate, String locationType, String communicationMethod,
       String name, String responseTime, String screeningDecision, String screeningDecisionDetail,
       String narrative, Address contactAddress, String assigneeStaffId,
-      Set<ParticipantEntity> participants) {
+      Set<ParticipantEntity> participants, String reportType) {
     super();
     this.id = id;
     this.reference = reference;
-    this.startedAt = freshDate(startedAt);
-    this.endedAt = freshDate(endedAt);
+    this.startedAt = startedAt;
+    this.endedAt = endedAt;
     this.incidentCounty = incidentCounty;
-    this.incidentDate = freshDate(incidentDate);
+    this.incidentDate = incidentDate;
     this.locationType = locationType;
     this.communicationMethod = communicationMethod;
     this.name = name;
@@ -189,6 +192,7 @@ public class ScreeningEntity implements PersistentObject {
     this.safetyAlerts = new String[1];
     this.assigneeStaffId = assigneeStaffId;
     this.participants = participants;
+    this.reportType = reportType;
   }
 
   /**
@@ -216,16 +220,16 @@ public class ScreeningEntity implements PersistentObject {
     this.reference = reference;
   }
 
-  public void setEndedAt(Date endedAt) {
-    this.endedAt = freshDate(endedAt);
+  public void setEndedAt(LocalDateTime endedAt) {
+    this.endedAt = endedAt;
   }
 
   public void setIncidentCounty(String incidentCounty) {
     this.incidentCounty = incidentCounty;
   }
 
-  public void setIncidentDate(Date incidentDate) {
-    this.incidentDate = freshDate(incidentDate);
+  public void setIncidentDate(LocalDate incidentDate) {
+    this.incidentDate = incidentDate;
   }
 
   public void setLocationType(String locationType) {
@@ -244,8 +248,8 @@ public class ScreeningEntity implements PersistentObject {
     this.screeningDecision = screeningDecision;
   }
 
-  public void setStartedAt(Date startedAt) {
-    this.startedAt = freshDate(startedAt);
+  public void setStartedAt(LocalDateTime startedAt) {
+    this.startedAt = startedAt;
   }
 
   public void setNarrative(String narrative) {
@@ -329,8 +333,8 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the endedAt
    */
-  public Date getEndedAt() {
-    return freshDate(endedAt);
+  public LocalDateTime getEndedAt() {
+    return endedAt;
   }
 
   /**
@@ -343,8 +347,8 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the incidentDate
    */
-  public Date getIncidentDate() {
-    return freshDate(incidentDate);
+  public LocalDate getIncidentDate() {
+    return incidentDate;
   }
 
   /**
@@ -379,8 +383,8 @@ public class ScreeningEntity implements PersistentObject {
   /**
    * @return the startedAt
    */
-  public Date getStartedAt() {
-    return freshDate(startedAt);
+  public LocalDateTime getStartedAt() {
+    return startedAt;
   }
 
   /**
@@ -499,6 +503,14 @@ public class ScreeningEntity implements PersistentObject {
 
   public void setParticipants(Set<ParticipantEntity> participants) {
     this.participants = participants;
+  }
+
+  public String getReportType() {
+    return reportType;
+  }
+
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
   }
 
   /**

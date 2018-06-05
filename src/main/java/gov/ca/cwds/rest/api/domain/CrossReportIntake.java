@@ -1,7 +1,20 @@
 package gov.ca.cwds.rest.api.domain;
 
+import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.validation.Date;
@@ -9,16 +22,6 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.util.HashSet;
-import java.util.Set;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-
-import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 
 /**
  * CWDS API Team
@@ -68,7 +71,7 @@ public class CrossReportIntake extends ReportingDomain implements Request, Respo
   @JsonProperty("agencies")
   @ApiModelProperty(required = false, readOnly = false)
   @Valid
-  private Set<GovernmentAgency> agencies = new HashSet<>();
+  private Set<GovernmentAgencyIntake> agencies = new HashSet<>();
 
   /**
    * default constructor
@@ -90,7 +93,7 @@ public class CrossReportIntake extends ReportingDomain implements Request, Respo
     this.countyId = countyId;
   }
 
-  public void setAgencies(Set<GovernmentAgency> agencies) {
+  public void setAgencies(Set<GovernmentAgencyIntake> agencies) {
     this.agencies = agencies;
   }
 
@@ -166,7 +169,7 @@ public class CrossReportIntake extends ReportingDomain implements Request, Respo
    *
    * @return Agencies
    */
-  public Set<GovernmentAgency> getAgencies() {
+  public Set<GovernmentAgencyIntake> getAgencies() {
     return agencies;
   }
 

@@ -4,9 +4,13 @@ import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_LEGACY_ID_L
 import static gov.ca.cwds.data.persistence.ns.ParticipantEntity.FIND_PARTICIPANTS_BY_SCREENING_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +19,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -43,7 +50,10 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
     query = "FROM ParticipantEntity WHERE screeningId = :screeningId)")
 @Entity
 @Table(name = "participants")
-public class ParticipantEntity implements PersistentObject, HasPaperTrail, Identifiable<String> {
+public class ParticipantEntity
+    implements PersistentObject, HasPaperTrail, Identifiable<String>, Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   public static final String FIND_LEGACY_ID_LIST_BY_SCREENING_ID =
       "gov.ca.cwds.data.persistence.ns.ParticipantEntity.findLegacyIdListByScreeningId";
@@ -123,6 +133,16 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
   @Column(name = "approximate_age_units")
   private String approximateAgeUnits;
 
+  @OneToMany(cascade = CascadeType.ALL)
+  @JoinColumn(name = "participant_id", insertable = false, updatable = false)
+  @OrderBy("id")
+  private List<CsecEntity> csecs = new ArrayList<>();
+
+  @HashCodeExclude
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "id", insertable = false, updatable = false)
+  private SafelySurrenderedBabiesEntity safelySurrenderedBabies;
+
   /**
    * Default constructor
    *
@@ -142,7 +162,7 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
       String legacySourceTable, Boolean sensitive, Boolean sealed, String approximateAge,
       String approximateAgeUnits) {
     this.id = id;
-    this.dateOfBirth = dateOfBirth;
+    this.dateOfBirth = freshDate(dateOfBirth);
     this.firstName = firstName;
     this.gender = gender;
     this.lastName = lastName;
@@ -313,6 +333,23 @@ public class ParticipantEntity implements PersistentObject, HasPaperTrail, Ident
 
   public void setLegacyId(String legacyId) {
     this.legacyId = legacyId;
+  }
+
+  public List<CsecEntity> getCsecs() {
+    return csecs;
+  }
+
+  public void setCsecs(List<CsecEntity> csecs) {
+    this.csecs = csecs;
+  }
+
+
+  public SafelySurrenderedBabiesEntity getSafelySurrenderedBabies() {
+    return safelySurrenderedBabies;
+  }
+
+  public void setSafelySurrenderedBabies(SafelySurrenderedBabiesEntity safelySurrenderedBabies) {
+    this.safelySurrenderedBabies = safelySurrenderedBabies;
   }
 
   public void setRoles(String[] roles) {

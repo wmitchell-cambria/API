@@ -18,14 +18,8 @@ public interface ScreeningMapper {
 
   @Mapping(target = "reportNarrative", source = "narrative")
   @Mapping(target = "allegations", source = "allegations", ignore = true)
-  @Mapping(target = "startedAt", expression = "java(DomainChef.cookDate(screeningEntity.getStartedAt()))")
-  @Mapping(target = "endedAt", expression = "java(DomainChef.cookDate(screeningEntity.getEndedAt()))")
-  @Mapping(target = "incidentDate", expression = "java(DomainChef.cookDate(screeningEntity.getIncidentDate()))")
   Screening map(ScreeningEntity screeningEntity);
 
   @InheritInverseConfiguration
-  @Mapping(target = "startedAt", expression = "java(DomainChef.uncookDateString(screening.getStartedAt()))")
-  @Mapping(target = "endedAt", expression = "java(DomainChef.uncookDateString(screening.getEndedAt()))")
-  @Mapping(target = "incidentDate", expression = "java(DomainChef.uncookDateString(screening.getIncidentDate()))")
   ScreeningEntity map(Screening screening);
 }

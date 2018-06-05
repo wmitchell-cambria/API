@@ -304,4 +304,8 @@ public class ClientAddressService implements
     return addressId;
   }
 
+  public RIClientAddress getRiClientAddress() {
+    return riClientAddress;
+  }
+
 }

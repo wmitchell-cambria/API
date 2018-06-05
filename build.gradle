@@ -19,7 +19,6 @@ plugins {
 }
 
 apply plugin: 'com.github.jk1.dependency-license-report'
-
 apply plugin: 'maven-publish'
 apply plugin: 'docker'
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -30,9 +29,9 @@ sourceCompatibility = 1.8
 applicationDefaultJvmArgs = ["-Djava.library.path=.:./lib:/var/lib/jenkins/workspace/API/lib:/usr/local/lib"]
 
 project.ext {
-    apiVersion = '0.7.1'
-    coreApiVersion = '1.6.4_758-RC'
-    cwdsModelVersion = '0.7.1_542-RC'
+    apiVersion = '0.7.3'
+    coreApiVersion = '1.7.2_794-RC'
+    cwdsModelVersion = '0.7.2_574-RC'
     configPath = '$rootProject.projectDir/config/'
     dropwizardVersion = '1.1.0'
     dropwizardFlywayVersion = '1.0.0-1'
@@ -187,7 +186,6 @@ dependencies {
     
 	// testCompile 'org.glassfish.jersey.core:jersey-client:2.26-b01'
     testCompile group: 'gov.ca.cwds.api', name: 'api-core-test-support', version: coreApiVersion
-
     testCompile group: 'gov.ca.cwds.cals', name: 'cws-cms-data-model', version: cwdsModelVersion
 
     testCompile group: 'junit', name: 'junit', version: junitVersion
@@ -202,7 +200,7 @@ dependencies {
 		
 	// functional testing
     testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
-    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'	
+    	compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'	
 	}
     testCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
     testCompile group: 'io.rest-assured', name: 'json-schema-validator', version: '3.0.7'
@@ -231,13 +229,13 @@ tasks.withType(Test) {
 
     // Set system properties for the test JVM(s).
     // Gradle passed the literal string '$rootProject.projectDir' ???
-    // systemProperty 'java.library.path', '.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
+    // systemProperty 'java.library.path', '.:${rootProject.projectDir}/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
     systemProperty 'java.library.path', '.:./lib:/opt/jenkins/workspace/taborda-API/lib:/usr/local/lib'
 }
 
 test {
-    exclude '**/*FT*'
-    exclude '**/*DaoIT*'
+    exclude '**/*IT.*'
+    exclude '**/*IRT.*'
 
     // These don't work. Docs mistaken?
     // jvmArgs '-Djava.library.path=.:$rootProject.projectDir/lib/:/var/lib/jenkins/workspace/API/:/usr/local/lib/'
@@ -250,17 +248,17 @@ test {
 }
 
 task functionalTest(type: Test, dependsOn: testClasses) {
-    include '**/functional/java/**'
-    include '**/FTSuite*'
-    exclude '**/*IT*'
-    exclude '**/*Test*'
+    exclude '**/*IT.*'
+    exclude '**/*IRT.*'
+    exclude '**/*Test.*'
     // systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER", DB_CWSRS_JDBC_URL", "DB_CWSRS_PASSWORD", "DB_CWSRS_SCHEMA", "DB_CWSRS_USER"])
 }
 
 task integrationTest(type: Test, dependsOn: testClasses) {
-    include '**/*IT*'
-    exclude '**/*FT*'
-    exclude '**/*Test*'
+    include '**/*SuiteIT.*'
+    exclude '**/*DaoIT.*'
+    exclude '**/*IRT.*'
+    exclude '**/*Test.*'
     // systemProperties project.properties.subMap(["DB_CMS_JDBC_URL", "DB_CMS_PASSWORD", "DB_CMS_SCHEMA", "DB_CMS_USER", "DB_NS_JDBC_URL", "DB_NS_PASSWORD", "DB_NS_SCHEMA", "DB_NS_USER", DB_CWSRS_JDBC_URL", "DB_CWSRS_PASSWORD", "DB_CWSRS_SCHEMA", "DB_CWSRS_USER"])
 }
 
@@ -270,16 +268,25 @@ run {
 
 jacocoTestReport {
   reports {
-      xml.enabled false
-      csv.enabled false
-      html.destination "${buildDir}/jacocoHtml"
+    xml.enabled false
+    csv.enabled false
+    html.destination "${buildDir}/jacocoHtml"
+    afterEvaluate {
+      classDirectories = files(classDirectories.files.collect {
+        fileTree(dir: it,
+          exclude: [
+            'gov/ca/cwds/rest/services/mapper/**'
+          ]
+        )
+      })
+    }
   }
 }
 
 sonarqube {
   properties {
       property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/test.exec"
-      property "sonar.jacoco.itReportPaths", "${buildDir}/jacoco/integrationTest.exec"
+      property "sonar.jacoco.reportPaths", "${buildDir}/jacoco/integrationTest.exec"
   }
 }
 
@@ -330,12 +337,17 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
 }
 
-task createFunctionalTestDockerImage (type:Exec, dependsOn: shadowJar) {
+task createGradleCache(type: Copy) {
+    from "$System.env.HOME/.gradle/caches/"
+    into 'build/gradle_cache'
+}
+
+task createFunctionalTestDockerImage (type:Exec, dependsOn: createGradleCache) {
   commandLine 'docker', 'build', '--file', 'docker/DockerfileTests',  '-t', 'cwds/api-functional-test', '.'
 }
 
 task createIntegrationTestDockerImage (type:Exec, dependsOn: shadowJar) {
-  commandLine 'docker',  'build',  '-t',  'cwds/api-functional-test', '-f', 'DockerfileIntegrationTest', '.'
+  commandLine 'docker',  'build',  '-t',  'cwds/api-integration-test', '-f', 'DockerfileIntegrationTest', '.'
 }
 
 task createDockerImage(type:Exec, dependsOn: shadowJar) {
@@ -354,20 +366,12 @@ task tagDockerImage(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'tag',  'cwds/api',  "cwds/api:$dockerTag"
 }
 
-task pushFunctionalTestDockerLatest(type:Exec, dependsOn: createFunctionalTestDockerImage) {
-  commandLine 'docker',  'push',  'cwds/api-functional-test:latest'
-}
-
 task pushIntegrationTestDockerLatest(type:Exec, dependsOn: createIntegrationTestDockerImage) {
   commandLine 'docker',  'push',  'cwds/api-integration-test:latest'
 }
 
 task pushDockerLatest(type:Exec, dependsOn: createDockerImage) {
   commandLine 'docker',  'push',  'cwds/api:latest'
-}
-
-task pushFunctionalTestDockerVersionTagged(type:Exec, dependsOn: tagFunctionalTestDockerImage) {
-  commandLine 'docker',  'push',  "cwds/api-functional-test:$dockerTag"
 }
 
 task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegrationTestDockerImage) {
@@ -377,10 +381,16 @@ task pushIntegrationTestDockerVersionTagged(type:Exec, dependsOn: tagIntegration
 task pushDockerVersionTagged(type:Exec, dependsOn: tagDockerImage) {
   commandLine 'docker',  'push',  "cwds/api:$dockerTag"
 }
+task createFunctionalTests(dependsOn: [tagFunctionalTestDockerImage , createFunctionalTestDockerImage]){
+    doLast {
+        println 'Published Functional Tests'
+    }
 
+}
 task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest,
-                          pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest] ) {
-   doLast {
-	 println 'Published'
-   }
+                               pushIntegrationTestDockerVersionTagged, pushIntegrationTestDockerLatest,
+                               createFunctionalTests] ) {
+    doLast {
+        println 'Published'
+    }
 }

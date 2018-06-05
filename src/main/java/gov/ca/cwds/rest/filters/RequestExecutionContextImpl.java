@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import gov.ca.cwds.auth.realms.PerryUserIdentity;
+import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 
 /**
@@ -47,6 +48,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.REQUEST_START_TIME, new Date());
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
+    put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
   }
 
   /**
@@ -72,7 +74,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Get user id if stored.
+   * Get user id, if stored.
    * 
    * @return The user id
    */
@@ -91,7 +93,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Get staff id if stored.
+   * Get staff id, if stored.
    * 
    * @return The staff id
    */
@@ -109,8 +111,13 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     return staffId;
   }
 
+  @Override
+  public MessageBuilder getMessageBuilder() {
+    return (MessageBuilder) contextParameters.get(Parameter.MESSAGE_BUILDER);
+  }
+
   /**
-   * Get request start time if stored
+   * Get request start time, if stored.
    * 
    * @return The request start time
    */
@@ -132,7 +139,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   /**
-   * Perform cleanup after request completion
+   * Perform cleanup after request completion.
    */
   static void stopRequest() {
     RequestExecutionContextRegistry.remove();

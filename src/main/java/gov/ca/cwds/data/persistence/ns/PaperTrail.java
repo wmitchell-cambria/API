@@ -25,7 +25,7 @@ public class PaperTrail implements PersistentObject {
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "versions_id")
-  @SequenceGenerator(name = "versions_id", sequenceName = "versions_id_seq")
+  @SequenceGenerator(name = "versions_id", sequenceName = "versions_id_seq", allocationSize = 1)
   private Long id;
 
   @Column(name = "item_type")

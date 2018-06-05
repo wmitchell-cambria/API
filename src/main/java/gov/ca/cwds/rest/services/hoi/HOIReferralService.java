@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -35,13 +35,17 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
  * <p>
- * This service handle request from the user to get all the referral involved for the client given.
+ * This service handles user requests to fetch all the clients' referrals.
  * <p>
- *
+ * 
  * @author CWDS API Team
  */
-public class HOIReferralService
-    extends SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> {
+public class HOIReferralService extends
+    SimpleResourceService<HOIRequest, HOIReferral, HOIReferralResponse> implements HOIBaseService {
+
+  private static final long serialVersionUID = 1L;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferralService.class);
 
   private AuthorizationService authorizationService;
   private ClientDao clientDao;
@@ -52,6 +56,8 @@ public class HOIReferralService
   private AllegationDao allegationDao;
 
   /**
+   * Preferred constructor.
+   *
    * @param authorizationService - authorizationService
    * @param clientDao - clientDao
    * @param referralClientDao - referralClientDao
@@ -86,9 +92,9 @@ public class HOIReferralService
       return new HOIReferralResponse();
     }
 
-    // eliminate rows with duplicate referral Id's from referralClientArrayList
-    ArrayList<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
-    HashMap<String, ReferralClient> uniqueReferralIds = new HashMap<>();
+    // Eliminate rows with duplicate referral Id's from referralClientArrayList
+    final List<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
+    final Map<String, ReferralClient> uniqueReferralIds = new HashMap<>();
     for (ReferralClient referralClient : referralClientArrayList) {
       uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
     }
@@ -98,7 +104,7 @@ public class HOIReferralService
       referralClientArrayList.add(uniqueReferral.getValue());
     }
 
-    List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
+    final List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
 
     HOIReferralsData hrd = new HOIReferralsData();
     hrd.setReferralClients(referralClientArrayList);
@@ -119,6 +125,15 @@ public class HOIReferralService
     hoiReferrals.sort((r1, r2) -> r2.getStartDate().compareTo(r1.getStartDate()));
     return new HOIReferralResponse(hoiReferrals);
   }
+
+  /* todo
+  protected List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
+    final List<String> authorizedClientIds = authorizeClients(clientIds);
+    return authorizedClientIds != null && !authorizedClientIds.isEmpty()
+        ? Arrays.asList(referralClientDao.findByClientIds(authorizedClientIds))
+        : new ArrayList<>();
+  }
+   */
 
   private void loadReferrals(HOIReferralsData hrd) {
     Collection<String> referralIds = hrd.getReferralClients().stream()
@@ -177,7 +192,7 @@ public class HOIReferralService
   }
 
   private Collection<String> getAllegationsClientsIds(HOIReferralsData hrd) {
-    Collection<String> allegationsClientsIds = new HashSet<>();
+    Collection<String> allegationsClientsIds = new LinkedHashSet<>();
     // collect all Allegations Clients ID-s
     for (Referral referral : hrd.getReferrals().values()) {
       for (Allegation allegation : referral.getAllegations()) {
@@ -196,4 +211,17 @@ public class HOIReferralService
   protected HOIReferralResponse handleRequest(HOIReferral req) {
     throw new NotImplementedException("handle request not implemented");
   }
+
+  // todo WTF
+  @Override
+  public AuthorizationService getAuthorizationService() {
+    return authorizationService;
+  }
+
+  // todo WTF
+  @Override
+  public Logger getLogger() {
+    return LOGGER;
+  }
+
 }

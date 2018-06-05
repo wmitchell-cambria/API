@@ -39,7 +39,7 @@ public class FunctionalTestingBuilder {
    */
   public Response processGetRequest(String resourcePath, String parameter, String ParameterValue,
       String token) {
-    return given().queryParam("token", token).queryParam(parameter, ParameterValue)
+    return given().queryParam(parameter, ParameterValue).queryParam("token", token)
         .get(resourcePath).then().contentType(ContentType.JSON).extract().response();
   }
 

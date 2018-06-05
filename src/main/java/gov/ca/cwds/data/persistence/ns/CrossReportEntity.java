@@ -65,7 +65,7 @@ public class CrossReportEntity implements PersistentObject {
   private String communicationMethod;
 
   @Column(name = "inform_date")
-  @Type(type = "date")
+  @Type(type = "timestamp")
   private Date informDate;
 
   @Basic

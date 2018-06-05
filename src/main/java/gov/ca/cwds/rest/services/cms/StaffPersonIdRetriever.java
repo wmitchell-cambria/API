@@ -19,7 +19,6 @@ import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * @author CWDS API Team
- *
  */
 public class StaffPersonIdRetriever {
 
@@ -63,8 +62,7 @@ public class StaffPersonIdRetriever {
 
       perryUserIdentity = getCurrentPrincipal(currentPrincipal);
     } else {
-      LOGGER.info("======= current user has no principals for {}", currentUser);
-
+      LOGGER.warn("======= current user has no principals for {}", currentUser);
     }
 
     if (perryUserIdentity == null) {
@@ -83,11 +81,13 @@ public class StaffPersonIdRetriever {
 
   private static PerryUserIdentity getCurrentPrincipal(Object currentPrincipal) {
     PerryUserIdentity perryUserIdentity = null;
-    if ( currentPrincipal != null && PerryAccount.class.isAssignableFrom(currentPrincipal.getClass())) {
+    if (currentPrincipal != null
+        && PerryAccount.class.isAssignableFrom(currentPrincipal.getClass())) {
       try {
         ObjectMapper objectMapper = ObjectMapperUtils.createObjectMapper();
         String valueAsString = objectMapper.writeValueAsString(currentPrincipal);
-        PerryUserIdentity currentUserInfo = objectMapper.readValue(valueAsString, PerryUserIdentity.class);
+        PerryUserIdentity currentUserInfo =
+            objectMapper.readValue(valueAsString, PerryUserIdentity.class);
         String staffPersonId = currentUserInfo.getStaffId();
 
         if (StringUtils.isBlank(staffPersonId)) {

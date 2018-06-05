@@ -52,7 +52,7 @@ public class CmsNSHelper {
       final Transaction transactionCMS = sessionCMS.beginTransaction();
       for (Entry<CrudsService, Request> cmsRequestsService : cmsRequests.entrySet()) {
         try {
-          CrudsService service = cmsRequestsService.getKey();
+          final CrudsService service = cmsRequestsService.getKey();
           referral = service.create(cmsRequests.get(service));
           cmsResponse.put(service, referral);
           sessionCMS.flush();
@@ -66,7 +66,7 @@ public class CmsNSHelper {
       final Transaction transactionNS = sessionNS.beginTransaction();
       for (Entry<CrudsService, Request> nsRequestsService : nsRequests.entrySet()) {
         try {
-          CrudsService service = nsRequestsService.getKey();
+          final CrudsService service = nsRequestsService.getKey();
           person = service.create(nsRequests.get(service));
           nsResponse.put(service, person);
           sessionNS.flush();

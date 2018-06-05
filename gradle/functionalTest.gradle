@@ -33,9 +33,8 @@ task functionalQATest(type: Test) {
         junitXml.destination = "$buildDir/functional-test-results"
     }
 
-    println "The env path:" + System.getenv("TEST_FILE_PATH")
-    println "The env path:" + System.env.DB_CMS_JDBC_URL
-    println "The env path:" + System.env.PATH
+    println "The following Functonal Test Conf File will override the default if not null" + System.getenv("TEST_FILE_PATH")
+    println "Your shell path is:" + System.env.PATH
     environment 'TEST_FILE_PATH', System.getenv('TEST_FILE_PATH')
     systemProperties = [
         TEST_FILE_PATH: System.getProperty('TEST_FILE_PATH')

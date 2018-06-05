@@ -8,6 +8,7 @@ import gov.ca.cwds.data.Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on {@link StaffPerson}
@@ -34,6 +35,7 @@ public class StaffPersonService implements TypedCrudsService<String, StaffPerson
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
+  @UnitOfWork(value = "cms")
   @Override
   public gov.ca.cwds.rest.api.domain.PostedStaffPerson find(String primaryKey) {
     gov.ca.cwds.data.persistence.cms.StaffPerson persistedStaffPerson =

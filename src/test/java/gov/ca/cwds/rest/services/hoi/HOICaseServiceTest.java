@@ -41,22 +41,24 @@ import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientRelationshipEntityBuilder;
 import gov.ca.cwds.fixture.CmsCaseEntityBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
-import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.api.domain.hoi.HOICase;
 import gov.ca.cwds.rest.api.domain.hoi.HOICaseResponse;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
-import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
-public class HOICaseServiceTest {
+public class HOICaseServiceTest extends Doofenshmirtz<Client> {
 
   private CaseDao caseDao;
+  private ClientDao clientDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private StaffPersonDao staffPersonDao;
+
   private HOICaseService target;
+  private AuthorizationService authorizationService;
   private HOIRequest request;
 
   /**
@@ -72,15 +74,17 @@ public class HOICaseServiceTest {
    *
    * @throws Exception - Exception
    */
+  @Override
   @Before
-  public void setUp() {
-    new TestingRequestExecutionContext("02f");
-    SystemCodeCache.global().getAllSystemCodes();
+  public void setup() throws Exception {
+    super.setup();
+
     caseDao = mock(CaseDao.class);
+    clientDao = mock(ClientDao.class);
+    clientRelationshipDao = mock(ClientRelationshipDao.class);
+    staffPersonDao = mock(StaffPersonDao.class);
 
-    ClientDao clientDao = mock(ClientDao.class);
-
-    Map<String, Client> clientMap = new HashMap<>();
+    final Map<String, Client> clientMap = new HashMap<>();
     Client client1 = new ClientEntityBuilder().setId("FOCUS-CHILD-1").build();
     Client client2 = new ClientEntityBuilder().setId("FOCUS-CHILD-2").build();
     Client client123 = new ClientEntityBuilder().setId("CLIENT-123").build();
@@ -89,15 +93,11 @@ public class HOICaseServiceTest {
     clientMap.put(client123.getId(), client123);
     when(clientDao.findClientsByIds(any(Set.class))).thenReturn(clientMap);
 
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
-
-    StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
-    Map<String, StaffPerson> staffPersons = new HashMap<>();
+    final Map<String, StaffPerson> staffPersons = new HashMap<>();
     staffPersons.put("q1p", new StaffPersonEntityBuilder().build());
     when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersons);
 
-    AuthorizationService authorizationService = new AuthorizationService();
-
+    authorizationService = new AuthorizationService();
     target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, staffPersonDao,
         authorizationService);
     request = new HOIRequest();
@@ -198,8 +198,8 @@ public class HOICaseServiceTest {
 
   @Test
   public void testFindParentsWhereChildIsPrimaryClientInTheRelationshipForAllValidTypesSuccess() {
-    List<Integer> childToParentTypes = new ArrayList<>(
-        Arrays.asList(198, 199, 242, 293, 242, 6360));
+    List<Integer> childToParentTypes =
+        new ArrayList<>(Arrays.asList(198, 199, 242, 293, 242, 6360));
     for (Integer i = 188; i <= 190; i++) {
       childToParentTypes.add(i);
     }
@@ -219,7 +219,6 @@ public class HOICaseServiceTest {
     }
   }
 
-
   @Test(expected = NotImplementedException.class)
   public void testHandleRequest() {
     target.handleRequest(new HOICase());
@@ -227,16 +226,15 @@ public class HOICaseServiceTest {
 
   private HOICaseResponse getCaseResponseWhereChildIsPrimaryClientInTheRelationship(short type) {
     Map<String, Collection<ClientRelationship>> relationships = new HashMap<>();
-    relationships.put("FOCUS-CHILD-1", Arrays.asList(
-        new ClientRelationshipEntityBuilder().setClientRelationshipType(type)
-            .setSecondaryClientId("FOCUS-CHILD-1").build()));
+    relationships.put("FOCUS-CHILD-1", Arrays.asList(new ClientRelationshipEntityBuilder()
+        .setClientRelationshipType(type).setSecondaryClientId("FOCUS-CHILD-1").build()));
     when(clientRelationshipDao.findByPrimaryClientIds(any(Collection.class)))
         .thenReturn(relationships);
     when(clientRelationshipDao.findBySecondaryClientIds(any(Collection.class)))
         .thenReturn(new HashMap());
 
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-1")
-        .build();
+    CmsCase cmscase =
+        new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-1").build();
     Map<String, CmsCase> cmsCases = new HashMap<>();
     cmsCases.put(cmscase.getId(), cmscase);
     when(caseDao.findByClientIds(any(Collection.class))).thenReturn(cmsCases);
@@ -247,16 +245,15 @@ public class HOICaseServiceTest {
   private HOICaseResponse getCaseResponseWhereChildIsSecondaryClientIdInTheRelationship(
       short type) {
     Map<String, Collection<ClientRelationship>> relationships = new HashMap<>();
-    relationships.put("FOCUS-CHILD-2", Arrays.asList(
-        new ClientRelationshipEntityBuilder().setClientRelationshipType(type)
-            .setPrimaryClientId("FOCUS-CHILD-2").build()));
+    relationships.put("FOCUS-CHILD-2", Arrays.asList(new ClientRelationshipEntityBuilder()
+        .setClientRelationshipType(type).setPrimaryClientId("FOCUS-CHILD-2").build()));
     when(clientRelationshipDao.findByPrimaryClientIds(any(Collection.class)))
         .thenReturn(new HashMap());
     when(clientRelationshipDao.findBySecondaryClientIds(any(Collection.class)))
         .thenReturn(relationships);
 
-    CmsCase cmscase = new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-2")
-        .build();
+    CmsCase cmscase =
+        new CmsCaseEntityBuilder().setId("TAZGOO205C").setFkchldClt("FOCUS-CHILD-2").build();
     Map<String, CmsCase> cmsCases = new HashMap<>();
     cmsCases.put(cmscase.getId(), cmscase);
     when(caseDao.findByClientIds(any(Collection.class))).thenReturn(cmsCases);
@@ -264,13 +261,19 @@ public class HOICaseServiceTest {
     return target.handleFind(request);
   }
 
-  @Test(expected = AuthorizationException.class)
-  public void testUnAuthorizedClient() {
-    AuthorizationService spyAuthorizationService = spy(new AuthorizationService());
-    doThrow(AuthorizationException.class).when(spyAuthorizationService).ensureClientAccessAuthorized(any(String.class));
-    HOICaseService target = new HOICaseService(null, null, null, null,
-        spyAuthorizationService);
-    target.handleFind(request);
+  @Test
+  public void testUnAuthorizedClient() throws Exception {
+    authorizationService = mock(AuthorizationService.class);
+    doThrow(AuthorizationException.class).when(authorizationService)
+        .ensureClientAccessAuthorized(any(String.class));
+
+    target = new HOICaseService(caseDao, clientDao, clientRelationshipDao, staffPersonDao,
+        authorizationService);
+    final HOICaseService spyTarget = spy(target);
+    final HOICaseResponse response = spyTarget.handleFind(request);
+
+    assertThat("Expected authorization errors!!",
+        response.hasMessages() && !response.getMessages().isEmpty());
   }
 
 }

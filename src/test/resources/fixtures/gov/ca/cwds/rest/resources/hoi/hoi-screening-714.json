@@ -1,0 +1,30 @@
+{
+  "id": "714",
+  "start_date": "2018-04-10",
+  "assigned_social_worker": {
+    "id": "0X5",
+    "first_name": "Testing",
+    "last_name": "CWDS",
+    "name_suffix": "",
+    "legacy_descriptor": {
+      "legacy_id": "0X5",
+      "legacy_ui_id": "0X5",
+      "legacy_table_name": "STFPERST",
+      "legacy_table_description": "Staff"
+    }
+  },
+  "all_people": [
+    {
+      "id": "708",
+      "first_name": "Jonathan",
+      "last_name": "O Drought",
+      "legacy_descriptor": {}
+    },
+    {
+      "id": "710",
+      "first_name": "Jane",
+      "last_name": "Blatcher",
+      "legacy_descriptor": {}
+    }
+  ]
+}

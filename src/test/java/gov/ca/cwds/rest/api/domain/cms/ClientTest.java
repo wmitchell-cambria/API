@@ -33,6 +33,7 @@ import gov.ca.cwds.data.CrudsDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ClientResourceBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
@@ -378,7 +379,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "jr", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     String genderCode = "male";
     String dateStarted = "now";
@@ -408,20 +409,11 @@ public class ClientTest implements DomainTestTemplate {
 
   @Test
   public void shouldAllowClientNamesToBeUpdatedAfterInitialization() {
-
-    RaceAndEthnicity raceAndEthnicity =
-        new RaceAndEthnicity(new ArrayList<>(), "A", new ArrayList<>(), "X", "A");
-
-    Participant participant =
-        new Participant(1, "sourceTable", "clientId", new LegacyDescriptor(), "Fred", "Wilson",
-            "Bill", "", "gender", "ssn", "dob", primaryLanguageType, secondaryLanguageType, 4,
-            reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-            sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(), raceAndEthnicity);
-
+    Participant participant = new ParticipantResourceBuilder().createParticipant();
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 
     client.update("Barney", "middlestone", "Rubble", "jr", "F", "765489675", (short) 0, "A", "A",
-        "X");
+        "X", "10-May-2017");
 
     assertEquals("Expected Client first name to have been changed", "Barney",
         client.getCommonFirstName());
@@ -433,6 +425,17 @@ public class ClientTest implements DomainTestTemplate {
         client.getSuffixTitleDescription());
   }
 
+  @Test 
+  public void shouldAllowClientBirthDateToBeUpdated() {
+    Participant participant = new ParticipantResourceBuilder().setDateOfBirth("01-Jun-2010").createParticipant();
+    Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
+
+    client.update("Barney", "middlestone", "Rubble", "jr", "F", "765489675", (short) 0, "A", "A",
+        "X", "10-May-2017");
+    
+    assertEquals("Expected Client birth date to have been changed", "10-May-2017", client.getBirthDate());
+    
+  }
   @Test
   public void testCreateWithDefaultCreatesWithDefaultValues() {
     RaceAndEthnicity raceAndEthnicity =
@@ -442,7 +445,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     String genderCode = "male";
     String dateStarted = "now";
@@ -2236,7 +2239,7 @@ public class ClientTest implements DomainTestTemplate {
         "firstName", "middleName", "lastName", "", "gender", "ssn", "dob", primaryLanguageType,
         secondaryLanguageType, 4, reporterConfidentialWaiver, reporterEmployerName,
         clientStaffPersonAdded, sensitivityIndicator, "12", "Y", new HashSet<>(), new HashSet<>(),
-        raceAndEthnicity);
+        raceAndEthnicity, null);
 
     Client client = Client.createWithDefaults(participant, "", "", (short) 0, true);
 

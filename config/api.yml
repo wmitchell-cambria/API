@@ -202,7 +202,7 @@ logging:
       level: DEBUG
     "org.hibernate.type.descriptor.sql":
       # Use TRACE to see SQL parameters logged
-      level: TRACE
+      level: DEBUG
     "gov.ca.cwds.data.ApiHibernateInterceptor":
       # Use DEBUG or TRACE to see entities logged
       level: DEBUG
@@ -211,7 +211,7 @@ logging:
     "io.dropwizard.jersey.DropwizardResourceConfig":
       level: INFO
     "AUDIT":
-      level: ALL
+      level: ${LOGLEVEL:-ALL}
   appenders:
     - type: console
       threshold: ALL

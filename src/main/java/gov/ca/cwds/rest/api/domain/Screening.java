@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.api.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,14 +9,11 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.Type;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.validation.Date;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -26,6 +25,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @JsonSnakeCase
 @ApiModel("Screening")
+@SuppressWarnings({"squid:S3437"})
 public class Screening extends ReportingDomain implements Request, Response {
 
   private static final long serialVersionUID = 1L;
@@ -65,16 +65,12 @@ public class Screening extends ReportingDomain implements Request, Response {
   private String assigneeStaffId;
 
   @JsonProperty("started_at")
-  @ApiModelProperty(value = "Screening Start Date", example = "1992-06-18")
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-  @Date(format = "yyyy-MM-dd")
-  private String startedAt;
+  @ApiModelProperty(value = "Screening Start Date", example = "2018-03-29T16:11:59")
+  private LocalDateTime startedAt;
 
   @JsonProperty("ended_at")
-  @ApiModelProperty(value = "Screening End Date", example = "1992-06-19")
-  @Type(type = "date")
-  @Date(format = "yyyy-MM-dd")
-  private String endedAt;
+  @ApiModelProperty(value = "Screening End Date", example = "2018-03-30T16:11:37")
+  private LocalDateTime endedAt;
 
   @JsonProperty("additional_information")
   @ApiModelProperty("Additional screening information")
@@ -86,8 +82,7 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   @JsonProperty("incident_date")
   @ApiModelProperty(value = "Incident Date", example = "1992-05-18")
-  @Date(format = "yyyy-MM-dd", required = false)
-  private String incidentDate;
+  private LocalDate incidentDate;
 
   @JsonProperty("indexable")
   @ApiModelProperty(value = "Indexable", example = "true")
@@ -108,6 +103,10 @@ public class Screening extends ReportingDomain implements Request, Response {
   @JsonProperty("access_restrictions")
   @ApiModelProperty(value = "Access Restrictions", example = "sensitive")
   private String accessRestrictions;
+
+  @JsonProperty("restrictions_date")
+  @ApiModelProperty(value = "Restrictions Date", example = "2001-01-01")
+  private LocalDate restrictionsDate;
 
   @JsonProperty("restrictions_rationale")
   @ApiModelProperty(value = "Restrictions Rationale", example = "string")
@@ -141,6 +140,8 @@ public class Screening extends ReportingDomain implements Request, Response {
   @ApiModelProperty(value = "Participants")
   private Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
 
+  @JsonProperty("report_type")
+  private String reportType;
 
   /**
    * default constructor
@@ -159,11 +160,12 @@ public class Screening extends ReportingDomain implements Request, Response {
    * @param startedAt - startedAt
    * @param referralId referral id, if provided
    * @param assigneeStaffId - assignee Id
+   * @param reportType report type
    */
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,
-      String screeningDecisionDetail, String assignee, String startedAt, String referralId,
-      String assigneeStaffId) {
+      String screeningDecisionDetail, String assignee, LocalDateTime startedAt, String referralId,
+      String assigneeStaffId, String reportType) {
     super();
     this.id = id;
     this.name = name;
@@ -174,6 +176,7 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.startedAt = startedAt;
     this.referralId = referralId;
     this.assigneeStaffId = assigneeStaffId;
+    this.reportType = reportType;
   }
 
   /**
@@ -221,7 +224,7 @@ public class Screening extends ReportingDomain implements Request, Response {
   /**
    * @return the startedAt
    */
-  public String getStartedAt() {
+  public LocalDateTime getStartedAt() {
     return startedAt;
   }
 
@@ -271,15 +274,15 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.assigneeStaffId = assigneeStaffId;
   }
 
-  public void setStartedAt(String startedAt) {
+  public void setStartedAt(LocalDateTime startedAt) {
     this.startedAt = startedAt;
   }
 
-  public String getEndedAt() {
+  public LocalDateTime getEndedAt() {
     return endedAt;
   }
 
-  public void setEndedAt(String endedAt) {
+  public void setEndedAt(LocalDateTime endedAt) {
     this.endedAt = endedAt;
   }
 
@@ -299,11 +302,11 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.incidentCounty = incidentCounty;
   }
 
-  public String getIncidentDate() {
+  public LocalDate getIncidentDate() {
     return incidentDate;
   }
 
-  public void setIncidentDate(String incidentDate) {
+  public void setIncidentDate(LocalDate incidentDate) {
     this.incidentDate = incidentDate;
   }
 
@@ -337,6 +340,14 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   public void setAccessRestrictions(String accessRestrictions) {
     this.accessRestrictions = accessRestrictions;
+  }
+
+  public LocalDate getRestrictionsDate() {
+    return restrictionsDate;
+  }
+
+  public void setRestrictionsDate(LocalDate restrictionsDate) {
+    this.restrictionsDate = restrictionsDate;
   }
 
   public String getRestrictionsRationale() {
@@ -395,7 +406,13 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.participantIntakeApis = participantIntakeApis;
   }
 
+  public String getReportType() {
+    return reportType;
+  }
 
+  public void setReportType(String reportType) {
+    this.reportType = reportType;
+  }
 
   /**
    * @return the currentLocationOfChildren

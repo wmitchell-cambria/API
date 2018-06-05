@@ -1,13 +1,23 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-  <changeSet author="Oleg Korneychuk (generated)" id="1522794912070-1">
+  <changeSet author="Intake Team" id="addresses_data">
+    <insert tableName="addresses">
+      <column name="id" value="55"/>
+      <column name="street_address" value="2300 Erie Hill"/>
+      <column name="city" value="San Diego"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95223"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id" value="0ByMpj00CN"/>
+      <column name="legacy_source_table" value="ADDRS_T"/>
+    </insert>
     <insert tableName="addresses">
       <column name="id" value="79"/>
       <column name="street_address" value="erfsgd"/>
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="Other"/>
+      <column name="type" value="29"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -17,7 +27,7 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="Other"/>
+      <column name="type" value="29"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
@@ -27,10 +37,129 @@
       <column name="city" value="Sacramento"/>
       <column name="state" value="CA"/>
       <column name="zip" value="95833"/>
-      <column name="type" value="Other"/>
+      <column name="type" value="29"/>
       <column name="legacy_id" value="79VrmIT00c"/>
       <column name="legacy_source_table" value="ADDRS_T"/>
     </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1095"/>
+      <column name="street_address"/>
+      <column name="city"/>
+      <column name="state"/>
+      <column name="zip"/>
+      <column name="type" value="29"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1153"/>
+      <column name="street_address"/>
+      <column name="city"/>
+      <column name="state"/>
+      <column name="zip"/>
+      <column name="type" value="29"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1156"/>
+      <column name="street_address" value="123 Kinsman Park"/>
+      <column name="city" value="Legal City"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="0"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id" value="MhXmWPa0DW"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1331"/>
+      <column name="street_address" value="77 Green Street"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type" value="29"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1332"/>
+      <column name="street_address" value="25 Main Street"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1333"/>
+      <column name="street_address" value="25 Main Street"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1334"/>
+      <column name="street_address" value="77 Green Street"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type" value="27"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1335"/>
+      <column name="street_address" value="123 Kinsman Park"/>
+      <column name="city" value="Legal City"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="0"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id" value="MhXmWPa0DW"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1379"/>
+      <column name="street_address" value="77 green st"/>
+      <column name="city" value="sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="95819"/>
+      <column name="type" value="29"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1380"/>
+      <column name="street_address" value="25 Main St"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1382"/>
+      <column name="street_address" value="77 Green ST"/>
+      <column name="city" value="Sacramento"/>
+      <column name="state" value="CA"/>
+      <column name="zip"/>
+      <column name="type" value="27"/>
+      <column name="legacy_id"/>
+      <column name="legacy_source_table"/>
+    </insert>
+    <insert tableName="addresses">
+      <column name="id" value="1383"/>
+      <column name="street_address" value="123 Kinsman Park"/>
+      <column name="city" value="Legal City"/>
+      <column name="state" value="CA"/>
+      <column name="zip" value="0"/>
+      <column name="type" value="32"/>
+      <column name="legacy_id" value="MhXmWPa0DW"/>
+      <column name="legacy_source_table"/>
+    </insert>
   </changeSet>
-
 </databaseChangeLog>

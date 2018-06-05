@@ -1,0 +1,96 @@
+{
+  "id": "25",
+  "legacy_id": "9C7kKgc0CN",
+  "first_name": "William",
+  "last_name": "Pfeiffer",
+  "gender": "male",
+  "ssn": "123456789",
+  "date_of_birth": "1999-11-15",
+  "roles": [],
+  "addresses": [
+    {
+      "messages": [],
+      "id": "${address_id}",
+      "legacy_id": "0ByMpj00CN",
+      "legacy_source_table": "ADDRS_T",
+      "type": "32",
+      "street_address": "2300 Erie Hill",
+      "city": "San Diego",
+      "state": "CA",
+      "zip": "95223",
+      "legacy_descriptor": {
+        "legacy_id": "0ByMpj00CN",
+        "legacy_ui_id": "0010-9694-8336-2000767",
+        "legacy_last_updated": "2005-12-09T16:20:43.320-0800",
+        "legacy_table_name": "ADDRS_T",
+        "legacy_table_description": "Address"
+      }
+    }
+  ],
+  "races": [
+    {
+      "race": "White"
+    }
+  ],
+  "ethnicity": {
+    "hispanic_latino_origin": "Unknown",
+    "ethnicity_detail": []
+  },
+  "middle_name": "T",
+  "name_suffix": "Jr",
+  "languages": [
+    "English"
+  ],
+  "screening_id": "36",
+  "phone_numbers": [],
+  "sealed": false,
+  "sensitive": false,
+  "csec": [
+    {
+      "id": "2501",
+      "csec_code_id": "519",
+      "start_date": "2001-01-01",
+      "end_date": "2002-02-02"
+    },
+    {
+      "id": "2502",
+      "csec_code_id": "520",
+      "start_date": "2001-01-02",
+      "end_date": "2002-02-03"
+    },
+    {
+      "id": "2503",
+      "csec_code_id": "521",
+      "start_date": "2001-01-03",
+      "end_date": "2002-02-04"
+    },
+    {
+      "id": "2504",
+      "csec_code_id": "522",
+      "start_date": "2001-01-04",
+      "end_date": "2002-02-05"
+    },
+    {
+      "id": "2505",
+      "csec_code_id": "523",
+      "start_date": "2001-01-05",
+      "end_date": "2002-02-06"
+    },
+    {
+      "id": "2506",
+      "csec_code_id": "524",
+      "start_date": "2001-01-06",
+      "end_date": "2002-02-07"
+    }
+  ],
+      "safelySurenderedBabies": {
+      "surrendered_by": "Unknown",
+      "relation_to_child": "525",
+      "bracelet_id": "1234",
+      "parent_guardian_given_bracelet_id": "U",
+      "parent_guardian_provided_med_questionaire": "U",
+      "med_questionaire_return_date": "1992-05-18",
+      "comments": "Mother surrendered the baby",
+      "participant_child": "25"
+      }
+}

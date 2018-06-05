@@ -1,9 +1,5 @@
 package gov.ca.cwds.inject;
 
-import gov.ca.cwds.data.ns.AddressesDao;
-import gov.ca.cwds.data.ns.AgencyDao;
-import gov.ca.cwds.data.ns.AllegationIntakeDao;
-import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,7 +58,12 @@ import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.ns.AddressDao;
+import gov.ca.cwds.data.ns.AddressesDao;
+import gov.ca.cwds.data.ns.AgencyDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
+import gov.ca.cwds.data.ns.CsecDao;
 import gov.ca.cwds.data.ns.EthnicityDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.IntakeLovDao;
@@ -77,6 +78,7 @@ import gov.ca.cwds.data.ns.PersonPhoneDao;
 import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
+import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
@@ -121,7 +123,8 @@ public class DataAccessModule extends AbstractModule {
 
   // CMS:
   private final ImmutableList<Class<?>> cmsEntities = ImmutableList.<Class<?>>builder()
-      .add(gov.ca.cwds.data.legacy.cms.entity.Client.class,
+      .add(gov.ca.cwds.data.legacy.cms.entity.CsecHistory.class,
+          gov.ca.cwds.data.legacy.cms.entity.Client.class,
           gov.ca.cwds.data.legacy.cms.entity.ClientOtherEthnicity.class,
           gov.ca.cwds.data.legacy.cms.entity.CountyLicenseCase.class,
           gov.ca.cwds.data.legacy.cms.entity.BackgroundCheck.class,
@@ -140,6 +143,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.legacy.cms.entity.SubstituteCareProvider.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.County.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.NameType.class,
+          gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType.class,
           gov.ca.cwds.data.legacy.cms.entity.syscodes.VisitType.class,
           gov.ca.cwds.data.persistence.cms.Address.class,
           gov.ca.cwds.data.persistence.cms.Allegation.class,
@@ -204,11 +208,11 @@ public class DataAccessModule extends AbstractModule {
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
-      gov.ca.cwds.data.persistence.ns.Person.class,
-      gov.ca.cwds.data.persistence.ns.Address.class,
+      gov.ca.cwds.data.persistence.ns.Person.class, gov.ca.cwds.data.persistence.ns.Address.class,
       gov.ca.cwds.data.persistence.ns.Addresses.class,
       gov.ca.cwds.data.persistence.ns.Allegation.class,
       gov.ca.cwds.data.persistence.ns.AllegationEntity.class,
+      gov.ca.cwds.data.persistence.ns.CsecEntity.class,
       gov.ca.cwds.data.persistence.ns.CrossReportEntity.class,
       gov.ca.cwds.data.persistence.ns.GovernmentAgencyEntity.class,
       gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity.class,
@@ -231,8 +235,9 @@ public class DataAccessModule extends AbstractModule {
       gov.ca.cwds.data.persistence.ns.PersonEthnicity.class,
       gov.ca.cwds.data.persistence.ns.Ethnicity.class,
       gov.ca.cwds.data.persistence.ns.PersonRaceId.class,
-      gov.ca.cwds.data.persistence.ns.PersonRace.class,
-      gov.ca.cwds.data.persistence.ns.Race.class,
+      gov.ca.cwds.data.persistence.ns.PersonRace.class, gov.ca.cwds.data.persistence.ns.Race.class,
+      gov.ca.cwds.data.persistence.ns.Relationship.class,
+      gov.ca.cwds.data.persistence.ns.SafelySurrenderedBabiesEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningAddressEntity.class,
       gov.ca.cwds.data.persistence.ns.ScreeningWrapper.class).build();
@@ -354,6 +359,7 @@ public class DataAccessModule extends AbstractModule {
     bind(AllegationPerpetratorHistoryDao.class);
     bind(ClientUcDao.class);
     bind(ChildClientDao.class);
+    bind(SexualExploitationTypeDao.class);
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
     bind(DrmsDocumentDao.class);
@@ -379,6 +385,7 @@ public class DataAccessModule extends AbstractModule {
     // NS:
     bind(AddressDao.class);
     bind(AddressesDao.class);
+    bind(CsecDao.class);
     bind(XaNsAddressDao.class);
 
     bind(PersonDao.class);
@@ -503,7 +510,8 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @Named("elasticsearch.daos")
-  public Map<String, ElasticsearchDao> provideElasticSearchDaos(ApiConfiguration apiConfiguration) {
+  public synchronized Map<String, ElasticsearchDao> provideElasticSearchDaos(
+      ApiConfiguration apiConfiguration) {
     if (clients == null) {
       provideElasticsearchClients(apiConfiguration);
     }

@@ -75,7 +75,7 @@ public class Allegation extends CmsPersistentObject {
   @SystemCodeSerializer(logical = true, description = true)
   @JsonDeserialize(using = CmsSystemCodeDeserializer.class)
   @Type(type = "short")
-  @Column(name = "ALG_TPC")
+  @Column(name = "ALG_TPC", nullable = false)
   private Short allegationType;
 
   @Column(name = "DISPSN_DSC")
@@ -94,7 +94,7 @@ public class Allegation extends CmsPersistentObject {
   @Column(name = "STFADD_IND")
   private String staffPersonAddedIndicator;
 
-  @Column(name = "FKCLIENT_T", length = CMS_ID_LEN)
+  @Column(name = "FKCLIENT_T", nullable = false, length = CMS_ID_LEN)
   private String victimClientId;
 
   @Column(name = "FKCLIENT_0", length = CMS_ID_LEN, nullable = true)
