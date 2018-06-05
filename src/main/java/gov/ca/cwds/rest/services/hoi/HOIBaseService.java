@@ -11,14 +11,14 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 
 /**
- * Common services for HOI service implementations.
+ * Common services for HOI service implementations, notably client authorization.
  * 
  * @author CWDS API Team
  */
 public interface HOIBaseService extends SensitiveClientOverride {
 
   /**
-   * Expose the authorization service for default interface methods
+   * Expose the authorization service to default interface methods.
    * 
    * @return authorization service
    */
@@ -39,10 +39,10 @@ public interface HOIBaseService extends SensitiveClientOverride {
    * due to sealed/sensitivity restriction, county access privileges, or a short-coming with
    * authorization rules. The client authorizer throws an UnauthorizedException, then skip that
    * client and move on. Don't bomb all History of Involvement because the user is not authorized to
-   * view a client's half-sister's foster sibling.
+   * view -- not making this up -- a client's half-brother's foster sibling.
    * </p>
    * 
-   * @param clientIds client keys to authorize
+   * @param clientIds client id's to authorize
    * @return list of client id's that the user is authorized to view
    */
   default List<String> authorizeClients(Collection<String> clientIds) {
