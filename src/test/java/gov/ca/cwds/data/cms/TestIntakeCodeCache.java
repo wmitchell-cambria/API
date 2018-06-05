@@ -37,7 +37,7 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     if (SystemCodeCategoryId.STATE_CODE.contains(metaId) && "CA".contains(intakeCode)) {
       return 1828;
     }
-    if (SystemCodeCategoryId.ADDRESS_TYPE.contains(metaId) && "28".contains(intakeCode)) {
+    if (SystemCodeCategoryId.ADDRESS_TYPE.contains(metaId) && "Day Care".equals(intakeCode)) {
       return 28;
     }
     if (SystemCodeCategoryId.CROSS_REPORT_METHOD.contains(metaId)
@@ -61,6 +61,10 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     if (SystemCodeCategoryId.COMMUNICATION_METHOD.contains(metaId)
         && "in_person".contains(intakeCode)) {
       return 408;
+    }
+    if (SystemCodeCategoryId.COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN.contains(metaId)
+        && "At Risk".contains(intakeCode)) {
+      return 6867;
     }
     return null;
   }

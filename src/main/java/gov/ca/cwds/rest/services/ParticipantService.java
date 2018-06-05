@@ -1,5 +1,14 @@
 package gov.ca.cwds.rest.services;
 
+import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
+import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
+import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
+import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.rest.api.domain.Csec;
+import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
+import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
+import gov.ca.cwds.rest.core.FerbConstants;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,21 +24,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
-import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
-import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.persistence.ns.IntakeLOVCodeEntity;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
-import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
+import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
@@ -38,13 +41,11 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparator;
 import gov.ca.cwds.rest.api.domain.comparator.DateTimeComparatorInterface;
-import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.R00824SetDispositionCode;
 import gov.ca.cwds.rest.business.rules.R00832SetStaffPersonAddedInd;
 import gov.ca.cwds.rest.business.rules.R00834AgeUnitRestriction;
 import gov.ca.cwds.rest.business.rules.R02265ChildClientExists;
 import gov.ca.cwds.rest.business.rules.R04466ClientSensitivityIndicator;
-import gov.ca.cwds.rest.core.FerbConstants;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
@@ -55,7 +56,7 @@ import gov.ca.cwds.rest.services.cms.ReporterService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
- * Business layer object to work on {@link Participant}.
+ * Business layer object to work on {@link Address}
  *
  * @author CWDS API Team
  */
@@ -73,31 +74,26 @@ public class ParticipantService implements CrudsService {
   private ChildClientService childClientService;
   private ClientAddressService clientAddressService;
   private ClientScpEthnicityService clientScpEthnicityService;
-
   private CaseDao caseDao;
   private ReferralClientDao referralClientDao;
 
   @Inject
   private CsecHistoryService csecHistoryService;
-
   @Inject
   private SexualExploitationTypeDao sexualExploitationTypeDao;
-
-  @Inject
-  private IntakeLOVCodeDao intakeLOVCodeDao;
 
   /**
    * Constructor
    *
-   * @param clientService clientService
-   * @param referralClientService referralClientService
-   * @param reporterService reporterService
-   * @param childClientService childClientService
-   * @param clientAddressService clientAddressService
-   * @param validator validator
+   * @param clientService             clientService
+   * @param referralClientService     referralClientService
+   * @param reporterService           reporterService
+   * @param childClientService        childClientService
+   * @param clientAddressService      clientAddressService
+   * @param validator                 validator
    * @param clientScpEthnicityService clientScpEthnicityService
-   * @param caseDao caseDao
-   * @param referralClientDao referralClientDao
+   * @param caseDao                   caseDao
+   * @param referralClientDao         referralClientDao
    */
   @Inject
   public ParticipantService(ClientService clientService,
@@ -128,28 +124,28 @@ public class ParticipantService implements CrudsService {
 
   /**
    * @param screeningToReferral - screeningToReferral
-   * @param dateStarted - dateStarted
-   * @param referralId - referralId
-   * @param messageBuilder - messageBuilder
+   * @param dateStarted         - dateStarted
+   * @param referralId          - referralId
+   * @param messageBuilder      - messageBuilder
    * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
       String dateStarted, String referralId, MessageBuilder messageBuilder) {
-    final ClientParticipants clientParticipants = new ClientParticipants();
-    final Set<Participant> participants = screeningToReferral.getParticipants();
+    ClientParticipants clientParticipants = new ClientParticipants();
 
+    Set<Participant> participants = screeningToReferral.getParticipants();
     for (Participant incomingParticipant : participants) {
       if (!ParticipantValidator.hasValidRoles(incomingParticipant)) {
-        messageBuilder.addMessageAndLog(" Participant contains incompatible roles ", LOGGER);
-        continue; // next participant
+        String message = " Participant contains incompatible roles ";
+        messageBuilder.addMessageAndLog(message, LOGGER);
+        // next participant
+        continue;
       }
-
       String sexAtBirth = "";
       if (!incomingParticipant.getGender().isEmpty()) {
         sexAtBirth = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
-
-      final Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
+      Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
       processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
           clientParticipants, incomingParticipant, sexAtBirth, roles);
     } // next participant
@@ -166,7 +162,7 @@ public class ParticipantService implements CrudsService {
     for (String role : roles) {
       boolean isRegularReporter = ParticipantValidator.roleIsReporterType(role)
           && (!ParticipantValidator.roleIsAnonymousReporter(role)
-              && !ParticipantValidator.selfReported(incomingParticipant));
+          && !ParticipantValidator.selfReported(incomingParticipant));
       if (isRegularReporter) {
         saveRegularReporter(screeningToReferral, referralId, messageBuilder, incomingParticipant,
             role);
@@ -208,10 +204,10 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(),
-            screeningToReferral.getReportType());
+        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(), screeningToReferral.getReportType());
       } catch (ServiceException e) {
-        messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
+        String message = e.getMessage();
+        messageBuilder.addMessageAndLog(message, e, LOGGER);
         // next role
       }
     }
@@ -224,7 +220,8 @@ public class ParticipantService implements CrudsService {
       // addresses associated with a client
       processClientAddress(incomingParticipant, referralId, clientId, messageBuilder);
     } catch (ServiceException e) {
-      messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
+      String message = e.getMessage();
+      messageBuilder.addMessageAndLog(message, e, LOGGER);
       // next role
     }
   }
@@ -236,13 +233,14 @@ public class ParticipantService implements CrudsService {
      * reporter or self-reported
      */
     try {
-      final Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
+      Reporter savedReporter = saveReporter(incomingParticipant, role, referralId,
           screeningToReferral.getIncidentCounty(), messageBuilder);
       incomingParticipant.setLegacyId(savedReporter.getReferralId());
       incomingParticipant.setLegacySourceTable(LegacyTable.REPORTER.getName());
       incomingParticipant.getLegacyDescriptor().setLastUpdated(savedReporter.getLastUpdatedTime());
     } catch (ServiceException e) {
-      messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
+      String message = e.getMessage();
+      messageBuilder.addMessageAndLog(message, e, LOGGER);
       // next role
       return true;
     }
@@ -322,14 +320,13 @@ public class ParticipantService implements CrudsService {
       foundClient.update(incomingParticipant.getFirstName(), incomingParticipant.getMiddleName(),
           incomingParticipant.getLastName(), incomingParticipant.getNameSuffix(),
           incomingParticipant.getGender(), incomingParticipant.getSsn(), primaryRaceCode,
-          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode,
-          incomingParticipant.getDateOfBirth());
+          unableToDetermineCode, hispanicUnableToDetermineCode, hispanicOriginCode, incomingParticipant.getDateOfBirth());
 
       update(messageBuilder, incomingParticipant, foundClient, otherRaceCodes);
     } else {
-      String message = String.format(
-          "Unable to update client %s %s. Client has been modified by another process.",
-          incomingParticipant.getFirstName(), incomingParticipant.getLastName());
+      String message =
+          String.format("Unable to update client %s %s. Client has been modified by another process.",
+              incomingParticipant.getFirstName(), incomingParticipant.getLastName());
       messageBuilder.addMessageAndLog(message, LOGGER);
     }
   }
@@ -355,17 +352,18 @@ public class ParticipantService implements CrudsService {
   private String createNewClient(ScreeningToReferral screeningToReferral, String dateStarted,
       MessageBuilder messageBuilder, Participant incomingParticipant, String sexAtBirth) {
     String clientId;
-    final List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
-    final Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
-    final List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
-    final boolean childClientIndicatorVar =
+
+    List<Short> allRaceCodes = getAllRaceCodes(incomingParticipant.getRaceAndEthnicity());
+    Short primaryRaceCode = getPrimaryRaceCode(allRaceCodes);
+    List<Short> otherRaceCodes = getOtherRaceCodes(allRaceCodes, primaryRaceCode);
+    boolean childClientIndicatorVar =
         new R02265ChildClientExists(incomingParticipant, dateStarted).isValid();
-    final Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
+
+    Client client = Client.createWithDefaults(incomingParticipant, dateStarted, sexAtBirth,
         primaryRaceCode, childClientIndicatorVar);
 
     /*
-     * IMPORTANT: A referral client record must be added *AFTER* updating the client sensitivity
-     * indicator.
+     * IMPORTANT: A referral client record must be added after updating client sensitivity indicator
      */
     executeR04466ClientSensitivityIndicator(client, screeningToReferral);
 
@@ -384,7 +382,7 @@ public class ParticipantService implements CrudsService {
     gov.ca.cwds.rest.api.domain.Address reporterAddress = null;
 
     if (ip.getAddresses() != null) {
-      final Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
+      Set<gov.ca.cwds.rest.api.domain.Address> addresses = new HashSet<>(ip.getAddresses());
 
       for (gov.ca.cwds.rest.api.domain.Address address : addresses) {
         if (address != null) {
@@ -395,10 +393,10 @@ public class ParticipantService implements CrudsService {
       }
     }
 
-    final Boolean mandatedReporterIndicator = ParticipantValidator.roleIsMandatedReporter(role);
+    Boolean mandatedReporterIndicator = ParticipantValidator.roleIsMandatedReporter(role);
     Reporter theReporter = reporterService.find(referralId);
     if (theReporter == null) {
-      final Reporter reporter = Reporter.createWithDefaults(referralId, mandatedReporterIndicator,
+      Reporter reporter = Reporter.createWithDefaults(referralId, mandatedReporterIndicator,
           reporterAddress, ip, countySpecificCode);
 
       messageBuilder.addDomainValidationError(validator.validate(reporter));
@@ -407,8 +405,7 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder,
-      List<Csec> csecs, String reportType) {
+  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder, List<Csec> csecs, String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -446,18 +443,18 @@ public class ParticipantService implements CrudsService {
         messageBuilder.addError("There is no CSEC code id provided for client with id: " + clientId,
             ErrorMessage.ErrorType.VALIDATION);
       } else {
-        IntakeLOVCodeEntity intakeLOVCodeEntity = intakeLOVCodeDao.find(Long.valueOf(csecCodeId));
+        Short csecLegacyId = IntakeCodeCache.global().getLegacySystemCodeForIntakeCode(
+            SystemCodeCategoryId.COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN, csecCodeId);
+
         SexualExploitationType sexualExploitationType = null;
-        if (intakeLOVCodeEntity == null) {
+        if (csecLegacyId == null) {
           messageBuilder.addError("LOV code is not found for CSEC code id: " + csecCodeId,
               ErrorMessage.ErrorType.VALIDATION);
         } else {
-          sexualExploitationType =
-              sexualExploitationTypeDao.find(intakeLOVCodeEntity.getLgSysId().shortValue());
+          sexualExploitationType = sexualExploitationTypeDao.find(csecLegacyId);
         }
         if (sexualExploitationType == null) {
-          messageBuilder.addError(
-              "Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
+          messageBuilder.addError("Legacy Id on CSEC does not correspond to an existing CMS/CWS CSEC",
               ErrorMessage.ErrorType.VALIDATION);
         } else {
           CsecHistory csecHistory = new CsecHistory();
@@ -478,6 +475,7 @@ public class ParticipantService implements CrudsService {
    */
   private Participant processClientAddress(Participant clientParticipant, String referralId,
       String clientId, MessageBuilder messageBuilder) {
+
     return clientAddressService.saveClientAddress(clientParticipant, referralId, clientId,
         messageBuilder);
   }
@@ -520,15 +518,15 @@ public class ParticipantService implements CrudsService {
   }
 
   private List<Short> getAllRaceCodes(RaceAndEthnicity raceAndEthnicity) {
-    final List<Short> allRaceCodes = new ArrayList<>();
+    List<Short> allRaceCodes = new ArrayList<>();
 
     if (raceAndEthnicity != null) {
-      final List<Short> raceCodes = raceAndEthnicity.getRaceCode();
+      List<Short> raceCodes = raceAndEthnicity.getRaceCode();
       if (raceCodes != null) {
         allRaceCodes.addAll(raceCodes);
       }
 
-      final List<Short> hispanicCodes = raceAndEthnicity.getHispanicCode();
+      List<Short> hispanicCodes = raceAndEthnicity.getHispanicCode();
       if (hispanicCodes != null) {
         allRaceCodes.addAll(hispanicCodes);
       }
@@ -552,9 +550,4 @@ public class ParticipantService implements CrudsService {
   void setSexualExploitationTypeDao(SexualExploitationTypeDao sexualExploitationTypeDao) {
     this.sexualExploitationTypeDao = sexualExploitationTypeDao;
   }
-
-  void setIntakeLOVCodeDao(IntakeLOVCodeDao intakeLOVCodeDao) {
-    this.intakeLOVCodeDao = intakeLOVCodeDao;
-  }
-
 }

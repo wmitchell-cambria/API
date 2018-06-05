@@ -42,7 +42,7 @@ public class AddressIntakeApi extends DomainObject implements Request, Response 
   private String legacySourceTable;
 
   @JsonProperty("type")
-  @ApiModelProperty(example = "32")
+  @ApiModelProperty(example = "Home")
   private String type;
 
   @JsonProperty("street_address")

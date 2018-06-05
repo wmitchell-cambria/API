@@ -27,7 +27,7 @@ public class AddressTransformerTest {
   @Test
   public void transformConvertsAddressIntakeApiToAddress() {
     LegacyDescriptor legacyDescriptor = new LegacyDescriptorEntityBuilder().build();
-    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType("28")
+    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType("Day Care")
         .setLegacyDescriptor(legacyDescriptor).build();
 
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
@@ -40,7 +40,7 @@ public class AddressTransformerTest {
   @Test
   public void transformConvertsAddressIntakeApiToAddressWhenStateIsNull() {
     LegacyDescriptor legacyDescriptor = new LegacyDescriptorEntityBuilder().build();
-    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType("28").setState(null)
+    AddressIntakeApi intakeApi = new AddressIntakeApiResourceBuilder().setType("Day Care").setState(null)
         .setLegacyDescriptor(legacyDescriptor).build();
 
     Address expected = new Address("ADDRESS_T", "1234567ABC", "742 Evergreen Terrace",
