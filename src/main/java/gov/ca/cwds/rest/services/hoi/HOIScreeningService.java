@@ -25,6 +25,7 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
+import org.hibernate.FlushMode;
 
 /**
  * Business layer object to work on Screening History Of Involvement
@@ -85,7 +86,7 @@ public class HOIScreeningService
     return new HOIScreeningResponse(buildHoiScreenings(hoiScreeningData));
   }
 
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false)
+  @UnitOfWork(value = "ns", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(HOIScreeningData hoiScreeningData) {
     fetchDataFromNS(hoiScreeningData);
@@ -129,7 +130,7 @@ public class HOIScreeningService
     hsd.setAssigneeStaffIds(assigneeStaffIds);
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false)
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(HOIScreeningData hoiScreeningData) {
     fetchDataFromCMS(hoiScreeningData);
