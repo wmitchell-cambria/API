@@ -63,10 +63,9 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   /**
    * @param caseDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.CmsCase} objects
    * @param clientDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client} objects
-   * @param clientRelationshipDao {@link Dao} handling
-   *        {@link gov.ca.cwds.data.persistence.cms.ClientRelationship}
+   * @param clientRelationshipDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.ClientRelationship}
    * @param staffPersonDao {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.StaffPerson}
-   *        objects
+   * objects
    * @param authorizationService - authorizationService
    */
   @Inject
@@ -119,7 +118,7 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
       }
       cases.sort((c1, c2) -> c2.getStartDate().compareTo(c1.getStartDate()));
     }
-    
+
     return new HOICaseResponse(cases);
   }
 
@@ -161,7 +160,8 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private void loadCmsCases(HOICasesData hcd) {
     final Map<String, CmsCase> cmsCases = caseDao.findByClientIds(hcd.getAllClientIds());
     if (!cmsCases.isEmpty()) {
-      final Collection<String> staffPersonIds = cmsCases.values().stream().map(CmsCase::getFkstfperst)
+      final Collection<String> staffPersonIds = cmsCases.values().stream()
+          .map(CmsCase::getFkstfperst)
           .collect(Collectors.toSet());
       final Map<String, StaffPerson> staffPersons = staffPersonDao.findByIds(staffPersonIds);
       cmsCases.values().forEach(c -> c.setStaffPerson(staffPersons.get(c.getFkstfperst())));
@@ -180,9 +180,10 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
     parents.addAll(hoiParentsFactory.buildParentsByPrimaryRelationship(focusChildClient, hcd));
     parents.addAll(hoiParentsFactory.buildParentsBySecondaryRelationship(focusChildClient, hcd));
 
-    return new HOICaseFactory().createHOICase(cmsCase, constructCounty(cmsCase),
-        constructServiceComponent(cmsCase), constructFocusChild(focusChildClient),
-        constructAssignedSocialWorker(cmsCase), parents);
+    return new HOICaseFactory()
+        .createHOICase(cmsCase, constructCounty(cmsCase.getGovernmentEntityType()),
+            constructServiceComponent(cmsCase), constructFocusChild(focusChildClient),
+            constructAssignedSocialWorker(cmsCase), parents);
   }
 
   private HOISocialWorker constructAssignedSocialWorker(CmsCase cmsCase) {
@@ -199,14 +200,6 @@ public class HOICaseService extends SimpleResourceService<HOIRequest, HOICase, H
   private SystemCodeDescriptor constructServiceComponent(CmsCase cmsCase) {
     return new SystemCodeDescriptor(cmsCase.getActiveServiceComponentType(), SystemCodeCache
         .global().getSystemCodeShortDescription(cmsCase.getActiveServiceComponentType()));
-  }
-
-  private SystemCodeDescriptor constructCounty(CmsCase cmsCase) {
-    return new SystemCodeDescriptor(cmsCase.getGovernmentEntityType(),
-        SystemCodeCache.global()
-            .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()) == null ? ""
-                : SystemCodeCache.global()
-                    .getSystemCodeShortDescription(cmsCase.getGovernmentEntityType()));
   }
 
   private HOIVictim constructFocusChild(Client client) {

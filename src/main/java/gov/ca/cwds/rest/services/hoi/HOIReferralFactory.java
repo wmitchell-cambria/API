@@ -28,7 +28,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIVictim;
 
 /**
  * @author CWDS API Team
- *
  */
 class HOIReferralFactory {
 
@@ -37,13 +36,13 @@ class HOIReferralFactory {
    * @param referralClient - ReferralClient
    * @return the built referral HOI
    */
-  HOIReferral createHOIReferral(Referral referral, ReferralClient referralClient) {
+  HOIReferral createHOIReferral(Referral referral, ReferralClient referralClient,
+      SystemCodeDescriptor county) {
     HOIReferral hoiReferral = new HOIReferral();
     hoiReferral.setId(referral.getId());
     hoiReferral.setStartDate(referral.getReceivedDate());
     hoiReferral.setEndDate(referral.getClosureDate());
-    hoiReferral.setCounty(new SystemCodeDescriptor(referral.getGovtEntityType(),
-        SystemCodeCache.global().getSystemCodeShortDescription(referral.getGovtEntityType())));
+    hoiReferral.setCounty(county);
     hoiReferral.setResponseTime(
         new SystemCodeDescriptor(referral.getReferralResponseType(), SystemCodeCache.global()
             .getSystemCodeShortDescription(referral.getReferralResponseType())));
@@ -54,7 +53,7 @@ class HOIReferralFactory {
     List<HOIAllegation> hoiAllegations = referral.getAllegations().stream()
         .map(this::buildAllegationDomain).collect(Collectors.toList());
     hoiReferral.setAllegations(hoiAllegations);
-    
+
     String referralId = referral.getId();
     hoiReferral.setLegacyDescriptor(
         new LegacyDescriptor(referralId, CmsKeyIdGenerator.getUIIdentifierFromKey(referralId),

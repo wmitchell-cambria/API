@@ -35,25 +35,25 @@ public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  ScreeningDao screeningDao;
+  private ScreeningDao screeningDao;
 
   @Inject
-  ParticipantDao participantDao;
+  private ParticipantDao participantDao;
 
   @Inject
-  IntakeLOVCodeDao intakeLOVCodeDao;
+  private IntakeLOVCodeDao intakeLOVCodeDao;
 
   @Inject
-  LegacyDescriptorDao legacyDescriptorDao;
+  private LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
-  StaffPersonDao staffPersonDao;
+  private StaffPersonDao staffPersonDao;
 
   @Inject
-  HOIScreeningFactory hoiScreeningFactory;
+  private HOIScreeningFactory hoiScreeningFactory;
 
   @Inject
-  AuthorizationService authorizationService;
+  private AuthorizationService authorizationService;
 
   private Comparator<HOIScreening> screeningsComparator;
 

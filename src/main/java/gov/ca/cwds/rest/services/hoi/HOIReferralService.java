@@ -4,6 +4,7 @@ import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.rest.api.domain.cms.SystemCodeDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,7 +40,7 @@ import gov.ca.cwds.rest.services.auth.AuthorizationService;
  * <p>
  * This service handles user requests to fetch all the clients' referrals.
  * <p>
- * 
+ *
  * @author CWDS API Team
  */
 public class HOIReferralService extends
@@ -116,7 +117,9 @@ public class HOIReferralService extends
     HOIReferralFactory hoiReferralFactory = new HOIReferralFactory();
     for (ReferralClient referralClient : referralClientArrayList) {
       Referral referral = hrd.getReferrals().get(referralClient.getReferralId());
-      HOIReferral hoiReferral = hoiReferralFactory.createHOIReferral(referral, referralClient);
+      SystemCodeDescriptor county = constructCounty(referral.getGovtEntityType());
+      HOIReferral hoiReferral = hoiReferralFactory
+          .createHOIReferral(referral, referralClient, county);
       hoiReferrals.add(hoiReferral);
     }
 
@@ -154,7 +157,8 @@ public class HOIReferralService extends
   }
 
   private void loadAllegations(HOIReferralsData hrd) {
-    Map<String, Set<Allegation>> allegations = allegationDao.findByReferralIds(hrd.getReferralIds());
+    Map<String, Set<Allegation>> allegations = allegationDao
+        .findByReferralIds(hrd.getReferralIds());
     for (Referral referral : hrd.getReferrals().values()) {
       if (allegations.containsKey(referral.getId())) {
         referral.setAllegations(allegations.get(referral.getId()));
@@ -193,7 +197,7 @@ public class HOIReferralService extends
         }
       }
     }
-    return  allegationsClientsIds;
+    return allegationsClientsIds;
   }
 
   @Override
