@@ -36,32 +36,25 @@ public class HOIScreeningService
     extends SimpleResourceService<HOIRequest, HOIScreening, HOIScreeningResponse> {
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private ScreeningDao screeningDao;
+  ScreeningDao screeningDao;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private ParticipantDao participantDao;
+  ParticipantDao participantDao;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private IntakeLOVCodeDao intakeLOVCodeDao;
+  IntakeLOVCodeDao intakeLOVCodeDao;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private LegacyDescriptorDao legacyDescriptorDao;
+  LegacyDescriptorDao legacyDescriptorDao;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private StaffPersonDao staffPersonDao;
+  StaffPersonDao staffPersonDao;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private HOIScreeningFactory hoiScreeningFactory;
+  HOIScreeningFactory hoiScreeningFactory;
 
   @Inject
-  @SuppressWarnings("fb-contrib:FCBL_FIELD_COULD_BE_LOCAL")
-  private AuthorizationService authorizationService;
+  AuthorizationService authorizationService;
 
   private Comparator<HOIScreening> screeningsComparator;
 
