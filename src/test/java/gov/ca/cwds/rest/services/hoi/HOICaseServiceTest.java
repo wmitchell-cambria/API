@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -262,7 +262,7 @@ public class HOICaseServiceTest extends Doofenshmirtz<Client> {
   }
 
   @Test
-  public void testUnAuthorizedClient() throws Exception {
+  public void testUnAuthorizedClient() {
     authorizationService = mock(AuthorizationService.class);
     doThrow(AuthorizationException.class).when(authorizationService)
         .ensureClientAccessAuthorized(any(String.class));

@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,13 +49,13 @@ public class HOIReferralService extends
 
   private static final Logger LOGGER = LoggerFactory.getLogger(HOIReferralService.class);
 
-  private AuthorizationService authorizationService;
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
-  private ReferralDao referralDao;
-  private ReporterDao reporterDao;
-  private StaffPersonDao staffPersonDao;
-  private AllegationDao allegationDao;
+  private transient AuthorizationService authorizationService;
+  private transient ClientDao clientDao;
+  private transient ReferralClientDao referralClientDao;
+  private transient ReferralDao referralDao;
+  private transient ReporterDao reporterDao;
+  private transient StaffPersonDao staffPersonDao;
+  private transient AllegationDao allegationDao;
 
   /**
    * Preferred constructor.
@@ -81,30 +83,25 @@ public class HOIReferralService extends
 
   @Override
   public HOIReferralResponse handleFind(HOIRequest hoiRequest) {
-    Collection<String> clientIds = hoiRequest.getClientIds();
+    final List<String> authorizedClientIds = authorizeClients(hoiRequest.getClientIds());
     List<ReferralClient> referralClientList = new ArrayList<>();
-    if (!clientIds.isEmpty()) {
-      authorizationService.ensureClientAccessAuthorized(clientIds);
-      referralClientList = Arrays
-          .asList(referralClientDao.findByClientIds(clientIds));
+    if (!authorizedClientIds.isEmpty()) {
+      referralClientList = Arrays.asList(referralClientDao.findByClientIds(authorizedClientIds));
     }
     if (referralClientList.isEmpty()) {
       return new HOIReferralResponse();
     }
 
-    // Eliminate rows with duplicate referral Id's from referralClientArrayList
-    final List<ReferralClient> referralClientArrayList = new ArrayList<>(referralClientList);
+    // Eliminate Referral Clients with duplicate Referral ID
     final Map<String, ReferralClient> uniqueReferralIds = new HashMap<>();
-    for (ReferralClient referralClient : referralClientArrayList) {
+    for (ReferralClient referralClient : referralClientList) {
       uniqueReferralIds.put(referralClient.getReferralId(), referralClient);
     }
-    referralClientArrayList.clear();
 
+    final List<ReferralClient> referralClientArrayList = new ArrayList<>();
     for (Map.Entry<String, ReferralClient> uniqueReferral : uniqueReferralIds.entrySet()) {
       referralClientArrayList.add(uniqueReferral.getValue());
     }
-
-    final List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
 
     HOIReferralsData hrd = new HOIReferralsData();
     hrd.setReferralClients(referralClientArrayList);
@@ -115,6 +112,7 @@ public class HOIReferralService extends
     loadAllegations(hrd);
     loadAllegationsClients(hrd);
 
+    final List<HOIReferral> hoiReferrals = new ArrayList<>(referralClientArrayList.size());
     HOIReferralFactory hoiReferralFactory = new HOIReferralFactory();
     for (ReferralClient referralClient : referralClientArrayList) {
       Referral referral = hrd.getReferrals().get(referralClient.getReferralId());
@@ -125,15 +123,6 @@ public class HOIReferralService extends
     hoiReferrals.sort((r1, r2) -> r2.getStartDate().compareTo(r1.getStartDate()));
     return new HOIReferralResponse(hoiReferrals);
   }
-
-  /* todo
-  protected List<ReferralClient> fetchReferralClients(Collection<String> clientIds) {
-    final List<String> authorizedClientIds = authorizeClients(clientIds);
-    return authorizedClientIds != null && !authorizedClientIds.isEmpty()
-        ? Arrays.asList(referralClientDao.findByClientIds(authorizedClientIds))
-        : new ArrayList<>();
-  }
-   */
 
   private void loadReferrals(HOIReferralsData hrd) {
     Collection<String> referralIds = hrd.getReferralClients().stream()
@@ -208,17 +197,15 @@ public class HOIReferralService extends
   }
 
   @Override
-  protected HOIReferralResponse handleRequest(HOIReferral req) {
+  public HOIReferralResponse handleRequest(HOIReferral req) {
     throw new NotImplementedException("handle request not implemented");
   }
 
-  // todo WTF
   @Override
   public AuthorizationService getAuthorizationService() {
     return authorizationService;
   }
 
-  // todo WTF
   @Override
   public Logger getLogger() {
     return LOGGER;
