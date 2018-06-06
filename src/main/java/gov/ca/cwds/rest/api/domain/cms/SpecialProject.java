@@ -17,12 +17,10 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-@ApiModel("cmsSpecialProject")
 
 public class SpecialProject implements Request, Response{
   
   private static final long serialVersionUID = 1L;
-  private  static final String DATE_FORMAT = "yyyy-MM-dd";
       
   @NotNull
   @ApiModelProperty(required = false, readOnly = false)
@@ -34,9 +32,9 @@ public class SpecialProject implements Request, Response{
       value = "description of the special project", example = "Special Project Description")
   private String description;
   
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
   @JsonProperty(value = "endDate")
-  @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
+  @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "date when special project ended",
       example = "2018-05-30")
   private String endDate;
@@ -48,12 +46,12 @@ public class SpecialProject implements Request, Response{
   @NotNull
   @Size(max = 30)
   @ApiModelProperty(required = false, readOnly = false, 
-      value = "name of the special project", example = "CSEC-Special Project")
+      value = "name of the special project", example = "S-CSEC Referral")
   private String name;
   
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
   @JsonProperty(value = "startDate")
-  @gov.ca.cwds.rest.validation.Date(format = DATE_FORMAT, required = false)
+  @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "date when special project started",
       example = "2018-05-30")
   private String startDate;
@@ -79,6 +77,12 @@ public class SpecialProject implements Request, Response{
     this.startDate = startDate;
   }
 
+  /**
+   * Constructor
+   * 
+   * @param specialProject - persisted CWS Special Project
+   * 
+   */
   public SpecialProject(gov.ca.cwds.data.persistence.cms.SpecialProject specialProject) {
     this.archiveAssociationIndicator = DomainChef.uncookBooleanString(specialProject.getArchiveAssociationIndicator());
     this.description = specialProject.getProjectDescription();

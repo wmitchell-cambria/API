@@ -3,7 +3,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import com.google.inject.Inject;
-import gov.ca.cwds.data.BaseDaoImpl;
+import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  * @author CWDS API Team
  */
 
-public class SpecialProjectDao extends BaseDaoImpl<SpecialProject>{
+public class SpecialProjectDao extends CrudsDaoImpl<SpecialProject>{
   
   /**
    * Constructor
