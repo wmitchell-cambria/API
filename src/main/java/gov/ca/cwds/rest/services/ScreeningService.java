@@ -53,7 +53,7 @@ import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 
 /**
- * Business layer object to work on {@link Screening}
+ * Business layer object to work on {@link Screening}.
  * 
  * @author CWDS API Team
  */
@@ -122,11 +122,10 @@ public class ScreeningService implements CrudsService {
   }
 
   private ScreeningDashboardList getScreeningsOfUser(String staffId) {
-    List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
-    List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
+    final List<ScreeningWrapper> screenings = screeningDao.findScreeningsByUserId(staffId);
+    final List<ScreeningDashboard> screeningDashboard = new ArrayList<>(screenings.size());
     for (ScreeningWrapper screening : screenings) {
-      ScreeningDashboard thisScreening = new ScreeningDashboard(screening);
-      screeningDashboard.add(thisScreening);
+      screeningDashboard.add(new ScreeningDashboard(screening));
     }
     return new ScreeningDashboardList(screeningDashboard);
   }
@@ -164,7 +163,7 @@ public class ScreeningService implements CrudsService {
   public Screening update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof String;
     assert request instanceof Screening;
-    Screening screening = (Screening) request;
+    final Screening screening = (Screening) request;
 
     if (!primaryKey.equals(screening.getId())) {
       throw new ServiceException(
@@ -202,14 +201,14 @@ public class ScreeningService implements CrudsService {
     Screening screening = (Screening) request;
     String screeningJson = toJson(screening);
 
-    IndexRequestBuilder builder =
+    final IndexRequestBuilder builder =
         esDao.getClient().prepareIndex(esDao.getConfig().getElasticsearchAlias(),
             esDao.getConfig().getElasticsearchDocType(), screening.getId());
     builder.setSource(screeningJson, XContentType.JSON);
 
-    IndexResponse response = builder.get();
-    RestStatus status = response.status();
-    boolean success = RestStatus.OK == status || RestStatus.CREATED == status;
+    final IndexResponse response = builder.get();
+    final RestStatus status = response.status();
+    final boolean success = RestStatus.OK == status || RestStatus.CREATED == status;
 
     if (!success) {
       throw new ServiceException(
@@ -225,8 +224,8 @@ public class ScreeningService implements CrudsService {
       throw new ServiceException("Screening with id=" + id + " is not found");
     }
 
-    Screening screening = screeningMapper.map(screeningEntity);
-    String screeningId = screeningEntity.getId();
+    final Screening screening = screeningMapper.map(screeningEntity);
+    final String screeningId = screeningEntity.getId();
 
     final List<AllegationEntity> allegationEntities = allegationDao.findByScreeningId(screeningId);
     final Set<AllegationIntake> allegations = allegationMapper.map(allegationEntities);
@@ -275,9 +274,9 @@ public class ScreeningService implements CrudsService {
     }
     validateParticipants(screening);
 
-    ScreeningEntity screeningEntity = screeningMapper.map(screening);
-    ScreeningEntity createdScreeningEntity = screeningDao.create(screeningEntity);
-    String screeningId = createdScreeningEntity.getId();
+    final ScreeningEntity screeningEntity = screeningMapper.map(screening);
+    final ScreeningEntity createdScreeningEntity = screeningDao.create(screeningEntity);
+    final String screeningId = createdScreeningEntity.getId();
     screening.setId(screeningId);
 
     createOrUpdateAllegations(screening);
@@ -296,8 +295,7 @@ public class ScreeningService implements CrudsService {
       throw new ServiceException("Primary key mismatch, [" + id + " != " + screening.getId() + "]");
     }
 
-    ScreeningEntity screeningEntity = screeningMapper.map(screening);
-    screeningDao.update(screeningEntity);
+    screeningDao.update(screeningMapper.map(screening));
 
     createOrUpdateAllegations(screening);
     createOrUpdateCrossReports(screening);
@@ -307,7 +305,7 @@ public class ScreeningService implements CrudsService {
     return screening;
   }
 
-  private void validateParticipants(Screening screening) {
+  protected void validateParticipants(Screening screening) {
     for (ParticipantIntakeApi participantIntakeApi : screening.getParticipantIntakeApis()) {
       if (participantIntakeApi.getScreeningId() != null
           && !Objects.equals(participantIntakeApi.getScreeningId(), screening.getId())) {
@@ -316,18 +314,19 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAllegations(Screening screening) {
+  protected void createOrUpdateAllegations(Screening screening) {
+    final Date now = RequestExecutionContext.instance().getRequestStartTime();
     for (AllegationIntake allegation : screening.getAllegations()) {
-      AllegationEntity allegationEntity = allegationMapper.map(allegation);
+      final AllegationEntity allegationEntity = allegationMapper.map(allegation);
       allegationEntity.setScreeningId(screening.getId());
-      Date now = new Date();
       allegationEntity.setUpdatedAt(now);
       if (allegationEntity.getId() == null) {
         allegationEntity.setCreatedAt(now);
-        AllegationEntity createdAllegationEntity = allegationDao.create(allegationEntity);
+        final AllegationEntity createdAllegationEntity = allegationDao.create(allegationEntity);
         allegation.setId(String.valueOf(createdAllegationEntity.getId()));
       } else {
-        AllegationEntity managedAllegationEntity = allegationDao.find(allegationEntity.getId());
+        final AllegationEntity managedAllegationEntity =
+            allegationDao.find(allegationEntity.getId());
         if (managedAllegationEntity == null) {
           throw new ServiceException(
               "Cannot update allegation that doesn't exist. id = " + allegationEntity.getId());
@@ -339,18 +338,18 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateCrossReports(Screening screening) {
+  protected void createOrUpdateCrossReports(Screening screening) {
+    final Date now = RequestExecutionContext.instance().getRequestStartTime();
     for (CrossReportIntake crossReport : screening.getCrossReports()) {
-      CrossReportEntity crossReportEntity = crossReportMapper.map(crossReport);
+      final CrossReportEntity crossReportEntity = crossReportMapper.map(crossReport);
       crossReportEntity.setScreeningId(screening.getId());
-      Date now = new Date();
       crossReportEntity.setUpdatedAt(now);
       if (crossReportEntity.getId() == null) {
         crossReportEntity.setCreatedAt(now);
-        CrossReportEntity createdCrossReportEntity = crossReportDao.create(crossReportEntity);
-        crossReport.setId(createdCrossReportEntity.getId());
+        crossReport.setId(crossReportDao.create(crossReportEntity).getId());
       } else {
-        CrossReportEntity managedCrossReportEntity = crossReportDao.find(crossReportEntity.getId());
+        final CrossReportEntity managedCrossReportEntity =
+            crossReportDao.find(crossReportEntity.getId());
         if (managedCrossReportEntity == null) {
           throw new ServiceException(
               "Cannot update cross report that doesn't exist. id = " + crossReportEntity.getId());
@@ -364,18 +363,18 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAgencies(CrossReportIntake crossReport) {
+  protected void createOrUpdateAgencies(CrossReportIntake crossReport) {
+    final Date now = RequestExecutionContext.instance().getRequestStartTime();
     for (GovernmentAgencyIntake agency : crossReport.getAgencies()) {
-      GovernmentAgencyEntity agencyEntity = agencyMapper.map(agency);
+      final GovernmentAgencyEntity agencyEntity = agencyMapper.map(agency);
       agencyEntity.setCrossReportId(crossReport.getId());
-      Date now = new Date();
       agencyEntity.setUpdatedAt(now);
       if (agencyEntity.getId() == null) {
         agencyEntity.setCreatedAt(now);
-        GovernmentAgencyEntity createdAgencyEntity = agencyDao.create(agencyEntity);
+        final GovernmentAgencyEntity createdAgencyEntity = agencyDao.create(agencyEntity);
         agency.setId(createdAgencyEntity.getId());
       } else {
-        GovernmentAgencyEntity managedAgencyEntity = agencyDao.find(agencyEntity.getId());
+        final GovernmentAgencyEntity managedAgencyEntity = agencyDao.find(agencyEntity.getId());
         if (managedAgencyEntity == null) {
           throw new ServiceException(
               "Cannot update agency that doesn't exist. id = " + agency.getId());
@@ -387,15 +386,15 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAddresses(Screening screening) {
-    AddressIntakeApi address = screening.getIncidentAddress();
+  protected void createOrUpdateAddresses(Screening screening) {
+    final AddressIntakeApi address = screening.getIncidentAddress();
     if (address == null) {
       return;
     }
-    Addresses addressEntity = addressMapper.map(address);
+    final Addresses addressEntity = addressMapper.map(address);
     if (addressEntity.getId() == null) {
-      Addresses createdAddress = addressesDao.create(addressEntity);
-      ScreeningAddressEntity screeningAddressesEntity = new ScreeningAddressEntity();
+      final Addresses createdAddress = addressesDao.create(addressEntity);
+      final ScreeningAddressEntity screeningAddressesEntity = new ScreeningAddressEntity();
       screeningAddressesEntity.setScreeningId(screening.getId());
       screeningAddressesEntity.setAddressId(createdAddress.getId());
       address.setId(String.valueOf(addressEntity.getId()));
@@ -405,20 +404,17 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateParticipants(Screening screening) {
-    Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
+  protected void createOrUpdateParticipants(Screening screening) {
+    final Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
 
     for (ParticipantIntakeApi participantIntakeApi : screening.getParticipantIntakeApis()) {
-      String participantIntakeApiId = participantIntakeApi.getId();
+      final String participantIntakeApiId = participantIntakeApi.getId();
       if (participantIntakeApiId == null) {
         participantIntakeApi.setScreeningId(screening.getId());
-        ParticipantIntakeApi createdParticipantIntakeApi =
-            participantIntakeApiService.create(participantIntakeApi);
-        participantIntakeApis.add(createdParticipantIntakeApi);
+        participantIntakeApis.add(participantIntakeApiService.create(participantIntakeApi));
       } else {
-        ParticipantIntakeApi updatedParticipantIntakeApi =
-            participantIntakeApiService.update(participantIntakeApiId, participantIntakeApi);
-        participantIntakeApis.add(updatedParticipantIntakeApi);
+        participantIntakeApis
+            .add(participantIntakeApiService.update(participantIntakeApiId, participantIntakeApi));
       }
     }
 
