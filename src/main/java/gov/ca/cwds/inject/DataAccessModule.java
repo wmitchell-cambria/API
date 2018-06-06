@@ -340,7 +340,7 @@ public class DataAccessModule extends AbstractModule {
       new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
+          return configuration.getRsDataSourceFactory();
         }
 
         @Override
