@@ -64,7 +64,6 @@ cmsDataSourceFactory:
       hibernate.connection.isolation: 1
       hibernate.connection.provider_disables_autocommit: true
 
-
 rsDataSourceFactory:
   autoCommitByDefault: false
   driverClass: com.ibm.db2.jcc.DB2Driver
@@ -95,7 +94,6 @@ rsDataSourceFactory:
       portNumber: ${DB_CMS_PORT:-50000}
       databaseName: ${DB_CMS_SERVICE:-DB0TDEV}
       driverType: 4 # Type4 connection for DB2 DataSource
-
 
 xaCmsDataSourceFactory:
   autoCommitByDefault: false
