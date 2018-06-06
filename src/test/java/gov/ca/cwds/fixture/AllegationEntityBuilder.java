@@ -30,8 +30,8 @@ public class AllegationEntityBuilder {
   String countySpecificCode = "";
   String zippyCreatedIndicator = "";
   Short placementFacilityType = 0;
-  Client victimClients = new Client();
-  Client perpetratorClients = new Client();
+  Client victim = new Client();
+  Client perpetrator = new Client();
 
   public AllegationEntityBuilder setId(String id) {
     this.id = id;
@@ -128,13 +128,13 @@ public class AllegationEntityBuilder {
     return this;
   }
 
-  public AllegationEntityBuilder setVictimClients(Client victimClients) {
-    this.victimClients = victimClients;
+  public AllegationEntityBuilder setVictim(Client victim) {
+    this.victim = victim;
     return this;
   }
 
-  public AllegationEntityBuilder setPerpetratorClients(Client perpetratorClients) {
-    this.perpetratorClients = perpetratorClients;
+  public AllegationEntityBuilder setPerpetrator(Client perpetrator) {
+    this.perpetrator = perpetrator;
     return this;
   }
 
@@ -143,7 +143,7 @@ public class AllegationEntityBuilder {
         abuseFrequencyPeriodCode, abuseLocationDescription, allegationDispositionType,
         allegationType, dispositionDescription, dispositionDate, injuryHarmDetailIndicator,
         nonProtectingParentCode, staffPersonAddedIndicator, victimClientId, perpetratorClientId,
-        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType, victimClients,
-        perpetratorClients);
+        referralId, countySpecificCode, zippyCreatedIndicator, placementFacilityType, victim,
+        perpetrator);
   }
 }

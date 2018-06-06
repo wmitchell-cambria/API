@@ -4,6 +4,7 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -18,9 +19,9 @@ class HOICasesData {
   private Collection<ClientRelationship> allRelationshipsBySecondaryClients;
 
   private Collection<String> allClientIds;
-  private Map<String, Client> allClients;
+  private Map<String, Client> allClients = new HashMap<>();
 
-  private Map<String, CmsCase> cmsCases;
+  private Map<String, CmsCase> cmsCases = new HashMap<>();
 
   HOICasesData(Collection<String> clientIds) {
     this.clientIds = clientIds;

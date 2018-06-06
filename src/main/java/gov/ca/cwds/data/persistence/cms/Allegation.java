@@ -1,11 +1,13 @@
 package gov.ca.cwds.data.persistence.cms;
 
+import static gov.ca.cwds.data.persistence.cms.Allegation.FIND_ALLEGATIONS_BY_REFERRAL_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -31,14 +33,15 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = "gov.ca.cwds.data.persistence.cms.Allegation.findByReferral",
-    query = "FROM Allegation WHERE referralId = :referralId")
+@NamedQuery(name = FIND_ALLEGATIONS_BY_REFERRAL_IDS, query = "FROM Allegation WHERE referralId IN :referralIds")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "ALLGTN_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Allegation extends CmsPersistentObject {
+
+  public static final String FIND_ALLEGATIONS_BY_REFERRAL_IDS = "gov.ca.cwds.data.persistence.cms.Allegation.findByReferralIds";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
@@ -118,13 +121,13 @@ public class Allegation extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, insertable = false, updatable = false)
-  private Client victimClients;
+  private Client victim;
 
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_0", nullable = true, insertable = false, updatable = false)
-  private Client perpetratorClients;
+  private Client perpetrator;
 
   /**
    * Default constructor
@@ -157,8 +160,8 @@ public class Allegation extends CmsPersistentObject {
    * @param countySpecificCode county code
    * @param zippyCreatedIndicator created by Zippy
    * @param placementFacilityType type of placement facility
-   * @param victimClients victimClient
-   * @param perpetratorClients perpetratorClient
+   * @param victim victim Client
+   * @param perpetrator perpetrator Client
    */
   public Allegation(String id, Date abuseEndDate, Date abuseStartDate, Short abuseFrequency, // NOSONAR
       String abuseFrequencyPeriodCode, String abuseLocationDescription,
@@ -166,7 +169,7 @@ public class Allegation extends CmsPersistentObject {
       Date dispositionDate, String injuryHarmDetailIndicator, String nonProtectingParentCode,
       String staffPersonAddedIndicator, String victimClientId, String perpetratorClientId,
       String referralId, String countySpecificCode, String zippyCreatedIndicator,
-      Short placementFacilityType, Client victimClients, Client perpetratorClients) {
+      Short placementFacilityType, Client victim, Client perpetrator) {
     super();
 
     this.id = id;
@@ -188,8 +191,8 @@ public class Allegation extends CmsPersistentObject {
     this.countySpecificCode = countySpecificCode;
     this.zippyCreatedIndicator = zippyCreatedIndicator;
     this.placementFacilityType = placementFacilityType;
-    this.victimClients = victimClients;
-    this.perpetratorClients = perpetratorClients;
+    this.victim = victim;
+    this.perpetrator = perpetrator;
   }
 
   /**
@@ -377,15 +380,23 @@ public class Allegation extends CmsPersistentObject {
   /**
    * @return the victimClient
    */
-  public Client getVictimClients() {
-    return victimClients;
+  public Client getVictim() {
+    return victim;
+  }
+
+  public void setVictim(Client victim) {
+    this.victim = victim;
   }
 
   /**
    * @return the perpetratorClient
    */
-  public Client getPerpetratorClients() {
-    return perpetratorClients;
+  public Client getPerpetrator() {
+    return perpetrator;
+  }
+
+  public void setPerpetrator(Client perpetrator) {
+    this.perpetrator = perpetrator;
   }
 
   @Override
@@ -402,7 +413,7 @@ public class Allegation extends CmsPersistentObject {
         + ", referralId=" + referralId + ", countySpecificCode=" + countySpecificCode
         + ", zippyCreatedIndicator=" + zippyCreatedIndicator + ", placementFacilityType="
         + placementFacilityType
-        // + ", victimClients=" + victimClients + ", perpetratorClients=" + perpetratorClients
+        // + ", victim=" + victim + ", perpetrator=" + perpetrator
         + "]";
   }
 

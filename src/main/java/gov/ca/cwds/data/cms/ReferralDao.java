@@ -1,6 +1,11 @@
 package gov.ca.cwds.data.cms;
 
-import org.apache.commons.lang3.StringUtils;
+import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_BY_IDS;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
@@ -8,6 +13,7 @@ import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.Referral;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import org.hibernate.query.Query;
 
 /**
  * DAO for {@link Referral}.
@@ -26,12 +32,19 @@ public class ReferralDao extends CrudsDaoImpl<Referral> {
     super(sessionFactory);
   }
 
-  @Override
-  public Referral create(Referral ref) {
-    if (StringUtils.isBlank(ref.getReferralName())) {
-      ref.setReferralName("CARES REFERRAL");
+  /**
+   * Find Referrals by id-s
+   *
+   * @param ids Set of Referral id-s
+   * @return map where key is a Referral id and value is a Referral itself
+   */
+  public Map<String, Referral> findByIds(Collection<String> ids) {
+    if (ids == null || ids.isEmpty()) {
+      return new HashMap<>();
     }
-    return super.create(ref);
+    @SuppressWarnings("unchecked")
+    final Query<Referral> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(FIND_REFERRALS_BY_IDS).setParameter("ids", ids);
+    return query.list().stream().collect(Collectors.toMap(Referral::getId, r -> r));
   }
-
 }

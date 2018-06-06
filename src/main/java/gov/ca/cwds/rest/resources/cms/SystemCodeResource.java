@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.hibernate.FlushMode;
 
 /**
  * A resource providing a RESTful interface for {@link SystemCode}. It delegates functions to
@@ -59,7 +60,7 @@ public class SystemCodeResource {
    * @param id The id
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -77,7 +78,7 @@ public class SystemCodeResource {
    *
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
