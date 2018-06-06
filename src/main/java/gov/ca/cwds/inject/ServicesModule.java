@@ -1,7 +1,5 @@
 package gov.ca.cwds.inject;
 
-import java.util.Properties;
-
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -12,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
 
 import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
@@ -233,10 +230,6 @@ public class ServicesModule extends AbstractModule {
     final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
     requestInjection(xaInterceptor);
-
-    final Properties p = new Properties();
-    p.setProperty("managed", "N"); // For CountyDeterminationDao.
-    Names.bindProperties(binder(), p);
 
     // @Singleton does not work with DropWizard Guice.
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);

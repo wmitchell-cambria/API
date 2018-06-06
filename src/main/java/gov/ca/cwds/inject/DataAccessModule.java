@@ -8,6 +8,7 @@ import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.elasticsearch.client.Client;
@@ -18,6 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 
 import gov.ca.cwds.data.cms.AddressUcDao;
 import gov.ca.cwds.data.cms.AllegationDao;
@@ -401,6 +403,10 @@ public class DataAccessModule extends AbstractModule {
    */
   @Override
   protected void configure() {
+    final Properties p = new Properties();
+    p.setProperty("managed", "N"); // For CountyDeterminationDao.
+    Names.bindProperties(binder(), p);
+
     // CMS:
     bind(AttorneyDao.class);
     bind(ClientCollateralDao.class);
