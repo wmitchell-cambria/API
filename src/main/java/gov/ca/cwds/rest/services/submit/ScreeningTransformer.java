@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.services.submit;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Set;
 
@@ -68,9 +70,9 @@ public class ScreeningTransformer {
     String screeningIncidentDate =
         screening.getIncidentDate() == null ? null : screening.getIncidentDate().toString();
     String screeningStartDate = screening.getStartedAt() == null ?
-        null : screening.getStartedAt().toString();
+        null : screening.getStartedAt().withNano(0).format(DateTimeFormatter.ISO_DATE_TIME);
     String screeningEndDate = screening.getEndedAt() == null ?
-        null : screening.getEndedAt().toString();
+        null : screening.getEndedAt().withNano(0).format(DateTimeFormatter.ISO_DATE_TIME);
 
     return new ScreeningToReferral(Integer.parseInt(screening.getId()),
         LegacyTable.REFERRAL.getName(), screening.getReferralId(), screeningEndDate,
