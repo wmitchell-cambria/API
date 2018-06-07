@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.auth;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_AUTHORIZE;
 
 import javax.ws.rs.GET;
@@ -9,12 +10,12 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.AuthorizationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,7 +23,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 /**
- * A resource to determine if logged-in staff person is authorized to access entities.
+ * A resource to determine if the logged-in staff person is authorized to access given clients.
  *
  * @author CWDS API Team
  */
@@ -45,12 +46,12 @@ public class AuthorizationResource {
   }
 
   /**
-   * Determine if logged-in user is authorized to access client identified by given id.
+   * Determine if the logged-in user is authorized to access the client identified by given id.
    *
    * @param id the id
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @Path("/client/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
