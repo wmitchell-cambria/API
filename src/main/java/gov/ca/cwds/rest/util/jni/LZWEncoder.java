@@ -82,13 +82,11 @@ public class LZWEncoder {
    * Load native library at runtime, when the classloader loads this class. Native libraries follow
    * the naming convention of the host operating system:
    * 
-   * <p>
    * <ul>
    * <li>Windows: LZW.dll</li>
    * <li>OS X: libLZW.dylib</li>
    * <li>Linux:libLZW.so</li>
    * </ul>
-   * </p>
    * 
    * @return true = native libraries load correctly
    */
