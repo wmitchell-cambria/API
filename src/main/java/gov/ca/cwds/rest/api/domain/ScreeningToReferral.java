@@ -292,9 +292,9 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param reportType - reportType
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
-      @Date String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
+      String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
       Short communicationMethod, String currentLocationOfChildren, String name,
-      String reportNarrative, String reference, Short responseTime, @Date String startedAt,
+      String reportNarrative, String reference, Short responseTime, String startedAt,
       String assignee, String assigneeStaffId, String additionalInformation,
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
