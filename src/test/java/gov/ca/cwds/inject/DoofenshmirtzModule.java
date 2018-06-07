@@ -7,8 +7,10 @@ import static org.mockito.Mockito.when;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
+import org.hibernate.SessionFactory;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AgencyDao;
@@ -17,6 +19,7 @@ import gov.ca.cwds.data.ns.CrossReportDao;
 import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
@@ -25,14 +28,24 @@ import gov.ca.cwds.rest.services.mapper.AgencyMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 public class DoofenshmirtzModule extends AbstractModule {
+
+  final Doofenshmirtz<ClientAddress> inator = new Doofenshmirtz<>();
 
   /**
    * {@inheritDoc}
    */
   @Override
   protected void configure() {
+    try {
+      inator.setupClass();
+      inator.setup();
+    } catch (Exception e) {
+      throw new IllegalStateException("Oops!", e);
+    }
+
     final ElasticsearchDao esDao = mock(ElasticsearchDao.class);
     final ElasticsearchConfiguration esConfig = mock(ElasticsearchConfiguration.class);
     final Client esClient = mock(Client.class);
@@ -41,6 +54,7 @@ public class DoofenshmirtzModule extends AbstractModule {
     final IndexResponse indexResponse = mock(IndexResponse.class);
     final ScreeningEntity screeningEntity = new ScreeningEntity();
     final ScreeningMapper screeningMapper = mock(ScreeningMapper.class);
+    final CrossReportMapper crossReportMapper = mock(CrossReportMapper.class);
 
     when(esDao.getConfig()).thenReturn(esConfig);
     when(esDao.getClient()).thenReturn(esClient);
@@ -48,7 +62,6 @@ public class DoofenshmirtzModule extends AbstractModule {
     when(esConfig.getElasticsearchDocType()).thenReturn("screening");
     when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
     when(indexRequestBuilder.get()).thenReturn(indexResponse);
-
     when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);
 
     bind(Client.class).toInstance(esClient);
@@ -57,7 +70,6 @@ public class DoofenshmirtzModule extends AbstractModule {
     bind(IndexRequestBuilder.class).toInstance(indexRequestBuilder);
     bind(IndexResponse.class).toInstance(mock(IndexResponse.class));
     bind(XaNsScreeningDaoImpl.class).toInstance(mock(XaNsScreeningDaoImpl.class));
-    bind(ScreeningMapper.class).toInstance(screeningMapper);
 
     bind(AddressMapper.class).toInstance(mock(AddressMapper.class));
     bind(AgencyDao.class).toInstance(mock(AgencyDao.class));
@@ -69,8 +81,38 @@ public class DoofenshmirtzModule extends AbstractModule {
     bind(ScreeningAddressDao.class).toInstance(mock(ScreeningAddressDao.class));
     bind(ScreeningDao.class).toInstance(mock(ScreeningDao.class));
 
-    bind(CrossReportMapper.class).toInstance(mock(CrossReportMapper.class));
-    bind(ScreeningMapper.class).toInstance(mock(ScreeningMapper.class));
+    bind(ScreeningMapper.class).toInstance(screeningMapper);
+    bind(CrossReportMapper.class).toInstance(crossReportMapper);
+  }
+
+  @Provides
+  @CmsSessionFactory
+  public SessionFactory cmsSessionFactory() {
+    return inator.sessionFactory;
+  }
+
+  @Provides
+  @NsSessionFactory
+  public SessionFactory nsSessionFactory() {
+    return inator.sessionFactory;
+  }
+
+  @Provides
+  @CwsRsSessionFactory
+  public SessionFactory rsSessionFactory() {
+    return inator.sessionFactory;
+  }
+
+  @Provides
+  @XaNsSessionFactory
+  public SessionFactory xaNsSessionFactory() {
+    return inator.sessionFactory;
+  }
+
+  @Provides
+  @XaCmsSessionFactory
+  public SessionFactory xaCmsSessionFactory() {
+    return inator.sessionFactory;
   }
 
 }
