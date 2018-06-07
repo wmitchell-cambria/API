@@ -15,19 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.rest.RestStatus;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
@@ -36,6 +33,7 @@ import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.inject.DoofenshmirtzModule;
 import gov.ca.cwds.inject.GuiceJUnitRunner.GuiceModules;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
@@ -62,26 +60,26 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   private XaNsScreeningDaoImpl screeningDao;
 
   // @Mock
-  // private Client esClient;
+  @Inject
+  private Client esClient;
 
-  @Mock
-  private IndexRequestBuilder indexRequestBuilder;
+  // @Mock
+  // @Inject
+  // private IndexRequestBuilder indexRequestBuilder;
 
-  @Mock
+  // @Mock
+  @Inject
   private IndexResponse indexResponse;
 
   // @Mock
-  // private ElasticsearchConfiguration esConfig;
-
-  @Inject
-  private Injector injector;
+  private ElasticsearchConfiguration esConfig;
 
   @Override
   @Before
   public void setup() throws Exception {
     super.setup();
 
-    MockitoAnnotations.initMocks(this);
+    // MockitoAnnotations.initMocks(this);
 
     // when(esDao.getConfig()).thenReturn(esConfig);
     // when(esDao.getClient()).thenReturn(esClient);
@@ -169,10 +167,12 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   public void testFindScreeningDashboard() throws Exception {
     ScreeningWrapper sw1 = new ScreeningWrapperEntityBuilder().build();
     ScreeningWrapper sw2 = new ScreeningWrapperEntityBuilder().build();
+
     List<ScreeningWrapper> screenings = new ArrayList<>();
     screenings.add(sw1);
     screenings.add(sw2);
     when(screeningDao.findScreeningsByUserId(any())).thenReturn(screenings);
+
     ScreeningDashboardList sdl = (ScreeningDashboardList) target.findScreeningDashboard();
     List<ScreeningDashboard> screeningDashboard = sdl.getScreeningDashboard();
     assertThat(screeningDashboard.size(), is(2));
