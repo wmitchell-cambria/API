@@ -72,18 +72,20 @@ public class DoofenshmirtzModule extends AbstractModule {
     when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
     when(indexRequestBuilder.get()).thenReturn(indexResponse);
     when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);
+    when(screeningMapper.map(any(Screening.class))).thenReturn(screeningEntity);
 
     bind(Client.class).toInstance(esClient);
     bind(ElasticsearchConfiguration.class).toInstance(inator.esConfig);
     bind(ElasticsearchDao.class).toInstance(inator.esDao);
     bind(IndexRequestBuilder.class).toInstance(indexRequestBuilder);
-    bind(IndexResponse.class).toInstance(mock(IndexResponse.class));
-    bind(XaNsScreeningDaoImpl.class).toInstance(mock(XaNsScreeningDaoImpl.class));
-
+    bind(ScreeningDao.class).toInstance(screeningDao);
+    bind(XaNsScreeningDaoImpl.class).toInstance(screeningDao);
     bind(ScreeningMapper.class).toInstance(screeningMapper);
     bind(CrossReportMapper.class).toInstance(crossReportMapper);
     bind(CsecMapper.class).toInstance(csecMapper);
     bind(SafelySurrenderedBabiesMapper.class).toInstance(safelySurrenderedBabiesMapper);
+
+    bind(IndexResponse.class).toInstance(mock(IndexResponse.class));
 
     bind(AddressMapper.class).toInstance(mock(AddressMapper.class));
     bind(AgencyDao.class).toInstance(mock(AgencyDao.class));
@@ -93,7 +95,6 @@ public class DoofenshmirtzModule extends AbstractModule {
     bind(CrossReportDao.class).toInstance(mock(CrossReportDao.class));
     bind(ParticipantIntakeApiService.class).toInstance(mock(ParticipantIntakeApiService.class));
     bind(ScreeningAddressDao.class).toInstance(mock(ScreeningAddressDao.class));
-    bind(ScreeningDao.class).toInstance(mock(ScreeningDao.class));
   }
 
   @Provides
@@ -129,7 +130,7 @@ public class DoofenshmirtzModule extends AbstractModule {
   @Provides
   @Named("screenings.index")
   public ElasticsearchDao makeEsDao() {
-    return this.inator.esDao;
+    return inator.esDao;
   }
 
 }
