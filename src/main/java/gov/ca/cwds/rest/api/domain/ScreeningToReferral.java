@@ -3,6 +3,8 @@ package gov.ca.cwds.rest.api.domain;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
+
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -292,9 +294,11 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    * @param reportType - reportType
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
-      String endedAt, String incidentCounty, @Date String incidentDate, String locationType,
+      @Date(format = "yyyy-MM-ddTHH:mm:ss") String endedAt, String incidentCounty,
+      @Date String incidentDate, String locationType,
       Short communicationMethod, String currentLocationOfChildren, String name,
-      String reportNarrative, String reference, Short responseTime, String startedAt,
+      String reportNarrative, String reference, Short responseTime,
+      @Date(format = "yyyy-MM-ddTHH:mm:ss") String startedAt,
       String assignee, String assigneeStaffId, String additionalInformation,
       String screeningDecision, String screeningDecisionDetail, int approvalStatus,
       boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
