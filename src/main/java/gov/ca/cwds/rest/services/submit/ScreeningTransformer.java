@@ -67,12 +67,10 @@ public class ScreeningTransformer {
 
     String screeningIncidentDate =
         screening.getIncidentDate() == null ? null : screening.getIncidentDate().toString();
-    String screeningStartDate = screening.getStartedAt() == null ? null
-        : DomainChef
-            .cookISO8601Timestamp(DomainChef.uncookDateString(screening.getStartedAt().toString()));
-    String screeningEndDate = screening.getEndedAt() == null ? null
-        : DomainChef
-            .cookISO8601Timestamp(DomainChef.uncookDateString(screening.getEndedAt().toString()));
+    String screeningStartDate = screening.getStartedAt() == null ?
+        null : screening.getStartedAt().toString();
+    String screeningEndDate = screening.getEndedAt() == null ?
+        null : screening.getEndedAt().toString();
 
     return new ScreeningToReferral(Integer.parseInt(screening.getId()),
         LegacyTable.REFERRAL.getName(), screening.getReferralId(), screeningEndDate,
