@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.SwaggerConfiguration;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.IntakeLovEntry;
 import gov.ca.cwds.rest.api.domain.IntakeLovResponse;
+import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
@@ -52,6 +53,7 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ScreeningDashboardResource;
 import gov.ca.cwds.rest.resources.ScreeningIntakeResource;
+import gov.ca.cwds.rest.resources.ScreeningParicipantResource;
 import gov.ca.cwds.rest.resources.ScreeningRelationshipResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
@@ -83,6 +85,7 @@ import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
@@ -174,6 +177,7 @@ public class ResourcesModule extends AbstractModule {
     bind(HoiScreeningResource.class);
     bind(AuthorizationResource.class);
     bind(HoiUsingClientIdResource.class);
+    bind(ScreeningParicipantResource.class);
   }
 
   @Provides
@@ -266,6 +270,14 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(HistoryOfInvolvementService.class));
+  }
+
+  @Provides
+  @ScreeningParticipantServiceBackedResource
+  public TypedResourceDelegate<String, ParticipantIntakeApi> screeningParticipantResource(
+      Injector injector) {
+    return new TypedServiceBackedResourceDelegate<>(
+        injector.getInstance(ScreeningParticipantService.class));
   }
 
   @Provides

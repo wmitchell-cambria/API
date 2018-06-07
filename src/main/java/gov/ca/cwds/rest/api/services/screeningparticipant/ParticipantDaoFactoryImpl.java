@@ -1,0 +1,42 @@
+package gov.ca.cwds.rest.api.services.screeningparticipant;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
+import gov.ca.cwds.data.CrudsDao;
+import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
+import gov.ca.cwds.rest.services.ServiceException;
+
+/**
+ * @author CWDS API Team
+ *
+ */
+public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantDaoFactoryImpl.class);
+
+  @Inject
+  private Injector injector;
+  private CrudsDao<CmsPersistentObject> crudsDao;
+
+
+  @Override
+  public CrudsDao<CmsPersistentObject> create(String tableName) {
+    String name =
+        "gov.ca.cwds.data.cms." + LegacyDaoMapperEnum.findByTableName(tableName).getDaoName();
+    try {
+      @SuppressWarnings("unchecked")
+      Class<CrudsDao<CmsPersistentObject>> daoclass =
+          (Class<CrudsDao<CmsPersistentObject>>) Class.forName(name);
+      crudsDao = injector.getInstance(daoclass);
+    } catch (ClassNotFoundException e) {
+      LOGGER.error("Unable to load the class {}", name);
+      throw new ServiceException();
+    }
+    return crudsDao;
+  }
+
+}

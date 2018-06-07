@@ -70,7 +70,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   @JsonProperty("gender")
   @OneOf(value = {"male", "female", "unknown"})
   @ApiModelProperty(required = false, readOnly = false, value = "Gender Code", example = "male",
-      allowableValues = "male, female, unknown")
+      allowableValues = "male, female, unknown, intersex")
   private String gender;
 
   @JsonProperty("ssn")

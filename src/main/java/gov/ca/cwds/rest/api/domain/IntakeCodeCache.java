@@ -55,4 +55,11 @@ public interface IntakeCodeCache extends ApiMarker {
    */
   Short getLegacySystemCodeForRaceAndEthnicity(String metaId, String intakeCode);
 
+  /**
+   * @param metaId
+   * @param systemCodeId
+   * @return
+   */
+  String getIntakeCodeForLegacySystemCode(Number systemCodeId);
+
 }

@@ -2,7 +2,9 @@ package gov.ca.cwds.rest.services;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +59,14 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
     intakeCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
 
+    try {
+      Map<CacheKey, Object> intakeCodes = cacheLoader.loadAll();
+      intakeCodeCache.putAll(intakeCodes);
+    } catch (Exception e) {
+      LOGGER.error("Error loading intake codes", e);
+      throw new ServiceException(e);
+    }
+
   }
 
   @SuppressWarnings("unchecked")
@@ -94,6 +104,20 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
       sysId = SystemCodeCache.global().getSystemCodeId(intakeCodeConveter.getLegacyValue(), metaId);
     }
     return sysId;
+  }
+
+  @Override
+  public String getIntakeCodeForLegacySystemCode(Number systemCodeId) {
+    String intakeCode = null;
+    if (systemCodeId == null || Integer.valueOf("0").equals(systemCodeId.intValue())) {
+      return null;
+    }
+    CacheKey cacheKey = CacheKey.createForMeta(systemCodeId.longValue());
+    final IntakeLov intakeLov = (IntakeLov) getFromCache(cacheKey);
+    if (intakeLov != null) {
+      return intakeLov.getIntakeCode();
+    }
+    return intakeCode;
   }
 
   /**
@@ -139,6 +163,19 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
         objectToCache = intakeCodeList;
       }
       return objectToCache;
+    }
+
+    public Map<CacheKey, Object> loadAll() {
+      LOGGER.info("Loading all intake code cache...");
+      Map<CacheKey, Object> systemCodeMap = new HashMap<>();
+      List<IntakeLov> intakeLovList = intakeLovService.findAllIntakeLov();
+      if (intakeLovList != null) {
+        for (IntakeLov intakeLov : intakeLovList) {
+          CacheKey cacheKey = CacheKey.createForMeta(intakeLov.getLegacySystemCodeId());
+          systemCodeMap.put(cacheKey, intakeLov);
+        }
+      }
+      return systemCodeMap;
     }
 
   }

@@ -28,11 +28,15 @@ import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.api.services.screeningparticipant.ClientTransformer;
+import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantDaoFactoryImpl;
+import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantMapperFactoryImpl;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.CachingIntakeCodeService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.PersonService;
+import gov.ca.cwds.rest.services.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
@@ -210,6 +214,10 @@ public class ServicesModule extends AbstractModule {
     bind(AuthorizationService.class);
     bind(ScreeningRelationshipService.class);
     bind(CsecHistoryService.class);
+    bind(ScreeningParticipantService.class);
+    bind(ParticipantDaoFactoryImpl.class);
+    bind(ParticipantMapperFactoryImpl.class);
+    bind(ClientTransformer.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();

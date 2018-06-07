@@ -60,4 +60,8 @@ public class IntakeLovService
     return intakeLovDao.findByLegacyMetaId(legacyCategoryId.toString());
   }
 
+  public List<IntakeLov> findAllIntakeLov() {
+    return intakeLovDao.findAll();
+  }
+
 }
