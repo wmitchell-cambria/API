@@ -429,4 +429,8 @@ public class ScreeningService implements CrudsService {
     this.screeningDao = screeningDao;
   }
 
+  public void setScreeningMapper(ScreeningMapper screeningMapper) {
+    this.screeningMapper = screeningMapper;
+  }
+
 }
