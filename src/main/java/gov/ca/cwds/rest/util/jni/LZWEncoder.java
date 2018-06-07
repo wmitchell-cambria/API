@@ -92,7 +92,7 @@ public class LZWEncoder {
    * 
    * @return true = native libraries load correctly
    */
-  private static final boolean loadLibs() {
+  protected static final boolean loadLibs() {
     LOGGER.info("LZWEncoder: user.dir={}", System.getProperty("user.dir"));
     LOGGER.info("LZWEncoder: java.library.path={}", System.getProperty("java.library.path"));
 

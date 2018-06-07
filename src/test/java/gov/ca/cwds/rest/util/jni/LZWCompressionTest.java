@@ -8,7 +8,10 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LZWCompressionTest {
+import gov.ca.cwds.data.persistence.cms.ClientAddress;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
+
+public class LZWCompressionTest extends Doofenshmirtz<ClientAddress> {
 
   protected static final String TEST_BASE = "/jni/lzw/";
   protected static final String GOOD_LZW = TEST_BASE + "good.lzw";
@@ -18,6 +21,7 @@ public class LZWCompressionTest {
 
   @Before
   public void setUpBeforeTest() throws Exception {
+    super.setup();
     this.inst = new LZWEncoder();
   }
 
@@ -32,7 +36,7 @@ public class LZWCompressionTest {
       return;
     }
 
-    // TODO: verify that temp files are deleted!
+    // NEXT: verify that temp files are deleted!
     try {
       final String src = LZWCompressionTest.class.getResource(GOOD_LZW).getPath();
       final String good = LZWCompressionTest.class.getResource(GOOD_DOC).getPath();

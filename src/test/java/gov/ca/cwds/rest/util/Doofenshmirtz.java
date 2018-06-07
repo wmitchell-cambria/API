@@ -464,7 +464,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     T t = null;
     docQuery = queryInator(this, Arrays.asList(t).toArray());
 
-    doc = readPersistedDocument();
+    doc = readPersistedDocumentPkCompression();
     when(cmsDocumentDao.grabSession()).thenReturn(session);
     when(cmsDocumentDao.find(any(CmsDocument.class))).thenReturn(doc);
     when(cmsDocumentDao.find(any(String.class))).thenReturn(doc);
@@ -546,9 +546,15 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     SystemCodeCache.global().getAllSystemCodes();
   }
 
-  protected CmsDocument readPersistedDocument() throws IOException {
+  protected CmsDocument readPersistedDocumentPkCompression() throws IOException {
     return MAPPER.readValue(
         "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"PKWare02\",\"blobSegments\":[]}",
+        CmsDocument.class);
+  }
+
+  protected CmsDocument readPersistedDocumentLzwCompression() throws IOException {
+    return MAPPER.readValue(
+        "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"COMPRESSION_TYPE_LZW_FULL\",\"blobSegments\":[]}",
         CmsDocument.class);
   }
 

@@ -40,9 +40,9 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentDao.class);
 
-  private static final String COMPRESSION_TYPE_LZW = "01";
-  private static final String COMPRESSION_TYPE_PK = "02";
-  private static final String COMPRESSION_TYPE_PLAIN = "00";
+  public static final String COMPRESSION_TYPE_LZW = "01";
+  public static final String COMPRESSION_TYPE_PK = "02";
+  public static final String COMPRESSION_TYPE_PLAIN = "00";
 
   public static final String COMPRESSION_TYPE_LZW_FULL = "CWSCMP01";
   public static final String COMPRESSION_TYPE_PK_FULL = "PKWare02";
