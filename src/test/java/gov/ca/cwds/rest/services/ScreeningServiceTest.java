@@ -17,7 +17,6 @@ import java.util.List;
 import org.apache.commons.lang3.NotImplementedException;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.Client;
 import org.elasticsearch.rest.RestStatus;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,6 +26,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
@@ -34,15 +36,12 @@ import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.inject.DoofenshmirtzModule;
 import gov.ca.cwds.inject.GuiceJUnitRunner.GuiceModules;
-import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
-import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
-import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 @RunWith(gov.ca.cwds.inject.GuiceJUnitRunner.class)
@@ -54,14 +53,16 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Mock
+  // @Mock
+  @Inject
   private ElasticsearchDao esDao;
 
-  @Mock
+  // @Mock
+  @Inject
   private XaNsScreeningDaoImpl screeningDao;
 
-  @Mock
-  private Client esClient;
+  // @Mock
+  // private Client esClient;
 
   @Mock
   private IndexRequestBuilder indexRequestBuilder;
@@ -69,8 +70,11 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Mock
   private IndexResponse indexResponse;
 
-  @Mock
-  private ElasticsearchConfiguration esConfig;
+  // @Mock
+  // private ElasticsearchConfiguration esConfig;
+
+  @Inject
+  private Injector injector;
 
   @Override
   @Before
@@ -79,24 +83,34 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
     MockitoAnnotations.initMocks(this);
 
-    when(esDao.getConfig()).thenReturn(esConfig);
-    when(esDao.getClient()).thenReturn(esClient);
-    when(esConfig.getElasticsearchAlias()).thenReturn("screenings");
-    when(esConfig.getElasticsearchDocType()).thenReturn("screening");
-    when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
-    when(indexRequestBuilder.get()).thenReturn(indexResponse);
+    // when(esDao.getConfig()).thenReturn(esConfig);
+    // when(esDao.getClient()).thenReturn(esClient);
+    // when(esConfig.getElasticsearchAlias()).thenReturn("screenings");
+    // when(esConfig.getElasticsearchDocType()).thenReturn("screening");
+    // when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
+    // when(indexRequestBuilder.get()).thenReturn(indexResponse);
+    //
+    // final ScreeningEntity screeningEntity = new ScreeningEntity();
+    // when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);
 
-    final ScreeningEntity screeningEntity = new ScreeningEntity();
-    when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);
-
-    final ScreeningMapper screeningMapper = mock(ScreeningMapper.class);
+    // final ScreeningMapper screeningMapper = mock(ScreeningMapper.class);
 
     // target = new ScreeningService();
     // target.setEsDao(esDao);
     // target.setScreeningDao(screeningDao);
     // target.setScreeningMapper(screeningMapper);
 
-    new TestingRequestExecutionContext("0X5");
+    // new TestingRequestExecutionContext("0X5");
+
+    // esDao = injector.getInstance(ElasticsearchDao.class);
+  }
+
+  /**
+   * @param service the service to set
+   */
+  @Inject
+  public void setTarget(ScreeningService service) {
+    this.target = service;
   }
 
   @Test(expected = Exception.class)
