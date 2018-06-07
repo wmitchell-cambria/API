@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -31,6 +32,8 @@ import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
+import gov.ca.cwds.inject.DoofenshmirtzModule;
+import gov.ca.cwds.inject.GuiceJUnitRunner.GuiceModules;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -42,6 +45,8 @@ import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
+@RunWith(gov.ca.cwds.inject.GuiceJUnitRunner.class)
+@GuiceModules({DoofenshmirtzModule.class})
 public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   private ScreeningService target;
@@ -86,10 +91,10 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
     final ScreeningMapper screeningMapper = mock(ScreeningMapper.class);
 
-    target = new ScreeningService();
-    target.setEsDao(esDao);
-    target.setScreeningDao(screeningDao);
-    target.setScreeningMapper(screeningMapper);
+    // target = new ScreeningService();
+    // target.setEsDao(esDao);
+    // target.setScreeningDao(screeningDao);
+    // target.setScreeningMapper(screeningMapper);
 
     new TestingRequestExecutionContext("0X5");
   }
