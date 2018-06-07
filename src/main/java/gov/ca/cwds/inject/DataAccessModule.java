@@ -126,6 +126,7 @@ import gov.ca.cwds.data.ns.PersonPhoneDao;
 import gov.ca.cwds.data.ns.PersonRaceDao;
 import gov.ca.cwds.data.ns.PhoneNumbersDao;
 import gov.ca.cwds.data.ns.RaceDao;
+import gov.ca.cwds.data.ns.SafelySurrenderedBabiesDao;
 import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
@@ -144,6 +145,7 @@ import gov.ca.cwds.data.ns.xa.XaNsParticipantDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsParticipantPhoneNumbersDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsPersonDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsPhoneNumbersDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsSafelySurrenderedBabiesDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
@@ -479,6 +481,7 @@ public class DataAccessModule extends AbstractModule {
     bind(PhoneNumbersDao.class).to(XaNsPhoneNumbersDaoImpl.class);
     bind(ScreeningAddressDao.class).to(XaNsScreeningAddressDaoImpl.class);
     bind(ScreeningDao.class).to(XaNsScreeningDaoImpl.class);
+    bind(SafelySurrenderedBabiesDao.class).to(XaNsSafelySurrenderedBabiesDaoImpl.class);
 
     // NS: obsolete Postgres tables.
     bind(LanguageDao.class);
