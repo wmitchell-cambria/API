@@ -479,9 +479,9 @@ public class DataAccessModule extends AbstractModule {
     bind(ParticipantPhoneNumbersDao.class).to(XaNsParticipantPhoneNumbersDaoImpl.class);
     bind(PersonDao.class).to(XaNsPersonDaoImpl.class);
     bind(PhoneNumbersDao.class).to(XaNsPhoneNumbersDaoImpl.class);
+    bind(SafelySurrenderedBabiesDao.class).to(XaNsSafelySurrenderedBabiesDaoImpl.class);
     bind(ScreeningAddressDao.class).to(XaNsScreeningAddressDaoImpl.class);
     bind(ScreeningDao.class).to(XaNsScreeningDaoImpl.class);
-    bind(SafelySurrenderedBabiesDao.class).to(XaNsSafelySurrenderedBabiesDaoImpl.class);
 
     // NS: obsolete Postgres tables.
     bind(LanguageDao.class);

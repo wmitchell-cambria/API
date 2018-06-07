@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.business.rules;
 
-import static gov.ca.cwds.rest.validation.StartDateTimeValidator.DATE_FORMAT_PATTERN;
-
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Years;
@@ -76,7 +74,7 @@ public class R00824SetDispositionCode implements RuleValidator {
   private int clientAge() {
     String date = screeningToReferral.getStartedAt().split("T")[0];
     String dob = incomingParticipant.getDateOfBirth();
-    DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_FORMAT_PATTERN);
+    DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd");
     DateTime receivedDate = formatter.parseDateTime(date);
     DateTime clientDob = formatter.parseDateTime(dob);
     return Years.yearsBetween(clientDob, receivedDate).getYears();
