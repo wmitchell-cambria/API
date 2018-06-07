@@ -14,6 +14,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
+import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -21,7 +22,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author CWDS API Team
  */
-public class SpecialProjectReferral implements Request, Response{
+public class SpecialProjectReferral extends ReportingDomain implements Request, Response{
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -44,14 +45,12 @@ public class SpecialProjectReferral implements Request, Response{
   private String specialProjectId;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
-  @JsonProperty(value = "participationEndDate")
   @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
   @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
       example = "2000-01-01")
   private String participationEndDate;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
-  @JsonProperty(value = "participationStartDate")
   @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
   @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd",
       example = "2000-01-01")
@@ -60,6 +59,13 @@ public class SpecialProjectReferral implements Request, Response{
   @NotNull
   @ApiModelProperty(required = false, readOnly = false)
   private Boolean safelySurrenderedBabiesIndicator;
+  
+  /**
+   * Constructor
+   */
+  public SpecialProjectReferral() {
+    super();
+  }
   
   /**
    * Constructor
@@ -152,7 +158,7 @@ public class SpecialProjectReferral implements Request, Response{
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -162,7 +168,7 @@ public class SpecialProjectReferral implements Request, Response{
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public boolean equals(Object obj) {
+  public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

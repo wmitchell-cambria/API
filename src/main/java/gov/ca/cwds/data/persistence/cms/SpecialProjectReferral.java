@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.Type;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
   /**
@@ -29,9 +30,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
     @Column(name = "FKSPC_PJT")
     private String specialProjectId;
     
+    @Type(type = "date")
     @Column(name = "PART_ENDT")
     private Date participationEndDate;
     
+    @Type(type = "date")
     @Column(name = "PART_STRDT")
     private Date participationStartDate;
     
