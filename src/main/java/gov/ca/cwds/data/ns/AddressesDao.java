@@ -30,9 +30,8 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
 
   public List<Addresses> findByParticipant(String participantId) {
     @SuppressWarnings("unchecked")
-    final Query<Addresses> query =
-        this.getSessionFactory().getCurrentSession().getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
-            .setParameter(Addresses.PARAM_PARTICIPANT_ID, participantId);
+    final Query<Addresses> query = grabSession().getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
+        .setParameter(Addresses.PARAM_PARTICIPANT_ID, participantId);
     return query.getResultList();
   }
 

@@ -46,9 +46,9 @@ import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
 
 /**
- * Business layer object to work on {@link ParticipantIntakeApi}
+ * Business layer object to work on {@link ParticipantIntakeApi}.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class ParticipantIntakeApiService implements CrudsService {
 
@@ -56,29 +56,39 @@ public class ParticipantIntakeApiService implements CrudsService {
 
   @Inject
   private ParticipantDao participantDao;
+
   @Inject
   private AllegationDao allegationDao;
+
   @Inject
   private LegacyDescriptorDao legacyDescriptorDao;
+
   @Inject
   private AddressesDao addressesDao;
+
   @Inject
   private ParticipantAddressesDao participantAddressesDao;
+
   @Inject
   private AddressIntakeApiService addressIntakeApiService;
+
   @Inject
   private PhoneNumbersDao phoneNumbersDao;
+
   @Inject
   private ParticipantPhoneNumbersDao participantPhoneNumbersDao;
+
   @Inject
   private CsecDao csecDao;
+
   @Inject
   private CsecMapper csecMapper;
+
   @Inject
   private SafelySurrenderedBabiesDao safelySurrenderedBabiesDao;
+
   @Inject
   private SafelySurrenderedBabiesMapper safelySurrenderedBabiesMapper;
-
 
   /**
    * {@inheritDoc}
@@ -193,8 +203,6 @@ public class ParticipantIntakeApiService implements CrudsService {
         safelySurrenderedBabiesMapper.map(participantEntityManaged.getSafelySurrenderedBabies());
     participantIntakeApiPosted.setSafelySurenderedBabies(createdSsb);
 
-
-
     // Save legacy descriptor entity
     if (participantIntakeApi.getLegacyDescriptor() != null) {
       LegacyDescriptorEntity legacyDescriptorEntityManaged = legacyDescriptorDao
@@ -246,8 +254,6 @@ public class ParticipantIntakeApiService implements CrudsService {
     participantIntakeApiPosted.setSafelySurenderedBabies(
         safelySurrenderedBabiesMapper.map(participantEntityManaged.getSafelySurrenderedBabies()));
     return participantIntakeApiPosted;
-
-
   }
 
   private Set<AddressIntakeApi> createParticipantAddresses(
@@ -311,7 +317,7 @@ public class ParticipantIntakeApiService implements CrudsService {
           throw new ServiceException(
               "Cannot update CSEC that doesn't exist. id = " + csecEntity.getId());
         }
-        csecDao.getSessionFactory().getCurrentSession().detach(managedCsecEntity);
+        csecDao.grabSession().detach(managedCsecEntity);
         csecEnities.add(csecDao.update(csecEntity));
       }
     }
@@ -320,8 +326,6 @@ public class ParticipantIntakeApiService implements CrudsService {
 
   private void createOrUpdateSafelySurrenderedBabies(ParticipantIntakeApi participantIntakeApi,
       ParticipantEntity participantEntityManaged) {
-
-
     SafelySurenderedBabies safelySurenderedBabies =
         participantIntakeApi.getSafelySurenderedBabies();
 
@@ -389,7 +393,6 @@ public class ParticipantIntakeApiService implements CrudsService {
     Set<PhoneNumber> phoneNumberSetPosted = new HashSet<>();
 
     for (PhoneNumber phoneNumber : phoneNumberSet) {
-
       PhoneNumbers phoneNumbersEntityManaged = phoneNumber.getId() == null ? null
           : phoneNumbersDao.find(String.valueOf(phoneNumber.getId()));
 
@@ -422,7 +425,6 @@ public class ParticipantIntakeApiService implements CrudsService {
             .put(participantPhoneNumbers.getPhoneNumber().getId(), participantPhoneNumbers));
 
     for (PhoneNumber phoneNumber : phoneNumberSet) {
-
       PhoneNumbers phoneNumbersEntityManaged = phoneNumber.getId() == null ? null
           : phoneNumbersDao.find(String.valueOf(phoneNumber.getId()));
 
@@ -464,4 +466,5 @@ public class ParticipantIntakeApiService implements CrudsService {
       SafelySurrenderedBabiesMapper safelySurrenderedBabiesMapper) {
     this.safelySurrenderedBabiesMapper = safelySurrenderedBabiesMapper;
   }
+
 }

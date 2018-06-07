@@ -3,10 +3,10 @@ package gov.ca.cwds.data.ns;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,26 +36,15 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
     super(sessionFactory);
   }
 
-  protected Session getCurrentSession() {
-    Session session;
-    try {
-      session = getSessionFactory().getCurrentSession();
-    } catch (HibernateException e) { // NOSONAR
-      LOGGER.warn("NO SESSION!");
-      session = getSessionFactory().openSession();
-    }
-
-    return session;
-  }
-
   /**
    * @param legacyCategoryId - legacyCategoryId
    * @return the intake code based on the category id
    */
+  @SuppressWarnings("rawtypes")
   public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
-    final Session session = getCurrentSession();
+    final Session session = grabSession();
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();

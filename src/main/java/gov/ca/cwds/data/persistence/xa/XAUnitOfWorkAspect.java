@@ -42,6 +42,8 @@ public class XAUnitOfWorkAspect {
 
   private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
+  private final Map<String, XAUnitOfWork> units = new ConcurrentHashMap<>();
+
   private XAUnitOfWork xaUnitOfWork;
 
   /**
@@ -203,6 +205,10 @@ public class XAUnitOfWorkAspect {
 
   /**
    * Set cache mode, flush mode, and read-only properties on a Hibernate session.
+   * 
+   * <p>
+   * Read-only operations run faster when flush mode is set to manual.
+   * </p>
    * 
    * @param session - target Hibernate session
    */

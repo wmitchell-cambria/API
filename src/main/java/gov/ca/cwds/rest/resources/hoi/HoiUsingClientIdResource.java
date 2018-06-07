@@ -60,7 +60,7 @@ public class HoiUsingClientIdResource {
    * @param clientIds the clientId
    * @return the response
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true, transactional = false)
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @Path("/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

@@ -43,9 +43,8 @@ public class DrmsDocumentTemplateDao extends CrudsDaoImpl<DrmsDocumentTemplate> 
   @SuppressWarnings("unchecked")
   public DrmsDocumentTemplate[] findByApplicationContextAndGovermentEntity(
       Short applicationContextType, Short govermentEntityType) {
-    final Query<DrmsDocumentTemplate> query =
-        this.getSessionFactory().getCurrentSession().getNamedQuery(
-            DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY);
+    final Query<DrmsDocumentTemplate> query = grabSession().getNamedQuery(
+        DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERNMENT_ENTITY);
     query.setParameter("applicationContextType", applicationContextType)
         .setParameter("govermentEntityType", govermentEntityType);
     return query.list().toArray(new DrmsDocumentTemplate[0]);

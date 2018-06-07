@@ -36,9 +36,8 @@ public class ContactPartyDeliveredServiceDao
    */
   @SuppressWarnings("unchecked")
   public ContactPartyDeliveredServiceEntity findByDeliveredServiceId(String deliveredServiceId) {
-    final NativeQuery<ContactPartyDeliveredServiceEntity> query =
-        this.getSessionFactory().getCurrentSession().getNamedNativeQuery(
-            "gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.findByDeliveredServiceId");
+    final NativeQuery<ContactPartyDeliveredServiceEntity> query = grabSession().getNamedNativeQuery(
+        "gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.findByDeliveredServiceId");
     query.setParameter("deliveredServiceId", deliveredServiceId, StringType.INSTANCE);
     return query.getSingleResult();
   }

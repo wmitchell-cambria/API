@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
@@ -41,9 +42,9 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
     if (referralIds == null || referralIds.isEmpty()) {
       return new HashMap<>();
     }
-    
-    @SuppressWarnings("unchecked") final Query<Allegation> query = this.getSessionFactory()
-        .getCurrentSession().getNamedQuery(FIND_ALLEGATIONS_BY_REFERRAL_IDS);
+
+    @SuppressWarnings("unchecked")
+    final Query<Allegation> query = grabSession().getNamedQuery(FIND_ALLEGATIONS_BY_REFERRAL_IDS);
     query.setParameter("referralIds", referralIds);
 
     Map<String, Set<Allegation>> allegations = new HashMap<>(referralIds.size());
@@ -55,4 +56,5 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
     }
     return allegations;
   }
+
 }

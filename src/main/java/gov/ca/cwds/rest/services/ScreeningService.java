@@ -332,7 +332,7 @@ public class ScreeningService implements CrudsService {
               "Cannot update allegation that doesn't exist. id = " + allegationEntity.getId());
         }
         allegationEntity.setCreatedAt(managedAllegationEntity.getCreatedAt());
-        allegationDao.getSessionFactory().getCurrentSession().detach(managedAllegationEntity);
+        allegationDao.grabSession().detach(managedAllegationEntity);
         allegationDao.update(allegationEntity);
       }
     }
@@ -355,7 +355,7 @@ public class ScreeningService implements CrudsService {
               "Cannot update cross report that doesn't exist. id = " + crossReportEntity.getId());
         }
         crossReportEntity.setCreatedAt(managedCrossReportEntity.getCreatedAt());
-        crossReportDao.getSessionFactory().getCurrentSession().detach(managedCrossReportEntity);
+        crossReportDao.grabSession().detach(managedCrossReportEntity);
         crossReportDao.update(crossReportEntity);
       }
 
@@ -380,7 +380,7 @@ public class ScreeningService implements CrudsService {
               "Cannot update agency that doesn't exist. id = " + agency.getId());
         }
         agencyEntity.setCreatedAt(managedAgencyEntity.getCreatedAt());
-        agencyDao.getSessionFactory().getCurrentSession().detach(managedAgencyEntity);
+        agencyDao.grabSession().detach(managedAgencyEntity);
         agencyDao.update(agencyEntity);
       }
     }

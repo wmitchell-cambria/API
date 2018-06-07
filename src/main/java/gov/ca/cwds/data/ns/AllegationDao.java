@@ -28,20 +28,23 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
     super(sessionFactory);
   }
 
+  @SuppressWarnings("unchecked")
   public List<Allegation> findByVictimId(String id) {
-    final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(Allegation.FIND_BY_VICTIM_ID).setParameter("victimId", id);
+    final Query<Allegation> query =
+        grabSession().getNamedQuery(Allegation.FIND_BY_VICTIM_ID).setParameter("victimId", id);
     return query.list();
   }
 
+  @SuppressWarnings("unchecked")
   public List<Allegation> findByPerpetratorId(String id) {
-    final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(Allegation.FIND_BY_PERPETRATOR_ID).setParameter("perpetratorId", id);
+    final Query<Allegation> query = grabSession().getNamedQuery(Allegation.FIND_BY_PERPETRATOR_ID)
+        .setParameter("perpetratorId", id);
     return query.list();
   }
 
+  @SuppressWarnings("unchecked")
   public List<Allegation> findByVictimOrPerpetratorId(String id) {
-    final Query<Allegation> query = this.getSessionFactory().getCurrentSession()
+    final Query<Allegation> query = grabSession()
         .getNamedQuery(Allegation.FIND_BY_VICTIM_OR_PERPETRATOR_ID).setParameter("id", id);
     return query.list();
   }

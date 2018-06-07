@@ -36,9 +36,9 @@ public class AssignmentDao extends CrudsDaoImpl<Assignment> {
    */
   @SuppressWarnings("unchecked")
   public CaseLoad[] findCaseLoads(String staffPersonId) {
-    Query<CaseLoad> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoads")
-        .setParameter("fkStaffPerson", staffPersonId);
+    Query<CaseLoad> query =
+        grabSession().getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findCaseLoads")
+            .setParameter("fkStaffPerson", staffPersonId);
     return query.list().toArray(new CaseLoad[0]);
   }
 
@@ -48,10 +48,10 @@ public class AssignmentDao extends CrudsDaoImpl<Assignment> {
    * @return the assignments
    */
   public Set<Assignment> findAssignmentsByReferralId(String referralId) {
-    final Query<Assignment> query = this.getSessionFactory().getCurrentSession()
+    final Query<Assignment> query = grabSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.Assignment.findAssignmentsByReferralId")
         .setParameter("referralId", referralId);
-    return new HashSet(query.list());
+    return new HashSet<>(query.list());
   }
 
 }

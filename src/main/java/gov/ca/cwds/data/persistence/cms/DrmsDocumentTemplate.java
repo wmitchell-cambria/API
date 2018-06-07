@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY;
+import static gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERNMENT_ENTITY;
 
 import java.util.Date;
 
@@ -25,7 +25,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
  *
  * @author CWDS API Team
  */
-@NamedQuery(name = NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY,
+@NamedQuery(name = NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERNMENT_ENTITY,
     query = "FROM DrmsDocumentTemplate WHERE applicationContextType = :applicationContextType "
         + "AND (govermentEntityType = :govermentEntityType OR govermentEntityType = 0) "
         + "AND  inactive = 'N'")
@@ -37,7 +37,7 @@ public class DrmsDocumentTemplate implements PersistentObject {
 
   private static final long serialVersionUID = 1L;
 
-  public static final String NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERMANT_ENTITY =
+  public static final String NQ_TEMPLATES_BY_APPLICATION_CONTEXT_AND_GOVERNMENT_ENTITY =
       "gov.ca.cwds.data.persistence.cms.DrmsDocumentTemplate.findByApplicationContext";
 
   @Id

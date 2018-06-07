@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources.auth;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_AUTHORIZE;
 
 import javax.ws.rs.GET;
@@ -51,7 +50,7 @@ public class AuthorizationResource {
    * @param id the id
    * @return the response
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @GET
   @Path("/client/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

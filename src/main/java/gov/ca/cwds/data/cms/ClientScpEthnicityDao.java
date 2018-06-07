@@ -33,7 +33,7 @@ public class ClientScpEthnicityDao extends CrudsDaoImpl<ClientScpEthnicity> {
    * @return the list of race and hispanic codes
    */
   public List<ClientScpEthnicity> getClientScp(String establishedId) {
-    final Query query = this.getSessionFactory().getCurrentSession()
+    final Query query = grabSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.ClientScpEthnicity.createOrUpdate")
         .setParameter("establishedId", establishedId);
     return query.list();

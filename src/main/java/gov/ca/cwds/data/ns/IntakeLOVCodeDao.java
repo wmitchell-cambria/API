@@ -40,9 +40,9 @@ public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
       return new HashMap<>();
     }
     @SuppressWarnings("unchecked")
-    final Query<IntakeLOVCodeEntity> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
-        .setParameter("intakeCodes", intakeCodes);
+    final Query<IntakeLOVCodeEntity> query =
+        grabSession().getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
+            .setParameter("intakeCodes", intakeCodes);
     return query.list().stream()
         .collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
   }
