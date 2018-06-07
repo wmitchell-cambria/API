@@ -89,7 +89,7 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
   }
 
   @Override
-  public String getIntakeCodeForLegacySystemCode(String metaId, Number systemCodeId) {
+  public String getIntakeCodeForLegacySystemCode(Number systemCodeId) {
     return null;
   }
 
