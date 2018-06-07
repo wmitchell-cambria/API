@@ -1,7 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
-import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,9 +8,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gov.ca.cwds.data.persistence.ns.Address;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
+import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 
-@SuppressWarnings("javadoc")
 public class ScreeningEntityBuilder {
+
   public static String DEFAULT_ASSIGNEE_STAFF_ID = "0X5";
 
   private String id = null;
@@ -35,8 +35,9 @@ public class ScreeningEntityBuilder {
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
-        locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
-        narrative, contactAddress, assigneeStaffId, participants, reportType);
+        locationType, communicationMethod, name, responseTime, screeningDecision,
+        screeningDecisionDetail, narrative, contactAddress, assigneeStaffId, participants,
+        reportType);
   }
 
   public ScreeningEntityBuilder setId(String id) {

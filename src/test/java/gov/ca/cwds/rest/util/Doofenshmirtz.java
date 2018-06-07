@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -87,6 +88,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
+import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -103,8 +105,10 @@ import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
@@ -161,12 +165,12 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
  */
 public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest {
 
-  protected static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
+  public static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
 
-  protected static SystemCodeCache systemCodeCache;
+  public static SystemCodeCache systemCodeCache;
 
   public SessionFactoryImplementor sessionFactoryImplementor;
   public org.hibernate.SessionFactory sessionFactory;
@@ -184,87 +188,90 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public Settings settings;
   PreparedStatement prepStmt;
 
-  protected Validator validator;
-  protected ScreeningToReferralResourceBuilder defaultReferralBuilder;
+  public Validator validator;
+  public ScreeningToReferralResourceBuilder defaultReferralBuilder;
 
   public SystemCodeDao systemCodeDao;
   public SystemMetaDao systemMetaDao;
 
-  protected XaCmsAllegationDaoImpl allegationDao;
-  protected XaCmsClientDaoImpl clientDao;
-  protected XaCmsReferralDaoImpl referralDao;
-  protected XaCmsStaffPersonDaoImpl staffPersonDao;
-  protected XaNonLACountyTriggers nonLACountyTriggers;
-  protected XaCmsAddressDaoImpl addressDao;
-  protected XaCmsSsaName3DaoImpl ssaName3Dao;
-  protected XaCmsClientRelationshipDaoImpl clientRelationshipDao;
-  protected XaCmsCaseLoadDaoImpl caseLoadDao;
-  protected XaCmsReporterDaoImpl reporterDao;
-  protected XaCmsReferralClientDaoImpl referralClientDao;
-  protected XaCmsClientAddressDaoImpl clientAddressDao;
-  protected XaCmsDocumentDaoImpl cmsDocumentDao;
-  protected XaUpperCaseTables upperCaseTables;
-  protected XaCmsStaffPersonDaoImpl staffpersonDao;
+  public XaCmsAllegationDaoImpl allegationDao;
+  public XaCmsClientDaoImpl clientDao;
+  public XaCmsReferralDaoImpl referralDao;
+  public XaCmsStaffPersonDaoImpl staffPersonDao;
+  public XaNonLACountyTriggers nonLACountyTriggers;
+  public XaCmsAddressDaoImpl addressDao;
+  public XaCmsSsaName3DaoImpl ssaName3Dao;
+  public XaCmsClientRelationshipDaoImpl clientRelationshipDao;
+  public XaCmsCaseLoadDaoImpl caseLoadDao;
+  public XaCmsReporterDaoImpl reporterDao;
+  public XaCmsReferralClientDaoImpl referralClientDao;
+  public XaCmsClientAddressDaoImpl clientAddressDao;
+  public XaCmsDocumentDaoImpl cmsDocumentDao;
+  public XaUpperCaseTables upperCaseTables;
+  public XaCmsStaffPersonDaoImpl staffpersonDao;
 
-  protected AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  protected AssignmentDao assignmentDao;
-  protected AssignmentUnitDao assignmentUnitDao;
-  protected CaseDao caseDao;
-  protected ChildClientDao childClientDao;
-  protected CrossReportDao crossReportDao;
-  protected CwsOfficeDao cwsOfficeDao;
-  protected DrmsDocumentDao drmsDocumentDao;
-  protected LongTextDaoImpl longTextDao;
-  protected TriggerTablesDao triggerTablesDao;
-  protected LACountyTrigger laCountyTrigger;
+  public AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
+  public AssignmentDao assignmentDao;
+  public AssignmentUnitDao assignmentUnitDao;
+  public CaseDao caseDao;
+  public ChildClientDao childClientDao;
+  public CrossReportDao crossReportDao;
+  public CwsOfficeDao cwsOfficeDao;
+  public DrmsDocumentDao drmsDocumentDao;
+  public LongTextDaoImpl longTextDao;
+  public TriggerTablesDao triggerTablesDao;
+  public LACountyTrigger laCountyTrigger;
 
-  protected RIChildClient riChildClient;
-  protected RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-  protected RIClientAddress riClientAddress;
-  protected RIAllegation riAllegation;
-  protected RICrossReport riCrossReport;
-  protected RIReporter riReporter;
-  protected RIReferral riReferral;
-  protected RIReferralClient riReferralClient;
+  public RIChildClient riChildClient;
+  public RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
+  public RIClientAddress riClientAddress;
+  public RIAllegation riAllegation;
+  public RICrossReport riCrossReport;
+  public RIReporter riReporter;
+  public RIReferral riReferral;
+  public RIReferralClient riReferralClient;
 
-  protected AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
-  protected AllegationService allegationService;
-  protected AssignmentService assignmentService;
-  protected ChildClientService childClientService;
-  protected ClientAddressService clientAddressService;
-  protected ClientScpEthnicityService clientScpEthnicityService;
-  protected ClientService clientService;
-  protected CrossReportService crossReportService;
-  protected LongTextService longTextService;
-  protected ParticipantService participantService;
-  protected ReferralClientService referralClientService;
-  protected ReporterService reporterService;
+  public AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
+  public AllegationService allegationService;
+  public AssignmentService assignmentService;
+  public ChildClientService childClientService;
+  public ClientAddressService clientAddressService;
+  public ClientScpEthnicityService clientScpEthnicityService;
+  public ClientService clientService;
+  public CrossReportService crossReportService;
+  public LongTextService longTextService;
+  public ParticipantService participantService;
+  public ReferralClientService referralClientService;
+  public ReporterService reporterService;
 
-  protected Reminders reminders;
-  protected ExternalInterfaceTables externalInterfaceTables;
-  protected GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  public Reminders reminders;
+  public ExternalInterfaceTables externalInterfaceTables;
+  public GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  protected XaCmsReferralService referralService;
-  protected XaCmsAddressService addressService;
-  protected CmsDocumentService cmsDocumentService;
+  public XaCmsReferralService referralService;
+  public XaCmsAddressService addressService;
+  public CmsDocumentService cmsDocumentService;
 
-  protected Query<CmsDocument> docQuery;
-  protected CmsDocument doc;
+  public Query<CmsDocument> docQuery;
+  public CmsDocument doc;
 
-  protected DrmsDocumentService drmsDocumentService;
-  protected DrmsDocumentTemplateService drmsDocumentTemplateService;
+  public DrmsDocumentService drmsDocumentService;
+  public DrmsDocumentTemplateService drmsDocumentTemplateService;
 
-  protected ScreeningToReferralService screeningToReferralService;
+  public ScreeningToReferralService screeningToReferralService;
 
-  protected XaNsAddressDaoImpl xaNsAddressDao;
-  protected XaNsAddressesDaoImpl xaNsAddressesDao;
+  public XaNsAddressDaoImpl xaNsAddressDao;
+  public XaNsAddressesDaoImpl xaNsAddressesDao;
 
-  protected MessageBuilder messageBuilder;
-  protected StaffPerson staffPerson;
+  public MessageBuilder messageBuilder;
+  public StaffPerson staffPerson;
 
-  Subject mockSubject;
-  PrincipalCollection principalCollection;
-  RequestExecutionContext ctx;
+  public ElasticsearchConfiguration esConfig = mock(ElasticsearchConfiguration.class);
+  public ElasticsearchDao esDao = mock(ElasticsearchDao.class);
+
+  public Subject mockSubject;
+  public PrincipalCollection principalCollection;
+  public RequestExecutionContext ctx;
 
   @BeforeClass
   public static void setupClass() {
@@ -546,20 +553,20 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     SystemCodeCache.global().getAllSystemCodes();
   }
 
-  protected CmsDocument readPersistedDocumentPkCompression() throws IOException {
+  public CmsDocument readPersistedDocumentPkCompression() throws IOException {
     return MAPPER.readValue(
         "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"PKWare02\",\"blobSegments\":[]}",
         CmsDocument.class);
   }
 
-  protected CmsDocument readPersistedDocumentLzwCompression() throws IOException {
+  public CmsDocument readPersistedDocumentLzwCompression() throws IOException {
     return MAPPER.readValue(
         "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"COMPRESSION_TYPE_LZW_FULL\",\"blobSegments\":[]}",
         CmsDocument.class);
   }
 
   @SuppressWarnings({"unchecked", "rawtypes"})
-  protected static <T> Query queryInator(Doofenshmirtz<?> heinz, T... values) {
+  public static <T> Query queryInator(Doofenshmirtz<?> heinz, T... values) {
     final Query<T> q = Mockito.mock(Query.class);
     if (values != null && values.length != 0) {
       final T t = ArrayUtils.toArray(values)[0];
@@ -608,7 +615,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
    * @return mock Hibernate Query of type T
    */
   @SuppressWarnings("unchecked")
-  protected Query<T> queryInator(T... values) {
+  public Query<T> queryInator(T... values) {
     return Doofenshmirtz.<T>queryInator(this, values);
   }
 
@@ -630,6 +637,11 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     referralClients[1].getReferral()
         .setLimitedAccessCode(secondReferralLimitedAccessCode.getValue());
     return referralClients;
+  }
+
+  public Screening makeScreening() {
+    return new Screening("abc", "screening", "reference", "screeningDecision",
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
   }
 
 }

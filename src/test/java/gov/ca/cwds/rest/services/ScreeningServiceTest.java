@@ -40,6 +40,7 @@ import gov.ca.cwds.rest.api.domain.CrossReportIntake;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 @RunWith(gov.ca.cwds.inject.GuiceJUnitRunner.class)
@@ -79,18 +80,6 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   public void setup() throws Exception {
     super.setup();
 
-    // MockitoAnnotations.initMocks(this);
-
-    // when(esDao.getConfig()).thenReturn(esConfig);
-    // when(esDao.getClient()).thenReturn(esClient);
-    // when(esConfig.getElasticsearchAlias()).thenReturn("screenings");
-    // when(esConfig.getElasticsearchDocType()).thenReturn("screening");
-    // when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
-    // when(indexRequestBuilder.get()).thenReturn(indexResponse);
-    //
-    // final ScreeningEntity screeningEntity = new ScreeningEntity();
-    // when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);
-
     // final ScreeningMapper screeningMapper = mock(ScreeningMapper.class);
 
     // target = new ScreeningService();
@@ -98,9 +87,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
     // target.setScreeningDao(screeningDao);
     // target.setScreeningMapper(screeningMapper);
 
-    // new TestingRequestExecutionContext("0X5");
-
-    // esDao = injector.getInstance(ElasticsearchDao.class);
+    new TestingRequestExecutionContext("0X5");
   }
 
   /**
@@ -221,7 +208,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test(expected = Exception.class)
   public void create_A$Request() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     Screening actual = target.create(screening);
     assertThat(actual, is(notNullValue()));
   }
@@ -229,7 +216,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Test
   public void update_A$Serializable$Request() throws Exception {
     Serializable primaryKey = DEFAULT_CLIENT_ID;
-    Screening screening = make();
+    Screening screening = makeScreening();
     Screening actual = target.update(primaryKey, screening);
     assertThat(actual, is(notNullValue()));
   }
@@ -243,7 +230,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test
   public void createScreening_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     Screening actual = target.createScreening(screening);
     assertThat(actual, is(notNullValue()));
   }
@@ -259,19 +246,19 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test
   public void validateParticipants_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     target.validateParticipants(screening);
   }
 
   @Test
   public void createOrUpdateAllegations_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     target.createOrUpdateAllegations(screening);
   }
 
   @Test
   public void createOrUpdateCrossReports_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     target.createOrUpdateCrossReports(screening);
   }
 
@@ -283,13 +270,13 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test
   public void createOrUpdateAddresses_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     target.createOrUpdateAddresses(screening);
   }
 
   @Test
   public void createOrUpdateParticipants_A$Screening() throws Exception {
-    final Screening screening = make();
+    final Screening screening = makeScreening();
     target.createOrUpdateParticipants(screening);
   }
 
@@ -301,12 +288,6 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Test
   public void setScreeningDao_A$ScreeningDao() throws Exception {
     target.setScreeningDao(screeningDao);
-  }
-
-  protected Screening make() {
-    return new Screening("abc", "screening", "reference", "screeningDecision",
-        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
-
   }
 
 }
