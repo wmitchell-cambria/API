@@ -87,7 +87,7 @@ rsDataSourceFactory:
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       # Properties for DB2XADataSource
       serverName: ${DB_CMS_HOST:-localhost}
@@ -118,7 +118,7 @@ xaCmsDataSourceFactory:
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       # Properties for DB2XADataSource
       serverName: ${DB_CMS_HOST:-localhost}
@@ -153,7 +153,7 @@ xaNsDataSourceFactory:
       # hibernate.cache.use_second_level_cache: false
       # hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
       # hibernate.cache.use_query_cache: false
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       url: ${DB_NS_JDBC_URL}
 

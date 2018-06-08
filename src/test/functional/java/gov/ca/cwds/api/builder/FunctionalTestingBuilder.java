@@ -2,20 +2,24 @@ package gov.ca.cwds.api.builder;
 
 import static io.restassured.RestAssured.given;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 /**
- * Functional Test Builder to used handle request for test, make it more cleaner and easier to build
- * the test classes.
+ * Functional Test Builder to used handle request for test, make it cleaner and easier to build the
+ * test classes.
  * 
  * @author CWDS API Team
- *
  */
 public class FunctionalTestingBuilder {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(FunctionalTestingBuilder.class);
+
   /**
-   * This method process the POST processing and return the appropriate body or Json response.
+   * This method process the POST processing and return the appropriate body or JSON response.
    * 
    * @param object - object
    * @param resourcePath - resourcePath
@@ -39,6 +43,8 @@ public class FunctionalTestingBuilder {
    */
   public Response processGetRequest(String resourcePath, String parameter, String ParameterValue,
       String token) {
+    LOGGER.info("processGetRequest: resourcePath: {}, parameter: {}, token: {}", resourcePath,
+        parameter, token);
     return given().queryParam(parameter, ParameterValue).queryParam("token", token)
         .get(resourcePath).then().contentType(ContentType.JSON).extract().response();
   }

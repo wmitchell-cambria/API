@@ -79,7 +79,7 @@ rsDataSourceFactory:
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       url: jdbc:h2:mem:cwsrs1;INIT=create schema if not exists cwsrs1\;set schema cwsrs1
 
@@ -106,7 +106,7 @@ xaCmsDataSourceFactory:
       hibernate.transaction.factory_class: org.hibernate.resource.transaction.backend.jta.internal.JtaTransactionCoordinatorBuilderImpl
       hibernate.connection.release_mode: auto
       connection.release_mode: auto
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       url: jdbc:h2:mem:cwsint;INIT=create schema if not exists cwsint\;set schema cwsint
 
@@ -137,7 +137,7 @@ xaNsDataSourceFactory:
       # hibernate.temp.use_jdbc_metadata_defaults: false
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
-      # hibernate.connection.provider_disables_autocommit: true
+      hibernate.connection.provider_disables_autocommit: true
   xaProperties:
       url: jdbc:h2:mem:intakens;INIT=create schema if not exists intakens\;set schema intakens
 
