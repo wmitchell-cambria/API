@@ -276,10 +276,10 @@ public class ScreeningService implements CrudsService {
     String screeningId = createdScreeningEntity.getId();
     screening.setId(screeningId);
 
-    createUpdateDeleteAllegations(screening);
     createUpdateDeleteCrossReports(screening);
     createOrUpdateAddresses(screening);
     createUpdateDeleteParticipants(screening);
+    createUpdateDeleteAllegations(screening);
 
     return screening;
   }
@@ -295,10 +295,10 @@ public class ScreeningService implements CrudsService {
     ScreeningEntity screeningEntity = screeningMapper.map(screening);
     screeningDao.update(screeningEntity);
 
-    createUpdateDeleteAllegations(screening);
     createUpdateDeleteCrossReports(screening);
     createOrUpdateAddresses(screening);
     createUpdateDeleteParticipants(screening);
+`    createUpdateDeleteAllegations(screening);
 
     return screening;
   }
