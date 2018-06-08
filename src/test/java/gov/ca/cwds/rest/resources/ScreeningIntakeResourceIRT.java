@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -27,6 +28,7 @@ import gov.ca.cwds.rest.api.domain.Screening;
 public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
 
   @Test
+  @Ignore
   public void testGet() throws Exception {
     String actualJson = doGetCall(RESOURCE_INTAKE_SCREENINGS + "/52");
     String expectedResponse =
