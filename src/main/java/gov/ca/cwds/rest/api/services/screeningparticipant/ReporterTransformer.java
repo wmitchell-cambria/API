@@ -35,18 +35,16 @@ public class ReporterTransformer implements ParticipantMapper {
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(reporter.getStateCodeType());
     String streetAddress = reporter.getStreetNumber() + " " + reporter.getStreetName();
     String zip = reporter.getZipNumber() + "-" + reporter.getZipSuffixNumber();
-    Set<AddressIntakeApi> addresses =
-        new HashSet<>(Arrays.asList(new AddressIntakeApi(LegacyTable.REPORTER.getName(), null,
-            streetAddress, reporter.getCity(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
+        streetAddress, reporter.getCity(), state, zip, null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     Set<PhoneNumber> phoneNumbers = new HashSet<>(
         Arrays.asList(new PhoneNumber(null, reporter.getPrimaryPhoneNumber().toString(), null)));
 
-    return new ParticipantIntakeApi(null, LegacyTable.REPORTER.getName(), reporter.getReferralId(),
-        legacyDescriptor, reporter.getFirstName(), reporter.getMiddleInitialName(),
-        reporter.getLastName(), reporter.getSuffixTitleDescription(), null, null, null, null, null,
-        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, phoneNumbers, false,
-        false);
+    return new ParticipantIntakeApi(null, null, null, legacyDescriptor, reporter.getFirstName(),
+        reporter.getMiddleInitialName(), reporter.getLastName(),
+        reporter.getSuffixTitleDescription(), null, null, null, null, null, new LinkedList<>(),
+        null, null, null, new HashSet<>(), addresses, phoneNumbers, false, false);
   }
 
 }
