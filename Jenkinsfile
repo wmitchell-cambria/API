@@ -217,10 +217,10 @@ node ('tpt4-slave'){
    def serverArti = Artifactory.server 'CWDS_DEV'
    def rtGradle = Artifactory.newGradleBuild()
    //properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-   //parameters([
-   //   string(defaultValue: 'master', description: '', name: 'branch'),
-   //   booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC')
-   //   ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
+   parameters([
+      string(defaultValue: 'master', description: '', name: 'branch'),
+      booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC')
+      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
    stage('Preparation') {
 		  git branch: '$branch', url: 'git@github.com:ca-cwds/API.git'
