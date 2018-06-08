@@ -60,6 +60,7 @@ compileJava {
 }
 
 //def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+
 def dockerTag = apiVersion
 version = apiVersion
 mainClassName = mainclass
