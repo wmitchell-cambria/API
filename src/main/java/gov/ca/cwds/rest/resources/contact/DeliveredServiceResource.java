@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.contact;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_DELIVERY_SERVICE;
 
 import javax.validation.Valid;
@@ -14,12 +15,12 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.DeliveredServiceBackedResource;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.cms.DrmsDocument;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import gov.ca.cwds.rest.services.contact.DeliveredService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -63,7 +64,7 @@ public class DeliveredServiceResource {
    *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),

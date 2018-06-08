@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.SCREENING_RELATIONSHIPS;
 
 import javax.validation.Valid;
@@ -16,9 +17,9 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.ScreeningRelationshipServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,7 +63,7 @@ public class ScreeningRelationshipResource {
    *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @POST
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -75,7 +76,7 @@ public class ScreeningRelationshipResource {
     return resourceDelegate.create(screeningRelationship);
   }
 
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @GET
   @Path("/{id}")
   @ApiResponses(

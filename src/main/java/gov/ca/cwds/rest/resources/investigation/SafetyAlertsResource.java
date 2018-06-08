@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources.investigation;
 
+
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
 
 import javax.validation.Valid;
@@ -16,12 +18,12 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.SafetyAlertsServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.investigation.AllegationList;
 import gov.ca.cwds.rest.api.domain.investigation.Investigation;
 import gov.ca.cwds.rest.api.domain.investigation.SafetyAlerts;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -65,7 +67,7 @@ public class SafetyAlertsResource {
    * @param id - CMS Id of Case or Referral
    * @return - safety alerts of investigation
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @Path("/{id}/safety_alerts")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -86,7 +88,7 @@ public class SafetyAlertsResource {
    * @param safetyAlerts - The safety alerts to create
    * @return - The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @POST
   @Path("/{id}/safety_alerts")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
