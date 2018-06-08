@@ -421,6 +421,31 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
     xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
 
+    when(addressDao.grabSession()).thenReturn(session);
+    when(allegationDao.grabSession()).thenReturn(session);
+    when(allegationPerpetratorHistoryDao.grabSession()).thenReturn(session);
+    when(assignmentDao.grabSession()).thenReturn(session);
+    when(assignmentUnitDao.grabSession()).thenReturn(session);
+    when(caseDao.grabSession()).thenReturn(session);
+    when(caseLoadDao.grabSession()).thenReturn(session);
+    when(childClientDao.grabSession()).thenReturn(session);
+    when(clientAddressDao.grabSession()).thenReturn(session);
+    when(clientDao.grabSession()).thenReturn(session);
+    when(clientRelationshipDao.grabSession()).thenReturn(session);
+    when(cmsDocumentDao.grabSession()).thenReturn(session);
+    when(crossReportDao.grabSession()).thenReturn(session);
+    when(cwsOfficeDao.grabSession()).thenReturn(session);
+    when(drmsDocumentDao.grabSession()).thenReturn(session);
+    when(intakeLOVCodeDao.grabSession()).thenReturn(session);
+    when(longTextDao.grabSession()).thenReturn(session);
+    when(referralClientDao.grabSession()).thenReturn(session);
+    when(referralDao.grabSession()).thenReturn(session);
+    when(reporterDao.grabSession()).thenReturn(session);
+    when(staffpersonDao.grabSession()).thenReturn(session);
+    when(staffPersonDao.grabSession()).thenReturn(session);
+    when(xaNsAddressDao.grabSession()).thenReturn(session);
+    when(xaNsAddressesDao.grabSession()).thenReturn(session);
+
     Addresses adr1 = new Addresses(DEFAULT_PARTICIPANT_ID, "123 main street", "Elk Grove", "1838",
         "95757", "32", DEFAULT_CLIENT_ID, "ADDRS_T");
     when(xaNsAddressesDao.find(any())).thenReturn(adr1);

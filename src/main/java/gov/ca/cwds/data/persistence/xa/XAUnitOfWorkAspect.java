@@ -45,7 +45,7 @@ public class XAUnitOfWorkAspect {
 
   private final Map<Method, XAUnitOfWork> units = new ConcurrentHashMap<>();
 
-  private XAUnitOfWork xaUnitOfWork;
+  private XAUnitOfWork firstXaUnitOfWork;
 
   /**
    * Preferred constructor.
@@ -67,8 +67,13 @@ public class XAUnitOfWorkAspect {
       LOGGER.error("XA beforeStart: no annotation");
       return;
     }
-    this.xaUnitOfWork = xaUnitOfWork;
+
     units.putIfAbsent(method, xaUnitOfWork);
+    if (this.firstXaUnitOfWork == null) {
+      this.firstXaUnitOfWork = xaUnitOfWork;
+    } else {
+
+    }
 
     openSessions();
     beginTransaction();
@@ -170,7 +175,7 @@ public class XAUnitOfWorkAspect {
   }
 
   protected boolean hasTransactionalAnnotation() {
-    return this.xaUnitOfWork.transactional();
+    return this.firstXaUnitOfWork.transactional();
   }
 
   /**
@@ -215,10 +220,10 @@ public class XAUnitOfWorkAspect {
    * @param session - target Hibernate session
    */
   protected void configureSession(Session session) {
-    session.setDefaultReadOnly(xaUnitOfWork.readOnly());
-    session.setCacheMode(xaUnitOfWork.cacheMode());
+    session.setDefaultReadOnly(firstXaUnitOfWork.readOnly());
+    session.setCacheMode(firstXaUnitOfWork.cacheMode());
     session.setHibernateFlushMode(
-        xaUnitOfWork.readOnly() ? FlushMode.MANUAL : xaUnitOfWork.flushMode());
+        firstXaUnitOfWork.readOnly() ? FlushMode.MANUAL : firstXaUnitOfWork.flushMode());
   }
 
   /**
@@ -268,7 +273,7 @@ public class XAUnitOfWorkAspect {
    * @throws CaresXAException on database error
    */
   protected void commitTransaction() throws CaresXAException {
-    if (!xaUnitOfWork.transactional()) {
+    if (!firstXaUnitOfWork.transactional()) {
       LOGGER.debug("XA COMMIT TRANSACTION: unit of work not transactional");
       return;
     }
@@ -287,11 +292,11 @@ public class XAUnitOfWorkAspect {
   }
 
   public XAUnitOfWork getXaUnitOfWork() {
-    return xaUnitOfWork;
+    return firstXaUnitOfWork;
   }
 
   public void setXaUnitOfWork(XAUnitOfWork xaUnitOfWork) {
-    this.xaUnitOfWork = xaUnitOfWork;
+    this.firstXaUnitOfWork = xaUnitOfWork;
   }
 
 }
