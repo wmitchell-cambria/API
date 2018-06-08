@@ -293,9 +293,9 @@ node ('tpt4-slave'){
   stage ('Build GitTag'){
     tagRepo(newTag)
   }
-	stage('Clean Workspace') {
-		cleanWs()
-	}
+	//stage('Clean Workspace') {
+	//	cleanWs()
+	//}
 	stage('Deploy Application') {
 		build job: 'tpt4-api-deploy-app', parameters: [string(name: 'version', value: 'latest'), string(name: 'inventory', value: 'inventories/development/hosts.yml')], propagate: false
 	}
@@ -309,10 +309,11 @@ node ('tpt4-slave'){
   	   currentBuild.result = "FAIL"
   	   notifyBuild(currentBuild.result,errorcode)
   	   throw e;
- }finally {
+ }
+ finally {
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'IT Report', reportTitles: 'Integration Tests summary'])
-       cleanWs()
+ //      cleanWs()
  }
 }
 
