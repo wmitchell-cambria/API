@@ -143,9 +143,9 @@ public class ScreeningToReferralTest {
     SafetyAlerts safetyAlerts = new SafetyAlerts();
 
     String expected = MAPPER.writeValueAsString(new ScreeningToReferral(id, "", "",
-        "2016-08-03T01:00:00.000Z", SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home",
+        "2016-08-03T01:00:00.000", SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home",
         communicationMethod, currentLocationOfChildren, "The Rocky Horror Show",
-        "Narrative 123 test", "123ABC", responseTime, "2016-08-03T01:00:00.000Z", "Michael Bastow",
+        "Narrative 123 test", "123ABC", responseTime, "2016-08-03T01:00:00.000", "Michael Bastow",
         "0X5", "addtional information", "Screening Descision", "Detail", approvalStatus,
         familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(),
         safetyAlerts.getAlertInformation(), address,
@@ -193,10 +193,10 @@ public class ScreeningToReferralTest {
     allegations.add(allegation);
     SafetyAlerts safetyAlerts = new SafetyAlerts();
     
-    ScreeningToReferral expected = new ScreeningToReferral(id, "", "", "2016-08-03T01:00:00.000Z",
+    ScreeningToReferral expected = new ScreeningToReferral(id, "", "", "2016-08-03T01:00:00.000",
         SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home", communicationMethod,
         currentLocationOfChildren, "The Rocky Horror Show", "Narrative 123 test", "123ABC",
-        responseTime, "2016-08-03T01:00:00.000Z", "Michael Bastow", "0X5", "addtional information",
+        responseTime, "2016-08-03T01:00:00.000", "Michael Bastow", "0X5", "addtional information",
         "Screening Descision", "Detail", approvalStatus, familyAwarness, filedWithLawEnforcement,
         responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(),
         address, participants, crossReports, allegations, reportType);

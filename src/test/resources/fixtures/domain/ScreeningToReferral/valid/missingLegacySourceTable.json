@@ -1,7 +1,7 @@
 {
    "id":"2",
    "legacy_id" : "1234567ABC",
-   "ended_at":"2016-08-03T01:00:00.000Z",
+   "ended_at":"2016-08-03T01:00:00.000",
    "incident_county":"34",
    "incident_date":"2016-08-02",
    "location_type":"Foster Home",
@@ -14,7 +14,7 @@
    "report_narrative":"Narrative 123 test",
    "reference":"123ABC",
    "response_time":1520,
-   "started_at":"2016-08-03T01:00:00.000Z",
+   "started_at":"2016-08-03T01:00:00.000",
    "assignee":"Michael Bastow",
    "assignee_staff_id":"0X5",
    "additional_information":"additional information about the referral",
