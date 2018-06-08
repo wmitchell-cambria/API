@@ -58,13 +58,14 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
 
   @Test
   public void beforeStart_A1() throws Exception {
-    final Method method = MethodUtils.getMatchingMethod(getClass(), "beforeStart_A1", Void.TYPE);
+    final Method method =
+        MethodUtils.getMatchingMethod(this.getClass(), "beforeStart_A1", new Class[0]);
     target.beforeStart(method, xaUnitOfWork);
   }
 
   @Test
   public void afterEnd_A1() throws Exception {
-    final Method method = MethodUtils.getMatchingMethod(getClass(), "afterEnd_A1", Void.TYPE);
+    final Method method = MethodUtils.getMatchingMethod(getClass(), "afterEnd_A1", new Class[0]);
     target.beforeStart(method, xaUnitOfWork);
   }
 
