@@ -129,7 +129,6 @@ public class HOIScreeningService
     hsd.setAssigneeStaffIds(assigneeStaffIds);
   }
 
-  // @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(HOIScreeningData hoiScreeningData) {
     fetchDataFromCMS(hoiScreeningData);

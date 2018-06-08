@@ -89,6 +89,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
@@ -221,6 +222,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public LongTextDaoImpl longTextDao;
   public TriggerTablesDao triggerTablesDao;
   public LACountyTrigger laCountyTrigger;
+  public IntakeLOVCodeDao intakeLOVCodeDao;
 
   public RIChildClient riChildClient;
   public RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
@@ -389,35 +391,35 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
 
-    xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
-    xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
-
-    staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     addressDao = mock(XaCmsAddressDaoImpl.class);
     allegationDao = mock(XaCmsAllegationDaoImpl.class);
     allegationPerpetratorHistoryDao = mock(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
     assignmentUnitDao = mock(XaCmsAssignmentUnitDaoImpl.class);
     caseDao = mock(XaCmsCaseDaoImpl.class);
     caseLoadDao = mock(XaCmsCaseLoadDaoImpl.class);
     childClientDao = mock(XaCmsChildClientDaoImpl.class);
     clientAddressDao = mock(XaCmsClientAddressDaoImpl.class);
-    cmsDocumentDao = mock(XaCmsDocumentDaoImpl.class);
     clientDao = mock(XaCmsClientDaoImpl.class);
     clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
+    cmsDocumentDao = mock(XaCmsDocumentDaoImpl.class);
     crossReportDao = mock(XaCmsCrossReportDaoImpl.class);
     cwsOfficeDao = mock(XaCmsCwsOfficeDaoImpl.class);
     drmsDocumentDao = mock(XaCmsDrmsDocumentDaoImpl.class);
+    intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
+    laCountyTrigger = mock(LACountyTrigger.class);
     longTextDao = mock(XaCmsLongTextDaoImpl.class);
     nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
     referralClientDao = mock(XaCmsReferralClientDaoImpl.class);
     referralDao = mock(XaCmsReferralDaoImpl.class);
     reporterDao = mock(XaCmsReporterDaoImpl.class);
     ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
+    staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
     staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
-    upperCaseTables = mock(XaUpperCaseTables.class);
-    laCountyTrigger = mock(LACountyTrigger.class);
     triggerTablesDao = mock(TriggerTablesDao.class);
-    assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
+    upperCaseTables = mock(XaUpperCaseTables.class);
+    xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
+    xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
 
     Addresses adr1 = new Addresses(DEFAULT_PARTICIPANT_ID, "123 main street", "Elk Grove", "1838",
         "95757", "32", DEFAULT_CLIENT_ID, "ADDRS_T");

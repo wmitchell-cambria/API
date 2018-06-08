@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.ns;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,8 +44,8 @@ public class IntakeLOVCodeDao extends BaseDaoImpl<IntakeLOVCodeEntity> {
     final Query<IntakeLOVCodeEntity> query =
         grabSession().getNamedQuery(constructNamedQueryName("findIntakeLOVCodesByIntakeCodes"))
             .setParameter("intakeCodes", intakeCodes);
-    return query.list().stream()
-        .collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
+    final List<IntakeLOVCodeEntity> list = query.list();
+    return list.stream().collect(Collectors.toMap(IntakeLOVCodeEntity::getIntakeCode, c -> c));
   }
 
 }

@@ -25,9 +25,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
     query = "SELECT c FROM IntakeLOVCodeEntity c WHERE c.intakeCode IN :intakeCodes")
 public class IntakeLOVCodeEntity implements PersistentObject {
 
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -118,4 +115,5 @@ public class IntakeLOVCodeEntity implements PersistentObject {
   public final boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
+
 }
