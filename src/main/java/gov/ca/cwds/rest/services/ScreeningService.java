@@ -298,7 +298,7 @@ public class ScreeningService implements CrudsService {
     createUpdateDeleteCrossReports(screening);
     createOrUpdateAddresses(screening);
     createUpdateDeleteParticipants(screening);
-`    createUpdateDeleteAllegations(screening);
+    createUpdateDeleteAllegations(screening);
 
     return screening;
   }
