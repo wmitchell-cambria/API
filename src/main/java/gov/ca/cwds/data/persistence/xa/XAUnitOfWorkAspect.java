@@ -47,6 +47,8 @@ public class XAUnitOfWorkAspect {
 
   private XAUnitOfWork firstXaUnitOfWork;
 
+  private boolean transactionStarted = false;
+
   /**
    * Preferred constructor.
    * 
@@ -72,8 +74,6 @@ public class XAUnitOfWorkAspect {
     units.putIfAbsent(method, xaUnitOfWork);
     if (this.firstXaUnitOfWork == null) {
       this.firstXaUnitOfWork = xaUnitOfWork;
-    } else {
-
     }
 
     openSessions();
@@ -101,17 +101,6 @@ public class XAUnitOfWorkAspect {
       rollbackTransaction();
       throw e;
     }
-  }
-
-  /**
-   * Add a nested {@link XAUnitOfWork} to the transaction and open sessions for datasources not
-   * already included.
-   * 
-   * @param xaUnitOfWork annotation
-   * @throws CaresXAException on database error
-   */
-  public void joinTransaction(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
-    // TODO1: Open sessions for any datasources not already opened.
   }
 
   /**
@@ -236,12 +225,16 @@ public class XAUnitOfWorkAspect {
     if (!hasTransactionalAnnotation()) {
       LOGGER.trace("XA BEGIN TRANSACTION: unit of work is not transactional");
       return;
+    } else if (transactionStarted) {
+      LOGGER.debug("XA: transaction already started");
+      return;
     }
 
     try {
       LOGGER.debug("XA BEGIN TRANSACTION!");
       txn.setTransactionTimeout(80); // NEXT: soft-code timeout
       txn.begin();
+      transactionStarted = true;
     } catch (Exception e) {
       LOGGER.error("XA BEGIN FAILED! {}", e.getMessage(), e);
       throw new CaresXAException("XA BEGIN FAILED!", e);
@@ -256,6 +249,9 @@ public class XAUnitOfWorkAspect {
   protected void rollbackTransaction() throws CaresXAException {
     if (!hasTransactionalAnnotation()) {
       LOGGER.trace("XA ROLLBACK TRANSACTION: unit of work not transactional");
+      return;
+    } else if (!transactionStarted) {
+      LOGGER.debug("XA: not transaction started");
       return;
     }
 
@@ -276,6 +272,9 @@ public class XAUnitOfWorkAspect {
   protected void commitTransaction() throws CaresXAException {
     if (!firstXaUnitOfWork.transactional()) {
       LOGGER.debug("XA COMMIT TRANSACTION: unit of work not transactional");
+      return;
+    } else if (!transactionStarted) {
+      LOGGER.debug("XA: not transaction started");
       return;
     }
 
