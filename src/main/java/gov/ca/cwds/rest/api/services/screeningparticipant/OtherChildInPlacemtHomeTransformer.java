@@ -18,6 +18,7 @@ import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
+import gov.ca.cwds.rest.services.submit.Gender;
 
 /**
  * @author CWDS API Team
@@ -41,6 +42,11 @@ public class OtherChildInPlacemtHomeTransformer implements ParticipantMapper {
     String lastName = StringUtils.isNotBlank(otherChildInPlacemtHome.getName())
         ? setLastName(otherChildInPlacemtHome)
         : otherChildInPlacemtHome.getName();
+    String gender =
+        StringUtils.isNotBlank(otherChildInPlacemtHome.getGenderCode())
+            ? (Gender.findByCmsDescription(otherChildInPlacemtHome.getGenderCode().toUpperCase()))
+                .getNsDescription()
+            : null;
 
     PlacementHome placementHome = otherChildInPlacemtHome.getPlacementHome();
     String streetAddress = placementHome.getStreetNo() + " " + placementHome.getStreetNm();
@@ -59,9 +65,8 @@ public class OtherChildInPlacemtHomeTransformer implements ParticipantMapper {
     addresses = Collections.unmodifiableSet(addresses);
 
     return new ParticipantIntakeApi(null, null, null, otherChildLegacyDescriptor, firstName, null,
-        lastName, null, otherChildInPlacemtHome.getGenderCode(), null, null, null,
-        otherChildInPlacemtHome.getBirthDate(), new LinkedList<>(), null, null, null,
-        new HashSet<>(), addresses, null, false, false);
+        lastName, null, gender, null, null, null, otherChildInPlacemtHome.getBirthDate(),
+        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, null, false, false);
   }
 
   private String setFirstName(OtherChildInPlacemtHome otherChildInPlacemtHome) {
