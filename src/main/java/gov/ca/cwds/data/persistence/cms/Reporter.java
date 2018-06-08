@@ -15,6 +15,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 
@@ -73,6 +77,7 @@ public class Reporter extends BaseReporter {
    * lawEnforcement and reporterDrmsDocument record.
    * </p>
    */
+  @ToStringExclude
   @OneToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
@@ -562,6 +567,21 @@ public class Reporter extends BaseReporter {
     }
 
     return phones.toArray(new ApiPhoneAware[0]);
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  @Override
+  public int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 
 }

@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import static gov.ca.cwds.data.persistence.cms.Allegation.FIND_ALLEGATIONS_BY_REFERRAL_IDS;
+import static gov.ca.cwds.data.persistence.cms.Allegation.FIND_ALLEGATIONS_WITH_CLIENTS_BY_REFERRAL_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Date;
@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -30,10 +32,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * {@link CmsPersistentObject} Class representing an Allegation.
- * 
+ *
  * @author CWDS API Team
  */
-@NamedQuery(name = FIND_ALLEGATIONS_BY_REFERRAL_IDS, query = "FROM Allegation WHERE referralId IN :referralIds")
+@NamedQuery(name = FIND_ALLEGATIONS_WITH_CLIENTS_BY_REFERRAL_IDS,
+    query = "FROM Allegation al INNER JOIN FETCH al.victim v LEFT OUTER JOIN FETCH al.perpetrator p WHERE al.referralId IN :referralIds")
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "ALLGTN_T")
@@ -41,7 +44,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Allegation extends CmsPersistentObject {
 
-  public static final String FIND_ALLEGATIONS_BY_REFERRAL_IDS = "gov.ca.cwds.data.persistence.cms.Allegation.findByReferralIds";
+  public static final String FIND_ALLEGATIONS_WITH_CLIENTS_BY_REFERRAL_IDS = "gov.ca.cwds.data.persistence.cms.Allegation.findAllegationsWithClientsByReferralIds";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
@@ -121,17 +124,19 @@ public class Allegation extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
+  @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, insertable = false, updatable = false)
   private Client victim;
 
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_0", nullable = true, insertable = false, updatable = false)
   private Client perpetrator;
 
   /**
    * Default constructor
-   * 
+   *
    * Required for Hibernate
    */
   public Allegation() {
@@ -140,7 +145,7 @@ public class Allegation extends CmsPersistentObject {
 
   /**
    * Constructor
-   * 
+   *
    * @param id primary key
    * @param abuseEndDate abuse end date
    * @param abuseStartDate abuse start date
@@ -197,7 +202,7 @@ public class Allegation extends CmsPersistentObject {
 
   /**
    * Constructor
-   * 
+   *
    * @param id The id
    * @param persistedAllegation persistedAllegation The domain object to construct this object from
    * @param lastUpdatedId the id of the last user to update this object
@@ -236,7 +241,7 @@ public class Allegation extends CmsPersistentObject {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.data.persistence.PersistentObject#getPrimaryKey()
    */
   @Override
@@ -401,20 +406,7 @@ public class Allegation extends CmsPersistentObject {
 
   @Override
   public String toString() {
-    return "Allegation [id=" + id + ", abuseEndDate=" + abuseEndDate + ", abuseFrequency="
-        + abuseFrequency + ", abuseFrequencyPeriodCode=" + abuseFrequencyPeriodCode
-        + ", abuseLocationDescription=" + abuseLocationDescription + ", abuseStartDate="
-        + abuseStartDate + ", allegationDispositionType=" + allegationDispositionType
-        + ", allegationType=" + allegationType + ", dispositionDescription="
-        + dispositionDescription + ", dispositionDate=" + dispositionDate
-        + ", injuryHarmDetailIndicator=" + injuryHarmDetailIndicator + ", nonProtectingParentCode="
-        + nonProtectingParentCode + ", staffPersonAddedIndicator=" + staffPersonAddedIndicator
-        + ", victimClientId=" + victimClientId + ", perpetratorClientId=" + perpetratorClientId
-        + ", referralId=" + referralId + ", countySpecificCode=" + countySpecificCode
-        + ", zippyCreatedIndicator=" + zippyCreatedIndicator + ", placementFacilityType="
-        + placementFacilityType
-        // + ", victim=" + victim + ", perpetrator=" + perpetrator
-        + "]";
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
