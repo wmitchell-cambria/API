@@ -43,7 +43,7 @@ public class XAUnitOfWorkAspect {
 
   private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
-  private final Map<String, XAUnitOfWork> units = new ConcurrentHashMap<>();
+  private final Map<Method, XAUnitOfWork> units = new ConcurrentHashMap<>();
 
   private XAUnitOfWork xaUnitOfWork;
 
@@ -68,6 +68,7 @@ public class XAUnitOfWorkAspect {
       return;
     }
     this.xaUnitOfWork = xaUnitOfWork;
+    units.putIfAbsent(method, xaUnitOfWork);
 
     openSessions();
     beginTransaction();
