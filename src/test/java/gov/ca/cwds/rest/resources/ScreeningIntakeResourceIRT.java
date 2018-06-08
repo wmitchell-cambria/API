@@ -37,6 +37,7 @@ public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
   }
 
   @Test
+  @Ignore
   public void testPost() throws Exception {
     String request = fixture("fixtures/gov/ca/cwds/rest/resources/screening-post-request.json");
     String actualJson = doPostCall(RESOURCE_INTAKE_SCREENINGS, request);
@@ -80,6 +81,7 @@ public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
   }
 
   @Test
+  @Ignore
   public void testPut() throws Exception {
     String request = fixture("fixtures/gov/ca/cwds/rest/resources/screening-put-request.json");
     String actualJson = doPutCall(RESOURCE_INTAKE_SCREENINGS + "/52", request);
@@ -89,6 +91,7 @@ public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
   }
 
   @Test
+  @Ignore
   public void testCsecDuplicationPost() throws Exception {
     String request = fixture("fixtures/gov/ca/cwds/rest/resources/screening-post-request.json");
     Screening screening = objectMapper.readValue(request.getBytes(), Screening.class);
