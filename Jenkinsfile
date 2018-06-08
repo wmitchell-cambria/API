@@ -166,12 +166,12 @@ def getNewTag(List tags, VersionIncrement increment) {
     return newTag
 }
 // Updates any build files that contain a version tag
-def updateFiles(String newTag) {
-    debug("updateFiles( newTag: ${newTag} )")
+//def updateFiles(String newTag) {
+//    debug("updateFiles( newTag: ${newTag} )")
 
     // TODO - Implement for updating a file
-    debug("updateFiles: TODO Implement")
-}
+  //  debug("updateFiles: TODO Implement")
+//}
 
 def copyAndReplaceText(source, dest, Closure replaceText){
     dest.write(replaceText(source.text))
