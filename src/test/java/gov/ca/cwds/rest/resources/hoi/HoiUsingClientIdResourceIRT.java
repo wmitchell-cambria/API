@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
@@ -34,8 +36,9 @@ public class HoiUsingClientIdResourceIRT extends HOIBaseTest {
 
     assertNull(actualInvolvementHistory.getId());
     assertEquals(expectedInvolvementHistory.getCases(), actualInvolvementHistory.getCases());
-    assertEquals(expectedInvolvementHistory.getReferrals(),
-        actualInvolvementHistory.getReferrals());
+    // convert lists of Referrals to JSON-s for comparison because otherwise it could fail because of random order of Allegations
+    JSONAssert.assertEquals(objectMapper.writeValueAsString(expectedInvolvementHistory.getReferrals()),
+        objectMapper.writeValueAsString(actualInvolvementHistory.getReferrals()), JSONCompareMode.NON_EXTENSIBLE);
     assertEquals(expectedHOIScreenings, actualInvolvementHistory.getScreenings());
 
     assertHOICasesAreSorted(new String[] {"Co8uaDi0DW", "IdQImWo0DW"},
