@@ -55,7 +55,7 @@ public class ScreeningDashboardResource {
    * 
    * @return the {@link Response}
    */
-  @XAUnitOfWork(readOnly = true)
+  @XAUnitOfWork
   @GET
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),

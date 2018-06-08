@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources.hoi;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CLIENT;
 
 import java.util.List;
@@ -60,7 +59,7 @@ public class HoiUsingClientIdResource {
    * @param clientIds the clientId
    * @return the response
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
+  @XAUnitOfWork
   @GET
   @Path("/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

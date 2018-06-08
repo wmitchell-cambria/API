@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_ADDRESSES;
 
 import javax.validation.Valid;
@@ -63,7 +62,7 @@ public class AddressResource {
    * @param id The id
    * @return The response
    */
-  @XAUnitOfWork(DATASOURCE_XA_NS)
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

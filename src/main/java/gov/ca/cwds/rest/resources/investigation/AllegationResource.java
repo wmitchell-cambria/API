@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources.investigation;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INVESTIGATIONS;
 
 import javax.validation.Valid;
@@ -65,7 +64,7 @@ public class AllegationResource {
    * @param allegation - The allegation to create
    * @return - The {@link Response}
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @POST
   @Path("/{id}/allegations")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -91,7 +90,7 @@ public class AllegationResource {
    * @param allegationToUpdate - allegation to update
    * @return - updated allegations
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @PUT
   @Path("/{id}/allegations/{allegation_id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

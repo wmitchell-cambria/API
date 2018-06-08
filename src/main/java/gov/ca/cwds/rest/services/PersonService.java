@@ -1,7 +1,5 @@
 package gov.ca.cwds.rest.services;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
-
 import java.io.Serializable;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -109,7 +107,7 @@ public class PersonService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  @XAUnitOfWork(DATASOURCE_XA_NS)
+  @XAUnitOfWork
   public PostedPerson create(Request request) {
     assert request instanceof Person;
     final Person person = (Person) request;

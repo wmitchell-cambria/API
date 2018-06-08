@@ -99,7 +99,7 @@ public class XAUnitOfWorkAwareProxyFactory {
         final XAUnitOfWorkAspect aspect = newAspect();
 
         try {
-          aspect.beforeStart(xaUnitOfWork); // BEFORE annotated method
+          aspect.beforeStart(overridden, xaUnitOfWork); // BEFORE annotated method
           final Object result = proceed.invoke(self, args); // call annotated method
           aspect.afterEnd(); // AFTER annotated method
           return result;

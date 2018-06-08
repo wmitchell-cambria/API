@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources.hoi;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
 
 import java.util.List;
@@ -62,7 +61,7 @@ public class HoiReferralResource {
    * @param clientIds - clientIds
    * @return the hoi referrals
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true, transactional = false)
+  @XAUnitOfWork
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),

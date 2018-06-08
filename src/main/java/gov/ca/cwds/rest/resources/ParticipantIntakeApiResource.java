@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_PARTICIPANTS_INTAKE_API;
 
 import javax.validation.Valid;
@@ -60,7 +59,7 @@ public class ParticipantIntakeApiResource {
    * @param id the id
    * @return the response
    */
-  @XAUnitOfWork(value = DATASOURCE_XA_NS, readOnly = true)
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -79,7 +78,7 @@ public class ParticipantIntakeApiResource {
    * @param id The id of the {@link ParticipantIntakeApi}
    * @return {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_NS)
+  @XAUnitOfWork
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -96,7 +95,7 @@ public class ParticipantIntakeApiResource {
    * @param participant The {@link ParticipantIntakeApi}
    * @return The {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_NS)
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -118,7 +117,7 @@ public class ParticipantIntakeApiResource {
    * @param participant {@link ParticipantIntakeApi}
    * @return The {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_NS)
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

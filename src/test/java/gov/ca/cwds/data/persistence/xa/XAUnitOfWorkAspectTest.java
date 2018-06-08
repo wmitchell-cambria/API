@@ -7,8 +7,10 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
@@ -35,10 +37,11 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
     target = new XAUnitOfWorkAspect(sessionFactories);
     target.setXaUnitOfWork(xaUnitOfWork);
 
-    final String[] values = {"cms", "ns"};
+    final String[] values = {Api.DATASOURCE_XA_CMS, Api.DATASOURCE_XA_NS};
     when(xaUnitOfWork.value()).thenReturn(values);
     when(xaUnitOfWork.cacheMode()).thenReturn(CacheMode.NORMAL);
     when(xaUnitOfWork.flushMode()).thenReturn(FlushMode.MANUAL);
+
     when(xaUnitOfWork.readOnly()).thenReturn(false);
     when(xaUnitOfWork.transactional()).thenReturn(true);
   }
@@ -54,67 +57,26 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
   }
 
   @Test
-  public void beforeStart_A$XAUnitOfWork() throws Exception {
-    target.beforeStart(xaUnitOfWork);
+  public void beforeStart_A1() throws Exception {
+    final Method method = MethodUtils.getMatchingMethod(getClass(), "beforeStart_A1", Void.TYPE);
+    target.beforeStart(method, xaUnitOfWork);
   }
-
-  // @Test
-  // public void beforeStart_A$XAUnitOfWork_T$Exception() throws Exception {
-  // try {
-  // target.beforeStart(xaUnitOfWork);
-  // fail("Expected exception was not thrown!");
-  // } catch (Exception e) {
-  // }
-  // }
 
   @Test
-  public void afterEnd_A$() throws Exception {
-    target.beforeStart(xaUnitOfWork);
-    target.afterEnd();
+  public void afterEnd_A1() throws Exception {
+    final Method method = MethodUtils.getMatchingMethod(getClass(), "afterEnd_A1", Void.TYPE);
+    target.beforeStart(method, xaUnitOfWork);
   }
-
-  // @Test
-  // public void afterEnd_A$_T$Exception() throws Exception {
-  // try {
-  // doThrow(SQLException.class).when(session).close();
-  // target.beforeStart(xaUnitOfWork);
-  // target.afterEnd();
-  // fail("Expected exception was not thrown!");
-  // } catch (Exception e) {
-  // }
-  // }
 
   @Test
   public void onError_A$() throws Exception {
     target.onError();
   }
 
-  // @Test
-  // public void onError_A$_T$Exception() throws Exception {
-  // try {
-  // doThrow(SQLException.class).when(session).close();
-  // target.beforeStart(xaUnitOfWork);
-  // target.onError();
-  // fail("Expected exception was not thrown!");
-  // } catch (Exception e) {
-  // }
-  // }
-
   @Test
   public void onFinish_A$() throws Exception {
     target.onFinish();
   }
-
-  // @Test
-  // public void onFinish_A$_T$Exception() throws Exception {
-  // try {
-  // doThrow(SQLException.class).when(session).close();
-  // target.beforeStart(xaUnitOfWork);
-  // target.onFinish();
-  // fail("Expected exception was not thrown!");
-  // } catch (Exception e) {
-  // }
-  // }
 
   @Test
   public void grabSession_A$SessionFactory() throws Exception {
@@ -148,36 +110,13 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
     target.beginTransaction();
   }
 
-  // @Test
-  // public void beginTransaction_A$_T$IllegalStateException() throws Exception {
-  // try {
-  // target.beginTransaction();
-  // fail("Expected exception was not thrown!");
-  // } catch (Exception e) {
-  // }
-  // }
-
   @Test
   public void rollbackTransaction_A$() throws Exception {
     target.rollbackTransaction();
   }
 
-  // @Test
-  // public void rollbackTransaction_A$_T$IllegalStateException() throws Exception {
-  // try {
-  // target.rollbackTransaction();
-  // fail("Expected exception was not thrown!");
-  // } catch (IllegalStateException e) {
-  // }
-  // }
-
   @Test
   public void commitTransaction_A$() throws Exception {
-    target.commitTransaction();
-  }
-
-  @Test(expected = CaresXAException.class)
-  public void commitTransaction_A$_T$Exception() throws Exception {
     target.commitTransaction();
   }
 

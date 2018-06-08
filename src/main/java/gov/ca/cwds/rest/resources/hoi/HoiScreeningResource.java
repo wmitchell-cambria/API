@@ -62,7 +62,7 @@ public class HoiScreeningResource {
    * @param clientIds - clientIds
    * @return the hoi screenings
    */
-  @XAUnitOfWork(readOnly = true, transactional = false)
+  @XAUnitOfWork
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),

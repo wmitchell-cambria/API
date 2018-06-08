@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_STAFF_PERSONS;
 
 import javax.ws.rs.Consumes;
@@ -59,7 +58,7 @@ public class StaffPersonResource {
    * @param id the id
    * @return the response
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

@@ -59,7 +59,7 @@ public class InvolvementHistoryResource {
    * 
    * @return the response
    */
-  @XAUnitOfWork(readOnly = true)
+  @XAUnitOfWork
   @GET
   @Path("/{id}/history_of_involvements")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

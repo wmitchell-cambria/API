@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.resources;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_PEOPLE;
 
 import javax.validation.Valid;
@@ -61,7 +60,7 @@ public class PersonResource {
    * @param id the id
    * @return the response
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -79,7 +78,7 @@ public class PersonResource {
    * @param id The id of the {@link Person}
    * @return {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -96,7 +95,7 @@ public class PersonResource {
    * @param person The {@link Person}
    * @return The {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -116,7 +115,7 @@ public class PersonResource {
    * @param person {@link Person}
    * @return The {@link Response}
    */
-  @XAUnitOfWork(DATASOURCE_XA_CMS)
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

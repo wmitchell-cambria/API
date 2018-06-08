@@ -1,5 +1,7 @@
 package gov.ca.cwds.inject;
 
+import java.lang.reflect.Method;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 
@@ -158,7 +160,8 @@ public class ServicesModule extends AbstractModule {
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         LOGGER.debug("Before XA annotation");
-        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
+        final Method method = mi.getMethod();
+        aspect.beforeStart(method, method.getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
         LOGGER.debug("After XA annotation");

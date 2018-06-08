@@ -1,5 +1,6 @@
 package gov.ca.cwds.data.persistence.xa;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,7 +62,7 @@ public class XAUnitOfWorkAspect {
    * @param xaUnitOfWork take settings from annotation
    * @throws CaresXAException on database error
    */
-  public void beforeStart(XAUnitOfWork xaUnitOfWork) throws CaresXAException {
+  public void beforeStart(Method method, XAUnitOfWork xaUnitOfWork) throws CaresXAException {
     if (xaUnitOfWork == null) {
       LOGGER.error("XA beforeStart: no annotation");
       return;
