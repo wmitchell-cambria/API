@@ -45,7 +45,8 @@ public class ReporterTransformer implements ParticipantMapper {
     return new ParticipantIntakeApi(null, LegacyTable.REPORTER.getName(), reporter.getReferralId(),
         legacyDescriptor, reporter.getFirstName(), reporter.getMiddleInitialName(),
         reporter.getLastName(), reporter.getSuffixTitleDescription(), null, null, null, null, null,
-        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, phoneNumbers, null, null);
+        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, phoneNumbers, false,
+        false);
   }
 
 }

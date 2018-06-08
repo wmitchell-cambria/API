@@ -68,4 +68,11 @@ public class OtherChildInPlacemtHome extends BaseOtherChildInPlacemtHome {
     this.name = name;
   }
 
+  /**
+   * @return the placementHome
+   */
+  public PlacementHome getPlacementHome() {
+    return placementHome;
+  }
+
 }
