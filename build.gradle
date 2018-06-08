@@ -59,7 +59,8 @@ compileJava {
     ]
 }
 
-def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+//def dockerTag = apiVersion + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+def dockerTag = apiVersion
 version = apiVersion
 mainClassName = mainclass
 
@@ -97,7 +98,8 @@ publishing {
       from components.java
       groupId 'gov.ca.cwds.api'
       artifactId 'api'
-        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+//        version version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+        version apiVersion
     }
   }
   repositories {
@@ -334,7 +336,7 @@ task apidocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     dockerfile = "Dockerfile"
     project.group = "cwds"
     applicationName = "api"
-    tagVersion = version + ((System.properties.getProperty('build') != null ) ? '.' + System.properties.getProperty('build') : '')
+    tagVersion = version
 }
 
 task createGradleCache(type: Copy) {
