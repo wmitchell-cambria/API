@@ -223,7 +223,7 @@ node ('tpt4-slave'){
    //   ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
    stage('Preparation') {
-		  git branch: '$branch', url: 'git@github.com:ca-cwds/API.git'
+		  git branch: '$pull_request_event_base_ref', url: 'git@github.com:ca-cwds/API.git'
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
 		  rtGradle.useWrapper = false
