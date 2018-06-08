@@ -1,8 +1,6 @@
 package gov.ca.cwds.rest.services.cms;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import gov.ca.cwds.data.cms.SpecialProjectDao;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 
@@ -12,8 +10,6 @@ import gov.ca.cwds.data.persistence.cms.SpecialProject;
  * @author CWDS API Team
  */
 public class SpecialProjectService {
-  
-  private static final Logger LOGGER = LoggerFactory.getLogger(SpecialProject.class);
   
   private SpecialProjectDao specialProjectDao;
   
@@ -30,7 +26,7 @@ public class SpecialProjectService {
    * 
    */
   public List<SpecialProject> getByGovernmentEntityTypeAndName(Short governmentEntityType, String name) {    
-    List<SpecialProject> specialProjects = specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(governmentEntityType, name);
+    List<SpecialProject> specialProjects = specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(name, governmentEntityType);
     return specialProjects;
   }
 }

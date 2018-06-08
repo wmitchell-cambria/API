@@ -32,8 +32,8 @@ public class SpecialProjectDao extends CrudsDaoImpl<SpecialProject>{
    * @param name - special project name
    * @return - list of special projects matching parameters
    */
-  public List<SpecialProject> findSpecialProjectsByGovernmentEntityAndName(Short governmentEntityType,
-    String name) {
+  public List<SpecialProject> findSpecialProjectsByGovernmentEntityAndName(String name, 
+      Short governmentEntityType) {
     @SuppressWarnings("unchecked")
     Query<SpecialProject> query = this.getSessionFactory().getCurrentSession()
       .getNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME)

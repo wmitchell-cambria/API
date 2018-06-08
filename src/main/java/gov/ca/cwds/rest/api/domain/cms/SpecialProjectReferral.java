@@ -50,6 +50,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
       example = "2000-01-01")
   private String participationEndDate;
 
+  @NotEmpty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
   @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
   @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd",

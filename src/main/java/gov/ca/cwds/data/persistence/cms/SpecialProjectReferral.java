@@ -88,10 +88,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
    * @param lastUpdatedTime - last updated time
    * 
    */
-  public SpecialProjectReferral(gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral domain, 
+  public SpecialProjectReferral(String id, gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral domain, 
       String lastUpdatedId, Date lastUpdatedTime) {
     super(lastUpdatedId, lastUpdatedTime);
-      this.countySpecificCode = domain.getCountySpecificCode();
+    this.id = id;
+    this.countySpecificCode = domain.getCountySpecificCode();
     this.referralId = domain.getReferralId();
     this.specialProjectId = domain.getSpecialProjectId();
     this.participationEndDate = DomainChef.uncookDateString(domain.getParticipationEndDate());

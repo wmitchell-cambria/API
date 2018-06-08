@@ -4,11 +4,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.junit.Test;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.fixture.SpecialProjectReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 
@@ -46,7 +43,8 @@ public class SpecialProjectReferralTest {
   @Test
   public void testConstructorUsingDomainObject() throws Exception {
     gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral domain = new SpecialProjectReferralResourceBuilder().build();
-    SpecialProjectReferral spr = new SpecialProjectReferral(domain, lastUpdatedId, lastUpdatedTime);
+    SpecialProjectReferral spr = new SpecialProjectReferral(id, domain, lastUpdatedId, lastUpdatedTime);
+    assertThat(spr.getId(), is(equalTo(id)));
     assertThat(spr.getCountySpecificCode(), is(equalTo(domain.getCountySpecificCode())));
     assertThat(spr.getReferralId(), is(equalTo(domain.getReferralId())));
     assertThat(spr.getSpecialProjectId(), is(equalTo(domain.getSpecialProjectId())));
