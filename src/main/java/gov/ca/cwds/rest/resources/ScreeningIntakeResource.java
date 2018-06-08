@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_SCREENINGS;
 
 import javax.validation.Valid;
@@ -60,7 +61,7 @@ public class ScreeningIntakeResource {
    * @param id the screening id
    * @return The {@link Response}
    */
-  @XAUnitOfWork
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
