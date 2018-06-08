@@ -1,24 +1,9 @@
 package gov.ca.cwds.rest.services;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import org.apache.commons.lang3.NotImplementedException;
-import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.rest.RestStatus;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressesDao;
@@ -51,10 +36,23 @@ import gov.ca.cwds.rest.services.mapper.AgencyMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.NotImplementedException;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.rest.RestStatus;
 
 /**
  * Business layer object to work on {@link Screening}
- * 
+ *
  * @author CWDS API Team
  */
 public class ScreeningService implements CrudsService {
@@ -103,7 +101,7 @@ public class ScreeningService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#find(java.io.Serializable)
    */
   @Override
@@ -113,7 +111,7 @@ public class ScreeningService implements CrudsService {
 
   /**
    * Return the screening dashboard of the logged in user.
-   * 
+   *
    * @return - array of screening dashboard objects
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
@@ -133,7 +131,7 @@ public class ScreeningService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
    */
   @Override
@@ -143,9 +141,8 @@ public class ScreeningService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @param request the request
-   * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
@@ -156,9 +153,9 @@ public class ScreeningService implements CrudsService {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
-   *      gov.ca.cwds.rest.api.Request)
+   * gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Screening update(Serializable primaryKey, Request request) {
@@ -177,7 +174,7 @@ public class ScreeningService implements CrudsService {
 
   /**
    * Convert given screening to JSON.
-   * 
+   *
    * @param screening Screening to convert to JSON format
    * @return Screening as JSON format
    */
@@ -193,7 +190,7 @@ public class ScreeningService implements CrudsService {
 
   /**
    * Index given screening request.
-   * 
+   *
    * @param request The screening request
    * @return The IndexResponse
    */
@@ -279,10 +276,10 @@ public class ScreeningService implements CrudsService {
     String screeningId = createdScreeningEntity.getId();
     screening.setId(screeningId);
 
-    createOrUpdateAllegations(screening);
-    createOrUpdateCrossReports(screening);
+    createUpdateDeleteAllegations(screening);
+    createUpdateDeleteCrossReports(screening);
     createOrUpdateAddresses(screening);
-    createOrUpdateParticipants(screening);
+    createUpdateDeleteParticipants(screening);
 
     return screening;
   }
@@ -298,10 +295,10 @@ public class ScreeningService implements CrudsService {
     ScreeningEntity screeningEntity = screeningMapper.map(screening);
     screeningDao.update(screeningEntity);
 
-    createOrUpdateAllegations(screening);
-    createOrUpdateCrossReports(screening);
+    createUpdateDeleteAllegations(screening);
+    createUpdateDeleteCrossReports(screening);
     createOrUpdateAddresses(screening);
-    createOrUpdateParticipants(screening);
+    createUpdateDeleteParticipants(screening);
 
     return screening;
   }
@@ -315,7 +312,10 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAllegations(Screening screening) {
+  private void createUpdateDeleteAllegations(Screening screening) {
+    Set<Integer> allegationIdsOld = allegationDao.findByScreeningId(screening.getId()).stream()
+        .map(AllegationEntity::getId).collect(Collectors.toSet());
+
     for (AllegationIntake allegation : screening.getAllegations()) {
       AllegationEntity allegationEntity = allegationMapper.map(allegation);
       allegationEntity.setScreeningId(screening.getId());
@@ -334,11 +334,18 @@ public class ScreeningService implements CrudsService {
         allegationEntity.setCreatedAt(managedAllegationEntity.getCreatedAt());
         allegationDao.getSessionFactory().getCurrentSession().detach(managedAllegationEntity);
         allegationDao.update(allegationEntity);
+        allegationIdsOld.remove(allegationEntity.getId());
       }
     }
+    // Delete old ones that are not in the new.
+    allegationIdsOld.forEach(allegationId -> allegationDao.delete(allegationId));
+
   }
 
-  private void createOrUpdateCrossReports(Screening screening) {
+  private void createUpdateDeleteCrossReports(Screening screening) {
+    Set<String> crossReportIdsOld = crossReportDao.findByScreeningId(screening.getId()).stream()
+        .map(CrossReportEntity::getId).collect(Collectors.toSet());
+
     for (CrossReportIntake crossReport : screening.getCrossReports()) {
       CrossReportEntity crossReportEntity = crossReportMapper.map(crossReport);
       crossReportEntity.setScreeningId(screening.getId());
@@ -357,10 +364,14 @@ public class ScreeningService implements CrudsService {
         crossReportEntity.setCreatedAt(managedCrossReportEntity.getCreatedAt());
         crossReportDao.getSessionFactory().getCurrentSession().detach(managedCrossReportEntity);
         crossReportDao.update(crossReportEntity);
+        crossReportIdsOld.remove(crossReportEntity.getId());
       }
 
       createOrUpdateAgencies(crossReport);
     }
+
+    // Delete old ones that are not in the new.
+    crossReportIdsOld.forEach(crossReportId -> crossReportDao.delete(crossReportId));
   }
 
   private void createOrUpdateAgencies(CrossReportIntake crossReport) {
@@ -404,8 +415,10 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateParticipants(Screening screening) {
+  private void createUpdateDeleteParticipants(Screening screening) {
     Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
+    Set<String> participantIdsOld = participantIntakeApiService.getByScreeningId(screening.getId())
+        .stream().map(ParticipantEntity::getId).collect(Collectors.toSet());
 
     for (ParticipantIntakeApi participantIntakeApi : screening.getParticipantIntakeApis()) {
       String participantIntakeApiId = participantIntakeApi.getId();
@@ -418,8 +431,11 @@ public class ScreeningService implements CrudsService {
         ParticipantIntakeApi updatedParticipantIntakeApi =
             participantIntakeApiService.update(participantIntakeApiId, participantIntakeApi);
         participantIntakeApis.add(updatedParticipantIntakeApi);
+        participantIdsOld.remove(participantIntakeApiId);
       }
     }
+    // Delete old ones that are not in the new.
+    participantIdsOld.forEach(participantId -> participantIntakeApiService.delete(participantId));
 
     screening.setParticipantIntakeApis(participantIntakeApis);
   }
