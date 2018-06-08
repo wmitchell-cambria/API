@@ -19,7 +19,7 @@ public class ScreeningResourceBuilder {
 
   String id = "1";
   String referralId = "";
-  LocalDateTime endedAt = LocalDateTime.parse("2017-01-03T00:00:00");
+  LocalDateTime endedAt = LocalDateTime.parse("2017-01-03T11:10:09");
   String incidentCounty = "34";
   LocalDate incidentDate = LocalDate.parse("2017-01-01");
   String locationType = "Foster Home";
@@ -29,7 +29,7 @@ public class ScreeningResourceBuilder {
   String reportNarrative = "Narrative 123 test";
   String reference = "123ABC";
   String restrictionsRationale = "";
-  LocalDateTime startedAt = LocalDateTime.parse("2017-01-02T00:00:00");
+  LocalDateTime startedAt = LocalDateTime.parse("2017-01-02T10:09:08");
   String assignee = "Michael Bastow";
   String assigneeStaffId = "0X5";
   String additionalInformation = "additional information";
