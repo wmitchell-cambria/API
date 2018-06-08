@@ -21,8 +21,8 @@ import com.atomikos.icatch.jta.UserTransactionImp;
  * 
  * <p>
  * In AOP terms, this wrapper method follows the <strong>"around"</strong> protocol. Start with
- * {@link XAUnitOfWorkAspect#beforeStart(XAUnitOfWork)}, call the annotated method, and finish with
- * {@link XAUnitOfWorkAspect#afterEnd()}.
+ * {@link #beforeStart(Method, XAUnitOfWork)}, call the annotated method, and finish with
+ * {@link #afterEnd()}.
  * </p>
  * 
  * <p>
@@ -59,6 +59,7 @@ public class XAUnitOfWorkAspect {
   /**
    * Aspect entry point.
    * 
+   * @param method join point
    * @param xaUnitOfWork take settings from annotation
    * @throws CaresXAException on database error
    */

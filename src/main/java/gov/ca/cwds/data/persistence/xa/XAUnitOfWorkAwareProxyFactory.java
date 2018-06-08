@@ -73,8 +73,8 @@ public class XAUnitOfWorkAwareProxyFactory {
    * 
    * <p>
    * In AOP terms, this wrapper method follows the <strong>"around"</strong> protocol by starting
-   * with {@link XAUnitOfWorkAspect#beforeStart(XAUnitOfWork)}, calling the target, annotated
-   * method, and finishing with {@link XAUnitOfWorkAspect#afterEnd()}.
+   * with {@link XAUnitOfWorkAspect#beforeStart(java.lang.reflect.Method, XAUnitOfWork)}, calling
+   * the target, annotated method, and finishing with {@link XAUnitOfWorkAspect#afterEnd()}.
    * </p>
    *
    * @param clazz the specified class definition, typically a REST resource
