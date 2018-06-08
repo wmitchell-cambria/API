@@ -15,7 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.NotFound;
@@ -175,12 +179,18 @@ public class CmsCase extends CmsPersistentObject {
   @Column(name = "TICKLE_T_B")
   private String tickleIndVar;
 
-  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKCHLD_CLT", nullable = true, updatable = false, insertable = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "FKCHLD_CLT", nullable = false, updatable = false, insertable = false)
   private ChildClient childClient;
 
-  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKSTFPERST", nullable = true, updatable = false, insertable = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
   /**
@@ -189,6 +199,9 @@ public class CmsCase extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
@@ -406,6 +419,11 @@ public class CmsCase extends CmsPersistentObject {
 
   public Referral getRiReferral() {
     return riReferral;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
