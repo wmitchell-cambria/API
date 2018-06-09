@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -33,10 +32,10 @@ class HOIReferralFactory {
 
   /**
    * @param referral - Referral
-   * @param referralClient - ReferralClient
+   * @param isSelfReported - is Referral Self Reported
    * @return the built referral HOI
    */
-  HOIReferral createHOIReferral(Referral referral, ReferralClient referralClient,
+  HOIReferral createHOIReferral(Referral referral, boolean isSelfReported,
       SystemCodeDescriptor county) {
     HOIReferral hoiReferral = new HOIReferral();
     hoiReferral.setId(referral.getId());
@@ -47,7 +46,7 @@ class HOIReferralFactory {
         new SystemCodeDescriptor(referral.getReferralResponseType(), SystemCodeCache.global()
             .getSystemCodeShortDescription(referral.getReferralResponseType())));
     hoiReferral.setAssignedSocialWorker(buildAssignedSocialWorkerDomain(referral.getStaffPerson()));
-    hoiReferral.setReporter(buildReporterDomain(referral, referralClient));
+    hoiReferral.setReporter(buildReporterDomain(referral, isSelfReported));
     hoiReferral.setAccessLimitation(buildAccessLimitationDomain(referral));
 
     List<HOIAllegation> hoiAllegations = referral.getAllegations().stream()
@@ -124,8 +123,8 @@ class HOIReferralFactory {
             LegacyTable.CLIENT.getDescription()));
   }
 
-  private HOIReporter buildReporterDomain(Referral referral, ReferralClient referralClient) {
-    Role role = getReporterRole(referral, referralClient);
+  private HOIReporter buildReporterDomain(Referral referral, boolean isSelfReported) {
+    Role role = getReporterRole(referral, isSelfReported);
     HOIReporter hoiReporter;
     Reporter reporter = referral.getReporter();
     if (reporter != null) {
@@ -148,12 +147,12 @@ class HOIReferralFactory {
     return hoiReporter;
   }
 
-  private Role getReporterRole(Referral referral, ReferralClient referralClient) {
+  private Role getReporterRole(Referral referral, boolean isSelfReported) {
     Reporter reporter = referral.getReporter();
     if (reporter == null) {
       if ("Y".equals(referral.getAnonymousReporterIndicator())) {
         return Role.ANONYMOUS_REPORTER;
-      } else if ("Y".equals(referralClient.getSelfReportedIndicator())) {
+      } else if (isSelfReported) {
         return Role.SELF_REPORTER;
       }
     } else {

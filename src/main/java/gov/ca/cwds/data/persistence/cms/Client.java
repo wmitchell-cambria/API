@@ -15,8 +15,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -43,6 +46,9 @@ public class Client extends BaseClient {
 
   private static final long serialVersionUID = 1L;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @OneToMany(cascade = CascadeType.DETACH)
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   private Set<ClientAddress> clientAddress = new HashSet<>();
@@ -363,16 +369,16 @@ public class Client extends BaseClient {
     return clientAddress;
   }
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
-
   /**
    * @param clientAddress - clientAddress
    */
   public void setClientAddress(Set<ClientAddress> clientAddress) {
     this.clientAddress = clientAddress;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
