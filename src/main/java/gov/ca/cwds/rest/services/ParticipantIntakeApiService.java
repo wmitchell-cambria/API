@@ -302,17 +302,17 @@ public class ParticipantIntakeApiService implements CrudsService {
 
   private void createOrUpdateCsecs(ParticipantIntakeApi participantIntakeApi,
       ParticipantEntity participantEntityManaged) {
-    List<CsecEntity> csecEnities = new ArrayList<>(participantIntakeApi.getCsecs().size());
+    final List<CsecEntity> csecEnities = new ArrayList<>(participantIntakeApi.getCsecs().size());
     for (Csec csec : participantIntakeApi.getCsecs()) {
       String participantId = participantEntityManaged.getId();
       CsecEntity csecEntity = csecMapper.map(csec);
       csecEntity.setParticipantId(participantId);
       if (csecEntity.getId() == null) {
-        CsecEntity createdCsecEntity = csecDao.create(csecEntity);
+        final CsecEntity createdCsecEntity = csecDao.create(csecEntity);
         csec.setId(String.valueOf(createdCsecEntity.getId()));
         csecEnities.add(createdCsecEntity);
       } else {
-        CsecEntity managedCsecEntity = csecDao.find(csecEntity.getId());
+        final CsecEntity managedCsecEntity = csecDao.find(csecEntity.getId());
         if (managedCsecEntity == null) {
           throw new ServiceException(
               "Cannot update CSEC that doesn't exist. id = " + csecEntity.getId());

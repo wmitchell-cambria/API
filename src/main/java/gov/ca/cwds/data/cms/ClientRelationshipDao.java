@@ -80,8 +80,9 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     @SuppressWarnings("unchecked")
     final Query<ClientRelationship> query =
         this.grabSession().getNamedQuery(FIND_CLIENT_RELATIONSHIPS_BY_PRIMARY_CLIENT_IDS);
-    query.setParameter("clientIds", clientIds);
-    Map<String, Collection<ClientRelationship>> relationships = new HashMap<>(clientIds.size());
+    query.setParameterList("clientIds", clientIds);
+    final Map<String, Collection<ClientRelationship>> relationships =
+        new HashMap<>(clientIds.size());
     for (ClientRelationship rel : query.list()) {
       if (!relationships.containsKey(rel.getPrimaryClientId())) {
         relationships.put(rel.getPrimaryClientId(), new ArrayList<>());
@@ -103,7 +104,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     @SuppressWarnings("unchecked")
     final Query<ClientRelationship> query =
         this.grabSession().getNamedQuery(FIND_CLIENT_RELATIONSHIPS_BY_SECONDARY_CLIENT_IDS);
-    query.setParameter("clientIds", clientIds);
+    query.setParameterList("clientIds", clientIds);
     Map<String, Collection<ClientRelationship>> relationships = new HashMap<>(clientIds.size());
     for (ClientRelationship rel : query.list()) {
       if (!relationships.containsKey(rel.getSecondaryClientId())) {
