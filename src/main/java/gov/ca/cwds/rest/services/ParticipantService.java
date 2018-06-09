@@ -25,6 +25,7 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
+import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
@@ -64,6 +65,7 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ParticipantService implements CrudsService {
 
   private static final String ASSESMENT = "A";
+  private static final String CLIENT = "CLIENT_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 
@@ -190,7 +192,11 @@ public class ParticipantService implements CrudsService {
       Participant incomingParticipant, String sexAtBirth, String role) {
     String clientId;
 
-    boolean newClient = StringUtils.isBlank(incomingParticipant.getLegacyId());
+    LegacyDescriptor clientLegacyDesc = incomingParticipant.getLegacyDescriptor();
+    boolean newClient = clientLegacyDesc == null || StringUtils.isBlank(clientLegacyDesc.getId())
+        || !StringUtils.equals(clientLegacyDesc.getTableName(), LegacyTable.CLIENT.getName());
+
+
     if (newClient) {
       clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
           incomingParticipant, sexAtBirth);

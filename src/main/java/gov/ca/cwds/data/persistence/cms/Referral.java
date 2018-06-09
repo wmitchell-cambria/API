@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_BY_IDS;
+import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_WITH_REPORTERS_BY_IDS;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
 import java.util.Date;
@@ -21,8 +21,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -42,14 +45,15 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
  * @author CWDS API Team
  */
 @SuppressWarnings("serial")
-@NamedQuery(name = FIND_REFERRALS_BY_IDS, query = "FROM Referral WHERE id IN :ids")
+@NamedQuery(name = FIND_REFERRALS_WITH_REPORTERS_BY_IDS,
+    query = "FROM Referral ref LEFT OUTER JOIN FETCH ref.reporter rep WHERE ref.id IN :ids")
 @Entity
 @Table(name = "REFERL_T")
 @JsonPropertyOrder(alphabetic = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Referral extends CmsPersistentObject implements AccessLimitationAware {
 
-  public static final String FIND_REFERRALS_BY_IDS = "gov.ca.cwds.data.persistence.cms.Referral.findByIds";
+  public static final String FIND_REFERRALS_WITH_REPORTERS_BY_IDS = "gov.ca.cwds.data.persistence.cms.Referral.findReferralsWithReportersByIds";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
@@ -235,10 +239,12 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<CrossReport> crossReports = new HashSet<>();
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ToStringExclude
+  @OneToOne
   @JoinColumn(name = "IDENTIFIER")
   private Reporter reporter;
 
+  @ToStringExclude
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<ReferralClient> referralClients = new HashSet<>();
@@ -249,38 +255,58 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERS0", nullable = true, updatable = false, insertable = false)
   private StaffPerson staffPerson0;
 
-  @ManyToOne(optional = true, fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
-  private Referral riReferral;
-
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ALGDSC_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ER_REF_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument1;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "INVSTG_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument2;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "CHILOC_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "RSP_RTNTXT", nullable = true, updatable = false, insertable = false)
   private LongText longText1;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "SCN_NT_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText2;

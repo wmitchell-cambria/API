@@ -1,7 +1,6 @@
 package gov.ca.cwds.rest.resources.hoi;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT;
-import static org.junit.Assert.assertEquals;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import gov.ca.cwds.rest.api.domain.hoi.HOIReferral;
@@ -15,6 +14,8 @@ import javax.ws.rs.core.Response;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 
 public class HoiReferralResourceIRT extends HOIBaseTest {
 
@@ -25,7 +26,11 @@ public class HoiReferralResourceIRT extends HOIBaseTest {
     final List<HOIReferral> actualHOIReferrals = objectMapper
         .readValue(actualJson.getBytes(), new TypeReference<List<HOIReferral>>() {
         });
-    assertEquals(expectedHOIReferrals, actualHOIReferrals);
+
+    // convert lists of Referrals to JSON-s for comparison because otherwise it could fail because of random order of Allegations
+    JSONAssert.assertEquals(objectMapper.writeValueAsString(expectedHOIReferrals),
+        objectMapper.writeValueAsString(actualHOIReferrals), JSONCompareMode.NON_EXTENSIBLE);
+
     assertHOIReferralsAreSorted(new String[]{"MYsSPHW0DW", "9OQhOAE0DW"}, actualHOIReferrals);
   }
 
@@ -38,7 +43,7 @@ public class HoiReferralResourceIRT extends HOIBaseTest {
 
   @Test(expected = NotImplementedException.class)
   public void handleRequestNotImplemented() {
-    new HOIReferralService(null, null, null, null, null, null, null)
+    new HOIReferralService(null, null, null, null, null)
         .handleRequest(new HOIReferral());
   }
 }
