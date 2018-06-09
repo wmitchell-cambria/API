@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,7 +12,11 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.Type;
 
@@ -70,11 +75,17 @@ public class ClientCollateral extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCOLTRL_T", nullable = false, updatable = false, insertable = false)
   private CollateralIndividual collateralIndividual;
 
@@ -176,6 +187,11 @@ public class ClientCollateral extends CmsPersistentObject {
   @Override
   public String getPrimaryKey() {
     return getThirdId();
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override

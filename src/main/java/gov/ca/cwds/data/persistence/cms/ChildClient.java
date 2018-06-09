@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -13,7 +14,11 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -173,7 +178,10 @@ public class ChildClient extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
-  @OneToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @OneToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
@@ -654,6 +662,11 @@ public class ChildClient extends CmsPersistentObject {
 
   public Client getClient() {
     return client;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
