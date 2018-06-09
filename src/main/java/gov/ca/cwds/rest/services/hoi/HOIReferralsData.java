@@ -1,14 +1,14 @@
 package gov.ca.cwds.rest.services.hoi;
 
 import gov.ca.cwds.data.persistence.cms.Referral;
-import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import java.util.Collection;
 import java.util.Map;
 
 class HOIReferralsData {
 
-  private Collection<ReferralClient> referralClients;
   private Collection<String> referralIds;
+
+  private Map<String, Boolean> referralsSelfReportedIndicators;
 
   // key: ReferralId, value: Referral
   private Map<String, Referral> referrals;
@@ -17,20 +17,20 @@ class HOIReferralsData {
     // no-op
   }
 
-  Collection<ReferralClient> getReferralClients() {
-    return referralClients;
-  }
-
-  void setReferralClients(Collection<ReferralClient> referralClients) {
-    this.referralClients = referralClients;
-  }
-
   Collection<String> getReferralIds() {
     return referralIds;
   }
 
   void setReferralIds(Collection<String> referralIds) {
     this.referralIds = referralIds;
+  }
+
+  Map<String, Boolean> getReferralsSelfReportedIndicators() {
+    return referralsSelfReportedIndicators;
+  }
+
+  void setReferralsSelfReportedIndicators(Map<String, Boolean> referralsSelfReportedIndicators) {
+    this.referralsSelfReportedIndicators = referralsSelfReportedIndicators;
   }
 
   Map<String, Referral> getReferrals() {
