@@ -15,7 +15,9 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.ColumnTransformer;
@@ -124,11 +126,15 @@ public class Allegation extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
+  @HashCodeExclude
+  @EqualsExclude
   @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, insertable = false, updatable = false)
   private Client victim;
 
+  @HashCodeExclude
+  @EqualsExclude
   @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_0", nullable = true, insertable = false, updatable = false)
