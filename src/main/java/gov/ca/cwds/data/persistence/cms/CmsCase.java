@@ -22,8 +22,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.annotations.NamedQuery;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -202,7 +200,6 @@ public class CmsCase extends CmsPersistentObject {
   @HashCodeExclude
   @EqualsExclude
   @ToStringExclude
-  @NotFound(action = NotFoundAction.IGNORE)
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
   private Referral riReferral;
