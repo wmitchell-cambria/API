@@ -11,6 +11,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -241,6 +242,13 @@ public class XAUnitOfWorkAspect {
     }
   }
 
+  protected void rollbackSessionTransaction(Session session) {
+    final Transaction txn = session.getTransaction();
+    if (txn != null && txn.getStatus().canRollback()) {
+      txn.rollback();
+    }
+  }
+
   /**
    * Roll back XA transaction.
    * 
@@ -257,6 +265,7 @@ public class XAUnitOfWorkAspect {
 
     try {
       LOGGER.debug("XA ROLLBACK TRANSACTION!");
+      sessions.values().stream().forEach(this::rollbackSessionTransaction);
       txn.rollback();
     } catch (Exception e) {
       LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
