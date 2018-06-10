@@ -93,27 +93,27 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
     target.delete("abc");
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void testCreate() {
     when(indexResponse.status()).thenReturn(RestStatus.CREATED);
-    Screening screening = inatorMakeScreening();
-    Screening actual = target.create(screening);
+    final Screening screening = inatorMakeScreening();
+    final Screening actual = target.create(screening);
     assertThat(actual, is(screening));
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void testUpdate() {
     when(indexResponse.status()).thenReturn(RestStatus.OK);
-    Screening screening =
+    final Screening screening =
         new Screening("abc", null, null, null, null, null, null, null, "0X5", "ssb");
-    Screening actual = target.update("abc", screening);
+    final Screening actual = target.update("abc", screening);
     assertThat(actual, is(screening));
   }
 
   @Test(expected = Exception.class)
   public void testUpdatePrimaryKeyValueMismatch() {
-    Screening screening = new Screening("abc", null, null, null, null, null, null, null, "0X5", "");
-    target.update("abcd", screening);
+    target.update("abcd",
+        new Screening("abc", null, null, null, null, null, null, null, "0X5", ""));
     fail("Expected exception");
   }
 
@@ -122,14 +122,13 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
     target.update(new Integer(1), null);
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void testUpdateRequestObjectTypMismatchn() {
-    Screening request = new Screening("abc", "screening", "reference", "screeningDecision",
-        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
-    target.update("abc", request);
+    target.update("abc", new Screening("abc", "screening", "reference", "screeningDecision",
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", ""));
   }
 
-  @Test(expected = Exception.class)
+  @Test
   public void testCreateRequestObjectTypMismatchn() {
     Request request = mock(Screening.class);
     target.create(request);
@@ -171,7 +170,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test(expected = NotImplementedException.class)
   public void find_A$Serializable() throws Exception {
-    Serializable primaryKey = DEFAULT_CLIENT_ID;
+    final Serializable primaryKey = DEFAULT_CLIENT_ID;
     Response actual = target.find(primaryKey);
     Response expected = null;
     assertThat(actual, is(equalTo(expected)));
@@ -185,24 +184,25 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test(expected = NotImplementedException.class)
   public void delete_A$Serializable() throws Exception {
-    Serializable primaryKey = DEFAULT_CLIENT_ID;
+    final Serializable primaryKey = DEFAULT_CLIENT_ID;
     Response actual = target.delete(primaryKey);
     Response expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
-  @Test(expected = Exception.class)
+  @Test
+  // (expected = Exception.class)
   public void create_A$Request() throws Exception {
     final Screening screening = inatorMakeScreening();
-    Screening actual = target.create(screening);
+    final Screening actual = target.create(screening);
     assertThat(actual, is(notNullValue()));
   }
 
   @Test(expected = ServiceException.class)
   public void update_A$Serializable$Request() throws Exception {
-    Serializable primaryKey = DEFAULT_CLIENT_ID;
+    final Serializable primaryKey = DEFAULT_CLIENT_ID;
     Screening screening = inatorMakeScreening();
-    Screening actual = target.update(primaryKey, screening);
+    final Screening actual = target.update(primaryKey, screening);
     assertThat(actual, is(notNullValue()));
   }
 
@@ -210,23 +210,23 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   // (expected = NullPointerException.class)
   public void getScreening_A$String() throws Exception {
     String id = DEFAULT_CLIENT_ID;
-    Screening actual = target.getScreening(id);
+    final Screening actual = target.getScreening(id);
     assertThat(actual, is(notNullValue()));
   }
 
   @Test(expected = NullPointerException.class)
   public void createScreening_A$Screening() throws Exception {
     final Screening screening = inatorMakeScreening();
-    Screening actual = target.createScreening(screening);
+    final Screening actual = target.createScreening(screening);
     assertThat(actual, is(notNullValue()));
   }
 
   @Test
   public void updateScreening_A$String$Screening() throws Exception {
-    String id = DEFAULT_PARTICIPANT_ID;
-    Screening screening = new Screening("10", "screening", "reference", "screeningDecision",
+    final String id = DEFAULT_PARTICIPANT_ID;
+    final Screening screening = new Screening("10", "screening", "reference", "screeningDecision",
         "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
-    Screening actual = target.updateScreening(id, screening);
+    final Screening actual = target.updateScreening(id, screening);
     assertThat(actual, is(notNullValue()));
   }
 

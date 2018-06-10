@@ -19,9 +19,7 @@ import gov.ca.cwds.rest.api.domain.GovernmentAgencyIntake;
 /***
  * 
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class CrossReportsTransformerTest {
 
   private CrossReportIntake crossReportIntake;

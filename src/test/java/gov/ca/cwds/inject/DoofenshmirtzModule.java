@@ -4,11 +4,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.rest.RestStatus;
 import org.hibernate.SessionFactory;
 
 import com.google.inject.AbstractModule;
@@ -24,10 +30,13 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.ns.xa.XaNsScreeningDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 import gov.ca.cwds.data.persistence.ns.AllegationEntity;
+import gov.ca.cwds.data.persistence.ns.CrossReportEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.fixture.ScreeningEntityBuilder;
 import gov.ca.cwds.fixture.ScreeningResourceBuilder;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
+import gov.ca.cwds.rest.api.domain.CrossReportIntake;
+import gov.ca.cwds.rest.api.domain.GovernmentAgencyIntake;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
 import gov.ca.cwds.rest.services.mapper.AddressMapper;
@@ -61,6 +70,7 @@ public class DoofenshmirtzModule extends AbstractModule {
 
   final ScreeningEntity screeningEntity = new ScreeningEntityBuilder().build();
   final Screening screening = inator.inatorMakeScreening();
+  CrossReportIntake crossReportIntake;
 
   /**
    * {@inheritDoc}
@@ -85,7 +95,24 @@ public class DoofenshmirtzModule extends AbstractModule {
     when(inator.esConfig.getElasticsearchDocType()).thenReturn("screening");
     when(esClient.prepareIndex(any(), any(), any())).thenReturn(indexRequestBuilder);
     when(indexRequestBuilder.get()).thenReturn(indexResponse);
+    when(indexResponse.status()).thenReturn(RestStatus.OK);
 
+    Set<GovernmentAgencyIntake> agencies =
+        Stream.of(new GovernmentAgencyIntake("12", "Ad4ATcY00E", "LAW_ENFORCEMENT"))
+            .collect(Collectors.toSet());
+    crossReportIntake = new CrossReportIntake();
+    crossReportIntake.setId("");
+    crossReportIntake.setLegacyId("");
+    crossReportIntake.setLegacySourceTable("");
+    crossReportIntake.setMethod("Electronic Report");
+    crossReportIntake.setFiledOutOfState(false);
+    crossReportIntake.setInformDate("2017-03-15");
+    crossReportIntake.setAgencies(agencies);
+    crossReportIntake.setCountyId("1101");
+
+    final List<CrossReportIntake> crossReportEntities = new ArrayList<>();
+    crossReportEntities.add(crossReportIntake);
+    when(crossReportMapper.map(any(CrossReportEntity.class))).thenReturn(crossReportIntake);
 
     final Screening screening = new ScreeningResourceBuilder().build();
     when(screeningDao.find(any(String.class))).thenReturn(screeningEntity);

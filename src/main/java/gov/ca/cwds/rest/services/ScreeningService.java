@@ -51,6 +51,7 @@ import gov.ca.cwds.rest.services.mapper.AgencyMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
+import gov.ca.cwds.utils.JsonUtils;
 
 /**
  * Business layer object to work on {@link Screening}.
@@ -183,7 +184,7 @@ public class ScreeningService implements CrudsService {
   private String toJson(Screening screening) {
     String screeningJson;
     try {
-      screeningJson = OBJECT_MAPPER.writeValueAsString(screening);
+      screeningJson = JsonUtils.to(screening);
     } catch (JsonProcessingException e) {
       throw new ServiceException(e);
     }
