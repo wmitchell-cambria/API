@@ -5,23 +5,27 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.xml.bind.DatatypeConverter;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import gov.ca.cwds.rest.util.jni.CWDSCompressionUtils;
+import gov.ca.cwds.rest.util.jni.LZWCompressionTest;
+import gov.ca.cwds.rest.util.jni.LZWEncoder;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-@SuppressWarnings("javadoc")
-public class CmsDocumentBlobSegmentTest {
+public class CmsDocumentBlobSegmentTest extends LZWCompressionTest {
 
   private static Validator validator;
 
@@ -141,7 +145,8 @@ public class CmsDocumentBlobSegmentTest {
 
   @Test
   public void testConstraintBlobMinSize() throws Exception {
-    CmsDocumentBlobSegment blob = new CmsDocumentBlobSegment(docHandle, segmentSequence, "".getBytes());
+    CmsDocumentBlobSegment blob =
+        new CmsDocumentBlobSegment(docHandle, segmentSequence, "".getBytes());
     Set<ConstraintViolation<CmsDocumentBlobSegment>> violations = validator.validate(blob);
 
     assertEquals(1, violations.size());
@@ -187,4 +192,68 @@ public class CmsDocumentBlobSegmentTest {
     blob.setSegmentSequence(newSegmentSequence);
     assertThat(blob.getSegmentSequence(), is(equalTo(newSegmentSequence)));
   }
+
+  // ===================
+  // DECOMPRESS:
+  // ===================
+
+  @Test
+  public void testDecompressGood() {
+    if (this.inst == null || !LZWEncoder.isClassloaded()) {
+      // Build platform does not yet support this test.
+      return;
+    }
+
+    // NEXT: verify that temp files are deleted!
+    try {
+      final String src =
+          LZWCompressionTest.class.getResource(LZWCompressionTest.GOOD_LZW).getPath();
+      final String good =
+          LZWCompressionTest.class.getResource(LZWCompressionTest.GOOD_DOC).getPath();
+
+      File tgt = File.createTempFile("tgt", ".lzw");
+      tgt.deleteOnExit();
+
+      inst.fileCopyUncompress(src, tgt.getAbsolutePath());
+
+      final String chkTgt = CWDSCompressionUtils.checksum(tgt);
+      final String chkGood = CWDSCompressionUtils.checksum(new File(good));
+
+      assertTrue("LZW decompression failed", chkTgt.equals(chkGood));
+    } catch (Exception e) {
+      fail("Exception: " + e.getMessage());
+    }
+  }
+
+  // ===================
+  // COMPRESS:
+  // ===================
+
+  @Test
+  public void testCompressGood() {
+    if (this.inst == null || !LZWEncoder.isClassloaded()) {
+      // Build platform does not yet support this test.
+      return;
+    }
+
+    try {
+      final String src =
+          LZWCompressionTest.class.getResource(LZWCompressionTest.GOOD_DOC).getPath();
+      final String good =
+          LZWCompressionTest.class.getResource(LZWCompressionTest.GOOD_LZW).getPath();
+
+      File tgt = File.createTempFile("tgt", ".doc");
+      tgt.deleteOnExit();
+
+      inst.fileCopyCompress(src, tgt.getAbsolutePath());
+
+      final String chkTgt = CWDSCompressionUtils.checksum(tgt);
+      final String chkGood = CWDSCompressionUtils.checksum(new File(good));
+
+      assertTrue("LZW compression failed", chkTgt.equals(chkGood));
+    } catch (Exception e) {
+      fail("Exception: " + e.getMessage());
+    }
+  }
+
 }

@@ -74,7 +74,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     super();
     this.docHandle = docHandle;
     this.segmentSequence = segmentSequence;
-    this.docBlob = Arrays.copyOf(docBlob, docBlob.length); // SonarQube complaint
+    this.docBlob = docBlob != null ? Arrays.copyOf(docBlob, docBlob.length) : null;
   }
 
   /**
