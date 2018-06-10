@@ -13,8 +13,7 @@ import gov.ca.cwds.cms.data.access.inject.AbstractDataAccessServicesModule;
 public class DataAccessServicesModule extends AbstractDataAccessServicesModule {
 
   @Override
-  protected SessionFactory getDataAccessSercvicesSessionFactory(Injector injector) {
+  protected SessionFactory getDataAccessServicesSessionFactory(Injector injector) {
     return injector.getInstance(Key.get(SessionFactory.class, CmsSessionFactory.class));
   }
-
 }

@@ -170,6 +170,11 @@ public class Participant extends ReportingDomain implements Request, Response {
   @JsonProperty("race_ethnicity")
   private RaceAndEthnicity raceAndEthnicity;
 
+  @Valid
+  @ApiModelProperty(dataType = "gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies")
+  @JsonProperty("safely_surrendered_babies")
+  private SafelySurrenderedBabies safelySurrenderedBabies;
+
   @JsonIgnore
   private List<Csec> csecs = new ArrayList<>();
 
@@ -509,6 +514,14 @@ public class Participant extends ReportingDomain implements Request, Response {
 
   public void setCsecs(List<Csec> csecs) {
     this.csecs = csecs;
+  }
+
+  public SafelySurrenderedBabies getSafelySurrenderedBabies() {
+    return safelySurrenderedBabies;
+  }
+
+  public void setSafelySurrenderedBabies(SafelySurrenderedBabies safelySurrenderedBabies) {
+    this.safelySurrenderedBabies = safelySurrenderedBabies;
   }
 
   /**
