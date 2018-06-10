@@ -47,15 +47,34 @@ public class CmsDocumentDaoTest extends LZWCompressionTest {
   }
 
   @Test
-  public void compressPK_Args__CmsDocument__String() throws Exception {
+  public void compressPK_Args__CmsDocument__String__zip() throws Exception {
     final String src = PKCompressionTest.class.getResource(PKCompressionTest.ZIP_B64_3).getPath();
     final String base64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
-    List<CmsDocumentBlobSegment> actual = target.compressPK(doc, base64);
+    final List<CmsDocumentBlobSegment> actual = target.compressPK(doc, base64);
     assertThat(actual, is(notNullValue()));
   }
 
   @Test
-  public void decompressDoc_Args__CmsDocument() throws Exception {
+  public void compressPK_Args__CmsDocument__String__plain() throws Exception {
+    final String src = PKCompressionTest.class.getResource(PKCompressionTest.ZIP_B64_3).getPath();
+    final String base64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
+    final List<CmsDocumentBlobSegment> actual = target.compressPK(doc, base64);
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void decompressDoc_Args__CmsDocument__zip_base64() throws Exception {
+    final String src = PKCompressionTest.class.getResource(PKCompressionTest.ZIP_B64_3).getPath();
+    final String base64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
+    final List<CmsDocumentBlobSegment> blobs = target.compressPK(doc, base64);
+    doc.setBlobSegments(new HashSet<>(blobs));
+
+    String actual = target.decompressDoc(doc);
+    assertThat(actual, is(notNullValue()));
+  }
+
+  @Test
+  public void decompressDoc_Args__CmsDocument__plain_base64() throws Exception {
     final String src = PKCompressionTest.class.getResource(PKCompressionTest.ZIP_B64_3).getPath();
     final String base64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
     final List<CmsDocumentBlobSegment> blobs = target.compressPK(doc, base64);
