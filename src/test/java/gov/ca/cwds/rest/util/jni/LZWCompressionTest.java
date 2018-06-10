@@ -2,16 +2,18 @@ package gov.ca.cwds.rest.util.jni;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.ca.cwds.data.persistence.cms.ClientAddress;
+import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
-public class LZWCompressionTest extends Doofenshmirtz<ClientAddress> {
+public class LZWCompressionTest extends Doofenshmirtz<CmsDocument> {
 
   protected static final String TEST_BASE = "/jni/lzw/";
   protected static final String GOOD_LZW = TEST_BASE + "good.lzw";
@@ -22,7 +24,9 @@ public class LZWCompressionTest extends Doofenshmirtz<ClientAddress> {
   @Before
   public void setUpBeforeTest() throws Exception {
     super.setup();
-    this.inst = new LZWEncoder();
+    this.inst = mock(LZWEncoder.class);
+
+    when(inst.didLibraryLoad()).thenReturn(true);
   }
 
   // ===================

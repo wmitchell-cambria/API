@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -48,6 +49,8 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   public static final String COMPRESSION_TYPE_PK_FULL = "PKWare02";
   public static final String COMPRESSION_TYPE_PLAIN_FULL = "PLAIN_00";
   public static final int BLOB_SEGMENT_LENGTH = 4000;
+
+  private Supplier<LZWEncoder> lzwSupplier = () -> new LZWEncoder();
 
   /**
    * Constructor.
@@ -90,7 +93,6 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       final RequestExecutionContext ctx = RequestExecutionContext.instance();
       doc.setLastUpdatedTime(ctx.getRequestStartTime());
       doc.setLastUpdatedId(StringUtils.isNotBlank(ctx.getStaffId()) ? ctx.getStaffId() : "0x5");
-
     } catch (Exception e) {
       LOGGER.error("ERROR COMPRESSING PK! {}", e.getMessage());
       throw new ServiceException("ERROR COMPRESSING PK! " + e.getMessage(), e);
@@ -148,7 +150,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     String retval = "";
 
     if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_LZW)) {
-      final LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = lzwSupplier.get();
       if (!lzw.didLibraryLoad()) {
         LOGGER.warn("LZW compression not enabled!");
       } else {
@@ -177,7 +179,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
     List<CmsDocumentBlobSegment> retval = null;
 
     if (doc.getCompressionMethod().endsWith(COMPRESSION_TYPE_LZW)) {
-      final LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = lzwSupplier.get();
       if (!lzw.didLibraryLoad()) {
         LOGGER.warn("LZW compression not enabled!");
       } else {
@@ -290,7 +292,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
 
     try { // DECOMPRESS!
       blobSegmentsToFile(doc, src);
-      final LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = lzwSupplier.get();
       lzw.fileCopyUncompress(src.getAbsolutePath(), tgt.getAbsolutePath());
       retval =
           DatatypeConverter.printBase64Binary(Files.readAllBytes(Paths.get(tgt.getAbsolutePath())));
@@ -362,7 +364,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       fos.write(bytes, 0, bytes.length);
       fos.flush();
 
-      final LZWEncoder lzw = new LZWEncoder();
+      final LZWEncoder lzw = lzwSupplier.get();
       lzw.fileCopyCompress(src.getAbsolutePath(), tgt.getAbsolutePath());
 
       final byte[] compressed = Files.readAllBytes(Paths.get(tgt.getAbsolutePath()));
@@ -409,6 +411,10 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   private void errorCompressing(Exception e) {
     LOGGER.error("ERROR COMPRESSING LZW! {}", e.getMessage());
     throw new ServiceException("ERROR COMPRESSING LZW! " + e.getMessage(), e);
+  }
+
+  public void setLzwSupplier(Supplier<LZWEncoder> lzwSupplier) {
+    this.lzwSupplier = lzwSupplier;
   }
 
 }

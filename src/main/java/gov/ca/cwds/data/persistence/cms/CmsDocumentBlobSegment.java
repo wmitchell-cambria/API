@@ -17,7 +17,8 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
 /**
- * {@link PersistentObject} represents a document blob record in TSBLOBT, the master document table.
+ * {@link PersistentObject} represents a document blob record in TSBLOBT, the document segments
+ * table.
  * 
  * <p>
  * Note that this entity class <strong>does not extend {@link CmsPersistentObject}</strong>, because
