@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import gov.ca.cwds.data.persistence.cms.Referral;
-import gov.ca.cwds.data.persistence.cms.Reporter;
+import gov.ca.cwds.data.std.ApiAddressAware;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ReportingDomain;
@@ -24,7 +24,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author CWDS API Team
- *
  */
 @JsonSnakeCase
 @JsonPropertyOrder({"legacy_descriptor", "street_address", "city", "state", "zip", "type"})
@@ -63,9 +62,8 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.ADDRESS_TYPE)
   private Short type;
 
-
   /**
-   * empty constructor
+   * Default constructor.
    */
   public InvestigationAddress() {
     super();
@@ -92,7 +90,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   }
 
   /**
-   * constructing InvestigationAddress object from ClientAddress(CMS) persistenced object
+   * Construct from ClientAddress(CMS) persisted object.
    * 
    * @param persistedClientAddress - client address object
    * @param cmsRecordDescriptor - legacy record descriptor
@@ -109,13 +107,12 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   }
 
   /**
-   * constructing InvestigationAddress object from Reporter(CMS) object
+   * Construct from Reporter(CMS) object.
    * 
    * @param reporter - reporter object
    * @param cmsRecordDescriptor - legacy record descriptor
    */
-  public InvestigationAddress(Reporter reporter, CmsRecordDescriptor cmsRecordDescriptor) {
-
+  public InvestigationAddress(ApiAddressAware reporter, CmsRecordDescriptor cmsRecordDescriptor) {
     this.streetAddress = trim(reporter.getStreetAddress());
     this.city = trim(reporter.getCity());
     this.state = reporter.getStateCd();
@@ -125,7 +122,7 @@ public class InvestigationAddress extends ReportingDomain implements Request, Re
   }
 
   /**
-   * constructing InvestigationAddress - object from Referral(CMS) object
+   * Construct from Referral(CMS) object.
    * 
    * @param referral - persistent referral
    * @param cmsRecordDescriptor table/key descriptor
