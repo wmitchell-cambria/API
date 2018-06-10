@@ -47,7 +47,7 @@ public class SpecialProjectReferralServiceTest extends Doofenshmirtz<SpecialProj
     final String[] roles = {"Sensitive Persons"};
     final Set<String> setRoles = new HashSet<>();
     setRoles.addAll(Arrays.asList(roles));
-    final PerryAccount perryAccount = perryAccountWithPrivilegesInator(roles);
+    final PerryAccount perryAccount = inatorPerryAccountWithPrivileges(roles);
     mockStatic(PerrySubject.class);
 
     perryAccount.setCountyCode("1126"); // State of California

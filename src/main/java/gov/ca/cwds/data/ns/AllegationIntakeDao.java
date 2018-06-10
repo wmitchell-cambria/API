@@ -26,6 +26,7 @@ public class AllegationIntakeDao extends BaseDaoImpl<AllegationEntity> {
     super(sessionFactory);
   }
 
+  @SuppressWarnings("unchecked")
   public List<AllegationEntity> findByScreeningId(String screeningId) {
     final Query<AllegationEntity> query =
         grabSession().getNamedQuery(constructNamedQueryName("findByScreeningId"))

@@ -13,7 +13,6 @@ import gov.ca.cwds.rest.api.domain.Screening;
 
 /**
  * @author CWDS API Team
- *
  */
 public class ScreeningResourceBuilder {
 
@@ -42,7 +41,6 @@ public class ScreeningResourceBuilder {
   Set<String> safetyAlerts = new HashSet<>();
   String safetyInformation = null;
   String accessRestrictions = "none";
-
 
   /**
    * @return the Screening
@@ -76,114 +74,95 @@ public class ScreeningResourceBuilder {
     return screening;
   }
 
-
   public ScreeningResourceBuilder setReferralId(String referralId) {
     this.referralId = referralId;
     return this;
   }
-
 
   public ScreeningResourceBuilder setEndedAt(String endedAt) {
     this.endedAt = LocalDateTime.parse(endedAt);
     return this;
   }
 
-
   public ScreeningResourceBuilder setIncidentCounty(String incidentCounty) {
     this.incidentCounty = incidentCounty;
     return this;
   }
-
 
   public ScreeningResourceBuilder setIncidentDate(String incidentDate) {
     this.incidentDate = LocalDate.parse(incidentDate);
     return this;
   }
 
-
   public ScreeningResourceBuilder setLocationType(String locationType) {
     this.locationType = locationType;
     return this;
   }
-
 
   public ScreeningResourceBuilder setCommunicationMethod(String communicationMethod) {
     this.communicationMethod = communicationMethod;
     return this;
   }
 
-
   public ScreeningResourceBuilder setCurrentLocationOfChildren(String currentLocationOfChildren) {
     this.currentLocationOfChildren = currentLocationOfChildren;
     return this;
   }
-
 
   public ScreeningResourceBuilder setName(String name) {
     this.name = name;
     return this;
   }
 
-
   public ScreeningResourceBuilder setReportNarrative(String reportNarrative) {
     this.reportNarrative = reportNarrative;
     return this;
   }
-
 
   public ScreeningResourceBuilder setReference(String reference) {
     this.reference = reference;
     return this;
   }
 
-
   public ScreeningResourceBuilder setRestrictionsRationale(String restrictionsRationale) {
     this.restrictionsRationale = restrictionsRationale;
     return this;
   }
-
 
   public ScreeningResourceBuilder setStartedAt(String startedAt) {
     this.startedAt = LocalDateTime.parse(startedAt);
     return this;
   }
 
-
   public ScreeningResourceBuilder setAssignee(String assignee) {
     this.assignee = assignee;
     return this;
   }
-
 
   public ScreeningResourceBuilder setAssigneeStaffId(String assigneeStaffId) {
     this.assigneeStaffId = assigneeStaffId;
     return this;
   }
 
-
   public ScreeningResourceBuilder setAdditionalInformation(String additionalInformation) {
     this.additionalInformation = additionalInformation;
     return this;
   }
-
 
   public ScreeningResourceBuilder setScreeningDecision(String screeningDecision) {
     this.screeningDecision = screeningDecision;
     return this;
   }
 
-
   public ScreeningResourceBuilder setScreeningDecisionDetail(String screeningDecisionDetail) {
     this.screeningDecisionDetail = screeningDecisionDetail;
     return this;
   }
 
-
   public ScreeningResourceBuilder setIncidentAddress(AddressIntakeApi incidentAddress) {
     this.incidentAddress = incidentAddress;
     return this;
   }
-
 
   public ScreeningResourceBuilder setParticipantIntakeApis(
       Set<ParticipantIntakeApi> participantIntakeApis) {
@@ -191,18 +170,15 @@ public class ScreeningResourceBuilder {
     return this;
   }
 
-
   public ScreeningResourceBuilder setAllegations(Set<AllegationIntake> allegations) {
     this.allegations = allegations;
     return this;
   }
 
-
   public ScreeningResourceBuilder setCrossReports(Set<CrossReportIntake> crossReports) {
     this.crossReports = crossReports;
     return this;
   }
-
 
   public ScreeningResourceBuilder setSafetyAlerts(Set<String> safetyAlerts) {
     this.safetyAlerts = safetyAlerts;
@@ -218,6 +194,5 @@ public class ScreeningResourceBuilder {
     this.id = id;
     return this;
   }
-
 
 }

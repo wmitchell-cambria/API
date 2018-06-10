@@ -94,9 +94,11 @@ import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.cms.CmsCase;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
@@ -105,10 +107,12 @@ import gov.ca.cwds.data.persistence.cms.ReferralClient;
 import gov.ca.cwds.data.persistence.cms.Reporter;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.data.persistence.ns.AllegationEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
+import gov.ca.cwds.fixture.ScreeningResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
@@ -216,6 +220,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public XaNsAddressesDaoImpl xaNsAddressesDao;
   public XaUpperCaseTables upperCaseTables;
 
+  public AllegationIntakeDao allegationIntakeDao;
   public AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   public AssignmentDao assignmentDao;
   public AssignmentUnitDao assignmentUnitDao;
@@ -398,6 +403,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     addressDao = mock(XaCmsAddressDaoImpl.class);
     allegationDao = mock(XaCmsAllegationDaoImpl.class);
+    allegationIntakeDao = mock(XaNsAllegationIntakeDaoImpl.class);
     allegationPerpetratorHistoryDao = mock(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
     assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
     assignmentUnitDao = mock(XaCmsAssignmentUnitDaoImpl.class);
@@ -476,7 +482,10 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(addressDao.update(any())).thenReturn(adrCms);
     when(addressDao.create(any())).thenReturn(adrCms);
 
-    // staffPerson = new StaffPersonEntityBuilder().setId("ZZp").build();
+    final Screening screening = new ScreeningResourceBuilder().build();
+    when(allegationIntakeDao.findByScreeningId(any(String.class)))
+        .thenReturn(Arrays.asList(screening.getAllegations().toArray(new AllegationEntity[0])));
+
     staffPerson = new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
     when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("52");
@@ -519,7 +528,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
 
     when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
-        .thenReturn(createCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
+        .thenReturn(inatorCreateCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
 
     final Participant victim =
         new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createVictimParticipant();
@@ -535,7 +544,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(clientDao.update(any(gov.ca.cwds.data.persistence.cms.Client.class)))
         .thenReturn(savedClient);
     when(referralClientDao.findByClientIds(any(Collection.class)))
-        .thenReturn(createReferralClients(LimitedAccessType.NONE, LimitedAccessType.NONE));
+        .thenReturn(inatorCreateReferralClients(LimitedAccessType.NONE, LimitedAccessType.NONE));
 
     clientScpEthnicityService = mock(ClientScpEthnicityService.class);
     addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
@@ -606,6 +615,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     final Query<T> q = Mockito.mock(Query.class);
     if (values != null && values.length != 0) {
       final T t = ArrayUtils.toArray(values)[0];
+
+      // In recognition of Heinz Doofenshmirtz.
       when(heinz.session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
       when(heinz.session.get(any(String.class), any(Serializable.class))).thenReturn(t);
       when(heinz.session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
@@ -655,7 +666,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     return Doofenshmirtz.<T>queryInator(this, values);
   }
 
-  private CmsCase[] createCases(LimitedAccessType firstCaseLimitedAccessCode,
+  public CmsCase[] inatorCreateCases(LimitedAccessType firstCaseLimitedAccessCode,
       LimitedAccessType secondCaseLimitedAccessCode) {
     CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
     cmsCases[0].setLimitedAccessCode(firstCaseLimitedAccessCode.getValue());
@@ -663,7 +674,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     return cmsCases;
   }
 
-  private ReferralClient[] createReferralClients(LimitedAccessType firstReferralLimitedAccessCode,
+  public ReferralClient[] inatorCreateReferralClients(
+      LimitedAccessType firstReferralLimitedAccessCode,
       LimitedAccessType secondReferralLimitedAccessCode) {
     ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
     referralClients[0].setReferral(new Referral());
@@ -675,12 +687,12 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     return referralClients;
   }
 
-  public Screening makeScreening() {
+  public Screening inatorMakeScreening() {
     return new Screening("abc", "screening", "reference", "screeningDecision",
         "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
   }
 
-  public PerryAccount perryAccountWithPrivilegesInator(String... privileges) {
+  public PerryAccount inatorPerryAccountWithPrivileges(String... privileges) {
     final PerryAccount perryAccount = new PerryAccount();
     final HashSet<String> privilegeSet = new HashSet<>();
     privilegeSet.addAll(Arrays.asList(privileges));

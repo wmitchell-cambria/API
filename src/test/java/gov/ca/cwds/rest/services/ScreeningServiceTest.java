@@ -96,7 +96,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Test(expected = Exception.class)
   public void testCreate() {
     when(indexResponse.status()).thenReturn(RestStatus.CREATED);
-    Screening screening = makeScreening();
+    Screening screening = inatorMakeScreening();
     Screening actual = target.create(screening);
     assertThat(actual, is(screening));
   }
@@ -193,7 +193,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test(expected = Exception.class)
   public void create_A$Request() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     Screening actual = target.create(screening);
     assertThat(actual, is(notNullValue()));
   }
@@ -201,12 +201,13 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Test(expected = ServiceException.class)
   public void update_A$Serializable$Request() throws Exception {
     Serializable primaryKey = DEFAULT_CLIENT_ID;
-    Screening screening = makeScreening();
+    Screening screening = inatorMakeScreening();
     Screening actual = target.update(primaryKey, screening);
     assertThat(actual, is(notNullValue()));
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
+  // (expected = NullPointerException.class)
   public void getScreening_A$String() throws Exception {
     String id = DEFAULT_CLIENT_ID;
     Screening actual = target.getScreening(id);
@@ -215,7 +216,7 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test(expected = NullPointerException.class)
   public void createScreening_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     Screening actual = target.createScreening(screening);
     assertThat(actual, is(notNullValue()));
   }
@@ -231,19 +232,19 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test
   public void validateParticipants_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     target.validateParticipants(screening);
   }
 
   @Test
   public void createOrUpdateAllegations_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     target.createOrUpdateAllegations(screening);
   }
 
   @Test
   public void createOrUpdateCrossReports_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     target.createOrUpdateCrossReports(screening);
   }
 
@@ -255,13 +256,13 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
   @Test
   public void createOrUpdateAddresses_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     target.createOrUpdateAddresses(screening);
   }
 
   @Test
   public void createOrUpdateParticipants_A$Screening() throws Exception {
-    final Screening screening = makeScreening();
+    final Screening screening = inatorMakeScreening();
     target.createOrUpdateParticipants(screening);
   }
 
