@@ -75,28 +75,16 @@ public class CmsDocumentDaoTest extends LZWCompressionTest {
 
   @Test
   public void decompressDoc_Args__CmsDocument__plain_base64() throws Exception {
-    final String src = PKCompressionTest.class.getResource(PKCompressionTest.ZIP_B64_3).getPath();
+    final String src = PKCompressionTest.class.getResource(PKCompressionTest.PLAIN_B64_1).getPath();
     final String base64 = FileCopyUtils.copyToString(new FileReader(new File(src))).trim();
-    final List<CmsDocumentBlobSegment> blobs = target.compressPK(doc, base64);
+
+    doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PLAIN);
+    final List<CmsDocumentBlobSegment> blobs = target.compressDoc(doc, base64);
     doc.setBlobSegments(new HashSet<>(blobs));
 
     String actual = target.decompressDoc(doc);
     assertThat(actual, is(notNullValue()));
   }
-
-  // @Test
-  // public void compressPK_A$CmsDocument$String() throws Exception {
-  // doc = readPersistedDocumentLzwCompression();
-  // final String base64 = IOUtils.resourceToString("/jni/lzw/good.b64", Charset.forName("UTF-8"));
-  // final String json = IOUtils.resourceToString("/jni/lzw/good.json", Charset.forName("UTF-8"));
-  //
-  // final List<CmsDocumentBlobSegment> actual = target.compressPK(doc, base64);
-  // System.out.println(JsonUtils.to(actual));
-  //
-  // final List<CmsDocumentBlobSegment> expected =
-  // JsonUtils.from(json, new ArrayList<CmsDocumentBlobSegment>().getClass());
-  // assertThat(actual, is(equalTo(expected)));
-  // }
 
   @Test
   public void decompressDoc_A$CmsDocument() throws Exception {
