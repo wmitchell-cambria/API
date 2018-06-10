@@ -49,7 +49,6 @@ import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
-@SuppressWarnings("javadoc")
 public class ScreeningToReferralTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRALS + "/";;
@@ -90,7 +89,7 @@ public class ScreeningToReferralTest {
   @Before
   public void setup() {
     messageBuilder = new MessageBuilder();
-    
+
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
@@ -132,13 +131,10 @@ public class ScreeningToReferralTest {
         countyId, Sets.newHashSet());
     crossReports.add(crossReport);
     Short injuryHarmType = 2178;
-    Allegation allegation = new AllegationResourceBuilder()
-        .setLegacySourceTable("ALLGTN_T")
-        .setLegacyId("1234567ABC")
-        .setPerpetratorPersonId(2)
-        .setInjuryHarmType(injuryHarmType)
-        .createAllegation();
-//    Allegation allegation = validAllegation();
+    Allegation allegation =
+        new AllegationResourceBuilder().setLegacySourceTable("ALLGTN_T").setLegacyId("1234567ABC")
+            .setPerpetratorPersonId(2).setInjuryHarmType(injuryHarmType).createAllegation();
+    // Allegation allegation = validAllegation();
     allegations.add(allegation);
     SafetyAlerts safetyAlerts = new SafetyAlerts();
 
@@ -147,9 +143,9 @@ public class ScreeningToReferralTest {
         communicationMethod, currentLocationOfChildren, "The Rocky Horror Show",
         "Narrative 123 test", "123ABC", responseTime, "2016-08-03T01:00:00.000", "Michael Bastow",
         "0X5", "addtional information", "Screening Descision", "Detail", approvalStatus,
-        familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(),
-        safetyAlerts.getAlertInformation(), address,
-        participants, crossReports, allegations, reportType));
+        familyAwarness, filedWithLawEnforcement, responsibleAgency, "S", "", "23", null,
+        safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(), address, participants,
+        crossReports, allegations, reportType));
 
     String serialized = MAPPER.writeValueAsString(
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
@@ -157,23 +153,22 @@ public class ScreeningToReferralTest {
     assertThat(serialized, is(expected));
   }
 
-  @Test 
+  @Test
   public void shouldSerializeToJSONwhenSafetyAlertsIncluded() throws Exception {
     Participant participant = new ParticipantResourceBuilder().createParticipant();
     participants.add(participant);
     SafetyAlerts safetyAlerts = new SafetyAlertsEntityBuilder().build();
-    String expected = MAPPER.writeValueAsString(new ScreeningToReferralResourceBuilder()
-        .setSafetyAlerts(safetyAlerts.getAlerts())
-        .setSafetyAlertInformationn(safetyAlerts.getAlertInformation())
-        .setParticipants(participants)
-        .createScreeningToReferral());
+    String expected = MAPPER.writeValueAsString(
+        new ScreeningToReferralResourceBuilder().setSafetyAlerts(safetyAlerts.getAlerts())
+            .setSafetyAlertInformationn(safetyAlerts.getAlertInformation())
+            .setParticipants(participants).createScreeningToReferral());
 
     String serialized = MAPPER.writeValueAsString(
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/validWithSafetyAlert.json"),
             ScreeningToReferral.class));
-    assertThat(serialized, is(expected));  
+    assertThat(serialized, is(expected));
   }
-  
+
   @Test
   public void shouldDeserializeFromJSON() throws Exception {
     MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
@@ -184,22 +179,20 @@ public class ScreeningToReferralTest {
         countyId, Sets.newHashSet());
     crossReports.add(crossReport);
     Short injuryHarmType = 2178;
-    Allegation allegation = new AllegationResourceBuilder()
-        .setLegacySourceTable("ALLGTN_T")
-        .setLegacyId("1234567ABC")
-        .setPerpetratorPersonId(2)
-        .setInjuryHarmType(injuryHarmType)
-        .createAllegation();
+    Allegation allegation =
+        new AllegationResourceBuilder().setLegacySourceTable("ALLGTN_T").setLegacyId("1234567ABC")
+            .setPerpetratorPersonId(2).setInjuryHarmType(injuryHarmType).createAllegation();
     allegations.add(allegation);
     SafetyAlerts safetyAlerts = new SafetyAlerts();
-    
+
     ScreeningToReferral expected = new ScreeningToReferral(id, "", "", "2016-08-03T01:00:00.000",
         SACRAMENTO_COUNTY_CODE, "2016-08-02", "Foster Home", communicationMethod,
         currentLocationOfChildren, "The Rocky Horror Show", "Narrative 123 test", "123ABC",
         responseTime, "2016-08-03T01:00:00.000", "Michael Bastow", "0X5", "addtional information",
         "Screening Descision", "Detail", approvalStatus, familyAwarness, filedWithLawEnforcement,
-        responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(), safetyAlerts.getAlertInformation(),
-        address, participants, crossReports, allegations, reportType);
+        responsibleAgency, "S", "", "23", null, safetyAlerts.getAlerts(),
+        safetyAlerts.getAlertInformation(), address, participants, crossReports, allegations,
+        reportType);
 
     ScreeningToReferral deserialized =
         MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/validstr.json"),
@@ -207,7 +200,7 @@ public class ScreeningToReferralTest {
 
     assertThat(deserialized, is(expected));
   }
-  
+
   @Test
   public void shouldValidateWithValid() throws Exception {
     ScreeningToReferral toValidate =
@@ -219,7 +212,9 @@ public class ScreeningToReferralTest {
 
   @Test
   public void shouldPassWithSafetyAlerts() throws Exception {
-    ScreeningToReferral screening = MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/validWithWorkerSafety.json"),  ScreeningToReferral.class);
+    ScreeningToReferral screening =
+        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/validWithWorkerSafety.json"),
+            ScreeningToReferral.class);
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(screening));
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
@@ -227,27 +222,28 @@ public class ScreeningToReferralTest {
       System.out.println(message.getMessage());
     }
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
-    
   }
+
   @Test
   public void shouldPassWithMissingSafetyAlerts() throws Exception {
-    ScreeningToReferral toValidate =
-        MAPPER.readValue(fixture("fixtures/domain/ScreeningToReferral/valid/missingSafetyAlerts.json"),
-            ScreeningToReferral.class);
+    ScreeningToReferral toValidate = MAPPER.readValue(
+        fixture("fixtures/domain/ScreeningToReferral/valid/missingSafetyAlerts.json"),
+        ScreeningToReferral.class);
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toValidate));
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
   }
-  
+
   @Test
   public void shouldFailWithNullParticipants() throws Exception {
-    ScreeningToReferral toValidate = new ScreeningToReferralResourceBuilder().setParticipants(null).createScreeningToReferral();
+    ScreeningToReferral toValidate =
+        new ScreeningToReferralResourceBuilder().setParticipants(null).createScreeningToReferral();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     messageBuilder.addDomainValidationError(validator.validate(toValidate));
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("participants may not be empty")) {
         theErrorDetected = true;
       }
@@ -265,7 +261,7 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("participants may not be empty")) {
         theErrorDetected = true;
       }
@@ -283,7 +279,7 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("allegations may not be empty")) {
         theErrorDetected = true;
       }
@@ -301,7 +297,7 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("allegations may not be empty")) {
         theErrorDetected = true;
       }
@@ -362,7 +358,7 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("incidentDate must be in the format of yyyy-MM-dd")) {
         theErrorDetected = true;
       }
@@ -435,7 +431,7 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
+      // System.out.println(message.getMessage());
       if (message.getMessage().equals("referralId size must be between 0 and 10")) {
         theErrorDetected = true;
       }
@@ -462,8 +458,9 @@ public class ScreeningToReferralTest {
     Boolean theErrorDetected = false;
     List<ErrorMessage> validationErrors = messageBuilder.getMessages();
     for (ErrorMessage message : validationErrors) {
-//      System.out.println(message.getMessage());
-      if (message.getMessage().equals("incidentCounty must be a valid logical id code for category GVR_ENTC")) {
+      // System.out.println(message.getMessage());
+      if (message.getMessage()
+          .equals("incidentCounty must be a valid logical id code for category GVR_ENTC")) {
         theErrorDetected = true;
       }
     }
@@ -600,7 +597,6 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("R").createScreeningToReferral();
     assertTrue("Expected access to be limited", screeningToReferral.isAccessLimited());
-
   }
 
   @Test
@@ -608,7 +604,6 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("N").createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
-
   }
 
   @Test
@@ -616,7 +611,6 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode(null).createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
-
   }
 
   private Participant validParticipant() {
@@ -637,4 +631,5 @@ public class ScreeningToReferralTest {
       return null;
     }
   }
+
 }
