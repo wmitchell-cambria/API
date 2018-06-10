@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.flywaydb.core.internal.util.FileCopyUtils;
-import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,7 +29,6 @@ public class CmsDocumentDaoTest extends LZWCompressionTest {
   @Before
   public void setup() throws Exception {
     super.setUpBeforeTest();
-    SessionFactory sessionFactory = mock(SessionFactory.class);
     target = new CmsDocumentDao(sessionFactory);
     doc = new CmsDocument();
 
