@@ -26,12 +26,13 @@ public class ReentrantXAUnitOfWorkAspectFactory
 
   private final Map<String, SessionFactory> sessionFactories;
 
-  private final ThreadLocal<XAUnitOfWorkAspect> local = new ThreadLocal<>();
+  private transient ThreadLocal<XAUnitOfWorkAspect> local = new ThreadLocal<>();
 
   public ReentrantXAUnitOfWorkAspectFactory(Map<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
-    RequestExecutionContextRegistry.registerCallback(this); // Notify this instance when request
-                                                            // start or end
+
+    // Notify this instance upon request start or end
+    RequestExecutionContextRegistry.registerCallback(this);
   }
 
   @Override
