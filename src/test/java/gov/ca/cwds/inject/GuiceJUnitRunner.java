@@ -74,10 +74,10 @@ public class GuiceJUnitRunner extends BlockJUnit4ClassRunner {
 
   /**
    * @param classes
-   * @return
+   * @return prepared injector
    * @throws InitializationError
    */
-  private Injector createInjectorFor(Class<?>[] classes) throws InitializationError {
+  public Injector createInjectorFor(Class<?>[] classes) throws InitializationError {
     Module[] modules = new Module[classes.length];
     for (int i = 0; i < classes.length; i++) {
       try {
@@ -99,7 +99,7 @@ public class GuiceJUnitRunner extends BlockJUnit4ClassRunner {
    *         test.
    * @throws InitializationError
    */
-  private Class<?>[] getModulesFor(Class<?> klass) throws InitializationError {
+  public Class<?>[] getModulesFor(Class<?> klass) throws InitializationError {
     GuiceModules annotation = klass.getAnnotation(GuiceModules.class);
     if (annotation == null)
       throw new InitializationError(

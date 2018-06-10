@@ -14,6 +14,7 @@ import gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
+import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /**
@@ -21,7 +22,9 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  * 
  * @author CWDS TPT Team
  */
-public class SpecialProjectReferralService {
+public class SpecialProjectReferralService extends ApiObjectIdentity {
+
+  private static final long serialVersionUID = 1L;
 
   private static final short MEDICAL_RECORD_SYSTEM_CODE_ID = 1331;
 
@@ -47,22 +50,21 @@ public class SpecialProjectReferralService {
   /**
    * Process special project for Safely Surrendered Babies.
    * 
-   * @param childClientId Child cleint ID.
+   * @param childClientId Child client ID.
    * @param referralId Referral ID
    * @param ssb Safely Surrendered Babies
    */
   public void processSafelySurrenderedBabies(String childClientId, String referralId,
       gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
-
     LocalDateTime now = LocalDateTime.now();
     String userId = PrincipalUtils.getStaffPersonId();
     String countyCode = PrincipalUtils.getPrincipal().getCountyCode();
     String countyCwsCode = PrincipalUtils.getPrincipal().getCountyCwsCode();
 
-    List<SpecialProject> ssbSpecialProjects =
+    final List<SpecialProject> ssbSpecialProjects =
         specialProjectDao.findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
             Short.valueOf(countyCode));
-    SpecialProject ssbSpecialProject =
+    final SpecialProject ssbSpecialProject =
         (ssbSpecialProjects != null && !ssbSpecialProjects.isEmpty()) ? ssbSpecialProjects.get(0)
             : null;
 
@@ -74,7 +76,7 @@ public class SpecialProjectReferralService {
     /**
      * Create SpecialProjectReferral persistence record.
      */
-    SpecialProjectReferral spr = new SpecialProjectReferral();
+    final SpecialProjectReferral spr = new SpecialProjectReferral();
     spr.setCountySpecificCode(countyCwsCode);
     spr.setId(CmsKeyIdGenerator.getNextValue(userId));
     spr.setPartStartDate(now.toLocalDate());
@@ -87,7 +89,7 @@ public class SpecialProjectReferralService {
     /**
      * Create SafelySurrenderedBabies persistence record.
      */
-    SafelySurrenderedBabies ssbEntity = new SafelySurrenderedBabies();
+    final SafelySurrenderedBabies ssbEntity = new SafelySurrenderedBabies();
     ssbEntity.setBraceletIdInfoCode(ssb.getBraceletInfoCode());
     ssbEntity.setChildClientId(childClientId);
     ssbEntity.setCommentDescription(ssb.getComments());
@@ -108,7 +110,7 @@ public class SpecialProjectReferralService {
     /**
      * Create bracelet ID.
      */
-    NonCWSNumber braceltInfo = new NonCWSNumber();
+    final NonCWSNumber braceltInfo = new NonCWSNumber();
     braceltInfo.setClientId(childClientId);
     braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(userId));
     braceltInfo.setLastUpdateId(userId);
@@ -117,4 +119,41 @@ public class SpecialProjectReferralService {
     braceltInfo.setOtherIdCode(MEDICAL_RECORD_SYSTEM_CODE_ID);
     nonCWSNumberDao.create(braceltInfo);
   }
+
+  public SpecialProjectDao getSpecialProjectDao() {
+    return specialProjectDao;
+  }
+
+  public void setSpecialProjectDao(SpecialProjectDao specialProjectDao) {
+    this.specialProjectDao = specialProjectDao;
+  }
+
+  public SpecialProjectReferralDao getSpecialProjectReferralDao() {
+    return specialProjectReferralDao;
+  }
+
+  public void setSpecialProjectReferralDao(SpecialProjectReferralDao specialProjectReferralDao) {
+    this.specialProjectReferralDao = specialProjectReferralDao;
+  }
+
+  public SafelySurrenderedBabiesDao getSafelySurrenderedBabiesDao() {
+    return safelySurrenderedBabiesDao;
+  }
+
+  public void setSafelySurrenderedBabiesDao(SafelySurrenderedBabiesDao safelySurrenderedBabiesDao) {
+    this.safelySurrenderedBabiesDao = safelySurrenderedBabiesDao;
+  }
+
+  public NonCWSNumberDao getNonCWSNumberDao() {
+    return nonCWSNumberDao;
+  }
+
+  public void setNonCWSNumberDao(NonCWSNumberDao nonCWSNumberDao) {
+    this.nonCWSNumberDao = nonCWSNumberDao;
+  }
+
+  public static long getSerialversionuid() {
+    return serialVersionUID;
+  }
+
 }

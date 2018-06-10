@@ -32,6 +32,7 @@ import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningWrapper;
 import gov.ca.cwds.fixture.ScreeningWrapperEntityBuilder;
 import gov.ca.cwds.inject.DoofenshmirtzModule;
+import gov.ca.cwds.inject.GuiceJUnitRunner;
 import gov.ca.cwds.inject.GuiceJUnitRunner.GuiceModules;
 import gov.ca.cwds.rest.ElasticsearchConfiguration;
 import gov.ca.cwds.rest.api.Request;
@@ -43,7 +44,7 @@ import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
-@RunWith(gov.ca.cwds.inject.GuiceJUnitRunner.class)
+@RunWith(GuiceJUnitRunner.class)
 @GuiceModules({DoofenshmirtzModule.class})
 public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
 
@@ -53,37 +54,24 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   @Inject
   private ScreeningService target;
 
-  // @Mock
   @Inject
   private ElasticsearchDao esDao;
 
-  // @Mock
   @Inject
   private XaNsScreeningDaoImpl screeningDao;
 
-  // @Mock
   @Inject
   private Client esClient;
 
-  // @Mock
-  // @Inject
-  // private IndexRequestBuilder indexRequestBuilder;
-
-  // @Mock
   @Inject
   private IndexResponse indexResponse;
 
-  // @Mock
   private ElasticsearchConfiguration esConfig;
 
   @Override
   @Before
   public void setup() throws Exception {
     super.setup();
-
-    // target.setEsDao(esDao);
-    // target.setScreeningDao(screeningDao);
-
     new TestingRequestExecutionContext("0X5");
   }
 

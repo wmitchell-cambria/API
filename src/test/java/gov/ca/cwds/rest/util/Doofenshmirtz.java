@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,6 +90,10 @@ import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
+import gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
@@ -149,6 +154,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * <a href="http://phineasandferb.wikia.com/wiki/Heinz_Doofenshmirtz">Heinz Doofenshmirtz</a> is the
@@ -192,24 +198,23 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public Validator validator;
   public ScreeningToReferralResourceBuilder defaultReferralBuilder;
 
-  public SystemCodeDao systemCodeDao;
-  public SystemMetaDao systemMetaDao;
-
+  public XaCmsAddressDaoImpl addressDao;
   public XaCmsAllegationDaoImpl allegationDao;
+  public XaCmsCaseLoadDaoImpl caseLoadDao;
+  public XaCmsClientAddressDaoImpl clientAddressDao;
   public XaCmsClientDaoImpl clientDao;
+  public XaCmsClientRelationshipDaoImpl clientRelationshipDao;
+  public XaCmsDocumentDaoImpl cmsDocumentDao;
+  public XaCmsReferralClientDaoImpl referralClientDao;
   public XaCmsReferralDaoImpl referralDao;
+  public XaCmsReporterDaoImpl reporterDao;
+  public XaCmsSsaName3DaoImpl ssaName3Dao;
+  public XaCmsStaffPersonDaoImpl staffpersonDao;
   public XaCmsStaffPersonDaoImpl staffPersonDao;
   public XaNonLACountyTriggers nonLACountyTriggers;
-  public XaCmsAddressDaoImpl addressDao;
-  public XaCmsSsaName3DaoImpl ssaName3Dao;
-  public XaCmsClientRelationshipDaoImpl clientRelationshipDao;
-  public XaCmsCaseLoadDaoImpl caseLoadDao;
-  public XaCmsReporterDaoImpl reporterDao;
-  public XaCmsReferralClientDaoImpl referralClientDao;
-  public XaCmsClientAddressDaoImpl clientAddressDao;
-  public XaCmsDocumentDaoImpl cmsDocumentDao;
+  public XaNsAddressDaoImpl xaNsAddressDao;
+  public XaNsAddressesDaoImpl xaNsAddressesDao;
   public XaUpperCaseTables upperCaseTables;
-  public XaCmsStaffPersonDaoImpl staffpersonDao;
 
   public AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
   public AssignmentDao assignmentDao;
@@ -219,10 +224,16 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public CrossReportDao crossReportDao;
   public CwsOfficeDao cwsOfficeDao;
   public DrmsDocumentDao drmsDocumentDao;
-  public LongTextDaoImpl longTextDao;
-  public TriggerTablesDao triggerTablesDao;
-  public LACountyTrigger laCountyTrigger;
   public IntakeLOVCodeDao intakeLOVCodeDao;
+  public LACountyTrigger laCountyTrigger;
+  public LongTextDaoImpl longTextDao;
+  public NonCWSNumberDao nonCWSNumberDao;
+  public SafelySurrenderedBabiesDao safelySurrenderedBabiesDao;
+  public SpecialProjectDao specialProjectDao;
+  public SpecialProjectReferralDao specialProjectReferralDao;
+  public SystemCodeDao systemCodeDao;
+  public SystemMetaDao systemMetaDao;
+  public TriggerTablesDao triggerTablesDao;
 
   public RIChildClient riChildClient;
   public RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
@@ -240,30 +251,24 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public ClientAddressService clientAddressService;
   public ClientScpEthnicityService clientScpEthnicityService;
   public ClientService clientService;
+  public CmsDocumentService cmsDocumentService;
   public CrossReportService crossReportService;
+  public DrmsDocumentService drmsDocumentService;
+  public DrmsDocumentTemplateService drmsDocumentTemplateService;
   public LongTextService longTextService;
   public ParticipantService participantService;
   public ReferralClientService referralClientService;
   public ReporterService reporterService;
+  public ScreeningToReferralService screeningToReferralService;
+  public XaCmsAddressService addressService;
+  public XaCmsReferralService referralService;
 
   public Reminders reminders;
   public ExternalInterfaceTables externalInterfaceTables;
   public GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
-  public XaCmsReferralService referralService;
-  public XaCmsAddressService addressService;
-  public CmsDocumentService cmsDocumentService;
-
   public Query<CmsDocument> docQuery;
   public CmsDocument doc;
-
-  public DrmsDocumentService drmsDocumentService;
-  public DrmsDocumentTemplateService drmsDocumentTemplateService;
-
-  public ScreeningToReferralService screeningToReferralService;
-
-  public XaNsAddressDaoImpl xaNsAddressDao;
-  public XaNsAddressesDaoImpl xaNsAddressesDao;
 
   public MessageBuilder messageBuilder;
   public StaffPerson staffPerson;
@@ -420,6 +425,10 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     upperCaseTables = mock(XaUpperCaseTables.class);
     xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
     xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
+    specialProjectDao = mock(SpecialProjectDao.class);
+    specialProjectReferralDao = mock(SpecialProjectReferralDao.class);
+    safelySurrenderedBabiesDao = mock(SafelySurrenderedBabiesDao.class);
+    nonCWSNumberDao = mock(NonCWSNumberDao.class);
 
     when(addressDao.grabSession()).thenReturn(session);
     when(allegationDao.grabSession()).thenReturn(session);
@@ -669,6 +678,14 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public Screening makeScreening() {
     return new Screening("abc", "screening", "reference", "screeningDecision",
         "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
+  }
+
+  public PerryAccount perryAccountWithPrivilegesInator(String... privileges) {
+    final PerryAccount perryAccount = new PerryAccount();
+    final HashSet<String> privilegeSet = new HashSet<>();
+    privilegeSet.addAll(Arrays.asList(privileges));
+    perryAccount.setPrivileges(privilegeSet);
+    return perryAccount;
   }
 
 }

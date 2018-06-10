@@ -128,4 +128,5 @@ public class ScreeningAuthorizerTest {
     perryAccount.setPrivileges(privilegeSet);
     return perryAccount;
   }
+
 }

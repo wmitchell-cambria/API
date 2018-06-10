@@ -35,6 +35,11 @@ import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
+/**
+ * Guice module injects dependencies into test classes.
+ * 
+ * @author CWDS API Team
+ */
 public class DoofenshmirtzModule extends AbstractModule {
 
   final Doofenshmirtz<ClientAddress> inator = new Doofenshmirtz<>();
