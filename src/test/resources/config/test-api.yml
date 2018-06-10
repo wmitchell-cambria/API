@@ -88,7 +88,7 @@ xaCmsDataSourceFactory:
   driverClass: org.h2.Driver
   user: sa
   password:
-  url: jdbc:h2:mem:cwsint;TRACE_LEVEL_FILE=3;LOCK_MODE=0;INIT=create schema if not exists cwsint\;set schema cwsint
+  url: jdbc:h2:mem:cwsint;DB_CLOSE_DELAY=-1;TRACE_LEVEL_FILE=3;LOCK_MODE=0;INIT=create schema if not exists cwsint\;set schema cwsint
   xaDataSourceClassName: org.h2.jdbcx.JdbcDataSource
   validationQuery: "/* MyService Health Check */ SELECT 1"
   logValidationErrors: true
@@ -108,7 +108,7 @@ xaCmsDataSourceFactory:
       connection.release_mode: auto
       # hibernate.connection.provider_disables_autocommit: true
   xaProperties:
-      url: jdbc:h2:mem:cwsint;TRACE_LEVEL_FILE=3;LOCK_MODE=0;INIT=create schema if not exists cwsint\;set schema cwsint
+      url: jdbc:h2:mem:cwsint;DB_CLOSE_DELAY=-1;TRACE_LEVEL_FILE=3;LOCK_MODE=0;INIT=create schema if not exists cwsint\;set schema cwsint
 
 xaNsDataSourceFactory:
   autoCommitByDefault: false

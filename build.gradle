@@ -314,7 +314,6 @@ task libLicenseReportFiles(type: Copy){
     include "licenses.csv"
 }
 
-
 task libLicenseReport(dependsOn:[generateLicenseReport, libLicenceFolders,
                                  libLicenseReportFiles ] ){
     println ("\n\n License files are generated in : ${licenceFolder}")

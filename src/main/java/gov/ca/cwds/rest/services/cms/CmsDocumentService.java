@@ -49,6 +49,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
 
     @Override
+    @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
     public void execute(Connection con) throws SQLException {
       try (final PreparedStatement delStmt = con.prepareStatement(parent.blobsDelete())) {
         delStmt.setString(1, docId);
@@ -77,6 +78,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
     }
 
     @Override
+    @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
     public void execute(Connection con) throws SQLException {
       try (final PreparedStatement delStmt = con.prepareStatement(parent.blobsDelete());
           final Statement insStmt = con.createStatement()) {
