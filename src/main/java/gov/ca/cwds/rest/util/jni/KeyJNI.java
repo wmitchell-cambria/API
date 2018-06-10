@@ -43,6 +43,7 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
  * @see CmsKeyIdGenerator
  */
 @Deprecated
+@SuppressWarnings("squid:S1133 ")
 public final class KeyJNI {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KeyJNI.class);

@@ -17,7 +17,7 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
 /**
- * {@link PersistentObject} represents a document blob record in TSBLOBT.
+ * {@link PersistentObject} represents a document blob record in TSBLOBT, the master document table.
  * 
  * <p>
  * Note that this entity class <strong>does not extend {@link CmsPersistentObject}</strong>, because
@@ -73,7 +73,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     super();
     this.docHandle = docHandle;
     this.segmentSequence = segmentSequence;
-    this.docBlob = docBlob;
+    this.docBlob = Arrays.copyOf(docBlob, docBlob.length); // SonarQube complaint
   }
 
   /**
@@ -141,7 +141,8 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     // 3) if you got this far, well ... ;)
     if (docBlob == null) {
       return other.docBlob == null;
-    } else return Arrays.equals(docBlob, other.docBlob);
+    } else
+      return Arrays.equals(docBlob, other.docBlob);
 
   }
 

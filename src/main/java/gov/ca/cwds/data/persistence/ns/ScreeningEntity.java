@@ -36,10 +36,12 @@ import gov.ca.cwds.data.persistence.PersistentObject;
     query = "FROM ScreeningEntity WHERE referralId = :referralId")
 @NamedQuery(name = "gov.ca.cwds.data.persistence.ns.ScreeningEntity.findScreeningsByClientIds",
     query = "SELECT s FROM ScreeningEntity s JOIN s.participants p WHERE p.legacyId IN :clientIds")
-@SuppressWarnings("serial")
+@SuppressWarnings("squid:S3437 ") // java.time.LocalDateTime is serializable
 @Entity
 @Table(name = "screenings")
 public class ScreeningEntity implements PersistentObject {
+
+  private static final long serialVersionUID = 1L;
 
   @Id
   @Column(name = "id")
@@ -171,11 +173,11 @@ public class ScreeningEntity implements PersistentObject {
    * @param assigneeStaffId The staffId of assignee
    * @param reportType report type
    */
-  public ScreeningEntity(String id, String reference, LocalDateTime startedAt, LocalDateTime endedAt,
-      String incidentCounty, LocalDate incidentDate, String locationType, String communicationMethod,
-      String name, String responseTime, String screeningDecision, String screeningDecisionDetail,
-      String narrative, Address contactAddress, String assigneeStaffId,
-      Set<ParticipantEntity> participants, String reportType) {
+  public ScreeningEntity(String id, String reference, LocalDateTime startedAt,
+      LocalDateTime endedAt, String incidentCounty, LocalDate incidentDate, String locationType,
+      String communicationMethod, String name, String responseTime, String screeningDecision,
+      String screeningDecisionDetail, String narrative, Address contactAddress,
+      String assigneeStaffId, Set<ParticipantEntity> participants, String reportType) {
     super();
     this.id = id;
     this.reference = reference;

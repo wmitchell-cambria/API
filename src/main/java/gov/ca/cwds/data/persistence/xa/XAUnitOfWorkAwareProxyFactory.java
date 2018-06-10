@@ -20,12 +20,14 @@ import javassist.util.proxy.ProxyFactory;
  * A created proxy will be aware of the {@link XAUnitOfWork} annotation on the original class
  * methods and will open an XA transaction around them.
  * </p>
+ * 
+ * @author CWDS API Team
  */
 public class XAUnitOfWorkAwareProxyFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAwareProxyFactory.class);
 
-  private final XAUnitOfWorkAspectFactory factory;
+  private final XAUnitOfWorkAspectFactory aspectFactory;
 
   public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
     final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
@@ -33,7 +35,7 @@ public class XAUnitOfWorkAwareProxyFactory {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
     }
 
-    factory = new ReentrantXAUnitOfWorkAspectFactory(sessionFactories);
+    aspectFactory = new ReentrantXAUnitOfWorkAspectFactory(sessionFactories);
   }
 
   /**
@@ -85,13 +87,13 @@ public class XAUnitOfWorkAwareProxyFactory {
   @SuppressWarnings({"unchecked", "squid:S1166"})
   public <T> T create(Class<T> clazz, Class<?>[] constructorParamTypes,
       Object[] constructorArguments) throws CaresXAException {
-    final ProxyFactory factory = new ProxyFactory();
-    factory.setSuperclass(clazz);
+    final ProxyFactory proxyFactory = new ProxyFactory();
+    proxyFactory.setSuperclass(clazz);
 
     try {
       final Proxy proxy = (Proxy) (constructorParamTypes.length == 0
-          ? factory.createClass().getConstructor().newInstance()
-          : factory.create(constructorParamTypes, constructorArguments));
+          ? proxyFactory.createClass().getConstructor().newInstance()
+          : proxyFactory.create(constructorParamTypes, constructorArguments));
       proxy.setHandler((self, overridden, proceed, args) -> {
         final XAUnitOfWork xaUnitOfWork = overridden.getAnnotation(XAUnitOfWork.class);
         final XAUnitOfWorkAspect aspect = newAspect();
@@ -121,7 +123,7 @@ public class XAUnitOfWorkAwareProxyFactory {
   }
 
   public XAUnitOfWorkAspect newAspect() {
-    return factory.make();
+    return aspectFactory.make();
   }
 
 }
