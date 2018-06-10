@@ -28,6 +28,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
 @JsonInclude(Include.ALWAYS)
 @JsonSnakeCase
 @JsonPropertyOrder({"id", "cases", "referrals", "screenings"})
+@SuppressWarnings("squid:S2160")
 public class InvolvementHistory extends ApiObjectIdentity
     implements ApiTypedIdentifier<String>, Request, Response {
 
