@@ -470,7 +470,6 @@ public class DataAccessModule extends AbstractModule {
         .to(XaCmsGovernmentOrganizationCrossReportDaoImpl.class);
     bind(SpecialProjectDao.class);
     bind(SpecialProjectReferralDao.class);
-    bind(SafelySurrenderedBabiesDao.class);
     bind(NonCWSNumberDao.class);
 
     // NS XA:
