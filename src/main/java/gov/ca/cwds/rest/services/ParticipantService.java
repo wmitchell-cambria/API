@@ -29,6 +29,7 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.LimitedAccessType;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 import gov.ca.cwds.rest.api.domain.cms.Address;
@@ -81,8 +82,12 @@ public class ParticipantService implements CrudsService {
 
   @Inject
   private CsecHistoryService csecHistoryService;
+
   @Inject
   private SexualExploitationTypeDao sexualExploitationTypeDao;
+
+  @Inject
+  private SpecialProjectReferralService specialProjectReferralService;
 
   /**
    * Constructor
@@ -210,8 +215,8 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, messageBuilder, incomingParticipant.getCsecs(),
-            screeningToReferral.getReportType());
+        processChildClient(clientId, referralId, messageBuilder, incomingParticipant.getCsecs(),
+            incomingParticipant.getSafelySurrenderedBabies(), screeningToReferral.getReportType());
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -413,8 +418,9 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, MessageBuilder messageBuilder,
-      List<Csec> csecs, String reportType) {
+  private ChildClient processChildClient(String clientId, String referralId,
+      MessageBuilder messageBuilder, List<Csec> csecs, SafelySurrenderedBabies ssb,
+      String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -424,6 +430,11 @@ public class ParticipantService implements CrudsService {
 
     if (FerbConstants.ReportType.CSEC.equals(reportType) && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
+    }
+
+    if (FerbConstants.ReportType.SSB.equals(reportType)
+        && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
+      specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId, ssb);
     }
 
     return exsistingChild;
@@ -441,6 +452,17 @@ public class ParticipantService implements CrudsService {
         return false;
       }
     }
+    return true;
+  }
+
+  private boolean validateSafelySurrenderedBabies(SafelySurrenderedBabies ssb,
+      MessageBuilder messageBuilder) {
+    if (ssb == null) {
+      messageBuilder.addError("SafelySurrenderedBabies info must be provided.",
+          ErrorMessage.ErrorType.VALIDATION);
+      return false;
+    }
+
     return true;
   }
 

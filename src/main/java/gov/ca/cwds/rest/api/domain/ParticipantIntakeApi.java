@@ -159,7 +159,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   private List<Csec> csecs = new ArrayList<>();
 
   @JsonProperty("safelySurenderedBabies")
-  private SafelySurenderedBabies safelySurenderedBabies;
+  private SafelySurenderedBabiesIntakeApi safelySurenderedBabies;
 
   /**
    * empty constructor
@@ -569,11 +569,11 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
   }
 
 
-  public SafelySurenderedBabies getSafelySurenderedBabies() {
+  public SafelySurenderedBabiesIntakeApi getSafelySurenderedBabies() {
     return safelySurenderedBabies;
   }
 
-  public void setSafelySurenderedBabies(SafelySurenderedBabies safelySurenderedBabies) {
+  public void setSafelySurenderedBabies(SafelySurenderedBabiesIntakeApi safelySurenderedBabies) {
     this.safelySurenderedBabies = safelySurenderedBabies;
   }
 
