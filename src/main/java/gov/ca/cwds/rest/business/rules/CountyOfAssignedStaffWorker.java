@@ -8,7 +8,6 @@ import gov.ca.cwds.data.persistence.cms.StaffPerson;
 import gov.ca.cwds.rest.api.domain.cms.Referral;
 import gov.ca.cwds.rest.business.RuleValidator;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 
 /**
  * Validate the county of the Assigned Staff Worker.
@@ -22,7 +21,7 @@ import gov.ca.cwds.rest.services.cms.ReferralService;
  */
 public class CountyOfAssignedStaffWorker implements RuleValidator {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReferralService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(CountyOfAssignedStaffWorker.class);
 
   private Referral referral;
   private StaffPersonDao staffPersonDao;

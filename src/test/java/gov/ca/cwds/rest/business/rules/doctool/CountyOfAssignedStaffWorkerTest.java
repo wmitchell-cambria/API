@@ -24,7 +24,6 @@ public class CountyOfAssignedStaffWorkerTest {
   public void setup() {
     staffPersonDao = mock(StaffPersonDao.class);
     when(staffPersonDao.find("q1p")).thenReturn(new StaffPersonEntityBuilder().build());
-
   }
 
   @Test

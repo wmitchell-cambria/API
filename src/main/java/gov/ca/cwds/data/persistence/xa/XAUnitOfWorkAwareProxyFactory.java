@@ -25,12 +25,10 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAwareProxyFactory.class);
 
-  private final Map<String, SessionFactory> sessionFactories;
-
   private final XAUnitOfWorkAspectFactory factory;
 
   public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
-    sessionFactories = new ConcurrentHashMap<>();
+    final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
     for (FerbHibernateBundle bundle : bundles) {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
     }
