@@ -7,8 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -24,8 +22,6 @@ import gov.ca.cwds.inject.NsSessionFactory;
  */
 public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(IntakeLovDao.class);
-
   /**
    * Constructor.
    * 
@@ -40,7 +36,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
    * @param legacyCategoryId - legacyCategoryId
    * @return the intake code based on the category id
    */
-  @SuppressWarnings("rawtypes")
+  @SuppressWarnings({"rawtypes", "unchecked"})
   public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 

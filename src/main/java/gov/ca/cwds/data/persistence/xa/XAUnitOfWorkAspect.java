@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.atomikos.icatch.jta.UserTransactionImp;
 
+import gov.ca.cwds.data.std.ApiMarker;
+
 /**
  * AOP aspect supports annotation {@link XAUnitOfWork}.
  * 
@@ -34,7 +36,9 @@ import com.atomikos.icatch.jta.UserTransactionImp;
  *
  * @author CWDS API Team
  */
-public class XAUnitOfWorkAspect {
+public class XAUnitOfWorkAspect implements ApiMarker {
+
+  private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAspect.class);
 
@@ -243,9 +247,9 @@ public class XAUnitOfWorkAspect {
   }
 
   protected void rollbackSessionTransaction(Session session) {
-    final Transaction txn = session.getTransaction();
-    if (txn != null && txn.getStatus().canRollback()) {
-      txn.rollback();
+    final Transaction sessionTran = session.getTransaction();
+    if (sessionTran != null && sessionTran.getStatus().canRollback()) {
+      sessionTran.rollback();
     }
   }
 
