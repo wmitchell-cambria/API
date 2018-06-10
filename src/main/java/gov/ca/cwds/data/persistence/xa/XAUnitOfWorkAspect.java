@@ -169,8 +169,13 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     return session;
   }
 
+  /**
+   * If any unit of work is marked transactional, then the whole run requires a transaction.
+   * 
+   * @return true = any unit is transactional
+   */
   protected boolean hasTransactionalAnnotation() {
-    return this.firstXaUnitOfWork.transactional();
+    return this.units.values().stream().anyMatch(XAUnitOfWork::transactional);
   }
 
   /**
