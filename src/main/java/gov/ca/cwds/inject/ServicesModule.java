@@ -39,6 +39,7 @@ import gov.ca.cwds.rest.services.PersonService;
 import gov.ca.cwds.rest.services.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
+import gov.ca.cwds.rest.services.SpecialProjectReferralService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.AssignmentService;
@@ -218,6 +219,7 @@ public class ServicesModule extends AbstractModule {
     bind(ParticipantDaoFactoryImpl.class);
     bind(ParticipantMapperFactoryImpl.class);
     bind(ClientTransformer.class);
+    bind(SpecialProjectReferralService.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();

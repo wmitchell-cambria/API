@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,10 +12,14 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 /**
  * {@link CmsPersistentObject} Class representing an GovernmentOrganizationCrossReport.
@@ -54,15 +59,24 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
    * and governmentOrganizationCrossReport record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCRSS_RP0", nullable = false, updatable = false, insertable = false)
   private CrossReport crossReport;
 
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCRSS_RPT", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
-  @ManyToOne(optional = true)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKGV_ORG_T", nullable = true, updatable = false, insertable = false)
   private GovernmentOrganizationEntity governmentOrganization;
 
@@ -182,6 +196,11 @@ public class GovernmentOrganizationCrossReport extends CmsPersistentObject {
 
   public GovernmentOrganizationEntity getGovernmentOrganization() {
     return governmentOrganization;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override

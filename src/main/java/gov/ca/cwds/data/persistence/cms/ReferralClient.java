@@ -16,7 +16,11 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
 
@@ -196,10 +200,16 @@ public class ReferralClient extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKCLIENT_T", nullable = false, updatable = false, insertable = false)
   private Client client;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
@@ -441,6 +451,11 @@ public class ReferralClient extends CmsPersistentObject {
    */
   public String getDrugIndicator() {
     return drugIndicator;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override

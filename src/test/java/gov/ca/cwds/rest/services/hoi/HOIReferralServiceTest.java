@@ -12,7 +12,6 @@ import static org.mockito.Mockito.when;
 
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import java.util.Collection;
 import java.util.Date;
@@ -26,9 +25,9 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import gov.ca.cwds.data.cms.ClientDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Allegation;
@@ -61,10 +60,9 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   private static final String CLIENT3_ID = "P975G53fTh";
   private static final String CLIENT4_ID = "ABC5G53fTh";
 
-  private ClientDao clientDao = mock(ClientDao.class);
+  //private ClientDao clientDao = mock(ClientDao.class);
   private ReferralClientDao referralClientDao = mock(ReferralClientDao.class);
   private ReferralDao referralDao = mock(ReferralDao.class);
-  private ReporterDao reporterDao = mock(ReporterDao.class);
   private StaffPersonDao staffPersonDao = mock(StaffPersonDao.class);
   private AllegationDao allegationDao = mock(AllegationDao.class);
   private AuthorizationService authorizationService;
@@ -86,11 +84,19 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   private static final gov.ca.cwds.data.persistence.cms.ReferralClient referralClientS = buildReferralClient(
       CLIENT1_ID, REFERRAL1_ID, true);
 
+  private static Map<String, Client> clientsMap;
+
   /**
    * Initialize system code cache
    */
   @SuppressWarnings("unused")
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+
+  @BeforeClass
+  public static void beforeClass() {
+    setUpClientsMap();
+  }
+
 
   /**
    * Test setup
@@ -101,14 +107,11 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   @Before
   public void setup() throws Exception {
     super.setup();
-    setUpClients();
     setUpStaffPersons();
-    setUpReporters();
     setUpAllegations();
-    setUpReferrals(REFERRAL1_ID, REFERRAL2_ID, REFERRAL3_ID, REFERRAL4_ID);
     authorizationService = new AuthorizationService();
-    hoiReferralService = new HOIReferralService(authorizationService, clientDao, referralClientDao,
-        referralDao, reporterDao, staffPersonDao, allegationDao);
+    hoiReferralService = new HOIReferralService(authorizationService, referralClientDao,
+        referralDao, staffPersonDao, allegationDao);
     request = new HOIRequest();
     request.setClientIds(Stream.of("CLIENT-123").collect(Collectors.toSet()));
   }
@@ -120,6 +123,7 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients =
         {referralClient11, referralClient12, referralClient21, referralClient22};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    setUpReferralsWithReporters(REFERRAL1_ID, REFERRAL2_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
@@ -132,6 +136,7 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients =
         {referralClient11, referralClient21};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    setUpReferralsWithReporters(REFERRAL1_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(1)));
@@ -141,6 +146,7 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   public void testHandleFindWhenReporterMandated() {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {referralClient3};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    setUpReferralsWithReporters(REFERRAL3_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(1)));
@@ -150,6 +156,7 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   public void testHandleFindWhenAnonymousReporter() {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {referralClient4};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    setUpReferralsWithReporters(REFERRAL4_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(1)));
@@ -159,6 +166,7 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   public void testHandleFindWhenSelfReporter() {
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {referralClientS};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
+    setUpReferralsWithReporters(REFERRAL1_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(1)));
@@ -168,8 +176,9 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
   public void testForHandleFindWhenPerpetratorAndVictimClientNull() {
     final Date allegationDate = new Date();
     final Allegation allegation1 = new AllegationEntityBuilder().setReferralId(REFERRAL1_ID)
-        .setVictimClientId(CLIENT2_ID).setPerpetratorClientId(null)
-        .setAbuseEndDate(allegationDate).setAbuseStartDate(allegationDate).build();
+        .setVictimClientId(CLIENT2_ID).setVictim(clientsMap.get(CLIENT2_ID))
+        .setPerpetratorClientId(null).setAbuseEndDate(allegationDate)
+        .setAbuseStartDate(allegationDate).build();
     final Allegation allegation2 = new AllegationEntityBuilder().setReferralId(REFERRAL2_ID)
         .setVictimClientId(null).setPerpetratorClientId(null)
         .setAbuseEndDate(allegationDate).setAbuseStartDate(allegationDate).build();
@@ -182,13 +191,14 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     allegationsSet2.add(allegation2);
     allegationsMap.put(REFERRAL1_ID, allegationsSet1);
     allegationsMap.put(REFERRAL2_ID, allegationsSet2);
-    when(allegationDao.findByReferralIds(any(Collection.class))).thenReturn(allegationsMap);
+
+    when(allegationDao.findAllegationsWithClientsByReferralIds(any(Collection.class)))
+        .thenReturn(allegationsMap);
 
     gov.ca.cwds.data.persistence.cms.ReferralClient[] referralClients = {referralClient21,
         referralClient22};
     when(referralClientDao.findByClientIds(any(Collection.class))).thenReturn(referralClients);
-
-    setUpReferrals(REFERRAL1_ID, REFERRAL2_ID);
+    setUpReferralsWithReporters(REFERRAL1_ID, REFERRAL2_ID);
 
     HOIReferralResponse response = hoiReferralService.handleFind(request);
     assertThat(response.getHoiReferrals().size(), is(equalTo(2)));
@@ -246,8 +256,8 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     request = new HOIRequest();
     request.setClientIds(Stream.of("unauthorizedId").collect(Collectors.toSet()));
 
-    hoiReferralService = new HOIReferralService(authorizationService, clientDao, referralClientDao,
-        referralDao, reporterDao, staffPersonDao, allegationDao);
+    hoiReferralService = new HOIReferralService(authorizationService, referralClientDao,
+        referralDao, staffPersonDao, allegationDao);
     final HOIReferralService spyTarget = spy(hoiReferralService);
     final HOIReferralResponse response = spyTarget.handleFind(request);
     assertThat("Expected authorization errors!!",
@@ -264,21 +274,6 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
         new Date());
   }
 
-  private void setUpClients() {
-    final Client client1 = new ClientEntityBuilder().setId(CLIENT1_ID).build();
-    final Client client2 = new ClientEntityBuilder().setId(CLIENT2_ID).build();
-    final Client client3 = new ClientEntityBuilder().setId(CLIENT3_ID).build();
-    final Client client4 = new ClientEntityBuilder().setId(CLIENT4_ID).build();
-
-    // map where key is a Client id and value is a Client itself
-    final Map<String, Client> clientMap = new HashMap<>();
-    clientMap.put(client1.getId(), client1);
-    clientMap.put(client2.getId(), client2);
-    clientMap.put(client3.getId(), client3);
-    clientMap.put(client4.getId(), client4);
-    when(clientDao.findClientsByIds(any(Collection.class))).thenReturn(clientMap);
-  }
-
   private void setUpStaffPersons() {
     final StaffPerson staffPerson = new StaffPersonEntityBuilder().setId("0X5").build();
     final StaffPerson otherStaffPerson = new StaffPersonEntityBuilder().setId("0Ht").build();
@@ -290,34 +285,24 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     when(staffPersonDao.findByIds(any(Collection.class))).thenReturn(staffPersonMap);
   }
 
-  private void setUpReporters() {
-    gov.ca.cwds.data.persistence.cms.Reporter reporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(new CmsReporterResourceBuilder().build(),
-            "0X5", new Date());
-    gov.ca.cwds.data.persistence.cms.Reporter mandatedReporter =
-        new gov.ca.cwds.data.persistence.cms.Reporter(new CmsReporterResourceBuilder()
-            .setMandatedReporterIndicator(true).build(), "0X5", new Date());
-
-    // map where key is a Referral id and value is a the Reporter of the Referral
-    final Map<String, gov.ca.cwds.data.persistence.cms.Reporter> reportersMap = new HashMap<>();
-    reportersMap.put(REFERRAL1_ID, reporter);
-    reportersMap.put(REFERRAL2_ID, reporter);
-    reportersMap.put(REFERRAL3_ID, mandatedReporter);
-    when(reporterDao.findByReferralIds(any(Collection.class))).thenReturn(reportersMap);
-  }
-
   private void setUpAllegations() {
     final Date allegationDate = new Date();
     final Allegation allegation1 = new AllegationEntityBuilder().setReferralId(REFERRAL1_ID)
         .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT2_ID)
+        .setVictim(clientsMap.get(CLIENT1_ID)).setPerpetrator(clientsMap.get(CLIENT2_ID))
         .setAbuseEndDate(allegationDate).setAbuseStartDate(allegationDate).build();
     final Allegation allegation2 = new AllegationEntityBuilder().setReferralId(REFERRAL2_ID)
         .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT2_ID)
+        .setVictim(clientsMap.get(CLIENT1_ID)).setPerpetrator(clientsMap.get(CLIENT2_ID))
         .setAbuseEndDate(allegationDate).setAbuseStartDate(allegationDate).build();
     final Allegation allegation3 = new AllegationEntityBuilder().setReferralId(REFERRAL3_ID)
-        .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT3_ID).build();
+        .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT3_ID)
+        .setVictim(clientsMap.get(CLIENT1_ID)).setPerpetrator(clientsMap.get(CLIENT3_ID))
+        .build();
     final Allegation allegation4 = new AllegationEntityBuilder().setReferralId(REFERRAL4_ID)
-        .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT4_ID).build();
+        .setVictimClientId(CLIENT1_ID).setPerpetratorClientId(CLIENT4_ID)
+        .setVictim(clientsMap.get(CLIENT1_ID)).setPerpetrator(clientsMap.get(CLIENT4_ID))
+        .build();
 
     // map where key is a referralId and value is a collection of Allegations of the referral
     final Map<String, Set<Allegation>> allegationsMap = new HashMap<>();
@@ -333,10 +318,13 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     allegationsMap.put(REFERRAL2_ID, allegationsSet2);
     allegationsMap.put(REFERRAL3_ID, allegationsSet3);
     allegationsMap.put(REFERRAL4_ID, allegationsSet4);
-    when(allegationDao.findByReferralIds(any(Collection.class))).thenReturn(allegationsMap);
+
+    when(allegationDao.findAllegationsWithClientsByReferralIds(any(Collection.class)))
+        .thenReturn(allegationsMap);
   }
 
-  private void setUpReferrals(String ... referralIds) {
+  private void setUpReferralsWithReporters(String ... referralIds) {
+    // set up referrals
     Date referralDate = new Date();
     Referral referral_1 = new ReferralEntityBuilder().setId(REFERRAL1_ID)
         .setReceivedDate(referralDate).setPrimaryContactStaffPersonId("0X5")
@@ -364,6 +352,32 @@ public class HOIReferralServiceTest extends Doofenshmirtz<Client> {
     if (ArrayUtils.contains(referralIds, referral_4.getId())) {
       referralsMap.put(referral_4.getId(), referral_4);
     }
-    when(referralDao.findByIds(any(Collection.class))).thenReturn(referralsMap);
+    when(referralDao.findReferralsWithReportersByIds(any(Collection.class))).thenReturn(referralsMap);
+
+    // set up reporters
+    gov.ca.cwds.data.persistence.cms.Reporter reporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(new CmsReporterResourceBuilder().build(),
+            "0X5", new Date());
+    gov.ca.cwds.data.persistence.cms.Reporter mandatedReporter =
+        new gov.ca.cwds.data.persistence.cms.Reporter(new CmsReporterResourceBuilder()
+            .setMandatedReporterIndicator(true).build(), "0X5", new Date());
+
+    referral_1.setReporter(reporter);
+    referral_2.setReporter(reporter);
+    referral_3.setReporter(mandatedReporter);
+  }
+
+  private static void setUpClientsMap() {
+    final Client client1 = new ClientEntityBuilder().setId(CLIENT1_ID).build();
+    final Client client2 = new ClientEntityBuilder().setId(CLIENT2_ID).build();
+    final Client client3 = new ClientEntityBuilder().setId(CLIENT3_ID).build();
+    final Client client4 = new ClientEntityBuilder().setId(CLIENT4_ID).build();
+
+    // map where key is a Client id and value is a Client itself
+    clientsMap = new HashMap<>();
+    clientsMap.put(client1.getId(), client1);
+    clientsMap.put(client2.getId(), client2);
+    clientsMap.put(client3.getId(), client3);
+    clientsMap.put(client4.getId(), client4);
   }
 }

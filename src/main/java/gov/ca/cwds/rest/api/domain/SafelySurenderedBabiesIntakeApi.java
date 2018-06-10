@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class SafelySurenderedBabies extends DomainObject {
+public class SafelySurenderedBabiesIntakeApi extends DomainObject {
 
   private static final long serialVersionUID = -5667060392833194010L;
 
@@ -57,7 +57,7 @@ public class SafelySurenderedBabies extends DomainObject {
   private String participantId;
 
 
-  public SafelySurenderedBabies() {
+  public SafelySurenderedBabiesIntakeApi() {
     // required by third party library
   }
 

@@ -1,6 +1,6 @@
 package gov.ca.cwds.data.cms;
 
-import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_BY_IDS;
+import static gov.ca.cwds.data.persistence.cms.Referral.FIND_REFERRALS_WITH_REPORTERS_BY_IDS;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,18 +33,18 @@ public class ReferralDao extends CrudsDaoImpl<Referral> {
   }
 
   /**
-   * Find Referrals by id-s
+   * Find Referrals by id-s with Reporters pre-loaded
    *
    * @param ids Set of Referral id-s
    * @return map where key is a Referral id and value is a Referral itself
    */
-  public Map<String, Referral> findByIds(Collection<String> ids) {
+  public Map<String, Referral> findReferralsWithReportersByIds(Collection<String> ids) {
     if (ids == null || ids.isEmpty()) {
       return new HashMap<>();
     }
     @SuppressWarnings("unchecked")
-    final Query<Referral> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(FIND_REFERRALS_BY_IDS).setParameter("ids", ids);
+    final Query<Referral> query = this.grabSession()
+        .getNamedQuery(FIND_REFERRALS_WITH_REPORTERS_BY_IDS).setParameter("ids", ids);
     return query.list().stream().collect(Collectors.toMap(Referral::getId, r -> r));
   }
 }

@@ -120,9 +120,14 @@ public final class SystemCodeCategoryId {
   public static final String COMMERCIALLY_SEXUALLY_EXPLOITED_CHILDREN = "CSEC_TPC";
 
   /**
-   * Reason for Removal type
+   * Removed from care taker type
    */
-  public static final String SAFELY_SURRENDERED_BABIES = "SSB_TPC";
+  public static final String REMOVEF_FROM_CARE_TAKER_TYPE = "RMV_FRMC";
+
+  /**
+   * Non-CWS ID/Number Code (for example safely surrendered babies bracelet id)
+   */
+  public static final String NON_CWS_ID_TYPE = "OTH_ID_C";
 
 
   /**

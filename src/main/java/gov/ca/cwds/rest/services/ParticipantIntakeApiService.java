@@ -41,7 +41,7 @@ import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
-import gov.ca.cwds.rest.api.domain.SafelySurenderedBabies;
+import gov.ca.cwds.rest.api.domain.SafelySurenderedBabiesIntakeApi;
 import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -191,7 +191,7 @@ public class ParticipantIntakeApiService implements CrudsService {
     participantIntakeApiPosted.addPhoneNumbers(phoneNumberSet);
     participantIntakeApiPosted.setCsecs(csecMapper.toDomain(participantEntityManaged.getCsecs()));
 
-    SafelySurenderedBabies createdSsb =
+    SafelySurenderedBabiesIntakeApi createdSsb =
         safelySurrenderedBabiesMapper.map(participantEntityManaged.getSafelySurrenderedBabies());
     participantIntakeApiPosted.setSafelySurenderedBabies(createdSsb);
 
@@ -322,7 +322,7 @@ public class ParticipantIntakeApiService implements CrudsService {
       ParticipantEntity participantEntityManaged) {
 
 
-    SafelySurenderedBabies safelySurenderedBabies =
+    SafelySurenderedBabiesIntakeApi safelySurenderedBabies =
         participantIntakeApi.getSafelySurenderedBabies();
 
     if (safelySurenderedBabies != null) {

@@ -204,7 +204,11 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.ContactPartyDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
-          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class)
+          gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class,
+          gov.ca.cwds.data.legacy.cms.entity.SpecialProject.class,
+          gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.class,
+          gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies.class,
+          gov.ca.cwds.data.legacy.cms.entity.NonCWSNumber.class)
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(
@@ -258,7 +262,7 @@ public class DataAccessModule extends AbstractModule {
 
   private final HibernateBundle<ApiConfiguration> nsHibernateBundle =
       new HibernateBundle<ApiConfiguration>(nsEntities,
-          new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
+          new FerbSessionFactoryFactory<>(paperTrailInterceptor)) {
         @Override
         public DataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
           return configuration.getNsDataSourceFactory();
@@ -302,18 +306,18 @@ public class DataAccessModule extends AbstractModule {
   /**
    * XA pooled datasource factory for NS PostgreSQL.
    */
-  private final FerbHibernateBundle xaNsHibernateBundle = new FerbHibernateBundle(nsEntities,
-      new FerbSessionFactoryFactory<PaperTrailInterceptor>(paperTrailInterceptor)) {
-    @Override
-    public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-      return configuration.getXaNsDataSourceFactory();
-    }
+  private final FerbHibernateBundle xaNsHibernateBundle =
+      new FerbHibernateBundle(nsEntities, new FerbSessionFactoryFactory<>(paperTrailInterceptor)) {
+        @Override
+        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getXaNsDataSourceFactory();
+        }
 
-    @Override
-    public String name() {
-      return "xa_ns";
-    }
-  };
+        @Override
+        public String name() {
+          return "xa_ns";
+        }
+      };
 
   /**
    * Constructor takes the API configuration.
@@ -380,6 +384,10 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
+    bind(gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao.class);
+    bind(gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao.class);
+    bind(gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao.class);
+    bind(gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao.class);
     bind(XaCmsAddressDao.class);
 
     // NS:
