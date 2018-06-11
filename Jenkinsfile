@@ -183,8 +183,6 @@ def updateFiles(newTag) {
     def source = readFile file: 'build.gradle'
       source = source.replace('apiVersion = \'0.7.3\'', 'apiVersion = '+newTag)
       writeFile file:'build.gradle', text: "$source"
-    }
-
 }
 // Tags the repo
 def tagRepo(String newTag) {
