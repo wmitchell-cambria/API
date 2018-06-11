@@ -96,6 +96,8 @@ import gov.ca.cwds.data.cms.xa.XaCmsSexualExploitationTypeDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStateIdDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsSystemCodeDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsSystemMetaDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsTickleDaoImpl;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
@@ -347,7 +349,7 @@ public class DataAccessModule extends AbstractModule {
   /**
    * XA pooled datasource factory for CMS DB2, replicated schema.
    */
-  private final FerbHibernateBundle xaRsHibernateBundle =
+  private final FerbHibernateBundle rsHibernateBundle =
       new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
@@ -400,7 +402,7 @@ public class DataAccessModule extends AbstractModule {
   public DataAccessModule(Bootstrap<ApiConfiguration> bootstrap) {
     bootstrap.addBundle(cmsHibernateBundle);
     bootstrap.addBundle(nsHibernateBundle);
-    bootstrap.addBundle(xaRsHibernateBundle);
+    bootstrap.addBundle(rsHibernateBundle);
     bootstrap.addBundle(xaCmsHibernateBundle);
     bootstrap.addBundle(xaNsHibernateBundle);
   }
@@ -426,8 +428,6 @@ public class DataAccessModule extends AbstractModule {
     bind(OtherCaseReferralDrmsDocumentDao.class);
     bind(OtherClientNameDao.class);
     bind(ReferralClientDeliveredServiceDao.class);
-    bind(SystemCodeDao.class);
-    bind(SystemMetaDao.class);
 
     // CMS XA:
     bind(AddressUcDao.class).to(XaCmsAddressUcDaoImpl.class);
@@ -462,6 +462,8 @@ public class DataAccessModule extends AbstractModule {
     bind(SsaName3Dao.class).to(XaCmsSsaName3DaoImpl.class);
     bind(StaffPersonDao.class).to(XaCmsStaffPersonDaoImpl.class);
     bind(StateIdDao.class).to(XaCmsStateIdDaoImpl.class);
+    bind(SystemCodeDao.class).to(XaCmsSystemCodeDaoImpl.class);
+    bind(SystemMetaDao.class).to(XaCmsSystemMetaDaoImpl.class);
     bind(TickleDao.class).to(XaCmsTickleDaoImpl.class);
     bind(XaCmsClientRelationshipDaoImpl.class);
     bind(XaCmsCountyOwnershipDaoImpl.class);
@@ -548,9 +550,9 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @CwsRsSessionFactory // For compatibility with api-core, Perry, and CALS.
+  @CwsRsSessionFactory
   public SessionFactory rsSessionFactory() {
-    return xaRsHibernateBundle.getSessionFactory();
+    return rsHibernateBundle.getSessionFactory();
   }
 
   @Provides
@@ -568,7 +570,7 @@ public class DataAccessModule extends AbstractModule {
   @Provides
   @CwsRsHibernateBundle
   public FerbHibernateBundle rsHibernateBundle() {
-    return xaRsHibernateBundle;
+    return rsHibernateBundle;
   }
 
   @Provides
