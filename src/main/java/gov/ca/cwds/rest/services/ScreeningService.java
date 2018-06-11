@@ -15,11 +15,9 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
@@ -59,8 +57,6 @@ import gov.ca.cwds.utils.JsonUtils;
  * @author CWDS API Team
  */
 public class ScreeningService implements CrudsService {
-
-  private static final ObjectMapper OBJECT_MAPPER = ObjectMapperUtils.createObjectMapper();
 
   @Named("screenings.index")
   @Inject

@@ -14,7 +14,6 @@ import gov.ca.cwds.rest.api.domain.investigation.InvestigationAddress;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.api.domain.investigation.PhoneNumber;
 
-@SuppressWarnings("javadoc")
 public class PersonEntityBuilder {
 
   private CmsRecordDescriptor cmsRecordDescriptor;
