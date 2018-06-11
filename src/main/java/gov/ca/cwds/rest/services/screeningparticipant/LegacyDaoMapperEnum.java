@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,7 +10,6 @@ import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.cms.ServiceProvider;
-import gov.ca.cwds.data.std.ApiPhoneAware.PhoneType;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -43,9 +42,10 @@ public class ServiceProviderTransformer implements ParticipantMapper {
         new HashSet<>(Arrays.asList(new AddressIntakeApi(LegacyTable.SERVICE_PROVIDER.getName(),
             null, streetAddress, serviceProvider.getCity(), state, zip, null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
-    PhoneType phoneType = serviceProvider.getPhoneType();
+    String phoneType =
+        serviceProvider.getPhoneType() != null ? serviceProvider.getPhoneType().name() : null;
     Set<PhoneNumber> phoneNumbers = new HashSet<>(
-        Arrays.asList(new PhoneNumber(null, serviceProvider.getPhoneNumber(), phoneType.name())));
+        Arrays.asList(new PhoneNumber(null, serviceProvider.getPhoneNumber(), phoneType)));
     String sensitivityIndicator = serviceProvider.getSensitivityIndicator() != null
         ? serviceProvider.getSensitivityIndicator()
         : "";

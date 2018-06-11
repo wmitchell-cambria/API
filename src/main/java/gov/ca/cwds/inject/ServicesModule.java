@@ -28,15 +28,11 @@ import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ClientTransformer;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantDaoFactoryImpl;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantMapperFactoryImpl;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.CachingIntakeCodeService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.PersonService;
-import gov.ca.cwds.rest.services.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.SpecialProjectReferralService;
@@ -70,6 +66,10 @@ import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+// import gov.ca.cwds.rest.api.services.screeningparticipant.ClientTransformer;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantDaoFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -218,8 +218,8 @@ public class ServicesModule extends AbstractModule {
     bind(ScreeningParticipantService.class);
     bind(ParticipantDaoFactoryImpl.class);
     bind(ParticipantMapperFactoryImpl.class);
-    bind(ClientTransformer.class);
     bind(SpecialProjectReferralService.class);
+    // bind(ClientTransformer.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();

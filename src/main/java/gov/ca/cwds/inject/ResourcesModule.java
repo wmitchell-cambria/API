@@ -53,7 +53,6 @@ import gov.ca.cwds.rest.resources.PersonResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ScreeningDashboardResource;
 import gov.ca.cwds.rest.resources.ScreeningIntakeResource;
-import gov.ca.cwds.rest.resources.ScreeningParicipantResource;
 import gov.ca.cwds.rest.resources.ScreeningRelationshipResource;
 import gov.ca.cwds.rest.resources.ScreeningResource;
 import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
@@ -79,13 +78,13 @@ import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
 import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
+import gov.ca.cwds.rest.resources.screeningparticipant.ScreeningParticipantResource;
 import gov.ca.cwds.rest.resources.submit.ScreeningSubmitResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.IntakeLovService;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
 import gov.ca.cwds.rest.services.ParticipantService;
 import gov.ca.cwds.rest.services.PersonService;
-import gov.ca.cwds.rest.services.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.ScreeningRelationshipService;
 import gov.ca.cwds.rest.services.ScreeningService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
@@ -123,6 +122,7 @@ import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
+import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 
 
@@ -177,7 +177,7 @@ public class ResourcesModule extends AbstractModule {
     bind(HoiScreeningResource.class);
     bind(AuthorizationResource.class);
     bind(HoiUsingClientIdResource.class);
-    bind(ScreeningParicipantResource.class);
+    bind(ScreeningParticipantResource.class);
   }
 
   @Provides

@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.services;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -13,9 +13,9 @@ import gov.ca.cwds.data.ns.ScreeningDao;
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantDaoFactoryImpl;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantMapper;
-import gov.ca.cwds.rest.api.services.screeningparticipant.ParticipantMapperFactoryImpl;
+import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
+import gov.ca.cwds.rest.services.ServiceException;
+import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
  * Business layer object to work on ParticipantIntakeApi

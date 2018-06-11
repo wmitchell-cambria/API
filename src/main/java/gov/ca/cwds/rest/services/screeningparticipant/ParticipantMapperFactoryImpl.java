@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +28,8 @@ public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
       throw new ServiceException();
     }
 
-    String name = "gov.ca.cwds.rest.api.services.screeningparticipant."
-        + legacyDaoMapperEnum.getTranformerName();
+    String name =
+        "gov.ca.cwds.rest.services.screeningparticipant." + legacyDaoMapperEnum.getTranformerName();
     try {
       @SuppressWarnings("unchecked")
       Class<ParticipantMapper> participantMapper = (Class<ParticipantMapper>) Class.forName(name);

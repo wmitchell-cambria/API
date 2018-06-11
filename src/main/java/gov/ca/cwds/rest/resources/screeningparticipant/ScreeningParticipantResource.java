@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.resources;
+package gov.ca.cwds.rest.resources.screeningparticipant;
 
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
 
@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 
 import gov.ca.cwds.inject.ScreeningParticipantServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
+import gov.ca.cwds.rest.resources.TypedResourceDelegate;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +40,7 @@ import io.swagger.annotations.ApiResponses;
 @Path(value = RESOURCE_SCREENINGS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class ScreeningParicipantResource {
+public class ScreeningParticipantResource {
 
   private TypedResourceDelegate<String, ParticipantIntakeApi> typedResourceDelegate;
 
@@ -47,7 +48,7 @@ public class ScreeningParicipantResource {
    * @param typedResourceDelegate - typedResourceDelegate
    */
   @Inject
-  public ScreeningParicipantResource(
+  public ScreeningParticipantResource(
       @ScreeningParticipantServiceBackedResource TypedResourceDelegate<String, ParticipantIntakeApi> typedResourceDelegate) {
     this.typedResourceDelegate = typedResourceDelegate;
   }
