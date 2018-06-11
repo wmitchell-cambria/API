@@ -1,6 +1,5 @@
 package gov.ca.cwds.rest.services.investigation;
 
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +8,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.cms.ClientDao;
+import gov.ca.cwds.data.cms.ClientRelationshipDao;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.persistence.cms.Referral;
@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
 /**
- * Business layer object to work on Investigation
+ * Business layer object to work on client relationships.
  * 
  * @author CWDS API Team
  */
@@ -40,7 +40,8 @@ public class ClientsRelationshipsService
    * @param clientDao - clientDao instance
    */
   @Inject
-  public ClientsRelationshipsService(ClientRelationshipDao clientRelationshipDao, ClientDao clientDao) {
+  public ClientsRelationshipsService(ClientRelationshipDao clientRelationshipDao,
+      ClientDao clientDao) {
     super();
     this.clientRelationshipDao = clientRelationshipDao;
     this.clientDao = clientDao;
@@ -89,7 +90,7 @@ public class ClientsRelationshipsService
   }
 
   /**
-   * construing Relationship object
+   * Construct a Relationship object
    * 
    * @param persistedClientRelationships - list of clientRelationship
    * @param primaryClientId - primary client id
