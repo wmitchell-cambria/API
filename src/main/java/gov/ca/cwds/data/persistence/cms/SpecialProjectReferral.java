@@ -24,7 +24,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
     public static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID = 
         "gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.findByReferralIdAndSpecialProjectId";
     static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID_QUERY =
-        "FROM SpecialProjectReferral WHERE FKREFER_T = referralId AND FKSPC_PRJT = specialProjectId";
+        "FROM SpecialProjectReferral WHERE FKREFERL_T = referralId AND FKSPC_PRJT = specialProjectId";
     
     @Column(name = "CNTY_SPFCD")
     private String countySpecificCode;
@@ -32,7 +32,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
     @Column(name = "FKREFERL_T")
     private String referralId;
     
-    @Column(name = "FKSPC_PJT")
+    @Column(name = "FKSPC_PRJT")
     private String specialProjectId;
     
     @Type(type = "date")

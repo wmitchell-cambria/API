@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.cms;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
@@ -10,8 +11,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,12 +20,10 @@ import javax.validation.Validator;
 import gov.ca.cwds.data.cms.SpecialProjectDao;
 import gov.ca.cwds.data.cms.SpecialProjectReferralDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
-import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.data.persistence.cms.SpecialProjectReferral;
 import gov.ca.cwds.fixture.CsecBuilder;
 import gov.ca.cwds.fixture.SpecialProjectEntityBuilder;
-import gov.ca.cwds.fixture.SpecialProjectReferralEntityBuilder;
 import gov.ca.cwds.fixture.SpecialProjectReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
@@ -55,16 +52,13 @@ public class SpecialProjectReferralServiceTest {
     RequestExecutionContext.instance();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     
-    specialProjectReferralDao = mock(SpecialProjectReferralDao.class);
-    
+    specialProjectReferralDao = mock(SpecialProjectReferralDao.class);    
     specialProjectDao = mock(SpecialProjectDao.class);
     
     riSpecialProjectReferral = mock(RISpecialProjectReferral.class);
     
     specialProjectReferralService = new SpecialProjectReferralService(specialProjectReferralDao,
-        specialProjectDao, riSpecialProjectReferral, validator);
-    
-    
+        specialProjectDao, riSpecialProjectReferral, validator);    
   }
   
   @Test
@@ -123,6 +117,103 @@ public class SpecialProjectReferralServiceTest {
   
   @Test 
   public void shouldReturnNullWhenSpecialProjectDoesNotExistsOnSave() throws Exception {
+    Csec csec = new CsecBuilder().createCsec();
+    csec.setId("S-CSEC Referral");
+    String referralId = "0987654ABC";
+    String incidentCounty = "34";
+    Date endDate = new Date();
+    MessageBuilder messageBuilder = new MessageBuilder();
+    
+    SpecialProject specialProject = new SpecialProjectEntityBuilder()
+        .setName("test")
+        .setEndDate(endDate)
+        .build();        
+    List<SpecialProject> specialProjects = new ArrayList();
+    specialProjects.add(specialProject);    
+    when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
+    .thenReturn(specialProjects);
+    
+    gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain = new SpecialProjectReferralResourceBuilder().build();
+    SpecialProjectReferral sprEntity = new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral("9876543ABC",
+        sprDomain,
+        "aab",
+        new Date());
+    when(specialProjectReferralDao.create(any(SpecialProjectReferral.class))).thenReturn(sprEntity);
+
+    // specialProjectReferralDao.create should not be called
+    PostedSpecialProjectReferral sprPosted = specialProjectReferralService
+        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+    assertThat(sprPosted, is(nullValue()));    
+ }
+  
+  @Test
+  public void shouldReturnNullWhenSpecialProjectReferralAlreadyExist() throws Exception {
+    Csec csec = new CsecBuilder().createCsec();
+    csec.setId("S-CSEC Referral");
+    String referralId = "9876543ABC";
+    String specialProjectId = "0987654ABC";
+    String incidentCounty = "34";
+    MessageBuilder messageBuilder = new MessageBuilder();
+
+    // mock the special project find dao
+    SpecialProject specialProject = new SpecialProjectEntityBuilder()
+        .setName("test")
+        .setId(specialProjectId)
+        .build();
+    List<SpecialProject> specialProjects = new ArrayList();
+    specialProjects.add(specialProject);
+    when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
+    .thenReturn(specialProjects);
+
+    // mock the special project referral dao (findSpecialProjectByReferralIdAndSpecialProjectId)
+    gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain = 
+        new SpecialProjectReferralResourceBuilder()
+        .setSpecialProjectId(specialProjectId)
+        .setReferralId(referralId)
+        .build();
+    SpecialProjectReferral sprEntity = new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral("9876543ABC",
+        sprDomain,
+        "aab",
+        new Date());
+    List<SpecialProjectReferral> specialProjectReferrals = new ArrayList();
+    specialProjectReferrals.add(sprEntity);    
+    when(specialProjectReferralDao
+        .findSpecialProjectReferralsByReferralIdAndSpecialProjectId(referralId, specialProjectId))
+        .thenReturn(specialProjectReferrals);
+
+    // specialProjectReferralDao.create should not be called
+    PostedSpecialProjectReferral sprPosted = specialProjectReferralService
+        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+    assertThat(sprPosted, is(nullValue()));    
+
+  }
+  
+  @Test
+  public void shouldReturnNullWhenInvalidGovernmentEntityType() throws Exception {
+    Csec csec = new CsecBuilder().createCsec();
+    csec.setId("S-CSEC Referral");
+    String referralId = "0987654ABC";
+    String incidentCounty = "ZZ";
+    MessageBuilder messageBuilder = new MessageBuilder();
+    
+    SpecialProject specialProject = new SpecialProjectEntityBuilder()
+        .setName("test")
+        .build();
+    List<SpecialProject> specialProjects = new ArrayList();
+    specialProjects.add(specialProject);    
+    when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
+    .thenReturn(specialProjects);
+
+    gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain = new SpecialProjectReferralResourceBuilder().build();
+    SpecialProjectReferral sprEntity = new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral("9876543ABC",
+        sprDomain,
+        "aab",
+        new Date());
+    when(specialProjectReferralDao.create(any(SpecialProjectReferral.class))).thenReturn(sprEntity);
+
+    PostedSpecialProjectReferral sprPosted = specialProjectReferralService
+        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+    assertThat(sprPosted, is(nullValue()));    
     
   }
   
@@ -130,10 +221,29 @@ public class SpecialProjectReferralServiceTest {
   public void testFind() {
     try {
       specialProjectReferralService.find("abc");
-      fail("Expected exception");
+      fail("Expected exception was not thrown");
     } catch (Exception e) {
-
     }
   }
 
+  @Test
+  public void testDelete() {
+    try {
+      specialProjectReferralService.delete("abc");
+      fail("Expected exception was not thrown");
+    } catch (Exception e) {
+    }
+  }
+
+  @Test
+  public void testUpdate() {
+    try {
+      String primaryKey = "1234567ABC";
+      gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain = new SpecialProjectReferralResourceBuilder().build();
+      
+      specialProjectReferralService.update(primaryKey, sprDomain);
+      fail("Expected exception was not thrown");
+    } catch (Exception e) {
+    }
+  }
 }

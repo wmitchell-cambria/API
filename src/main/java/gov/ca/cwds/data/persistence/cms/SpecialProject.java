@@ -40,7 +40,7 @@ public class SpecialProject extends CmsPersistentObject {
   @Column(name = "END_DT")
   private Date endDate;
   
-  @Column(name = "GOV_ENTC")
+  @Column(name = "GVR_ENTC")
   private Short governmentEntityType;
   
   @Id
