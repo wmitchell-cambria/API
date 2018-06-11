@@ -252,7 +252,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   /**
    * #147241489: referential integrity check.
    * <p>
-   * Doesn't actually load the data. Just checks the existence of the parent client record.
+   * Shouldn't load the data. Just checks the existence of the parent client record.
    * </p>
    */
   @HashCodeExclude

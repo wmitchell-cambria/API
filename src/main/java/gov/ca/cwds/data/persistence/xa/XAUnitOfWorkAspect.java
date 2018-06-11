@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.FlushMode;
@@ -302,8 +303,14 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     }
 
     try {
-      LOGGER.debug("XA COMMIT TRANSACTION!");
-      txn.commit();
+      final int status = txn.getStatus();
+      if (status == Status.STATUS_ROLLING_BACK || status == Status.STATUS_MARKED_ROLLBACK) {
+        LOGGER.debug("XA ROLLBACK TRANSACTION!");
+        txn.rollback();
+      } else {
+        LOGGER.debug("XA COMMIT TRANSACTION!");
+        txn.commit();
+      }
     } catch (Exception e) {
       LOGGER.error("XA COMMIT FAILED! {}", e.getMessage(), e);
       throw new CaresXAException("XA COMMIT FAILED!", e);
