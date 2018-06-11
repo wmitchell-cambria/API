@@ -260,10 +260,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       for (CmsDocumentBlobSegment blob : blobs) {
         insStmt.executeUpdate(blobToInsert(blob));
       }
-
-      con.commit(); // WARNING: deadlock without this.
     } catch (SQLException e) {
-      con.rollback();
       throw e;
     }
   }
