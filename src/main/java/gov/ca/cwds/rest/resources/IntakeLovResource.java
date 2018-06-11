@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_INTAKE_LOV;
 
 import javax.ws.rs.Consumes;
@@ -101,7 +102,7 @@ public class IntakeLovResource {
    * 
    * @return web service response
    */
-  @XAUnitOfWork
+  @XAUnitOfWork(value = DATASOURCE_XA_NS, readOnly = true)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
