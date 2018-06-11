@@ -18,11 +18,6 @@ public final class Api {
   public static final String RESOURCE_APPLICATION = "application";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CASE_HISTORY_OF_INVOLVEMENT} API..
-   */
-  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
   public static final String RESOURCE_CLIENT = "clients";
@@ -68,6 +63,16 @@ public final class Api {
   public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_CASE_HISTORY_OF_INVOLVEMENT} API..
+   */
+  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT} API..
+   */
+  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_HOI_SCREENINGS} API..
    */
   public static final String RESOURCE_HOI_SCREENINGS = "hoi_screenings";
@@ -101,11 +106,6 @@ public final class Api {
    * A {@code String} constant representing {@value #RESOURCE_REFERRALS} API..
    */
   public static final String RESOURCE_REFERRALS = "referrals";
-
-  /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT} API..
-   */
-  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
 
   /**
    * A {@code String} constant representing {@value #RESOURCE_SCREENINGS} API..
