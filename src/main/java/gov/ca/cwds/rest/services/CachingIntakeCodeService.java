@@ -21,19 +21,15 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.submit.IntakeCodeConveter;
 
 /**
- * Intake code cache Implementation
+ * Intake list of values (LOV) code cache implementation.
  * 
  * @author CWDS API Team
- *
  */
 public class CachingIntakeCodeService extends IntakeLovService implements IntakeCodeCache {
 
-  private transient LoadingCache<CacheKey, Object> intakeCodeCache;
-
-  /**
-   * 
-   */
   private static final long serialVersionUID = 1L;
+
+  private transient LoadingCache<CacheKey, Object> intakeCodeCache;
 
   /**
    * Default no-arg constructor.
@@ -56,7 +52,6 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
     final IntakeCodeCacheLoader cacheLoader = new IntakeCodeCacheLoader(this);
     intakeCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
-
   }
 
   @SuppressWarnings("unchecked")

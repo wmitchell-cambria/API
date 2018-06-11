@@ -96,6 +96,7 @@ import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
 import gov.ca.cwds.data.ns.AllegationIntakeDao;
 import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
 import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDaoImpl;
@@ -230,6 +231,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public CwsOfficeDao cwsOfficeDao;
   public DrmsDocumentDao drmsDocumentDao;
   public IntakeLOVCodeDao intakeLOVCodeDao;
+  public IntakeLovDao intakeLovDao;
   public LACountyTrigger laCountyTrigger;
   public LongTextDaoImpl longTextDao;
   public NonCWSNumberDao nonCWSNumberDao;
@@ -418,6 +420,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     cwsOfficeDao = mock(XaCmsCwsOfficeDaoImpl.class);
     drmsDocumentDao = mock(XaCmsDrmsDocumentDaoImpl.class);
     intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
+    intakeLovDao = mock(IntakeLovDao.class);
     laCountyTrigger = mock(LACountyTrigger.class);
     longTextDao = mock(XaCmsLongTextDaoImpl.class);
     nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
