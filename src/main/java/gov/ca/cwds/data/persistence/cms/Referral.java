@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -232,11 +231,11 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKADDRS_T", nullable = true, updatable = false, insertable = false)
   private Address addresses;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Allegation> allegations = new HashSet<>();
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<CrossReport> crossReports = new HashSet<>();
 
@@ -246,7 +245,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   private Reporter reporter;
 
   @ToStringExclude
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<ReferralClient> referralClients = new HashSet<>();
 
