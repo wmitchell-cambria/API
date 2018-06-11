@@ -47,11 +47,16 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
   @Override
   public String getUserId() {
     String userId = null;
-    PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
+    PerryUserIdentity userIdentity = getUserIdentity();
     if (userIdentity != null) {
       userId = userIdentity.getUser();
     }
     return userId;
+  }
+
+  @Override
+  public PerryUserIdentity getUserIdentity() {
+    return (PerryUserIdentity) get(Parameter.USER_IDENTITY);
   }
 
   @Override

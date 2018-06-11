@@ -1,10 +1,13 @@
 package gov.ca.cwds.rest.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.auth.realms.PerryUserIdentity;
 import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
 import gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao;
 import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
@@ -14,7 +17,7 @@ import gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.security.utils.PrincipalUtils;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
 
 /**
  * Special project services.
@@ -52,35 +55,43 @@ public class SpecialProjectReferralService {
    * @param ssb Safely Surrendered Babies
    */
   public void processSafelySurrenderedBabies(String childClientId, String referralId,
+      LocalDate referralReceivedDate, LocalTime referralReceivedTime,
       gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
 
     LocalDateTime now = LocalDateTime.now();
-    String userId = PrincipalUtils.getStaffPersonId();
-    String countyCode = PrincipalUtils.getPrincipal().getCountyCode();
-    String countyCwsCode = PrincipalUtils.getPrincipal().getCountyCwsCode();
 
+    PerryUserIdentity perruUser = RequestExecutionContext.instance().getUserIdentity();
+
+    String staffId = RequestExecutionContext.instance().getStaffId();
+    String staffCountySpecificCode = perruUser.getCountyCode(); // 2 gigit
+    String staffCountyCode = perruUser.getCountyCwsCode(); // 4 digit
+
+    /**
+     * Find SSB special project for staff county
+     */
     List<SpecialProject> ssbSpecialProjects =
         specialProjectDao.findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
-            Short.valueOf(countyCode));
+            Short.valueOf(staffCountyCode));
     SpecialProject ssbSpecialProject =
         (ssbSpecialProjects != null && !ssbSpecialProjects.isEmpty()) ? ssbSpecialProjects.get(0)
             : null;
 
     if (ssbSpecialProject == null) {
       throw new ServiceException(
-          "Special project not found for Safely Surrendered Babies for county " + countyCode);
+          "Special project not found for Safely Surrendered Babies for staff county "
+              + staffCountyCode);
     }
 
     /**
      * Create SpecialProjectReferral persistence record.
      */
     SpecialProjectReferral spr = new SpecialProjectReferral();
-    spr.setCountySpecificCode(countyCwsCode);
-    spr.setId(CmsKeyIdGenerator.getNextValue(userId));
-    spr.setPartStartDate(now.toLocalDate());
+    spr.setCountySpecificCode(staffCountySpecificCode);
+    spr.setId(CmsKeyIdGenerator.getNextValue(staffId));
+    spr.setPartStartDate(referralReceivedDate);
     spr.setReferralId(referralId);
     spr.setSpecialProjectId(ssbSpecialProject.getId());
-    spr.setLastUpdateId(userId);
+    spr.setLastUpdateId(staffId);
     spr.setLastUpdateTime(now);
     SpecialProjectReferral createdSpr = specialProjectReferralDao.create(spr);
 
@@ -92,17 +103,17 @@ public class SpecialProjectReferralService {
     ssbEntity.setChildClientId(childClientId);
     ssbEntity.setCommentDescription(ssb.getComments());
     ssbEntity.setCpsNotofiedIndicator(Boolean.TRUE);
-    ssbEntity.setCpsNotofiedDate(now.toLocalDate());
     ssbEntity.setMedicalQuestionnaireCode(ssb.getMedicalQuestionaireCode());
     ssbEntity.setQuestionnaireReceivedDate(ssb.getMedicalQuestionaireReturnDate());
-    ssbEntity.setCpsNotofiedTime(now.toLocalTime());
-    ssbEntity.setLastUpdateId(userId);
+    ssbEntity.setCpsNotofiedDate(referralReceivedDate);
+    ssbEntity.setCpsNotofiedTime(referralReceivedTime);
+    ssbEntity.setLastUpdateId(staffId);
     ssbEntity.setLastUpdateTime(now);
     ssbEntity.setRelationToClient(ssb.getRelationToChild().shortValue());
     ssbEntity.setSpecialProjectReferral(createdSpr.getId());
     ssbEntity.setSurrenderedByName(ssb.getSurrenderedByName());
-    ssbEntity.setSurrenderedDate(now.toLocalDate());
-    ssbEntity.setSurrenderedTime(now.toLocalTime());
+    ssbEntity.setSurrenderedDate(referralReceivedDate);
+    ssbEntity.setSurrenderedTime(referralReceivedTime);
     safelySurrenderedBabiesDao.create(ssbEntity);
 
     /**
@@ -110,8 +121,8 @@ public class SpecialProjectReferralService {
      */
     NonCWSNumber braceltInfo = new NonCWSNumber();
     braceltInfo.setClientId(childClientId);
-    braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(userId));
-    braceltInfo.setLastUpdateId(userId);
+    braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(staffId));
+    braceltInfo.setLastUpdateId(staffId);
     braceltInfo.setLastUpdateTime(now);
     braceltInfo.setOtherId(ssb.getBraceletId());
     braceltInfo.setOtherIdCode(MEDICAL_RECORD_SYSTEM_CODE_ID);
