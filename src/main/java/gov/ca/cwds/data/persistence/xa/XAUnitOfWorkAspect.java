@@ -197,12 +197,9 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     if (session != null) {
       LOGGER.debug("XA CLOSE SESSION");
       try {
-        // final int status = txn.getStatus();
-        // if (status != Status.STATUS_NO_TRANSACTION && status != Status.STATUS_UNKNOWN) {
         session.flush();
-        // }
       } catch (Exception e) {
-        LOGGER.warn("FAILED TO FLUSH SESSION! {}", e.getMessage(), e);
+        LOGGER.warn("FAILED TO FLUSH SESSION! {}", e.getMessage());
       }
 
       try {
