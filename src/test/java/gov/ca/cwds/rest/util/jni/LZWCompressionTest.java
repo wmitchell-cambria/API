@@ -8,7 +8,7 @@ import org.junit.Before;
 import gov.ca.cwds.data.persistence.cms.CmsDocument;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
 
-public class LZWCompressionTest extends Doofenshmirtz<CmsDocument> {
+public abstract class LZWCompressionTest extends Doofenshmirtz<CmsDocument> {
 
   public static final String TEST_BASE = "/jni/lzw/";
   public static final String GOOD_LZW = TEST_BASE + "good.lzw";

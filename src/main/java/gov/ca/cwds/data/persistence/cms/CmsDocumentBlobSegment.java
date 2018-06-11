@@ -144,7 +144,6 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
       return other.docBlob == null;
     } else
       return Arrays.equals(docBlob, other.docBlob);
-
   }
 
   // ==================
@@ -185,7 +184,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * @param docBlob hex of binary, compressed data for this segment
    */
   public void setDocBlob(byte[] docBlob) {
-    this.docBlob = docBlob;
+    this.docBlob = Arrays.copyOf(docBlob, docBlob.length);
   }
 
   /**

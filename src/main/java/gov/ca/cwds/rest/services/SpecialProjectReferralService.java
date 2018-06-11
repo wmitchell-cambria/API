@@ -14,7 +14,6 @@ import gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProject;
 import gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
-import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.security.utils.PrincipalUtils;
 
 /**
@@ -22,9 +21,7 @@ import gov.ca.cwds.security.utils.PrincipalUtils;
  * 
  * @author CWDS TPT Team
  */
-public class SpecialProjectReferralService extends ApiObjectIdentity {
-
-  private static final long serialVersionUID = 1L;
+public class SpecialProjectReferralService {
 
   private static final short MEDICAL_RECORD_SYSTEM_CODE_ID = 1331;
 
@@ -150,10 +147,6 @@ public class SpecialProjectReferralService extends ApiObjectIdentity {
 
   public void setNonCWSNumberDao(NonCWSNumberDao nonCWSNumberDao) {
     this.nonCWSNumberDao = nonCWSNumberDao;
-  }
-
-  public static long getSerialversionuid() {
-    return serialVersionUID;
   }
 
 }

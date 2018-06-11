@@ -18,7 +18,7 @@ import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.data.std.ApiObjectIdentity;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.services.submit.IntakeCodeConveter;
+import gov.ca.cwds.rest.services.submit.IntakeCodeConverter;
 
 /**
  * Intake list of values (LOV) code cache implementation.
@@ -81,8 +81,8 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   @Override
   public Short getLegacySystemCodeForRaceAndEthnicity(String metaId, String intakeCode) {
     Short sysId = null;
-    IntakeCodeConveter intakeCodeConveter =
-        StringUtils.isNotBlank(intakeCode) ? IntakeCodeConveter.findLegacyDescpretion(intakeCode)
+    IntakeCodeConverter intakeCodeConveter =
+        StringUtils.isNotBlank(intakeCode) ? IntakeCodeConverter.findLegacyDescription(intakeCode)
             : null;
     if (intakeCodeConveter != null && StringUtils.isNotBlank(intakeCodeConveter.getLegacyValue())
         && StringUtils.isNotBlank(metaId)) {
