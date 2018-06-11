@@ -21,7 +21,9 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
@@ -253,38 +255,58 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * Doesn't actually load the data. Just checks the existence of the parent client record.
    * </p>
    */
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERS0", nullable = true, updatable = false, insertable = false)
   private StaffPerson staffPerson0;
 
-  @ManyToOne(optional = true, fetch = FetchType.LAZY)
-  @JoinColumn(name = "FKREFERL_T", nullable = true, updatable = false, insertable = false)
-  private Referral riReferral;
-
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ALGDSC_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "ER_REF_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument1;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "INVSTG_DOC", nullable = true, updatable = false, insertable = false)
   private DrmsDocument drmsDocument2;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "CHILOC_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "RSP_RTNTXT", nullable = true, updatable = false, insertable = false)
   private LongText longText1;
 
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "SCN_NT_TXT", nullable = true, updatable = false, insertable = false)
   private LongText longText2;

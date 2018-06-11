@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,7 +15,11 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.Type;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -114,7 +119,10 @@ public class CrossReport extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", nullable = false, updatable = false, insertable = false)
   private Referral referral;
 
@@ -124,7 +132,10 @@ public class CrossReport extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
-  @ManyToOne(optional = true)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKLAW_ENFT", nullable = true, updatable = false, insertable = false)
   private LawEnforcementEntity lawEnforcement;
 
@@ -134,7 +145,10 @@ public class CrossReport extends CmsPersistentObject {
    * Doesn't actually load the data. Just checks the existence of the parent referral record.
    * </p>
    */
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKSTFPERST", nullable = false, updatable = false, insertable = false)
   private StaffPerson staffPerson;
 
@@ -411,6 +425,11 @@ public class CrossReport extends CmsPersistentObject {
 
   public StaffPerson getStaffPerson() {
     return staffPerson;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
