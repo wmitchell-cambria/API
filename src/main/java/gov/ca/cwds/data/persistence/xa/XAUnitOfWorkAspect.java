@@ -253,9 +253,13 @@ public class XAUnitOfWorkAspect implements ApiMarker {
   }
 
   protected void rollbackSessionTransaction(Session session) {
-    final Transaction sessionTran = session.getTransaction();
-    if (sessionTran != null && sessionTran.getStatus().canRollback()) {
-      sessionTran.rollback();
+    try {
+      final Transaction sessionTran = session.getTransaction();
+      if (sessionTran != null && sessionTran.getStatus().canRollback()) {
+        sessionTran.rollback();
+      }
+    } catch (Exception e) {
+      LOGGER.warn("Unable to rollback! {}", e.getMessage(), e);
     }
   }
 
