@@ -41,7 +41,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAspect.class);
 
-  private transient UserTransaction txn = new UserTransactionImp();
+  private transient UserTransaction txn;
 
   private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
 
@@ -100,9 +100,9 @@ public class XAUnitOfWorkAspect implements ApiMarker {
 
     try {
       LOGGER.debug("XA afterEnd: commit");
-      commitTransaction();
+      commit();
     } catch (Exception e) {
-      rollbackTransaction();
+      rollback();
       throw e;
     }
   }
@@ -120,7 +120,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
 
     LOGGER.warn("XA onError: rollback");
     try {
-      rollbackTransaction();
+      rollback();
     } finally {
       // nix
     }
@@ -242,6 +242,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
 
     try {
       LOGGER.debug("XA BEGIN TRANSACTION!");
+      txn = new UserTransactionImp();
       txn.setTransactionTimeout(80); // NEXT: soft-code timeout
       txn.begin();
       transactionStarted = true;
@@ -263,7 +264,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * 
    * @throws CaresXAException on database error
    */
-  protected void rollbackTransaction() throws CaresXAException {
+  protected void rollback() throws CaresXAException {
     if (!hasTransactionalFlag()) {
       LOGGER.trace("XA ROLLBACK TRANSACTION: unit of work not transactional");
       return;
@@ -287,7 +288,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * 
    * @throws CaresXAException on database error
    */
-  protected void commitTransaction() throws CaresXAException {
+  protected void commit() throws CaresXAException {
     if (!firstXaUnitOfWork.transactional()) {
       LOGGER.debug("XA COMMIT TRANSACTION: unit of work not transactional");
       return;

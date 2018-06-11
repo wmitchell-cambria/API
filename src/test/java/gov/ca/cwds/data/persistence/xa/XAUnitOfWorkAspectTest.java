@@ -113,12 +113,12 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
 
   @Test
   public void rollbackTransaction_A$() throws Exception {
-    target.rollbackTransaction();
+    target.rollback();
   }
 
   @Test
   public void commitTransaction_A$() throws Exception {
-    target.commitTransaction();
+    target.commit();
   }
 
   @Test
