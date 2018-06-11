@@ -80,7 +80,7 @@ public class ClientRelationshipDao extends BaseDaoImpl<ClientRelationship> {
     @SuppressWarnings("unchecked")
     final Query<ClientRelationship> query =
         this.grabSession().getNamedQuery(FIND_CLIENT_RELATIONSHIPS_BY_PRIMARY_CLIENT_IDS);
-    query.setParameterList("clientIds", clientIds);
+    query.setParameter("clientIds", clientIds);
     final Map<String, Collection<ClientRelationship>> relationships =
         new HashMap<>(clientIds.size());
     for (ClientRelationship rel : query.list()) {

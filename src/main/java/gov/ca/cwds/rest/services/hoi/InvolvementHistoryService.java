@@ -67,7 +67,6 @@ public class InvolvementHistoryService
   }
 
   // Use XAUnitOfWork instead at the resource level.
-  // @UnitOfWork(value = "ns", readOnly = true, transactional = false)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();
@@ -81,7 +80,6 @@ public class InvolvementHistoryService
   }
 
   // Use XAUnitOfWork instead at the resource level.
-  // @UnitOfWork(value = "cms", readOnly = true, transactional = false)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();
