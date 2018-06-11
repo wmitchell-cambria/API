@@ -1,7 +1,8 @@
 package gov.ca.cwds.data.persistence.xa;
 
 /**
- * Make a new AOP {@link XAUnitOfWorkAspect} or join an existing instance for this request.
+ * Make a new aspect-oriented programming (AOP) handler, {@link XAUnitOfWorkAspect}, or join an
+ * existing instance for this request.
  * 
  * @author CWDS API Team
  */

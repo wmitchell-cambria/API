@@ -18,8 +18,9 @@ import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
  * </p>
  * 
  * @author CWDS API Team
+ * @see RequestExecutionContextRegistry
  */
-public class ReentrantXAUnitOfWorkAspectFactory
+public class ReentrantXAUnitOfWorkAspectFactoryImpl
     implements RequestExecutionContextCallback, XAUnitOfWorkAspectFactory {
 
   private static final long serialVersionUID = 1L;
@@ -28,16 +29,16 @@ public class ReentrantXAUnitOfWorkAspectFactory
 
   private transient ThreadLocal<XAUnitOfWorkAspect> local = new ThreadLocal<>();
 
-  public ReentrantXAUnitOfWorkAspectFactory(Map<String, SessionFactory> sessionFactories) {
+  public ReentrantXAUnitOfWorkAspectFactoryImpl(Map<String, SessionFactory> sessionFactories) {
     this.sessionFactories = sessionFactories;
 
-    // Notify this instance upon request start or end
+    // Notify this instance upon request start and end.
     RequestExecutionContextRegistry.registerCallback(this);
   }
 
   @Override
   public Serializable key() {
-    return ReentrantXAUnitOfWorkAspectFactory.class.getName();
+    return ReentrantXAUnitOfWorkAspectFactoryImpl.class.getName();
   }
 
   @Override
@@ -56,6 +57,7 @@ public class ReentrantXAUnitOfWorkAspectFactory
       ret = new XAUnitOfWorkAspect(someSessionFactories);
       local.set(ret);
     }
+
     return ret;
   }
 

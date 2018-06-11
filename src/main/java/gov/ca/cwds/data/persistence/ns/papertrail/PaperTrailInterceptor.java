@@ -11,9 +11,14 @@ import javax.inject.Inject;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gov.ca.cwds.data.ns.PaperTrailDao;
 import gov.ca.cwds.data.persistence.ns.PaperTrail;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.filters.RequestExecutionContextCallback;
+import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
 
 /**
  * Synthetic triggers for PostgreSQL via Hibernate interceptor.
@@ -53,11 +58,18 @@ import gov.ca.cwds.data.persistence.ns.PaperTrail;
  * </tr>
  * </table>
  * 
+ * <p>
+ * <strong>INVESTIGATE: audits on read-only operations?</strong>
+ * </p>
+ * 
  * @author CWDS API Team
  */
-public class PaperTrailInterceptor extends EmptyInterceptor {
+public class PaperTrailInterceptor extends EmptyInterceptor
+    implements RequestExecutionContextCallback {
 
   private static final long serialVersionUID = 1L;
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PaperTrailInterceptor.class);
 
   private static final String CREATE = "create";
   private static final String UPDATE = "update";
@@ -73,14 +85,38 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Inject
   private transient PaperTrailDao paperTrailDao;
 
+  /**
+   * Default ctor.
+   */
   public PaperTrailInterceptor() {
-    // Default ctor.
+    // Notify this instance upon request start and end.
+    RequestExecutionContextRegistry.registerCallback(this);
+  }
+
+  @Override
+  public Serializable key() {
+    return PaperTrailInterceptor.class.getName();
+  }
+
+  @Override
+  public void startRequest(RequestExecutionContext ctx) {
+    LOGGER.debug("PaperTrailInterceptor.startRequest");
+    clearMaps();
+  }
+
+  @Override
+  public void endRequest(RequestExecutionContext ctx) {
+    LOGGER.debug("PaperTrailInterceptor.endRequest");
+    clearMaps();
   }
 
   // Create
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onSave: readOnly: {}", readOnly);
+
     if (entity instanceof HasPaperTrail) {
       insertsTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }
@@ -91,6 +127,9 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onFlushDirty: readOnly: {}", readOnly);
+
     if (entity instanceof HasPaperTrail) {
       updatesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }
@@ -101,6 +140,9 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onDelete: readOnly: {}", readOnly);
+
     if (entity instanceof HasPaperTrail) {
       deletesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
     }
@@ -110,11 +152,26 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @SuppressWarnings("rawtypes")
   @Override
   public void preFlush(Iterator entities) {
+    LOGGER.debug("PaperTrailInterceptor.preFlush");
     processPaperTrail();
     super.preFlush(entities);
   }
 
-  private void processPaperTrail() {
+  @Override
+  public void afterTransactionBegin(Transaction tx) {
+    LOGGER.debug("PaperTrailInterceptor.afterTransactionBegin");
+    super.afterTransactionBegin(tx);
+    clearMaps();
+  }
+
+  @Override
+  public void afterTransactionCompletion(Transaction tx) {
+    LOGGER.debug("PaperTrailInterceptor.afterTransactionCompletion");
+    super.afterTransactionCompletion(tx);
+    clearMaps();
+  }
+
+  protected void processPaperTrail() {
     try {
       for (Entry<String, Object> entry : insertsTlMap.get().entrySet()) {
         createPaperTrail(CREATE, (HasPaperTrail) entry.getValue());
@@ -133,18 +190,18 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     }
   }
 
-  private void clearMaps() {
+  protected void clearMaps() {
     insertsTlMap.get().clear();
     updatesTlMap.get().clear();
     deletesTlMap.get().clear();
   }
 
-  private String getItemTypeAndId(HasPaperTrail entity) {
+  protected String getItemTypeAndId(HasPaperTrail entity) {
     return entity.getClass().getSimpleName().concat("->").concat(entity.getId());
   }
 
-  private void createPaperTrail(String event, HasPaperTrail entity) {
-    PaperTrail paperTrail =
+  protected void createPaperTrail(String event, HasPaperTrail entity) {
+    final PaperTrail paperTrail =
         new PaperTrail(entity.getClass().getSimpleName(), entity.getId(), event);
     paperTrailDao.create(paperTrail);
   }
@@ -160,18 +217,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public String toString() {
     return "PaperTrailInterceptor [paperTrailDao=" + paperTrailDao + "]";
-  }
-
-  @Override
-  public void afterTransactionBegin(Transaction tx) {
-    super.afterTransactionBegin(tx);
-    clearMaps();
-  }
-
-  @Override
-  public void afterTransactionCompletion(Transaction tx) {
-    super.afterTransactionCompletion(tx);
-    clearMaps();
   }
 
 }

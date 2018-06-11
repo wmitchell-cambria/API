@@ -35,7 +35,7 @@ public class XAUnitOfWorkAwareProxyFactory {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
     }
 
-    aspectFactory = new ReentrantXAUnitOfWorkAspectFactory(sessionFactories);
+    aspectFactory = new ReentrantXAUnitOfWorkAspectFactoryImpl(sessionFactories);
   }
 
   /**
@@ -48,6 +48,7 @@ public class XAUnitOfWorkAwareProxyFactory {
    * @see #create(Class, Class[], Object[])
    */
   public <T> T create(Class<T> clazz) throws CaresXAException {
+    LOGGER.debug("XAUnitOfWorkAwareProxyFactory.create: clazz: {}", clazz);
     return create(clazz, new Class<?>[] {}, new Object[] {});
   }
 
@@ -64,6 +65,9 @@ public class XAUnitOfWorkAwareProxyFactory {
    */
   public <T> T create(Class<T> clazz, Class<?> constructorParamType, Object constructorArguments)
       throws CaresXAException {
+    LOGGER.debug(
+        "XAUnitOfWorkAwareProxyFactory.create: clazz: {}, constructorParamType: {}, constructorArguments: {}",
+        clazz, constructorParamType, constructorArguments);
     return create(clazz, new Class<?>[] {constructorParamType},
         new Object[] {constructorArguments});
   }
@@ -87,6 +91,9 @@ public class XAUnitOfWorkAwareProxyFactory {
   @SuppressWarnings({"unchecked", "squid:S1166"})
   public <T> T create(Class<T> clazz, Class<?>[] constructorParamTypes,
       Object[] constructorArguments) throws CaresXAException {
+    LOGGER.debug(
+        "XAUnitOfWorkAwareProxyFactory.create: clazz: {}, constructorParamTypes: {}, constructorArguments: {}",
+        clazz, constructorParamTypes, constructorArguments);
     final ProxyFactory proxyFactory = new ProxyFactory();
     proxyFactory.setSuperclass(clazz);
 

@@ -18,21 +18,26 @@ public interface RequestExecutionContext {
   public enum Parameter {
 
     /**
-     * Current user's user id or staff id.
+     * Type: String. Current user's user id or staff id.
      */
     USER_IDENTITY,
 
     /**
-     * The request's start time.
+     * Type: Date. The request's start time.
      */
     REQUEST_START_TIME,
 
     SEQUENCE_EXTERNAL_TABLE,
 
     /**
-     * Default error/warning message builder.
+     * Type: {@link MessageBuilder}. Default error/warning message builder.
      */
-    MESSAGE_BUILDER
+    MESSAGE_BUILDER,
+
+    /**
+     * Type: Boolean. Is the current REST endpoint read-only?
+     */
+    RESOURCE_READ_ONLY
   }
 
   /**
@@ -78,6 +83,13 @@ public interface RequestExecutionContext {
    * @return message builder for warnings and errors
    */
   MessageBuilder getMessageBuilder();
+
+  /**
+   * Is the current REST endpoint read-only?
+   * 
+   * @return true if current operation is read-only
+   */
+  boolean isResourceReadOnly();
 
   /**
    * Get instance of RequestExecutionContext from registry.

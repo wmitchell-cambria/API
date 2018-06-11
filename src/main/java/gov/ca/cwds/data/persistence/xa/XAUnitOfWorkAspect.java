@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 import org.hibernate.FlushMode;
@@ -195,18 +194,22 @@ public class XAUnitOfWorkAspect implements ApiMarker {
   }
 
   protected void closeSession(Session session) {
-    if (session != null && (session.isOpen() || session.isDirty())) {
+    if (session != null) {
       LOGGER.debug("XA CLOSE SESSION");
       try {
-        final int status = txn.getStatus();
-        if (status != Status.STATUS_NO_TRANSACTION && status != Status.STATUS_UNKNOWN) {
-          session.flush();
-        }
+        // final int status = txn.getStatus();
+        // if (status != Status.STATUS_NO_TRANSACTION && status != Status.STATUS_UNKNOWN) {
+        session.flush();
+        // }
       } catch (Exception e) {
-        LOGGER.warn("Flush session failed! {}", e.getMessage(), e);
+        LOGGER.warn("FAILED TO FLUSH SESSION! {}", e.getMessage(), e);
       }
 
-      session.close();
+      try {
+        session.close();
+      } catch (Exception e) {
+        LOGGER.warn("FAILED TO CLOSE SESSION! {}", e.getMessage());
+      }
     }
   }
 
