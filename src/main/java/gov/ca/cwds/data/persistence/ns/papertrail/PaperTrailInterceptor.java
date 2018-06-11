@@ -144,6 +144,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor
     super.onDelete(entity, id, state, propertyNames, types);
   }
 
+  @SuppressWarnings("rawtypes")
   @Override
   public void preFlush(Iterator entities) {
     processPaperTrail();

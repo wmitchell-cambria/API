@@ -231,7 +231,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKADDRS_T", nullable = true, updatable = false, insertable = false)
   private Address addresses;
 
-  @OneToMany(fetch = FetchType.LAZY)
+  // DRS: question: which cascade type?
+  // Don't fire updates on read-only operations or set an Allegation's non-nullable foreign key to
+  // Referral to null.
+  @OneToMany
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Allegation> allegations = new HashSet<>();
 
