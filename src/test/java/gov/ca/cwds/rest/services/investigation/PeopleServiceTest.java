@@ -5,11 +5,14 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+
 import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.dao.investigation.PeopleDao;
@@ -21,8 +24,8 @@ import gov.ca.cwds.rest.api.domain.investigation.People;
 import gov.ca.cwds.rest.api.domain.investigation.Person;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 
-@SuppressWarnings("javadoc")
 public class PeopleServiceTest {
+
   private static final String DEFAULT_KEY = "1234567ABC";
   private People stubPeople;
 
@@ -45,9 +48,7 @@ public class PeopleServiceTest {
     this.clientScpEthnicityDao = mock(ClientScpEthnicityDao.class);
 
     peopleService = new PeopleService(peopleDao, reporterDao, clientScpEthnicityDao);
-
     stubPeople = new PeopleEntityBuilder().build();
-
   }
 
   @Test
@@ -57,7 +58,6 @@ public class PeopleServiceTest {
     Referral persistent = new Referral(id, domainReferral, "0X5");
     Set<Person> persons = peopleService.getInvestigationPeople(persistent);
     assertNotNull(persons);
-
   }
 
   @Test
@@ -70,7 +70,6 @@ public class PeopleServiceTest {
   public void testCreateReturnsStubPeople() {
     Response response = peopleService.create(stubPeople);
     assertThat(response, is(equalTo(stubPeople)));
-
   }
 
   @Test
@@ -84,6 +83,6 @@ public class PeopleServiceTest {
   public void testUpdateReturnsStubPeople() {
     Response response = peopleService.update(DEFAULT_KEY, stubPeople);
     assertThat(response, is(equalTo(stubPeople)));
-
   }
+
 }

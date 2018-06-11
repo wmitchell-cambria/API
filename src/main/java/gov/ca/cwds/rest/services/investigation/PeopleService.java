@@ -234,7 +234,7 @@ public class PeopleService implements TypedCrudsService<String, People, Response
 
   /**
    * 
-   * @param apiLanguages - api languages
+   * @param apiLanguages - languages
    * @return list of languages
    */
   private Set<String> getLanguages(ApiLanguageAware[] apiLanguages) {
