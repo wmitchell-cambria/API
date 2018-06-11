@@ -82,7 +82,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     }
 
     openSessions();
-    beginTransaction();
+    beginXaTransaction();
   }
 
   /**
@@ -232,7 +232,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * 
    * @throws CaresXAException on database error
    */
-  protected void beginTransaction() throws CaresXAException {
+  protected void beginXaTransaction() throws CaresXAException {
     if (!hasTransactionalFlag()) {
       LOGGER.trace("XA BEGIN TRANSACTION: unit of work is not transactional");
       return;

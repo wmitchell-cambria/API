@@ -108,7 +108,7 @@ public class XAUnitOfWorkAspectTest extends Doofenshmirtz<Addresses> {
 
   @Test
   public void beginTransaction_A$() throws Exception {
-    target.beginTransaction();
+    target.beginXaTransaction();
   }
 
   @Test
