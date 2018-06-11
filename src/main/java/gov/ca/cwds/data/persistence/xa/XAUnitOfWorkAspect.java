@@ -173,7 +173,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * 
    * @return true = any unit is transactional
    */
-  protected boolean hasTransactionalAnnotation() {
+  protected boolean hasTransactionalFlag() {
     return this.units.values().stream().anyMatch(XAUnitOfWork::transactional);
   }
 
@@ -232,7 +232,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * @throws CaresXAException on database error
    */
   protected void beginTransaction() throws CaresXAException {
-    if (!hasTransactionalAnnotation()) {
+    if (!hasTransactionalFlag()) {
       LOGGER.trace("XA BEGIN TRANSACTION: unit of work is not transactional");
       return;
     } else if (transactionStarted) {
@@ -264,7 +264,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
    * @throws CaresXAException on database error
    */
   protected void rollbackTransaction() throws CaresXAException {
-    if (!hasTransactionalAnnotation()) {
+    if (!hasTransactionalFlag()) {
       LOGGER.trace("XA ROLLBACK TRANSACTION: unit of work not transactional");
       return;
     } else if (!transactionStarted) {
@@ -275,7 +275,7 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     try {
       LOGGER.debug("XA ROLLBACK TRANSACTION!");
       sessions.values().stream().forEach(this::rollbackSessionTransaction);
-      txn.rollback();
+      txn.rollback(); // wrapping XA transaction
     } catch (Exception e) {
       LOGGER.error("XA ROLLBACK FAILED! {}", e.getMessage(), e);
       throw new CaresXAException("XA ROLLBACK FAILED!", e);

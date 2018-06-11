@@ -112,7 +112,6 @@ public class XAUnitOfWorkAwareProxyFactory {
           return result;
         } catch (InvocationTargetException e) {
           LOGGER.error("XA ERROR! InvocationTargetException: {}", e.getCause(), e);
-          aspect.onError();
           throw e.getCause();
         } catch (Exception e) {
           LOGGER.error("XA ERROR! {}", e);
