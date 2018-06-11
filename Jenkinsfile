@@ -180,12 +180,9 @@ def copyAndReplaceText(source, dest, Closure replaceText){
 def updateFiles(newTag) {
     debug("updateFiles( newTag: ${newTag} )")
 
-    def source = new File('build.gradle.old')
-    def dest = new File('build.gradle')
-    source << dest.text
-
-    copyAndReplaceText(source, dest) {
-        it.replaceAll('apiVersion = \'0.7.3\'', 'apiVersion = '+newTag)
+    def source = readFile file: 'build.gradle'
+      source = source.replace('apiVersion = \'0.7.3\'', 'apiVersion = '+newTag)
+      writeFile file:'build.gradle', text: "$source"
     }
 
 }
