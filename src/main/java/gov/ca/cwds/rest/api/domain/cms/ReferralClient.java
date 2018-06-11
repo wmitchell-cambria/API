@@ -25,11 +25,12 @@ import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a ReferralClient
+ * {@link DomainObject} representing a Referral Client.
  * 
  * @author CWDS API Team
  */
 public class ReferralClient extends ReportingDomain implements Request, Response {
+
   private static final short DEFAULT_CODE = 0;
 
   private static final long serialVersionUID = 1L;

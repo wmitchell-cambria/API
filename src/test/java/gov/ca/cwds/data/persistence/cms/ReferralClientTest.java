@@ -24,13 +24,13 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * @author CWDS API Team
- *
  */
 public class ReferralClientTest implements PersistentTestTemplate {
 
   private static final ObjectMapper MAPPER = SystemCodeTestHarness.MAPPER;
 
   private final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
   private String lastUpdatedId = "0X5";
 
   /*
@@ -42,11 +42,9 @@ public class ReferralClientTest implements PersistentTestTemplate {
     assertThat(ReferralClient.class.newInstance(), is(notNullValue()));
   }
 
-
   @Override
   @Test
   public void testPersistentConstructor() throws Exception {
-
     ReferralClient prc = validReferralClient();
 
     ReferralClient pers = new ReferralClient(prc.getReferralId(), prc.getClientId(),
@@ -83,7 +81,6 @@ public class ReferralClientTest implements PersistentTestTemplate {
   @Override
   @Test
   public void testConstructorUsingDomain() throws Exception {
-
     gov.ca.cwds.rest.api.domain.cms.ReferralClient domain = validDomainReferralClient();
 
     ReferralClient persistent = new ReferralClient(domain, lastUpdatedId, new Date());
@@ -114,10 +111,8 @@ public class ReferralClientTest implements PersistentTestTemplate {
     assertThat(persistent.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testSerializeAndDeserialize() throws Exception {
-
     ReferralClient prc = validReferralClient();
 
     ReferralClient pers = new ReferralClient(prc.getReferralId(), prc.getClientId(),
@@ -132,9 +127,7 @@ public class ReferralClientTest implements PersistentTestTemplate {
         ReferralClient.class)));
 
     assertThat(MAPPER.writeValueAsString(pers)).isEqualTo(expected);
-
   }
-
 
   private ReferralClient validReferralClient()
       throws JsonParseException, JsonMappingException, IOException {
@@ -143,12 +136,12 @@ public class ReferralClientTest implements PersistentTestTemplate {
     return rc;
   }
 
-  private gov.ca.cwds.rest.api.domain.cms.ReferralClient validDomainReferralClient()
+  public static gov.ca.cwds.rest.api.domain.cms.ReferralClient validDomainReferralClient()
       throws JsonParseException, JsonMappingException, IOException {
     gov.ca.cwds.rest.api.domain.cms.ReferralClient validDomainReferralClient =
         MAPPER.readValue(fixture("fixtures/domain/legacy/ReferralClient/valid/valid.json"),
             gov.ca.cwds.rest.api.domain.cms.ReferralClient.class);
     return validDomainReferralClient;
-
   }
+
 }

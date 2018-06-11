@@ -60,6 +60,7 @@ import gov.ca.cwds.data.cms.AssignmentDao;
 import gov.ca.cwds.data.cms.AssignmentUnitDao;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ChildClientDao;
+import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
@@ -88,6 +89,7 @@ import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
 import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
+import gov.ca.cwds.data.dao.investigation.PeopleDao;
 import gov.ca.cwds.data.es.ElasticSearchPerson;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
@@ -111,6 +113,7 @@ import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.AllegationEntity;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningResourceBuilder;
@@ -241,6 +244,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public SystemCodeDao systemCodeDao;
   public SystemMetaDao systemMetaDao;
   public TriggerTablesDao triggerTablesDao;
+  public ClientScpEthnicityDao clientScpEthnicityDao;
+  public PeopleDao peopleDao;
 
   public RIChildClient riChildClient;
   public RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
@@ -438,6 +443,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     specialProjectReferralDao = mock(SpecialProjectReferralDao.class);
     safelySurrenderedBabiesDao = mock(SafelySurrenderedBabiesDao.class);
     nonCWSNumberDao = mock(NonCWSNumberDao.class);
+    peopleDao = mock(PeopleDao.class);
+    clientScpEthnicityDao = mock(ClientScpEthnicityDao.class);
 
     when(addressDao.grabSession()).thenReturn(session);
     when(allegationDao.grabSession()).thenReturn(session);
@@ -508,6 +515,8 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
     reminders = mock(Reminders.class);
     externalInterfaceTables = mock(ExternalInterfaceTables.class);
+
+    when(peopleDao.find(any(String.class))).thenReturn(new ClientEntityBuilder().build());
 
     // =================
     // SERVICES:

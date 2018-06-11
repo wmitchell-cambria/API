@@ -6,7 +6,6 @@ import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ReferralClientResourceBuilder {
 
   String approvalNumber = "123456789A";
