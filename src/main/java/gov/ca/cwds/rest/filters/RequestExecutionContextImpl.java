@@ -49,7 +49,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
     put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
-    put(Parameter.RESOURCE_READ_ONLY, false);
+    put(Parameter.RESOURCE_READ_ONLY, true);
   }
 
   /**

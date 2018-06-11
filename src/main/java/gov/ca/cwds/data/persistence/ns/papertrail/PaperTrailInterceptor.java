@@ -159,7 +159,6 @@ public class PaperTrailInterceptor extends EmptyInterceptor
           .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, UPDATE)));
       deletesTlSet.get()
           .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, DESTROY)));
-
     } finally {
       clearSets();
     }

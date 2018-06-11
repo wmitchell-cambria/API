@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -234,7 +235,7 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   // DRS: question: which cascade type?
   // Don't fire updates on read-only operations or set an Allegation's non-nullable foreign key to
   // Referral to null.
-  @OneToMany
+  @OneToMany(cascade = {CascadeType.DETACH})
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Allegation> allegations = new HashSet<>();
 
