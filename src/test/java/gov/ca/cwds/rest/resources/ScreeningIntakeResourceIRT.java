@@ -63,10 +63,6 @@ public class ScreeningIntakeResourceIRT extends IntakeBaseTest {
     AddressIntakeApi address = screening.getIncidentAddress();
     expectedResponse = expectedResponse.replace("${address_id}", address.getId());
 
-    AllegationIntake allegation = screening.getAllegations().iterator().next();
-    expectedResponse =
-        expectedResponse.replace("${allegation_id}", String.valueOf(allegation.getId()));
-
     ParticipantIntakeApi participantIntakeApi =
         screening.getParticipantIntakeApis().iterator().next();
     expectedResponse = expectedResponse.replace("${participant_id}", participantIntakeApi.getId());

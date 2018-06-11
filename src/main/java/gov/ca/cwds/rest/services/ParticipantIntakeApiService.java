@@ -136,7 +136,6 @@ public class ParticipantIntakeApiService implements CrudsService {
     if (participantEntity == null) {
       return null;
     }
-    participantDao.delete(primaryKey);
 
     // Delete all allegations for this participant
     allegationDao.deleteByIdList(allegationDao.findByVictimOrPerpetratorId((String) primaryKey)
@@ -156,6 +155,8 @@ public class ParticipantIntakeApiService implements CrudsService {
     if (legacyDescriptorEntity != null) {
       legacyDescriptorDao.delete(legacyDescriptorEntity.getId());
     }
+
+    participantDao.delete(primaryKey);
 
     return new ParticipantIntakeApi(participantEntity);
   }
