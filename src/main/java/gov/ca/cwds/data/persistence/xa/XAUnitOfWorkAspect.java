@@ -42,15 +42,15 @@ public class XAUnitOfWorkAspect implements ApiMarker {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(XAUnitOfWorkAspect.class);
 
-  private final UserTransaction txn = new UserTransactionImp();
+  private transient UserTransaction txn = new UserTransactionImp();
 
   private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
 
   private final Map<String, Session> sessions = new ConcurrentHashMap<>();
 
-  private final Map<Method, XAUnitOfWork> units = new ConcurrentHashMap<>();
+  private transient Map<Method, XAUnitOfWork> units = new ConcurrentHashMap<>();
 
-  private XAUnitOfWork firstXaUnitOfWork;
+  private transient XAUnitOfWork firstXaUnitOfWork;
 
   private boolean transactionStarted = false;
 
