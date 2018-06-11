@@ -59,17 +59,6 @@
     "state": "CA",
     "zip": "95833"
   },
-  "allegations": [
-    {
-      "id": "32",
-      "victim_person_id": 42,
-      "perpetrator_person_id": 43,
-      "types": [
-        "General neglect",
-        "Physical abuse"
-      ]
-    }
-  ],
   "participants": [
     {
       "id": "42",
