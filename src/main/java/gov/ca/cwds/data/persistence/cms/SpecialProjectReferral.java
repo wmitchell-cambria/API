@@ -21,6 +21,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
   @Table(name = "SPRJ_RFT")
   public class SpecialProjectReferral extends CmsPersistentObject {
     
+    public static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID = 
+        "gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.findByReferralIdAndSpecialProjectId";
+    static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID_QUERY =
+        "FROM SpecialProjectReferral WHERE FKREFER_T = referralId AND FKSPC_PRJT = specialProjectId";
+    
     @Column(name = "CNTY_SPFCD")
     private String countySpecificCode;
     

@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.cms;
 
+import java.util.List;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.SpecialProjectReferral;
@@ -22,6 +24,16 @@ public class SpecialProjectReferralDao extends CrudsDaoImpl<SpecialProjectReferr
   @Inject
   public SpecialProjectReferralDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
+  }
+  
+  public List<SpecialProjectReferral> findSpecialProjectReferralsByReferralIdAndSpecialProjectId(String referralId,
+      String specialProjectId) {
+    @SuppressWarnings("unchecked")
+    Query<SpecialProjectReferral> query = this.getSessionFactory().getCurrentSession()
+        .getNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID)
+        .setParameter("referralId", referralId)
+        .setParameter("specialProjectId", specialProjectId);
+    return query.list();
   }
   
 }

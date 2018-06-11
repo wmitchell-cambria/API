@@ -29,7 +29,7 @@ public class SpecialProject extends CmsPersistentObject {
   public static final String FIND_BY_PROJECT_NAME = 
       "gov.ca.cwds.data.persistence.cms.SpecialProject.findByProjectName";
   static final String FIND_BY_PROJECT_NAME_QUERY = 
-      "FROM ScreeningWrapper WHERE GOV_ENTC = :governementEntityType AND PROJECT_NM = :name";
+      "FROM SpecialProject WHERE GOV_ENTC = :governementEntityType AND PROJECT_NM = :name";
   
   @Column(name = "ARCASS_IND")
   private String archiveAssociationIndicator;

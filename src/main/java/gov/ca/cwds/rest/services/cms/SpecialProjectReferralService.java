@@ -24,6 +24,7 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RISpecialProjectReferral;
+import io.dropwizard.hibernate.UnitOfWork;
 /**
  * Business layer object to work on {@link SpecialProjectReferral}
  * 
@@ -34,6 +35,8 @@ public class SpecialProjectReferralService implements
     gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SpecialProjectReferral.class);
+  
+  private static final String S_CESC_REFERRAL = "S-CESC Referral";
   
   private SpecialProjectReferralDao specialProjectReferralDao;
   private SpecialProjectDao specialProjectDao;
@@ -59,22 +62,38 @@ public class SpecialProjectReferralService implements
   }
   
 
+  /**
+   * create Special Project Referral
+   * 
+   * @param sprDomain - Special Project Referral domain object
+   * 
+   * @return PostedSpecialProjectReferral  - posted Special Project Referral
+   * 
+   */
   @Override
+  @UnitOfWork(value = "cms")
   public PostedSpecialProjectReferral create(gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain) {
-    try {
-      gov.ca.cwds.data.persistence.cms.SpecialProjectReferral persisted = 
-          new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral(CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
-              sprDomain,
-              RequestExecutionContext.instance().getStaffId(),
-              RequestExecutionContext.instance().getRequestStartTime());
-      return new PostedSpecialProjectReferral(specialProjectReferralDao.create(persisted));
-    } catch (EntityExistsException e) {
-      LOGGER.info("Special Project Referral already exists :{}", sprDomain);
-      throw new ServiceException(e);      
-    }
+    assert sprDomain instanceof gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral;
+    gov.ca.cwds.data.persistence.cms.SpecialProjectReferral persisted = 
+        new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral(CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
+            sprDomain,
+            RequestExecutionContext.instance().getStaffId(),
+            RequestExecutionContext.instance().getRequestStartTime());
+    return new PostedSpecialProjectReferral(specialProjectReferralDao.create(persisted));
   }
-  
-  public PostedSpecialProjectReferral saveSpecialProjectReferral(gov.ca.cwds.rest.api.domain.Csec csecDomain,
+
+  /**
+   * save Csec Special Project Referral
+   * 
+   * @param csecDomain - CSEC domain object
+   * @param referralId - referral ID
+   * @param incidentCounty - county Code
+   * @param messageBuilder - message builder
+   * 
+   * @return PostedSpecialProjectReferral - posted Special Project Referral
+   * 
+   */
+  public PostedSpecialProjectReferral saveCsecSpecialProjectReferral(gov.ca.cwds.rest.api.domain.Csec csecDomain,
       String referralId, String incidentCounty, MessageBuilder messageBuilder) {
     
     PostedSpecialProjectReferral postedSpecialProjectReferral = null;
@@ -82,10 +101,10 @@ public class SpecialProjectReferralService implements
     short governmentEntityType = convertLogicalIdToSystemCodeFor(incidentCounty, 
         LegacyTable.GOVERNMENT_ORGANIZATION_ENTITY.getName());
     
-    String specialProjectId = findSpecialProjectId(csecDomain.getCsecCodeId(), governmentEntityType);   
+    String specialProjectId = findSpecialProjectId(S_CESC_REFERRAL, governmentEntityType);   
     if (StringUtils.isBlank(specialProjectId)) {
       String message = "Special Project does not exist for: " 
-        + csecDomain.getCsecCodeId() + " " + governmentEntityType;
+        + S_CESC_REFERRAL + " " + governmentEntityType;
       messageBuilder.addMessageAndLog(message, LOGGER);
       return null;
     }
@@ -97,14 +116,27 @@ public class SpecialProjectReferralService implements
               Boolean.FALSE);
       messageBuilder.addDomainValidationError(validator.validate(sprDomain));
       
-      postedSpecialProjectReferral = this.create(sprDomain);
+      if (!specialProjectReferralExists(referralId, specialProjectId)) {
+        postedSpecialProjectReferral = this.create(sprDomain);        
+        return postedSpecialProjectReferral;
+      } else {
+        return null;
+      }
     
     } catch (Exception e) {
       messageBuilder.addMessageAndLog(e.getMessage(), e, LOGGER);
+      return null;
     }
-    
-    return postedSpecialProjectReferral;
-    
+  }
+  
+  private Boolean specialProjectReferralExists(String referralId, String specialProjectId) {
+    List<gov.ca.cwds.data.persistence.cms.SpecialProjectReferral> specialProjectReferrals = 
+        specialProjectReferralDao
+        .findSpecialProjectReferralsByReferralIdAndSpecialProjectId(referralId, specialProjectId);
+    if (specialProjectReferrals.size() > 0) {
+      return true;
+    }
+    return false;
   }
   
   private String findSpecialProjectId(String specialProjectName, Short governmentEntityType) {
@@ -113,7 +145,7 @@ public class SpecialProjectReferralService implements
     
     // use the first matching Special Project that is not end dated
     for (SpecialProject specialProject : specialProjects) {
-      if (StringUtils.isNotBlank(DomainChef.cookDate(specialProject.getEndDate()))) {
+      if (StringUtils.isBlank(DomainChef.cookDate(specialProject.getEndDate()))) {
         specialProjectId = specialProject.getId();
         break;
       }
@@ -155,7 +187,7 @@ public class SpecialProjectReferralService implements
   /**
    * @return the riSpecialProjectReferral
    */
-  public RISpecialProjectReferral getRiSpecialProjectReporter() {
+  public RISpecialProjectReferral getRiSpecialProjectReferral() {
     return riSpecialProjectReferral;
   }
 
