@@ -90,6 +90,9 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
 
   @Override
   public String getIntakeCodeForLegacySystemCode(Number systemCodeId) {
+    if (1828 == systemCodeId.intValue()) {
+      return "CA";
+    }
     return null;
   }
 

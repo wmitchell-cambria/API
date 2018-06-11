@@ -10,8 +10,8 @@ import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 public interface ParticipantDaoFactory {
 
   /**
-   * @param tableName
-   * @return
+   * @param tableName - tableName
+   * @return the table dao
    */
   CrudsDao<CmsPersistentObject> create(String tableName);
 

@@ -10,8 +10,8 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 public interface ParticipantMapper {
 
   /**
-   * @param object
-   * @return
+   * @param object - object
+   * @return the object
    */
   ParticipantIntakeApi tranform(CmsPersistentObject object);
 

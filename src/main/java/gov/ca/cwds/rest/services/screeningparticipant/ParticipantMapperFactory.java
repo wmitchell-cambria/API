@@ -7,8 +7,8 @@ package gov.ca.cwds.rest.services.screeningparticipant;
 public interface ParticipantMapperFactory {
 
   /**
-   * @param tableName
-   * @return
+   * @param tableName - tableName
+   * @return the tableName
    */
   ParticipantMapper create(String tableName);
 

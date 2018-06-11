@@ -21,6 +21,9 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.services.submit.Gender;
 
 /**
+ * Business layer object to transform a {@link OtherChildInPlacemtHome} to an
+ * {@link ParticipantIntakeApi}
+ * 
  * @author CWDS API Team
  *
  */

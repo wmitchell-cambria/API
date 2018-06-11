@@ -18,6 +18,8 @@ import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 
 /**
+ * Business layer object to transform a {@link Reporter} to an {@link ParticipantIntakeApi}
+ * 
  * @author CWDS API Team
  *
  */
