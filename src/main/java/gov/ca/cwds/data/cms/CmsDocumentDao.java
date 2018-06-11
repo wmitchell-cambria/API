@@ -50,7 +50,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
   public static final String COMPRESSION_TYPE_PLAIN_FULL = "PLAIN_00";
   public static final int BLOB_SEGMENT_LENGTH = 4000;
 
-  private Supplier<LZWEncoder> lzwSupplier = () -> new LZWEncoder();
+  private Supplier<LZWEncoder> lzwSupplier = LZWEncoder::new;
 
   /**
    * Constructor.
