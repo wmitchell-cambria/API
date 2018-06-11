@@ -13,8 +13,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  */
 public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantMapperFactoryImpl.class);
+
+  private static final String SOURCE_PACKAGE = "gov.ca.cwds.rest.services.screeningparticipant.";
 
   @Inject
   private Injector injector;
@@ -28,8 +29,7 @@ public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
       throw new ServiceException();
     }
 
-    String name =
-        "gov.ca.cwds.rest.services.screeningparticipant." + legacyDaoMapperEnum.getTranformerName();
+    String name = SOURCE_PACKAGE + legacyDaoMapperEnum.getTranformerName();
     try {
       @SuppressWarnings("unchecked")
       Class<ParticipantMapper> participantMapper = (Class<ParticipantMapper>) Class.forName(name);

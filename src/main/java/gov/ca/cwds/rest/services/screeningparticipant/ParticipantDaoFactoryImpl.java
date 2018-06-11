@@ -15,8 +15,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  *
  */
 public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
-
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantDaoFactoryImpl.class);
+
+  private static final String SOURCE_PACKAGE = "gov.ca.cwds.data.cms.";
 
   @Inject
   private Injector injector;
@@ -25,8 +26,7 @@ public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
 
   @Override
   public CrudsDao<CmsPersistentObject> create(String tableName) {
-    String name =
-        "gov.ca.cwds.data.cms." + LegacyDaoMapperEnum.findByTableName(tableName).getDaoName();
+    String name = SOURCE_PACKAGE + LegacyDaoMapperEnum.findByTableName(tableName).getDaoName();
     try {
       @SuppressWarnings("unchecked")
       Class<CrudsDao<CmsPersistentObject>> daoclass =

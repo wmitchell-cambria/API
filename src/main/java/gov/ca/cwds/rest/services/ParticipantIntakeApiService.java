@@ -44,7 +44,6 @@ import gov.ca.cwds.rest.api.domain.PhoneNumber;
 import gov.ca.cwds.rest.api.domain.SafelySurenderedBabiesIntakeApi;
 import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
-import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on {@link ParticipantIntakeApi}
@@ -168,7 +167,6 @@ public class ParticipantIntakeApiService implements CrudsService {
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
-  @UnitOfWork(value = "ns")
   public ParticipantIntakeApi create(Request request) {
     assert request instanceof ParticipantIntakeApi;
     ParticipantIntakeApi participantIntakeApi = (ParticipantIntakeApi) request;

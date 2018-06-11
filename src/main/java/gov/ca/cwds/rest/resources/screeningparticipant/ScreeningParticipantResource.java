@@ -60,7 +60,7 @@ public class ScreeningParticipantResource {
    * @param participant - The participant to create
    * @return - The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @UnitOfWork(value = "ns")
   @POST
   @Path("/{id}/participant")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

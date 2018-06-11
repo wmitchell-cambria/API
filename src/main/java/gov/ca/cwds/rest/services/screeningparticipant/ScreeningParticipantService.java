@@ -16,6 +16,7 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.services.ParticipantIntakeApiService;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on ParticipantIntakeApi
@@ -40,6 +41,7 @@ public class ScreeningParticipantService
   private ParticipantMapperFactoryImpl participantMapperFactoryImpl;
 
   @Override
+  @UnitOfWork(value = "cms")
   public ParticipantIntakeApi create(ParticipantIntakeApi incomingParticipantIntakeApi) {
     if (StringUtils.isNotBlank(incomingParticipantIntakeApi.getScreeningId())) {
       isScreeningExists(incomingParticipantIntakeApi);
