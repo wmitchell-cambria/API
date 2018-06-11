@@ -237,18 +237,6 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   }
 
   @Test
-  public void createOrUpdateAllegations_A$Screening() throws Exception {
-    final Screening screening = inatorMakeScreening();
-    target.createOrUpdateAllegations(screening);
-  }
-
-  @Test
-  public void createOrUpdateCrossReports_A$Screening() throws Exception {
-    final Screening screening = inatorMakeScreening();
-    target.createOrUpdateCrossReports(screening);
-  }
-
-  @Test
   public void createOrUpdateAgencies_A$CrossReportIntake() throws Exception {
     CrossReportIntake crossReport = mock(CrossReportIntake.class);
     target.createOrUpdateAgencies(crossReport);
@@ -258,12 +246,6 @@ public class ScreeningServiceTest extends Doofenshmirtz<ScreeningEntity> {
   public void createOrUpdateAddresses_A$Screening() throws Exception {
     final Screening screening = inatorMakeScreening();
     target.createOrUpdateAddresses(screening);
-  }
-
-  @Test
-  public void createOrUpdateParticipants_A$Screening() throws Exception {
-    final Screening screening = inatorMakeScreening();
-    target.createOrUpdateParticipants(screening);
   }
 
   @Test

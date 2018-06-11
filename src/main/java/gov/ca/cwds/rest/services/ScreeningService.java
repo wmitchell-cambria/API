@@ -1,9 +1,25 @@
 package gov.ca.cwds.rest.services;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.NotImplementedException;
+import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.rest.RestStatus;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import gov.ca.cwds.ObjectMapperUtils;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.ns.AddressesDao;
@@ -36,19 +52,6 @@ import gov.ca.cwds.rest.services.mapper.AgencyMapper;
 import gov.ca.cwds.rest.services.mapper.AllegationMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.lang3.NotImplementedException;
-import org.elasticsearch.action.index.IndexRequestBuilder;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.rest.RestStatus;
 
 /**
  * Business layer object to work on {@link Screening}
@@ -155,7 +158,7 @@ public class ScreeningService implements CrudsService {
    * {@inheritDoc}
    *
    * @see gov.ca.cwds.rest.services.CrudsService#update(java.io.Serializable,
-   * gov.ca.cwds.rest.api.Request)
+   *      gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Screening update(Serializable primaryKey, Request request) {
@@ -303,7 +306,7 @@ public class ScreeningService implements CrudsService {
     return screening;
   }
 
-  private void validateParticipants(Screening screening) {
+  public void validateParticipants(Screening screening) {
     for (ParticipantIntakeApi participantIntakeApi : screening.getParticipantIntakeApis()) {
       if (participantIntakeApi.getScreeningId() != null
           && !Objects.equals(participantIntakeApi.getScreeningId(), screening.getId())) {
@@ -312,7 +315,7 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createUpdateDeleteAllegations(Screening screening) {
+  public void createUpdateDeleteAllegations(Screening screening) {
     Set<Integer> allegationIdsOld = allegationDao.findByScreeningId(screening.getId()).stream()
         .map(AllegationEntity::getId).collect(Collectors.toSet());
 
@@ -342,7 +345,7 @@ public class ScreeningService implements CrudsService {
 
   }
 
-  private void createUpdateDeleteCrossReports(Screening screening) {
+  public void createUpdateDeleteCrossReports(Screening screening) {
     Set<String> crossReportIdsOld = crossReportDao.findByScreeningId(screening.getId()).stream()
         .map(CrossReportEntity::getId).collect(Collectors.toSet());
 
@@ -374,7 +377,7 @@ public class ScreeningService implements CrudsService {
     crossReportIdsOld.forEach(crossReportId -> crossReportDao.delete(crossReportId));
   }
 
-  private void createOrUpdateAgencies(CrossReportIntake crossReport) {
+  public void createOrUpdateAgencies(CrossReportIntake crossReport) {
     for (GovernmentAgencyIntake agency : crossReport.getAgencies()) {
       GovernmentAgencyEntity agencyEntity = agencyMapper.map(agency);
       agencyEntity.setCrossReportId(crossReport.getId());
@@ -397,7 +400,7 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createOrUpdateAddresses(Screening screening) {
+  public void createOrUpdateAddresses(Screening screening) {
     AddressIntakeApi address = screening.getIncidentAddress();
     if (address == null) {
       return;
@@ -415,7 +418,7 @@ public class ScreeningService implements CrudsService {
     }
   }
 
-  private void createUpdateDeleteParticipants(Screening screening) {
+  public void createUpdateDeleteParticipants(Screening screening) {
     Set<ParticipantIntakeApi> participantIntakeApis = new HashSet<>();
     Set<String> participantIdsOld = participantIntakeApiService.getByScreeningId(screening.getId())
         .stream().map(ParticipantEntity::getId).collect(Collectors.toSet());
