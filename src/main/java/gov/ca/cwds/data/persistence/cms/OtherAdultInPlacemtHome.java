@@ -82,6 +82,14 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
     this.startDate = freshDate(startDate);
   }
 
+
+  /**
+   * @return the placementHome
+   */
+  public PlacementHome getPlacementHome() {
+    return placementHome;
+  }
+
   /**
    * {@inheritDoc}
    *

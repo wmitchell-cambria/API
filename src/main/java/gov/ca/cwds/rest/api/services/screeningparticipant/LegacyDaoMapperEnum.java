@@ -20,7 +20,7 @@ public enum LegacyDaoMapperEnum {
 
   SERVICE_PROVIDER("SVC_PVRT", "ServiceProviderDao", "ServiceProviderTransformer"),
 
-  SUBSTITITE_CARE_PROVIDER("SVC_PVRT", "SubstituteCareProviderDao",
+  SUBSTITITE_CARE_PROVIDER("SB_PVDRT", "SubstituteCareProviderDao",
       "SubstituteCareProviderTransformer"),
 
   EDUCATION_PROVIDER_CONTACT("EDPRVCNT", "EducationProviderContactDao",

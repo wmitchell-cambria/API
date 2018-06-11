@@ -39,7 +39,7 @@ public class EducationProviderContact extends BaseEducationProviderContact {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "FKED_PVDRT", nullable = false, updatable = false, insertable = false)
-  private ServiceProvider serviceProvider;
+  private EducationProvider educationProvider;
 
   /**
    * Default constructor
@@ -88,6 +88,14 @@ public class EducationProviderContact extends BaseEducationProviderContact {
     this.suffixTitleDescription = suffixTitleDescription;
     this.titleDescription = titleDescription;
   }
+
+  /**
+   * @return the education provider
+   */
+  public EducationProvider getEducationProvider() {
+    return educationProvider;
+  }
+
 
   /**
    * {@inheritDoc}

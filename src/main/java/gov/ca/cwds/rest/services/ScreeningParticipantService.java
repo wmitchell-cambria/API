@@ -70,7 +70,7 @@ public class ScreeningParticipantService
       participantMapper = participantMapperFactoryImpl.create(tableName);
       return participantMapper.tranform(persistentObject);
     } else {
-      LOGGER.error("Dao is not found with the given {}", tableName);
+      LOGGER.error("Object is not found with the given identifier {}", id);
       throw new ServiceException();
     }
   }

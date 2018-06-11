@@ -22,8 +22,14 @@ public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
   @Override
   public ParticipantMapper create(String tableName) {
     ParticipantMapper mapper;
+    LegacyDaoMapperEnum legacyDaoMapperEnum = LegacyDaoMapperEnum.findByTableName(tableName);
+    if (legacyDaoMapperEnum == null) {
+      LOGGER.error("Dao is not found with the given {}", tableName);
+      throw new ServiceException();
+    }
+
     String name = "gov.ca.cwds.rest.api.services.screeningparticipant."
-        + LegacyDaoMapperEnum.findByTableName(tableName).getTranformerName();
+        + legacyDaoMapperEnum.getTranformerName();
     try {
       @SuppressWarnings("unchecked")
       Class<ParticipantMapper> participantMapper = (Class<ParticipantMapper>) Class.forName(name);
