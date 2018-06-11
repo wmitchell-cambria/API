@@ -42,7 +42,7 @@ public class ScreeningParticipantService
   @Override
   public ParticipantIntakeApi create(ParticipantIntakeApi incomingParticipantIntakeApi) {
     if (StringUtils.isNotBlank(incomingParticipantIntakeApi.getScreeningId())) {
-      // isScreeningExists(incomingParticipantIntakeApi);
+      isScreeningExists(incomingParticipantIntakeApi);
       ParticipantIntakeApi participantIntakeApi = null;
       LegacyDescriptor legacyDescriptor = incomingParticipantIntakeApi.getLegacyDescriptor();
 

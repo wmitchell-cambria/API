@@ -50,21 +50,25 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
    * 
    * @param intakeLovDao Intake Lov Dao
    * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
+   * @param preloadCache preloadCache If true then preload all intake code cache
    */
   @Inject
-  public CachingIntakeCodeService(IntakeLovDao intakeLovDao, long secondsToRefreshCache) {
+  public CachingIntakeCodeService(IntakeLovDao intakeLovDao, long secondsToRefreshCache,
+      boolean preloadCache) {
     super(intakeLovDao);
 
     final IntakeCodeCacheLoader cacheLoader = new IntakeCodeCacheLoader(this);
     intakeCodeCache = CacheBuilder.newBuilder()
         .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
 
-    try {
-      Map<CacheKey, Object> intakeCodes = cacheLoader.loadAll();
-      intakeCodeCache.putAll(intakeCodes);
-    } catch (Exception e) {
-      LOGGER.error("Error loading intake codes", e);
-      throw new ServiceException(e);
+    if (preloadCache) {
+      try {
+        Map<CacheKey, Object> intakeCodes = cacheLoader.loadAll();
+        intakeCodeCache.putAll(intakeCodes);
+      } catch (Exception e) {
+        LOGGER.error("Error loading intake codes", e);
+        throw new ServiceException(e);
+      }
     }
 
   }
