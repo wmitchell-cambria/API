@@ -66,6 +66,7 @@ import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+import gov.ca.cwds.rest.services.screeningparticipant.ClientTransformer;
 // import gov.ca.cwds.rest.api.services.screeningparticipant.ClientTransformer;
 import gov.ca.cwds.rest.services.screeningparticipant.ParticipantDaoFactoryImpl;
 import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
@@ -219,7 +220,7 @@ public class ServicesModule extends AbstractModule {
     bind(ParticipantDaoFactoryImpl.class);
     bind(ParticipantMapperFactoryImpl.class);
     bind(SpecialProjectReferralService.class);
-    // bind(ClientTransformer.class);
+    bind(ClientTransformer.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
