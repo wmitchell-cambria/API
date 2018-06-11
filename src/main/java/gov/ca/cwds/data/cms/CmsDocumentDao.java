@@ -251,7 +251,7 @@ public class CmsDocumentDao extends BaseDaoImpl<CmsDocument> {
       retval = DatatypeConverter.printBase64Binary(bytes);
     } catch (Exception e) {
       LOGGER.error("ERROR DECOMPRESSING PLAIN! {}", e.getMessage());
-      throw new ServiceException("ERROR DECOMPRESSING PLAINE! " + e.getMessage(), e);
+      throw new ServiceException("ERROR DECOMPRESSING PLAIN! " + e.getMessage(), e);
     }
 
     return retval;
