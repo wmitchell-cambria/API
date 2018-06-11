@@ -1,16 +1,24 @@
 package gov.ca.cwds.data.persistence.ns.papertrail;
 
-import gov.ca.cwds.data.ns.PaperTrailDao;
-import gov.ca.cwds.data.persistence.ns.PaperTrail;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.persistence.ns.PaperTrail;
+import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import gov.ca.cwds.rest.filters.RequestExecutionContextCallback;
+import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
 
 /**
  * Synthetic triggers for PostgreSQL via Hibernate interceptor.
@@ -40,8 +48,7 @@ import org.hibernate.type.Type;
  * </tr>
  * <tr>
  * <td align="justify">preFlush</td>
- * <td align="justify">Called before the saved, updated or deleted objects are committed to
- * database
+ * <td align="justify">Called before the saved, updated or deleted objects are committed to database
  * (usually before postFlush)</td>
  * </tr>
  * <tr>
@@ -51,9 +58,12 @@ import org.hibernate.type.Type;
  * </tr>
  * </table>
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
-public class PaperTrailInterceptor extends EmptyInterceptor {
+public class PaperTrailInterceptor extends EmptyInterceptor
+    implements RequestExecutionContextCallback {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(PaperTrailInterceptor.class);
 
   public static final String STR_ARROW = "->";
   private static final long serialVersionUID = 1L;
@@ -66,17 +76,41 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       ThreadLocal.withInitial(HashSet::new);
   private static final ThreadLocal<Set<String>> deletesTlSet =
       ThreadLocal.withInitial(HashSet::new);
+
   @Inject
   private transient PaperTrailDao paperTrailDao;
 
+  /**
+   * Default ctor.
+   */
   public PaperTrailInterceptor() {
-    // Default ctor.
+    // Notify this instance upon request start and end.
+    RequestExecutionContextRegistry.registerCallback(this);
+  }
+
+  @Override
+  public Serializable key() {
+    return PaperTrailInterceptor.class.getName();
+  }
+
+  @Override
+  public void startRequest(RequestExecutionContext ctx) {
+    LOGGER.debug("PaperTrailInterceptor.startRequest");
+    clearSets();
+  }
+
+  @Override
+  public void endRequest(RequestExecutionContext ctx) {
+    LOGGER.debug("PaperTrailInterceptor.endRequest");
+    clearSets();
   }
 
   // Create
   @Override
   public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onSave: readOnly: {}", readOnly);
 
     if (entity instanceof HasPaperTrail) {
       insertsTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
@@ -88,6 +122,8 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onSave: onFlushDirty: {}", readOnly);
 
     if (entity instanceof HasPaperTrail) {
       updatesTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
@@ -99,6 +135,8 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames,
       Type[] types) {
+    final boolean readOnly = RequestExecutionContext.instance().isResourceReadOnly();
+    LOGGER.debug("PaperTrailInterceptor.onDelete: onFlushDirty: {}", readOnly);
 
     if (entity instanceof HasPaperTrail) {
       deletesTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
@@ -112,7 +150,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     super.preFlush(entities);
   }
 
-  private void processPaperTrail() {
+  protected void processPaperTrail() {
     try {
       insertsTlSet.get()
           .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, CREATE)));
@@ -126,7 +164,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     }
   }
 
-  private void clearSets() {
+  protected void clearSets() {
     insertsTlSet.get().clear();
     updatesTlSet.get().clear();
     deletesTlSet.get().clear();
@@ -136,7 +174,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
     return entity.getClass().getSimpleName().concat(STR_ARROW).concat(entity.getId());
   }
 
-  private PaperTrail createPaperTrail(String typeAndId, String event) {
+  protected PaperTrail createPaperTrail(String typeAndId, String event) {
     return new PaperTrail(StringUtils.split(typeAndId, STR_ARROW, 2)[0],
         StringUtils.split(typeAndId, STR_ARROW, 2)[1], event);
   }
