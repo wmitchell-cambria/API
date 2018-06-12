@@ -7,6 +7,7 @@ import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
  * @author CWDS API Team
  *
  */
+@FunctionalInterface
 public interface ParticipantDaoFactory {
 
   /**

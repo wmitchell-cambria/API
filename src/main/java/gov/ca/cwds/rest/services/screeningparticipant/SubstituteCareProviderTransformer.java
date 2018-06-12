@@ -48,7 +48,6 @@ public class SubstituteCareProviderTransformer implements ParticipantMapper {
     String sensitivityIndicator = substituteCareProvider.getSensitivityIndicator() != null
         ? substituteCareProvider.getSensitivityIndicator()
         : "";
-    substituteCareProvider.getAdditionalPhoneNumber();
 
     Set<PhoneNumber> phoneNumbers = new HashSet<>(Arrays.asList(
         new PhoneNumber(null, substituteCareProvider.getAdditionalPhoneNumber().toString(), null)));
@@ -57,8 +56,8 @@ public class SubstituteCareProviderTransformer implements ParticipantMapper {
         substituteCareProvider.getFirstName(), substituteCareProvider.getMiddleName(),
         substituteCareProvider.getLastName(), substituteCareProvider.getSuffixTitleDescription(),
         null, null, null, null, substituteCareProvider.getBirthDate(), new LinkedList<>(), null,
-        null, null, new HashSet<>(), addresses, phoneNumbers, sensitivityIndicator.equals("R"),
-        sensitivityIndicator.equals("S"));
+        null, null, new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
+        "S".equals(sensitivityIndicator));
   }
 
 }

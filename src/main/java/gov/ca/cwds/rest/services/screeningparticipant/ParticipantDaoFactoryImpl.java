@@ -21,11 +21,11 @@ public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
 
   @Inject
   private Injector injector;
-  private CrudsDao<CmsPersistentObject> crudsDao;
 
 
   @Override
   public CrudsDao<CmsPersistentObject> create(String tableName) {
+    CrudsDao<CmsPersistentObject> crudsDao;
     String name = SOURCE_PACKAGE + LegacyDaoMapperEnum.findByTableName(tableName).getDaoName();
     try {
       @SuppressWarnings("unchecked")
@@ -33,7 +33,7 @@ public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
           (Class<CrudsDao<CmsPersistentObject>>) Class.forName(name);
       crudsDao = injector.getInstance(daoclass);
     } catch (ClassNotFoundException e) {
-      LOGGER.error("Unable to load the class {}", name);
+      LOGGER.error("Unable to load the class {} {}", e, name);
       throw new ServiceException();
     }
     return crudsDao;

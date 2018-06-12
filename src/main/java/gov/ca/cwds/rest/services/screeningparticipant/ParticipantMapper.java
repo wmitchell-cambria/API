@@ -7,6 +7,7 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
  * @author CWDS API Team
  *
  */
+@FunctionalInterface
 public interface ParticipantMapper {
 
   /**

@@ -38,6 +38,17 @@ public class LegacyToIntakeCodeConveterTest {
    * 
    */
   @Test
+  public void getLegacyValue_Args__() {
+    IntakeRaceCode target = IntakeRaceCode.ALASKA_NATIVE;
+    String race = target.getLegacyValue();
+    String expected = "Alaskan Native*";
+    assertThat(race, is(equalTo(expected)));
+  }
+
+  /**
+   * 
+   */
+  @Test
   public void getRaceDetail_Args__() {
     IntakeRaceCode target = IntakeRaceCode.AMERICAN_INDIA;
     String raceDetail = target.getRaceDetail();
