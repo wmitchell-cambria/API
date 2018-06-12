@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,10 +47,12 @@ import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
+import gov.ca.cwds.fixture.SafelySurrenderedBabiesBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
+import gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.cms.Address;
 import gov.ca.cwds.rest.api.domain.cms.ChildClient;
@@ -119,6 +122,8 @@ public class ParticipantServiceTest {
   private SexualExploitationTypeDao sexualExploitationTypeDao;
   private CsecHistoryService csecHistoryService;
 
+  private SpecialProjectReferralService specialProjectReferralService;
+
   /**
    *
    */
@@ -187,12 +192,14 @@ public class ParticipantServiceTest {
     when(sexualExploitationTypeDao.find((short) 6867)).thenReturn(sexualExploitationType);
 
     csecHistoryService = mock(CsecHistoryService.class);
+    specialProjectReferralService = mock(SpecialProjectReferralService.class);
 
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
     participantService.setSexualExploitationTypeDao(sexualExploitationTypeDao);
     participantService.setCsecHistoryService(csecHistoryService);
+    participantService.setSpecialProjectReferralService(specialProjectReferralService);
   }
 
   @Test
@@ -778,6 +785,78 @@ public class ParticipantServiceTest {
     assertEquals("Expected client to have sensitivty indicator applied",
         defaultVictim.getSensitivityIndicator(),
         clientArgCaptor.getValue().getSensitivityIndicator());
+  }
+
+  @Test
+  public void testSSBIsNotUpdatedForNotSupportedReportType() {
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType("").createScreeningToReferral();
+
+    participantService.saveParticipants(referral, dateStarted, timeStarted, referralId,
+        messageBuilder);
+
+    verify(specialProjectReferralService, times(0)).processSafelySurrenderedBabies(any(), any(),
+        any(), any(), any());
+  }
+
+  @Test
+  public void testSSBIsNull() {
+    Participant victimParticipant = new ParticipantResourceBuilder().createVictimParticipant();
+    victimParticipant.setSafelySurrenderedBabies(null);
+
+    Set<Participant> participants =
+        new HashSet<>(Arrays.asList(defaultReporter, victimParticipant));
+
+    ScreeningToReferral referral =
+        new ScreeningToReferralResourceBuilder().setReportType(FerbConstants.ReportType.SSB)
+            .setParticipants(participants).createScreeningToReferral();
+    participantService.saveParticipants(referral, dateStarted, timeStarted, referralId,
+        messageBuilder);
+
+    assertTrue(messageBuilder.getMessages().stream().map(message -> message.getMessage())
+        .collect(Collectors.toList()).contains("SafelySurrenderedBabies info must be provided."));
+  }
+
+  @Test
+  public void testSSBIsUpdated() {
+    ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
+        .setReportType(FerbConstants.ReportType.SSB).createScreeningToReferral();
+
+    participantService.saveParticipants(referral, dateStarted, timeStarted, referralId,
+        messageBuilder);
+
+    verify(specialProjectReferralService)
+        .processSafelySurrenderedBabies(argThat(new ArgumentMatcher<String>() {
+          @Override
+          public boolean matches(String childClientId) {
+            assertEquals("1234567ABC", childClientId);
+            return true;
+          }
+        }), argThat(new ArgumentMatcher<String>() {
+          @Override
+          public boolean matches(String referralId) {
+            assertEquals("1234567890", referralId);
+            return true;
+          }
+        }), argThat(new ArgumentMatcher<LocalDate>() {
+          @Override
+          public boolean matches(LocalDate referralReceivedDate) {
+            return true;
+          }
+        }), argThat(new ArgumentMatcher<LocalTime>() {
+          @Override
+          public boolean matches(LocalTime referralReceivedTime) {
+            return true;
+          }
+        }), argThat(new ArgumentMatcher<gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies>() {
+          @Override
+          public boolean matches(gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
+            assertNotNull(ssb);
+            SafelySurrenderedBabies expected = new SafelySurrenderedBabiesBuilder().build();
+            assertEquals(expected, ssb);
+            return true;
+          }
+        }));
   }
 
 }

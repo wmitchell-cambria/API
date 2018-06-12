@@ -65,5 +65,13 @@
       "start_date": "2018-05-28",
       "end_date": "2018-05-29"
     }
-  ]
+  ],
+  "safely_surrendered_babies": {
+    "bracelet_id": "ssb-braceletId",
+    "parent_guardian_given_bracelet_id": "U",
+    "comments": "ssb-comments",
+    "parent_guardian_provided_med_questionaire": "U",
+    "relation_to_child": "1592",
+    "surrendered_by": "ssb-surrenderedByName" 
+  }
 }

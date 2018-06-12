@@ -587,4 +587,13 @@ public class ParticipantService implements CrudsService {
   void setSexualExploitationTypeDao(SexualExploitationTypeDao sexualExploitationTypeDao) {
     this.sexualExploitationTypeDao = sexualExploitationTypeDao;
   }
+
+  public SpecialProjectReferralService getSpecialProjectReferralService() {
+    return specialProjectReferralService;
+  }
+
+  public void setSpecialProjectReferralService(
+      SpecialProjectReferralService specialProjectReferralService) {
+    this.specialProjectReferralService = specialProjectReferralService;
+  }
 }

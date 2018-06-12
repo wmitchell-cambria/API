@@ -128,4 +128,36 @@ public class SpecialProjectReferralService {
     braceltInfo.setOtherIdCode(MEDICAL_RECORD_SYSTEM_CODE_ID);
     nonCWSNumberDao.create(braceltInfo);
   }
+
+  public SpecialProjectDao getSpecialProjectDao() {
+    return specialProjectDao;
+  }
+
+  public void setSpecialProjectDao(SpecialProjectDao specialProjectDao) {
+    this.specialProjectDao = specialProjectDao;
+  }
+
+  public SpecialProjectReferralDao getSpecialProjectReferralDao() {
+    return specialProjectReferralDao;
+  }
+
+  public void setSpecialProjectReferralDao(SpecialProjectReferralDao specialProjectReferralDao) {
+    this.specialProjectReferralDao = specialProjectReferralDao;
+  }
+
+  public SafelySurrenderedBabiesDao getSafelySurrenderedBabiesDao() {
+    return safelySurrenderedBabiesDao;
+  }
+
+  public void setSafelySurrenderedBabiesDao(SafelySurrenderedBabiesDao safelySurrenderedBabiesDao) {
+    this.safelySurrenderedBabiesDao = safelySurrenderedBabiesDao;
+  }
+
+  public NonCWSNumberDao getNonCWSNumberDao() {
+    return nonCWSNumberDao;
+  }
+
+  public void setNonCWSNumberDao(NonCWSNumberDao nonCWSNumberDao) {
+    this.nonCWSNumberDao = nonCWSNumberDao;
+  }
 }
