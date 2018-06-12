@@ -26,6 +26,8 @@ public class StaffPersonIdRetriever {
 
   private static final String DEFAULT_STAFF_ID = "0X5";
   private static final String DEFAULT_USER_ID = "CWDST";
+  public static final String DEFAULT_GOVERNMENT_ENTITY_CODE = "1126";
+  public static final String DEFAULT_COUNTY_SPECIFIC_CODE = "99";
 
   StaffPersonIdRetriever() {}
 
@@ -71,6 +73,9 @@ public class StaffPersonIdRetriever {
         perryUserIdentity = new PerryUserIdentity();
         perryUserIdentity.setStaffId(DEFAULT_STAFF_ID);
         perryUserIdentity.setUser(DEFAULT_USER_ID);
+        perryUserIdentity.setCountyCode(DEFAULT_COUNTY_SPECIFIC_CODE);
+        perryUserIdentity.setCountyCwsCode(DEFAULT_GOVERNMENT_ENTITY_CODE);
+
         LOGGER.error("======= PerryUserIdentity not found, using default for local dev = {}",
             DEFAULT_STAFF_ID);
       }
