@@ -34,6 +34,7 @@
       <column name="indexable" value="false"/>
       <column name="curr_loc_of_children" value="Home with father mother"/>
       <column name="report_type" value="ssb"/>
+      <column name="screening_status" value="Open"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="714"/>

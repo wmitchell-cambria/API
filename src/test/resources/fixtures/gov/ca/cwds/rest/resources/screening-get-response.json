@@ -21,6 +21,7 @@
   "restrictions_rationale": "res",
   "report_narrative": "tsrgdhr",
   "report_type": "ssb",
+  "screening_status": "Open",
   "safety_alerts": [
     "Dangerous Environment",
     "Hostile"
