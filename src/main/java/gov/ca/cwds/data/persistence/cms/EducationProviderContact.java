@@ -97,6 +97,10 @@ public class EducationProviderContact extends BaseEducationProviderContact {
   }
 
 
+  public void setEducationProvider(EducationProvider educationProvider) {
+    this.educationProvider = educationProvider;
+  }
+
   /**
    * {@inheritDoc}
    *
