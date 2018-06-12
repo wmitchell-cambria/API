@@ -2,10 +2,12 @@ package gov.ca.cwds.data.cms;
 import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.inject.CmsSessionFactory;
+import gov.ca.cwds.util.Require;
 
 /**
  * DAO for {@link SpecialProject}.
@@ -34,12 +36,38 @@ public class SpecialProjectDao extends CrudsDaoImpl<SpecialProject>{
    */
   public List<SpecialProject> findSpecialProjectsByGovernmentEntityAndName(String name, 
       Short governmentEntityType) {
-    @SuppressWarnings("unchecked")
-    Query<SpecialProject> query = this.getSessionFactory().getCurrentSession()
-      .getNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME)
-      .setParameter("governmentEntityType", governmentEntityType)
-      .setParameter("name", name);
-    return query.list();      
+
+    final List<SpecialProject> specialProjects = currentSession()
+      .createNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME, SpecialProject.class)
+      .setParameter(SpecialProject.PARAM_GOVERNMENT_ENTITY, governmentEntityType)
+      .setParameter(SpecialProject.PARAM_NAME, name)
+      .list();
+    return ImmutableList.copyOf(specialProjects);
+    
+//    Query<SpecialProject> query = this.getSessionFactory().getCurrentSession()
+//      .getNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME)
+//      .setParameter("governmentEntityType", governmentEntityType)
+//      .setParameter("name", name);
+//    return query.list();      
     }
-  
+
+
+  /**
+   * Find active SSB special projects for given government entity.
+   * 
+   * @param governmentEntity Government entity for which to find SSB special project
+   * @return The active SSB special projects for given government entity, returns null if not found.
+   */
+  public List<SpecialProject> findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
+      Short governmentEntity) {
+    Require.requireNotNullAndNotEmpty(governmentEntity);
+
+    final List<SpecialProject> specialProjects = currentSession()
+        .createNamedQuery(SpecialProject.FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY, SpecialProject.class)
+        .setParameter(SpecialProject.PARAM_GOVERNMENT_ENTITY, governmentEntity).list();
+
+    return ImmutableList.copyOf(specialProjects);
+    
+  }
+
 }

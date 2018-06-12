@@ -26,13 +26,16 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
     static final String FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID_QUERY =
         "FROM SpecialProjectReferral WHERE FKREFERL_T = referralId AND FKSPC_PRJT = specialProjectId";
     
+    public static final String PARAM_REFERRAL_ID = "referralId";
+    public static final String PARAM_SPECIAL_PROJECT_ID = "specialProjectId";
+    
     @Column(name = "CNTY_SPFCD")
     private String countySpecificCode;
     
-    @Column(name = "FKREFERL_T")
+    @Column(name = "FKREFERL_T", length = CMS_ID_LEN)
     private String referralId;
     
-    @Column(name = "FKSPC_PRJT")
+    @Column(name = "FKSPC_PRJT", length = CMS_ID_LEN)
     private String specialProjectId;
     
     @Type(type = "date")
@@ -44,10 +47,11 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
     private Date participationStartDate;
     
     @Column(name = "SFSURB_IND")
+    @Type(type = "yes_no")
     private String safelySurrenderedBabiesIndicator;
     
     @Id
-    @Column(name = "THRID_ID")
+    @Column(name = "THRID_ID", length = CMS_ID_LEN)
     private String id;
   
     /**

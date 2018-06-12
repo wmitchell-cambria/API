@@ -3,8 +3,10 @@ package gov.ca.cwds.data.cms;
 import java.util.List;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.data.persistence.cms.SpecialProjectReferral;
 import gov.ca.cwds.inject.CmsSessionFactory;
 
@@ -28,12 +30,20 @@ public class SpecialProjectReferralDao extends CrudsDaoImpl<SpecialProjectReferr
   
   public List<SpecialProjectReferral> findSpecialProjectReferralsByReferralIdAndSpecialProjectId(String referralId,
       String specialProjectId) {
-    @SuppressWarnings("unchecked")
-    Query<SpecialProjectReferral> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID)
-        .setParameter("referralId", referralId)
-        .setParameter("specialProjectId", specialProjectId);
-    return query.list();
+    
+    final List<SpecialProjectReferral> specialProjects = currentSession()
+    .createNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID, SpecialProjectReferral.class)
+    .setParameter(SpecialProjectReferral.PARAM_REFERRAL_ID, referralId)
+    .setParameter(SpecialProjectReferral.PARAM_SPECIAL_PROJECT_ID, specialProjectId)
+    .list();
+    
+    return ImmutableList.copyOf(specialProjects);
+    
+//    Query<SpecialProjectReferral> query = this.getSessionFactory().getCurrentSession()
+//        .getNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID)
+//        .setParameter("referralId", referralId)
+//        .setParameter("specialProjectId", specialProjectId);
+//    return query.list();
   }
   
 }

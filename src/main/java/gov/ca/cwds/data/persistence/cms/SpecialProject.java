@@ -4,6 +4,7 @@ import static gov.ca.cwds.data.persistence.cms.SpecialProject.FIND_BY_PROJECT_NA
 import static gov.ca.cwds.data.persistence.cms.SpecialProject.FIND_BY_PROJECT_NAME_QUERY;
 
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.NamedQuery;
+import org.hibernate.annotations.Type;
 
 /**
  * {@link CmsPersistentObject} Class representing a Special Project.
@@ -21,10 +24,26 @@ import org.hibernate.annotations.NamedQuery;
 @NamedQuery(name = FIND_BY_PROJECT_NAME,
     query = FIND_BY_PROJECT_NAME_QUERY)
 
-@SuppressWarnings("serial")
 @Entity
 @Table(name = "SPC_PRJT")
+
+@NamedQuery(name = FIND_BY_PROJECT_NAME,
+query = FIND_BY_PROJECT_NAME_QUERY)
+
+@NamedQuery(name = SpecialProject.FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY,
+query = "FROM SpecialProject WHERE PROJECT_NM = '" + SpecialProject.SSB_SPECIAL_PROJECT_NAME
+    + "' AND END_DT IS NULL AND GVR_ENTC = :governmentEntity")
+
 public class SpecialProject extends CmsPersistentObject {
+
+  private static final long serialVersionUID = 241170224860954003L;
+
+  public static final String FIND_ACTIVE_SSB_BY_GOVERNMENT_ENTITY =
+      "SpecialProject.findActiveSSBByGovernmentEntity";
+
+  public static final String SSB_SPECIAL_PROJECT_NAME = "S-Safely Surrendered Baby";
+  public static final String PARAM_GOVERNMENT_ENTITY = "governmentEntity";
+  public static final String PARAM_NAME = "name";
 
   public static final String FIND_BY_PROJECT_NAME = 
       "gov.ca.cwds.data.persistence.cms.SpecialProject.findByProjectName";
@@ -32,6 +51,7 @@ public class SpecialProject extends CmsPersistentObject {
       "FROM SpecialProject WHERE GOV_ENTC = :governementEntityType AND PROJECT_NM = :name";
   
   @Column(name = "ARCASS_IND")
+  @Type(type = "yes_no")
   private String archiveAssociationIndicator;
 
   @Column(name = "PRJCT_DSC")
@@ -48,6 +68,7 @@ public class SpecialProject extends CmsPersistentObject {
   private String id;
   
   @Column(name = "PROJECT_NM") 
+  @ColumnTransformer(read = "trim(PROJECT_NM)")
   private String name;
   
   @Column(name = "START_DT")
@@ -90,7 +111,7 @@ public class SpecialProject extends CmsPersistentObject {
   /**
    *  @return the id
    */
-  public String getPrimaryKey() {
+  public Serializable getPrimaryKey() {
     return this.getId();
   }
 

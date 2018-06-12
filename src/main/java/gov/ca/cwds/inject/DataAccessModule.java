@@ -207,6 +207,9 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.cms.SpecialProject.class,
+          gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.class,
+          gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies.class,
+          gov.ca.cwds.data.legacy.cms.entity.NonCWSNumber.class)
       .build();
 
   private final ImmutableList<Class<?>> nsEntities = ImmutableList.<Class<?>>builder().add(

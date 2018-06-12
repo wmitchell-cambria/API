@@ -32,7 +32,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   @NotEmpty
   @NotBlank
   @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)
-  @ApiModelProperty(required = true, readOnly = false, value = "named in referral",
+  @ApiModelProperty(required = true, readOnly = false, value = "referral ID",
       example = "ABC1234567")
   private String referralId;
   
@@ -45,15 +45,15 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
   @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
-  @ApiModelProperty(required = false, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+  @ApiModelProperty(required = false, readOnly = false, value = "participation end date",
+      example = "2018-01-01")
   private String participationEndDate;
 
   @NotEmpty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT)
   @gov.ca.cwds.rest.validation.Date(format = gov.ca.cwds.rest.api.domain.DomainObject.DATE_FORMAT, required = false)
-  @ApiModelProperty(required = true, readOnly = false, value = "yyyy-MM-dd",
-      example = "2000-01-01")
+  @ApiModelProperty(required = true, readOnly = false, value = "participation start date",
+      example = "2018-01-01")
   private String participationStartDate;
   
   @NotNull
@@ -112,12 +112,20 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
     return countySpecificCode;
   }
 
+  public void setCountySpecificCode(String countySpecificCode) {
+    this.countySpecificCode = countySpecificCode;
+  }
+  
   /**
    * 
    * @return - referralId
    */
   public String getReferralId() {
     return referralId;
+  }
+  
+  public void setReferralId(String referralId)  {
+    this.referralId = referralId;
   }
 
   /**
@@ -127,6 +135,10 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   public String getSpecialProjectId() {
     return specialProjectId;
   }
+  
+  public void setSpecialProjectId(String specialProjectId) {
+    this.specialProjectId = specialProjectId;
+  }
 
   /**
    * 
@@ -135,6 +147,10 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   public String getParticipationEndDate() {
     return participationEndDate;
   }
+  
+  public void setParticipantEndDate(String participantEndDate) {
+    this.participationEndDate = participantEndDate;
+  }
 
   /** 
    * 
@@ -142,6 +158,10 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
    */
   public String getParticipationStartDate() {
     return participationStartDate;
+  }
+  
+  public void setParticipantStartDate(String participantStartDate) {
+    this.participationStartDate = participantStartDate;
   }
 
   /**
@@ -152,6 +172,11 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
     return safelySurrenderedBabiesIndicator;
   }
 
+  public void setSafelySurrenderedBabiesIndicator(Boolean safelySurrenderedBabiesIndicator)  {
+    this.safelySurrenderedBabiesIndicator = safelySurrenderedBabiesIndicator;
+  }
+  
+  
   /**
    * {@inheritDoc}
    *

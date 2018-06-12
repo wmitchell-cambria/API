@@ -1,16 +1,24 @@
 package gov.ca.cwds.rest.services.cms;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.EntityExistsException;
 import javax.validation.Validator;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
+
+
 import gov.ca.cwds.data.cms.SpecialProjectDao;
 import gov.ca.cwds.data.cms.SpecialProjectReferralDao;
+
+import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
+import gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao;
+import gov.ca.cwds.data.legacy.cms.entity.NonCWSNumber;
+import gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies;
+
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
@@ -19,11 +27,13 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
 import gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral;
+
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RISpecialProjectReferral;
+import gov.ca.cwds.security.utils.PrincipalUtils;
 import io.dropwizard.hibernate.UnitOfWork;
 /**
  * Business layer object to work on {@link SpecialProjectReferral}
@@ -37,13 +47,32 @@ public class SpecialProjectReferralService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(SpecialProjectReferral.class);
   
   private static final String S_CESC_REFERRAL = "S-CESC Referral";
+  private static final short MEDICAL_RECORD_SYSTEM_CODE_ID = 1331;
   
+  @Inject
   private SpecialProjectReferralDao specialProjectReferralDao;
+  
+  @Inject
   private SpecialProjectDao specialProjectDao;
+  
+  @Inject
   private RISpecialProjectReferral riSpecialProjectReferral;
+  
+  @Inject
+  private SafelySurrenderedBabiesDao safelySurrenderedBabiesDao;
+
+  @Inject
+  private NonCWSNumberDao nonCWSNumberDao;
   
   private Validator validator;
   
+  /**
+   * Default no-argument constructor.
+   */
+  public SpecialProjectReferralService() {
+    super();
+  }
+
   /**
    * Constructor
    * 
@@ -158,6 +187,79 @@ public class SpecialProjectReferralService implements
     return specialProjectId;
   }
   
+  /**
+   * Process special project for Safely Surrendered Babies.
+   * 
+   * @param childClientId Child cleint ID.
+   * @param referralId Referral ID
+   * @param ssb Safely Surrendered Babies
+   */
+  public void processSafelySurrenderedBabies(String childClientId, String referralId,
+      gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
+
+    LocalDateTime now = LocalDateTime.now();
+    String userId = PrincipalUtils.getStaffPersonId();
+    String countyCode = PrincipalUtils.getPrincipal().getCountyCode();
+    String countyCwsCode = PrincipalUtils.getPrincipal().getCountyCwsCode();
+
+    List<SpecialProject> ssbSpecialProjects =
+        specialProjectDao.findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
+            Short.valueOf(countyCode));
+    SpecialProject ssbSpecialProject =
+        (ssbSpecialProjects != null && !ssbSpecialProjects.isEmpty()) ? ssbSpecialProjects.get(0)
+            : null;
+
+    if (ssbSpecialProject == null) {
+      throw new ServiceException(
+          "Special project not found for Safely Surrendered Babies for county " + countyCode);
+    }
+
+    /**
+     * Create SpecialProjectReferral persistence record.
+     */
+    gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral spr = 
+        new gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral();
+    spr.setCountySpecificCode(countyCwsCode);
+    spr.setParticipantStartDate(now.toLocalDate().toString());
+    spr.setReferralId(referralId);
+    spr.setSpecialProjectId(ssbSpecialProject.getId());
+    
+    gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral createdSpr = this.create(spr);
+
+    /**
+     * Create SafelySurrenderedBabies persistence record.
+     */
+    SafelySurrenderedBabies ssbEntity = new SafelySurrenderedBabies();
+    ssbEntity.setBraceletIdInfoCode(ssb.getBraceletInfoCode());
+    ssbEntity.setChildClientId(childClientId);
+    ssbEntity.setCommentDescription(ssb.getComments());
+    ssbEntity.setCpsNotofiedIndicator(Boolean.TRUE);
+    ssbEntity.setCpsNotofiedDate(now.toLocalDate());
+    ssbEntity.setMedicalQuestionnaireCode(ssb.getMedicalQuestionaireCode());
+    ssbEntity.setQuestionnaireReceivedDate(ssb.getMedicalQuestionaireReturnDate());
+    ssbEntity.setCpsNotofiedTime(now.toLocalTime());
+    ssbEntity.setLastUpdateId(userId);
+    ssbEntity.setLastUpdateTime(now);
+    ssbEntity.setRelationToClient(ssb.getRelationToChild().shortValue());
+    ssbEntity.setSpecialProjectReferral(createdSpr.getId());
+    ssbEntity.setSurrenderedByName(ssb.getSurrenderedByName());
+    ssbEntity.setSurrenderedDate(now.toLocalDate());
+    ssbEntity.setSurrenderedTime(now.toLocalTime());
+    safelySurrenderedBabiesDao.create(ssbEntity);
+
+    /**
+     * Create bracelet ID.
+     */
+    NonCWSNumber braceltInfo = new NonCWSNumber();
+    braceltInfo.setClientId(childClientId);
+    braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(userId));
+    braceltInfo.setLastUpdateId(userId);
+    braceltInfo.setLastUpdateTime(now);
+    braceltInfo.setOtherId(ssb.getBraceletId());
+    braceltInfo.setOtherIdCode(MEDICAL_RECORD_SYSTEM_CODE_ID);
+    nonCWSNumberDao.create(braceltInfo);
+  }
+
   /**
    * {@inheritDoc}
    * 

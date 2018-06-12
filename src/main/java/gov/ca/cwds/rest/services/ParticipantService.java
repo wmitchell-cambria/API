@@ -55,6 +55,7 @@ import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.SpecialProjectReferralService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
@@ -216,7 +217,7 @@ public class ParticipantService implements CrudsService {
       // since this is the victim - process the ChildClient
       try {
         processChildClient(clientId, referralId, messageBuilder, incomingParticipant.getCsecs(),
-            incomingParticipant.getSafelySurrenderedBabies(), screeningToReferral.getReportType());
+            incomingParticipant.getSafelySurrenderedBabies(), screeningToReferral);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -420,7 +421,7 @@ public class ParticipantService implements CrudsService {
 
   private ChildClient processChildClient(String clientId, String referralId,
       MessageBuilder messageBuilder, List<Csec> csecs, SafelySurrenderedBabies ssb,
-      String reportType) {
+      ScreeningToReferral screeningToReferral) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -428,11 +429,16 @@ public class ParticipantService implements CrudsService {
       exsistingChild = this.childClientService.create(childClient);
     }
 
-    if (FerbConstants.ReportType.CSEC.equals(reportType) && validateCsec(csecs, messageBuilder)) {
+    if (FerbConstants.ReportType.CSEC.equals(screeningToReferral.getReportType()) && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
+      if (!csecs.isEmpty()) {
+        // create a special project for this referral
+        specialProjectReferralService.saveCsecSpecialProjectReferral(csecs.get(0), referralId, 
+            screeningToReferral.getIncidentCounty(), messageBuilder);
+      }
     }
 
-    if (FerbConstants.ReportType.SSB.equals(reportType)
+    if (FerbConstants.ReportType.SSB.equals(screeningToReferral.getReportType())
         && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
       specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId, ssb);
     }
