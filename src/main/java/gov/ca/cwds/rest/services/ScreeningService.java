@@ -30,6 +30,7 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.Screening;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboard;
 import gov.ca.cwds.rest.api.domain.ScreeningDashboardList;
+import gov.ca.cwds.rest.api.domain.enums.ScreeningStatus;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.mapper.AddressMapper;
 import gov.ca.cwds.rest.services.mapper.AgencyMapper;
@@ -272,6 +273,7 @@ public class ScreeningService implements CrudsService {
     validateParticipants(screening);
 
     ScreeningEntity screeningEntity = screeningMapper.map(screening);
+    screeningEntity.setScreeningStatus(ScreeningStatus.OPEN.getStatus());
     ScreeningEntity createdScreeningEntity = screeningDao.create(screeningEntity);
     String screeningId = createdScreeningEntity.getId();
     screening.setId(screeningId);
