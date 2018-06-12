@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
 import org.junit.Test;
 
@@ -67,9 +68,53 @@ public class ClientTransformerTest {
    */
   @Test
   public void testTranformPrimaryAndSecondayLanguage() {
-    Client client = new ClientEntityBuilder().setGenderCode("F").build();
+    Client client = new ClientEntityBuilder().setPrimaryLanguageType((short) 1248)
+        .setSecondaryLanguageType((short) 1253).build();
     ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
-    assertThat(participantIntakeApi.getGender(), is(equalTo("female")));
+    assertThat(participantIntakeApi.getLanguages(),
+        containsInAnyOrder("English", "American Sign Language"));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformWhenOnlyPrimatyLanguageSet() {
+    Client client = new ClientEntityBuilder().setPrimaryLanguageType((short) 1248)
+        .setSecondaryLanguageType((short) 0).build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getLanguages(), containsInAnyOrder("American Sign Language"));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformWhenLanguages0() {
+    Client client = new ClientEntityBuilder().setPrimaryLanguageType((short) 0)
+        .setSecondaryLanguageType((short) 0).build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getLanguages().isEmpty(), is(equalTo(true)));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformSensitiveIndicator() {
+    Client client = new ClientEntityBuilder().setSensitivityIndicator("S").build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getSensitive(), is(equalTo(true)));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformSealedIndicator() {
+    Client client = new ClientEntityBuilder().setSensitivityIndicator("R").build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getSealed(), is(equalTo(true)));
   }
 
 }

@@ -96,6 +96,12 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     if (32 == systemCodeId.intValue()) {
       return "Residence";
     }
+    if (1248 == systemCodeId.intValue()) {
+      return "American Sign Language";
+    }
+    if (1253 == systemCodeId.intValue()) {
+      return "English";
+    }
     return null;
   }
 
