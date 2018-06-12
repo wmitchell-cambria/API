@@ -62,6 +62,7 @@
       <column name="indexable" valueBoolean="true"/>
       <column name="curr_loc_of_children"/>
       <column name="report_type" value="ssb"/>
+      <column name="screening_status" value="Open"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="750"/>
@@ -89,6 +90,7 @@
       <column name="indexable" valueBoolean="true"/>
       <column name="curr_loc_of_children"/>
       <column name="report_type" value="ssb"/>
+      <column name="screening_status" value="Open"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="862"/>
@@ -116,6 +118,7 @@
       <column name="indexable"/>
       <column name="curr_loc_of_children"/>
       <column name="report_type" value="ssb"/>
+      <column name="screening_status" value="Open"/>
     </insert>
     <insert tableName="screenings">
       <column name="id" value="885"/>
@@ -143,6 +146,7 @@
       <column name="indexable"/>
       <column name="curr_loc_of_children"/>
       <column name="report_type" value="ssb"/>
+      <column name="screening_status" value="Open"/>
     </insert>
   </changeSet>
 </databaseChangeLog>

@@ -25,6 +25,9 @@
   <include file="liquibase/data/201805251518-delete_intake_lov_code.sql"/>
   <include file="liquibase/data/201806011244_remove_fk_and_convert_to_intake_lov_code.xml"/>
   <include file="liquibase/data/201806011245_restore_pk_in_intake_lov_code.xml"/>
+  <include file="liquibase/data/201806011524_add_status_column_to_screenings.sql"/>
+  <include file="liquibase/data/201806061051_increase_char_limit_of_curr_child_loc.sql"/>
+  <include file="liquibase/data/201806111202_drop_foreign_key_constatint_on_allegationsTable_ofPerpetrator.xml"/>
 
   <include file="data/screening_data.xml" relativeToChangelogFile="true"/>
   <include file="data/addresses_data.xml" relativeToChangelogFile="true"/>
