@@ -598,7 +598,7 @@ public class R07577CreateDummyDocsForReferralTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
   }
 
