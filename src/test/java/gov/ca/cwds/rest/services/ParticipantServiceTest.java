@@ -42,11 +42,15 @@ import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
 import gov.ca.cwds.data.legacy.cms.entity.CsecHistory;
 import gov.ca.cwds.data.legacy.cms.entity.syscodes.SexualExploitationType;
+import gov.ca.cwds.data.persistence.cms.SpecialProjectReferral;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.fixture.ParticipantResourceBuilder;
 import gov.ca.cwds.fixture.ReporterResourceBuilder;
+import gov.ca.cwds.fixture.ScreeningResourceBuilder;
 import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.fixture.SpecialProjectReferralEntityBuilder;
+import gov.ca.cwds.fixture.SpecialProjectReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.Role;
@@ -58,6 +62,7 @@ import gov.ca.cwds.rest.api.domain.cms.ClientAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedAddress;
 import gov.ca.cwds.rest.api.domain.cms.PostedClient;
 import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
+import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.error.ErrorMessage;
 import gov.ca.cwds.rest.business.rules.LACountyTrigger;
@@ -71,6 +76,7 @@ import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.SpecialProjectReferralService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
 
 /**
@@ -117,6 +123,7 @@ public class ParticipantServiceTest {
 
   private SexualExploitationTypeDao sexualExploitationTypeDao;
   private CsecHistoryService csecHistoryService;
+  private SpecialProjectReferralService specialProjectReferralService;
 
   /**
    *
@@ -186,11 +193,19 @@ public class ParticipantServiceTest {
 
     csecHistoryService = mock(CsecHistoryService.class);
 
+    specialProjectReferralService = mock(SpecialProjectReferralService.class);
+    SpecialProjectReferral specialProjectReferral = new SpecialProjectReferralEntityBuilder().build();
+    PostedSpecialProjectReferral postedSpecialProjectReferral = 
+        new PostedSpecialProjectReferral(specialProjectReferral);
+    when(specialProjectReferralService.saveCsecSpecialProjectReferral(any(), any(), any(), any()))
+      .thenReturn(postedSpecialProjectReferral);   
+    
     participantService = new ParticipantService(clientService, referralClientService,
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
     participantService.setSexualExploitationTypeDao(sexualExploitationTypeDao);
     participantService.setCsecHistoryService(csecHistoryService);
+    participantService.setSpecialProjectReferralService(specialProjectReferralService);
   }
 
   @Test

@@ -23,6 +23,7 @@ import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
@@ -76,8 +77,10 @@ public class SpecialProjectReferralService implements
   /**
    * Constructor
    * 
-   * @param specialProjectDao - special Project ReferralDao
+   * @param specialProjectReferralDao - special project referral DAO
+   * @param specialProjectDao - special Project DAO
    * @param riSpecialProjectReferral - referential integrity special project referral
+   * @param validator - object validator
    * 
    */
   @Inject
@@ -114,7 +117,7 @@ public class SpecialProjectReferralService implements
   /**
    * save Csec Special Project Referral
    * 
-   * @param csecDomain - CSEC domain object
+   * @param csecs - list of CSEC domain objects
    * @param referralId - referral ID
    * @param incidentCounty - county Code
    * @param messageBuilder - message builder
@@ -122,10 +125,16 @@ public class SpecialProjectReferralService implements
    * @return PostedSpecialProjectReferral - posted Special Project Referral
    * 
    */
-  public PostedSpecialProjectReferral saveCsecSpecialProjectReferral(gov.ca.cwds.rest.api.domain.Csec csecDomain,
+  public PostedSpecialProjectReferral saveCsecSpecialProjectReferral(List<Csec> csecs,
       String referralId, String incidentCounty, MessageBuilder messageBuilder) {
     
     PostedSpecialProjectReferral postedSpecialProjectReferral = null;
+    
+    if (csecs.isEmpty()) {
+      String message = "CSEC data not sent or empty";
+      messageBuilder.addMessageAndLog(message, LOGGER);
+      return null;
+    }
     
     short governmentEntityType = convertLogicalIdToSystemCodeFor(incidentCounty, 
         LegacyTable.GOVERNMENT_ORGANIZATION_ENTITY.getName());
@@ -144,6 +153,7 @@ public class SpecialProjectReferralService implements
     }
     
     try {
+      Csec csecDomain = csecs.get(0);
       gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain =
           new gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral(incidentCounty, referralId,
               specialProjectId, csecDomain.getEndDate().toString(), csecDomain.getStartDate().toString(), 

@@ -88,8 +88,11 @@ public class SpecialProjectReferralServiceTest {
   
   @Test
   public void shouldReturnPostedSpecialProjectReferralWhenSave() throws Exception {
+    List<Csec> csecs = new ArrayList();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
+    csecs.add(csec);
+    
     String referralId = "0987654ABC";
     String incidentCounty = "34";
     MessageBuilder messageBuilder = new MessageBuilder();
@@ -111,14 +114,17 @@ public class SpecialProjectReferralServiceTest {
     when(specialProjectReferralDao.create(any(SpecialProjectReferral.class))).thenReturn(sprEntity);
 
     PostedSpecialProjectReferral sprPosted = specialProjectReferralService
-        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+        .saveCsecSpecialProjectReferral(csecs, referralId, incidentCounty, messageBuilder);
     assertThat(sprPosted.getClass(), is(PostedSpecialProjectReferral.class));    
   }
   
   @Test 
   public void shouldReturnNullWhenSpecialProjectDoesNotExistsOnSave() throws Exception {
+    List<Csec> csecs = new ArrayList();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
+    csecs.add(csec);
+    
     String referralId = "0987654ABC";
     String incidentCounty = "34";
     Date endDate = new Date();
@@ -142,14 +148,17 @@ public class SpecialProjectReferralServiceTest {
 
     // specialProjectReferralDao.create should not be called
     PostedSpecialProjectReferral sprPosted = specialProjectReferralService
-        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+        .saveCsecSpecialProjectReferral(csecs, referralId, incidentCounty, messageBuilder);
     assertThat(sprPosted, is(nullValue()));    
  }
   
   @Test
   public void shouldReturnNullWhenSpecialProjectReferralAlreadyExist() throws Exception {
+    List<Csec> csecs = new ArrayList();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
+    csecs.add(csec);
+    
     String referralId = "9876543ABC";
     String specialProjectId = "0987654ABC";
     String incidentCounty = "34";
@@ -183,15 +192,18 @@ public class SpecialProjectReferralServiceTest {
 
     // specialProjectReferralDao.create should not be called
     PostedSpecialProjectReferral sprPosted = specialProjectReferralService
-        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+        .saveCsecSpecialProjectReferral(csecs, referralId, incidentCounty, messageBuilder);
     assertThat(sprPosted, is(nullValue()));    
 
   }
   
   @Test
   public void shouldReturnNullWhenInvalidGovernmentEntityType() throws Exception {
+    List<Csec> csecs = new ArrayList();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
+    csecs.add(csec);
+    
     String referralId = "0987654ABC";
     String incidentCounty = "ZZ";
     MessageBuilder messageBuilder = new MessageBuilder();
@@ -212,7 +224,37 @@ public class SpecialProjectReferralServiceTest {
     when(specialProjectReferralDao.create(any(SpecialProjectReferral.class))).thenReturn(sprEntity);
 
     PostedSpecialProjectReferral sprPosted = specialProjectReferralService
-        .saveCsecSpecialProjectReferral(csec, referralId, incidentCounty, messageBuilder);
+        .saveCsecSpecialProjectReferral(csecs, referralId, incidentCounty, messageBuilder);
+    assertThat(sprPosted, is(nullValue()));    
+    
+  }
+  
+  @Test
+  public void shouldRetrunNullWhenCSECDataNotProvided() throws Exception {
+    List<Csec> csecs = new ArrayList();
+
+    String referralId = "0987654ABC";
+    String incidentCounty = "34";
+    MessageBuilder messageBuilder = new MessageBuilder();
+    
+    SpecialProject specialProject = new SpecialProjectEntityBuilder()
+        .setName("test")
+        .build();
+    List<SpecialProject> specialProjects = new ArrayList();
+    specialProjects.add(specialProject);
+    
+    when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
+    .thenReturn(specialProjects);
+
+    gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain = new SpecialProjectReferralResourceBuilder().build();
+    SpecialProjectReferral sprEntity = new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral("9876543ABC",
+        sprDomain,
+        "aab",
+        new Date());
+    when(specialProjectReferralDao.create(any(SpecialProjectReferral.class))).thenReturn(sprEntity);
+
+    PostedSpecialProjectReferral sprPosted = specialProjectReferralService
+        .saveCsecSpecialProjectReferral(csecs, referralId, incidentCounty, messageBuilder);
     assertThat(sprPosted, is(nullValue()));    
     
   }

@@ -9,7 +9,6 @@ import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.DomainObject;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -62,7 +61,7 @@ public class SpecialProject implements Request, Response{
    * @param archiveAssociationIndicator - archive association indicator
    * @param description - special project description
    * @param endDate - end date
-   * @param governmentEnityType = government entity type
+   * @param governmentEntityType = government entity type
    * @param name - special project name
    * @param startDate - start date
    */

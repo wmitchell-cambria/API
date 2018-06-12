@@ -431,11 +431,9 @@ public class ParticipantService implements CrudsService {
 
     if (FerbConstants.ReportType.CSEC.equals(screeningToReferral.getReportType()) && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
-      if (!csecs.isEmpty()) {
-        // create a special project for this referral
-        specialProjectReferralService.saveCsecSpecialProjectReferral(csecs.get(0), referralId, 
-            screeningToReferral.getIncidentCounty(), messageBuilder);
-      }
+      // create a special project for this referral
+      specialProjectReferralService.saveCsecSpecialProjectReferral(csecs, referralId, 
+          screeningToReferral.getIncidentCounty(), messageBuilder);
     }
 
     if (FerbConstants.ReportType.SSB.equals(screeningToReferral.getReportType())
@@ -588,4 +586,9 @@ public class ParticipantService implements CrudsService {
   void setSexualExploitationTypeDao(SexualExploitationTypeDao sexualExploitationTypeDao) {
     this.sexualExploitationTypeDao = sexualExploitationTypeDao;
   }
+  
+  void setSpecialProjectReferralService(SpecialProjectReferralService specialProjectReferralService) {
+    this.specialProjectReferralService = specialProjectReferralService;
+  }
+  
 }

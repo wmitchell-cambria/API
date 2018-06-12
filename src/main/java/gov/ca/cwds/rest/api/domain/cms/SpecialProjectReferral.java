@@ -72,7 +72,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
    * 
    * @param countySpecificCode - county specific code
    * @param referralId - referral ID
-   * @param spcialProjectId - special project ID
+   * @param specialProjectId - special project ID
    * @param participationEndDate - participation end date
    * @param participationStartDate - participation start date
    * @param safelySurrenderedBabiesIndicator - safely surrendered babies indicator
@@ -91,7 +91,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   /**
    * Constructor
    * 
-   * @param specialProjectReferral - persisted special project referral
+   * @param persistent - persisted special project referral
    * 
    */
   public SpecialProjectReferral(gov.ca.cwds.data.persistence.cms.SpecialProjectReferral persistent) {

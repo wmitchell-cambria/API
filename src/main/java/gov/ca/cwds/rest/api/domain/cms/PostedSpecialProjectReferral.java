@@ -23,12 +23,12 @@ public class PostedSpecialProjectReferral extends SpecialProjectReferral {
    * @param specialProjectReferral - persisted special project referral
    * 
    */
-  public PostedSpecialProjectReferral(gov.ca.cwds.data.persistence.cms.SpecialProjectReferral spr) {
-    super(spr);
-    if (StringUtils.isBlank(spr.getId())) {
+  public PostedSpecialProjectReferral(gov.ca.cwds.data.persistence.cms.SpecialProjectReferral specialProjectReferral) {
+    super(specialProjectReferral);
+    if (StringUtils.isBlank(specialProjectReferral.getId())) {
       throw new ServiceException("SpecialProjectReferral Third ID cannot be blank");
     }
-    this.id = spr.getId();
+    this.id = specialProjectReferral.getId();
   }
   
   /**
