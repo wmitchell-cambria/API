@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,7 +25,6 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.PhoneNumber;
-import gov.ca.cwds.rest.services.screeningparticipant.EducationProviderContactTransformer;
 
 /**
  * @author CWDS API Team

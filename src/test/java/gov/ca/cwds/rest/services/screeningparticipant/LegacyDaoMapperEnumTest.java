@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 
-import gov.ca.cwds.rest.services.screeningparticipant.LegacyDaoMapperEnum;
 import gov.ca.cwds.rest.services.screeningparticipant.LegacyToIntakeCodeConveter.IntakeRaceCode;
 
 /**

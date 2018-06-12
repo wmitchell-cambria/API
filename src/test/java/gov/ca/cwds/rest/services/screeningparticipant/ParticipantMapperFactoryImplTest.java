@@ -1,4 +1,4 @@
-package gov.ca.cwds.rest.api.services.screeningparticipant;
+package gov.ca.cwds.rest.services.screeningparticipant;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -13,9 +13,6 @@ import com.google.inject.Injector;
 
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.screeningparticipant.CollateralIndividualTranformer;
-import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapper;
-import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
 
 /**
  * @author CWDS API Team
