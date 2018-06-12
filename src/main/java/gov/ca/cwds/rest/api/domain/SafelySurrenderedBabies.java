@@ -36,7 +36,6 @@ public class SafelySurrenderedBabies extends ReportingDomain implements Request,
   @JsonProperty("relation_to_child")
   @ApiModelProperty(required = true, readOnly = false, value = "", example = "1592",
       notes = "The code for relationship RMV_FRMC")
-  @NotEmpty
   @ValidSystemCodeId(required = true, category = SystemCodeCategoryId.REMOVEF_FROM_CARE_TAKER_TYPE)
   private Integer relationToChild;
 

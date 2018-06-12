@@ -129,8 +129,8 @@ public class ScreeningToReferralService implements CrudsService {
 
     String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
-    ClientParticipants clientParticipants =
-        processParticipants(screeningToReferral, dateStarted, referralId, messageBuilder);
+    ClientParticipants clientParticipants = processParticipants(screeningToReferral, dateStarted,
+        timeStarted, referralId, messageBuilder);
 
     Set<CrossReport> resultCrossReports = createCrossReports(screeningToReferral, referralId);
 
@@ -182,10 +182,10 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private ClientParticipants processParticipants(ScreeningToReferral screeningToReferral,
-      String dateStarted, String referralId, MessageBuilder messageBuilder) {
+      String dateStarted, String timeStarted, String referralId, MessageBuilder messageBuilder) {
 
-    return participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
-        messageBuilder);
+    return participantService.saveParticipants(screeningToReferral, dateStarted, timeStarted,
+        referralId, messageBuilder);
   }
 
   private String createCmsReferral(ScreeningToReferral screeningToReferral, String dateStarted,

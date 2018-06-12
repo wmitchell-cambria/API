@@ -25,6 +25,8 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
   public TestingRequestExecutionContext(String userId) {
     PerryUserIdentity userIdentity = new PerryUserIdentity();
     userIdentity.setUser(userId);
+    userIdentity.setCountyCode("34");
+    userIdentity.setCountyCwsCode("1101");
 
     put(Parameter.REQUEST_START_TIME, new Date());
     put(Parameter.USER_IDENTITY, userIdentity);
@@ -47,11 +49,16 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
   @Override
   public String getUserId() {
     String userId = null;
-    PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
+    PerryUserIdentity userIdentity = getUserIdentity();
     if (userIdentity != null) {
       userId = userIdentity.getUser();
     }
     return userId;
+  }
+
+  @Override
+  public PerryUserIdentity getUserIdentity() {
+    return (PerryUserIdentity) get(Parameter.USER_IDENTITY);
   }
 
   @Override

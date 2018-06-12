@@ -4,12 +4,26 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+import java.util.Set;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -89,16 +103,6 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
 import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
 import io.dropwizard.jackson.Jackson;
-import java.util.Date;
-import java.util.Set;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * 
@@ -251,7 +255,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
 
     participantService = mock(ParticipantService.class);
     ClientParticipants referralParticipants = new ClientParticipants();
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -400,7 +404,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);

@@ -272,7 +272,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
 
     participantService = mock(ParticipantService.class);
     ClientParticipants referralParticipants = new ClientParticipants();
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -397,7 +397,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);

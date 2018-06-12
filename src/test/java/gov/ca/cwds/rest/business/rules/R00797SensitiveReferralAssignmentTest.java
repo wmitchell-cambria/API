@@ -5,7 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -251,7 +251,7 @@ public class R00797SensitiveReferralAssignmentTest {
 
     participantService = mock(ParticipantService.class);
     ClientParticipants referralParticipants = new ClientParticipants();
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
@@ -401,7 +401,7 @@ public class R00797SensitiveReferralAssignmentTest {
       participant.setLegacyId(generator.generate());
     }
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
 
     screeningToReferralService.create(screeningToReferral);
