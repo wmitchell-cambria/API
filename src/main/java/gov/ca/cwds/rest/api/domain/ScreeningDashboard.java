@@ -70,6 +70,11 @@ public class ScreeningDashboard extends ReportingDomain {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DomainObject.TIMESTAMP_ISO8601_FORMAT)
   private Date startedAt;
 
+  @JsonProperty("screening_status")
+  @ApiModelProperty(required = false, readOnly = false, value = "Screening status",
+          example = "Open")
+  private String screeningStatus;
+
   public ScreeningDashboard() {
     super();
   }
@@ -119,6 +124,7 @@ public class ScreeningDashboard extends ReportingDomain {
     this.assignee = screening.getAssignee();
     this.assigneeStaffId = screening.getAssigneeStaffId();
     this.startedAt = screening.getStartedAt();
+    this.screeningStatus = screening.getScreeningStatus();
   }
 
   public String getId() {
@@ -151,6 +157,10 @@ public class ScreeningDashboard extends ReportingDomain {
 
   public Date getStartedAt() {
     return freshDate(startedAt);
+  }
+
+  public String getScreeningStatus() {
+    return screeningStatus;
   }
 
   /**

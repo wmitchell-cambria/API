@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.services.submit;
 
 import java.io.Serializable;
 
+import gov.ca.cwds.rest.api.domain.enums.ScreeningStatus;
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
@@ -60,6 +61,7 @@ public class ScreeningSubmitService implements CrudsService {
         (ScreeningToReferral) screeningToReferralService.create(screeningToReferral);
     screening.setReferralId(str.getReferralId());
     // ns session
+    screening.setScreeningStatus(ScreeningStatus.SUBMITTED.getStatus());
     screeningService.updateScreening(screening.getId(), screening);
     return screening;
   }

@@ -32,11 +32,12 @@ public class ScreeningEntityBuilder {
   private String assigneeStaffId = DEFAULT_ASSIGNEE_STAFF_ID;
   private Set<ParticipantEntity> participants = new HashSet<>();
   private String reportType = "ssb";
+  private String screeningStatus = "Open";
 
   public ScreeningEntity build() {
     return new ScreeningEntity(id, reference, startedAt, endedAt, incidentCounty, incidentDate,
         locationType, communicationMethod, name, responseTime, screeningDecision, screeningDecisionDetail,
-        narrative, contactAddress, assigneeStaffId, participants, reportType);
+        narrative, contactAddress, assigneeStaffId, participants, reportType, screeningStatus);
   }
 
   public ScreeningEntityBuilder setId(String id) {
@@ -102,6 +103,11 @@ public class ScreeningEntityBuilder {
 
   public ScreeningEntityBuilder setNarrative(String narrative) {
     this.narrative = narrative;
+    return this;
+  }
+
+  public ScreeningEntityBuilder setScreeningStatus(String status) {
+    this.screeningStatus = status;
     return this;
   }
 

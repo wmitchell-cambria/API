@@ -69,9 +69,9 @@ public class ScreeningTransformer {
     String screeningIncidentDate =
         screening.getIncidentDate() == null ? null : screening.getIncidentDate().toString();
     String screeningStartDate = screening.getStartedAt() == null ?
-        null : FerbDateUtils.utcToPst(screening.getStartedAt().withNano(0)).format(DateTimeFormatter.ISO_DATE_TIME);
+        null : FerbDateUtils.utcToSystemTime(screening.getStartedAt().withNano(0)).format(DateTimeFormatter.ISO_DATE_TIME);
     String screeningEndDate = screening.getEndedAt() == null ?
-        null : FerbDateUtils.utcToPst(screening.getEndedAt()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        null : FerbDateUtils.utcToSystemTime(screening.getEndedAt()).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
     return new ScreeningToReferral(Integer.parseInt(screening.getId()),
         LegacyTable.REFERRAL.getName(), screening.getReferralId(), screeningEndDate,
