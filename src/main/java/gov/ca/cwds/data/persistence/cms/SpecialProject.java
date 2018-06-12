@@ -21,9 +21,6 @@ import org.hibernate.annotations.Type;
  * 
  * @author CWDS API Team
  */
-@NamedQuery(name = FIND_BY_PROJECT_NAME,
-    query = FIND_BY_PROJECT_NAME_QUERY)
-
 @Entity
 @Table(name = "SPC_PRJT")
 
@@ -48,7 +45,7 @@ public class SpecialProject extends CmsPersistentObject {
   public static final String FIND_BY_PROJECT_NAME = 
       "gov.ca.cwds.data.persistence.cms.SpecialProject.findByProjectName";
   static final String FIND_BY_PROJECT_NAME_QUERY = 
-      "FROM SpecialProject WHERE GOV_ENTC = :governementEntityType AND PROJECT_NM = :name";
+      "FROM SpecialProject WHERE GOV_ENTC = :governementEntityType AND END_DT IS NULL AND PROJECT_NM = :name";
   
   @Column(name = "ARCASS_IND")
   @Type(type = "yes_no")
