@@ -57,8 +57,8 @@ public class ParticipantDao extends BaseDaoImpl<ParticipantEntity> {
     if (screeningIds == null || screeningIds.isEmpty()) {
       return new HashMap<>();
     }
-    @SuppressWarnings("unchecked") final Query<ParticipantEntity> query = this.getSessionFactory()
-        .getCurrentSession()
+    @SuppressWarnings("unchecked")
+    final Query<ParticipantEntity> query = this.getSessionFactory().getCurrentSession()
         .getNamedQuery(FIND_PARTICIPANTS_BY_SCREENING_IDS)
         .setParameter("screeningIds", screeningIds);
     Map<String, Set<ParticipantEntity>> result = new HashMap<>(screeningIds.size());

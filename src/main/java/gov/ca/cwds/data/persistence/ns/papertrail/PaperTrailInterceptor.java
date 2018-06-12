@@ -1,19 +1,16 @@
 package gov.ca.cwds.data.persistence.ns.papertrail;
 
+import gov.ca.cwds.data.ns.PaperTrailDao;
+import gov.ca.cwds.data.persistence.ns.PaperTrail;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import java.util.Set;
 import javax.inject.Inject;
-
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
-
-import gov.ca.cwds.data.ns.PaperTrailDao;
-import gov.ca.cwds.data.persistence.ns.PaperTrail;
 
 /**
  * Synthetic triggers for PostgreSQL via Hibernate interceptor.
@@ -43,7 +40,8 @@ import gov.ca.cwds.data.persistence.ns.PaperTrail;
  * </tr>
  * <tr>
  * <td align="justify">preFlush</td>
- * <td align="justify">Called before the saved, updated or deleted objects are committed to database
+ * <td align="justify">Called before the saved, updated or deleted objects are committed to
+ * database
  * (usually before postFlush)</td>
  * </tr>
  * <tr>
@@ -52,24 +50,22 @@ import gov.ca.cwds.data.persistence.ns.PaperTrail;
  * database</td>
  * </tr>
  * </table>
- * 
+ *
  * @author Intake Team 4
  */
 public class PaperTrailInterceptor extends EmptyInterceptor {
 
+  public static final String STR_ARROW = "->";
   private static final long serialVersionUID = 1L;
-
   private static final String CREATE = "create";
   private static final String UPDATE = "update";
   private static final String DESTROY = "destroy";
-
-  private static final ThreadLocal<Map<String, Object>> insertsTlMap =
-      ThreadLocal.withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> updatesTlMap =
-      ThreadLocal.withInitial(HashMap::new);
-  private static final ThreadLocal<Map<String, Object>> deletesTlMap =
-      ThreadLocal.withInitial(HashMap::new);
-
+  private static final ThreadLocal<Set<String>> insertsTlSet =
+      ThreadLocal.withInitial(HashSet::new);
+  private static final ThreadLocal<Set<String>> updatesTlSet =
+      ThreadLocal.withInitial(HashSet::new);
+  private static final ThreadLocal<Set<String>> deletesTlSet =
+      ThreadLocal.withInitial(HashSet::new);
   @Inject
   private transient PaperTrailDao paperTrailDao;
 
@@ -83,7 +79,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       Type[] types) {
 
     if (entity instanceof HasPaperTrail) {
-      insertsTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
+      insertsTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
     }
     return super.onSave(entity, id, state, propertyNames, types);
   }
@@ -94,7 +90,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       Object[] previousState, String[] propertyNames, Type[] types) {
 
     if (entity instanceof HasPaperTrail) {
-      updatesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
+      updatesTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
     }
     return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
   }
@@ -105,7 +101,7 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
       Type[] types) {
 
     if (entity instanceof HasPaperTrail) {
-      deletesTlMap.get().put(getItemTypeAndId((HasPaperTrail) entity), entity);
+      deletesTlSet.get().add(getItemTypeAndId((HasPaperTrail) entity));
     }
     super.onDelete(entity, id, state, propertyNames, types);
   }
@@ -118,40 +114,31 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
 
   private void processPaperTrail() {
     try {
-      for (Entry<String, Object> entry : insertsTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(CREATE, entity);
-      }
-
-      for (Entry<String, Object> entry : updatesTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(UPDATE, entity);
-      }
-
-      for (Entry<String, Object> entry : deletesTlMap.get().entrySet()) {
-        HasPaperTrail entity = (HasPaperTrail) entry.getValue();
-        createPaperTrail(DESTROY, entity);
-      }
+      insertsTlSet.get()
+          .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, CREATE)));
+      updatesTlSet.get()
+          .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, UPDATE)));
+      deletesTlSet.get()
+          .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, DESTROY)));
 
     } finally {
-      clearMaps();
+      clearSets();
     }
   }
 
-  private void clearMaps() {
-    insertsTlMap.get().clear();
-    updatesTlMap.get().clear();
-    deletesTlMap.get().clear();
+  private void clearSets() {
+    insertsTlSet.get().clear();
+    updatesTlSet.get().clear();
+    deletesTlSet.get().clear();
   }
 
   private String getItemTypeAndId(HasPaperTrail entity) {
-    return entity.getClass().getSimpleName().concat("->").concat(entity.getId());
+    return entity.getClass().getSimpleName().concat(STR_ARROW).concat(entity.getId());
   }
 
-  private void createPaperTrail(String event, HasPaperTrail entity) {
-    PaperTrail paperTrail =
-        new PaperTrail(entity.getClass().getSimpleName(), entity.getId(), event);
-    paperTrailDao.create(paperTrail);
+  private PaperTrail createPaperTrail(String typeAndId, String event) {
+    return new PaperTrail(StringUtils.split(typeAndId, STR_ARROW, 2)[0],
+        StringUtils.split(typeAndId, STR_ARROW, 2)[1], event);
   }
 
   public PaperTrailDao getPaperTrailDao() {
@@ -170,13 +157,13 @@ public class PaperTrailInterceptor extends EmptyInterceptor {
   @Override
   public void afterTransactionBegin(Transaction tx) {
     super.afterTransactionBegin(tx);
-    clearMaps();
+    clearSets();
   }
 
   @Override
   public void afterTransactionCompletion(Transaction tx) {
     super.afterTransactionCompletion(tx);
-    clearMaps();
+    clearSets();
   }
 
 }
