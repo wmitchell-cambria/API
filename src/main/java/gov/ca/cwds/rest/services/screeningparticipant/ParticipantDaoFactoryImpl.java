@@ -39,4 +39,13 @@ public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
     return crudsDao;
   }
 
+  /**
+   * @param injector - injector
+   */
+  public void setInjector(Injector injector) {
+    this.injector = injector;
+  }
+
+
+
 }

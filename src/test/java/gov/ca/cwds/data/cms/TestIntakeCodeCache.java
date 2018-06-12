@@ -93,6 +93,9 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     if (1828 == systemCodeId.intValue()) {
       return "CA";
     }
+    if (32 == systemCodeId.intValue()) {
+      return "Residence";
+    }
     return null;
   }
 
