@@ -380,6 +380,13 @@ public class Client extends BaseClient {
     return clientScpEthnicities;
   }
 
+  /**
+   * @param clientScpEthnicities - clientScpEthnicities
+   */
+  public void setClientScpEthnicities(Set<ClientScpEthnicity> clientScpEthnicities) {
+    this.clientScpEthnicities = clientScpEthnicities;
+  }
+
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);

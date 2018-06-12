@@ -41,4 +41,11 @@ public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
     return mapper;
   }
 
+  /**
+   * @param injector - injector
+   */
+  public void setInjector(Injector injector) {
+    this.injector = injector;
+  }
+
 }

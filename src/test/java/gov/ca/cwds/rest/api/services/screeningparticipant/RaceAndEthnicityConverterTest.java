@@ -5,11 +5,17 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.Client;
+import gov.ca.cwds.data.persistence.cms.ClientScpEthnicity;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.ClientScpEthnicityEntityBuilder;
 import gov.ca.cwds.rest.services.screeningparticipant.RaceAndEthnicityConverter;
 
 /**
@@ -55,6 +61,20 @@ public class RaceAndEthnicityConverterTest {
     String IntakeHispanic = raceAndEthnicityConverter.createRace(client);
     assertThat(IntakeHispanic,
         is(equalTo("[{\"race\":\"Black or African American\",\"race_detail\":\"Caribbean\"}]")));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testCreateRaceForPrimaryAndSecondaryCodes() {
+    Set<ClientScpEthnicity> clientScpEthnicities = new HashSet<>(
+        Arrays.asList(new ClientScpEthnicityEntityBuilder().setEthnicity((short) 821).build()));
+    Client client = new ClientEntityBuilder().setPrimaryEthnicityType((short) 3162).build();
+    client.setClientScpEthnicities(clientScpEthnicities);
+    String IntakeHispanic = raceAndEthnicityConverter.createRace(client);
+    assertThat(IntakeHispanic, is(equalTo(
+        "[{\"race\":\"Black or African American\",\"race_detail\":\"Caribbean\"},{\"race\":\"American Indian or Alaska Native\",\"race_detail\":\"American Indian\"}]")));
   }
 
   /**
