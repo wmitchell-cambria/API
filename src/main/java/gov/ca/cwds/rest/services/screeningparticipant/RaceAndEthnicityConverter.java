@@ -15,7 +15,6 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
-import gov.ca.cwds.rest.services.submit.RaceAndEthnicityTransformer;
 
 /**
  * Transforms the Legacy race and ethnicity values for an existing people into valid
@@ -24,8 +23,8 @@ import gov.ca.cwds.rest.services.submit.RaceAndEthnicityTransformer;
  * @author CWDS API Team
  *
  */
-public class RaceAndEthnicityConveter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityTransformer.class);
+public class RaceAndEthnicityConverter {
+  private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityConverter.class);
 
   private static final String HISPANIC_CODE_OTHER_ID = "02";
   private static final Short CARIBBEAN_RACE_CODE = 3162;

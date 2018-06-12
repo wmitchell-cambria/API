@@ -19,21 +19,21 @@ public class LegacyToIntakeCodeConveter {
 
     AMERICAN_INDIA("American Indian*", "American Indian or Alaska Native", "American Indian"),
 
-    ASIAN_INDIAN("Asian Indian*", "Asian", "Asian Indian"),
+    ASIAN_INDIAN("Asian Indian*", Constants.ASIAN, "Asian Indian"),
 
     BLACK("Black*", "Black or African American", ""),
 
-    COMBODIAN("Cambodian*", "Asian", "Cambodian"),
+    COMBODIAN("Cambodian*", Constants.ASIAN, "Cambodian"),
 
     CARIBBEAN("Caribbean", "Black or African American", "Caribbean"),
 
-    CHINESE("Chinese*", "Asian", "Chinese"),
+    CHINESE("Chinese*", Constants.ASIAN, "Chinese"),
 
     DECLINED_TO_STATE("Declines to State*", "Declined to answer", ""),
 
     ETHIOPIAN("Ethiopian*", "Black or African American", "Ethiopian"),
 
-    FILIPINO("Filipino*", "Asian", "Filipino"),
+    FILIPINO("Filipino*", Constants.ASIAN, "Filipino"),
 
     GUAMANIAN("Guamanian*", "Native Hawaiian or Other Pacific Islander", "Guamanian"),
 
@@ -43,11 +43,11 @@ public class LegacyToIntakeCodeConveter {
 
     JAPANESE("Japanese*", Constants.ASIAN, "Japanese"),
 
-    KOREAN("Korean*", "Asian", "Korean"),
+    KOREAN("Korean*", Constants.ASIAN, "Korean"),
 
-    LAOTIAN("Laotian*", "Asian", "Laotian"),
+    LAOTIAN("Laotian*", Constants.ASIAN, "Laotian"),
 
-    OTHER_ASIAN("Other Asian*", "Asian", "Other Asian"),
+    OTHER_ASIAN("Other Asian*", Constants.ASIAN, "Other Asian"),
 
     OTHER_PACIFIC_ISLANDER("Other Pacific Islander*", "Native Hawaiian or Other Pacific Islander",
         "Other Pacific Islander"),
@@ -63,19 +63,19 @@ public class LegacyToIntakeCodeConveter {
 
     UNABLE_TO_DETERMINE("Unable to Determine*", "Abandoned", ""),
 
-    VIETNAMESE("Vietnamese*", "Asian", "Vietnamese"),
+    VIETNAMESE("Vietnamese*", Constants.ASIAN, "Vietnamese"),
 
-    WHITE_ARMENIAN("White - Armenian*", "White", "Armenian"),
+    WHITE_ARMENIAN("White - Armenian*", Constants.WHITE, "Armenian"),
 
-    WHITE_CENTRAL_AMERICAN("White - Central American*", "White", "Central American"),
+    WHITE_CENTRAL_AMERICAN("White - Central American*", Constants.WHITE, "Central American"),
 
-    WHITE_EUROPEAN("White - European*", "White", "European"),
+    WHITE_EUROPEAN("White - European*", Constants.WHITE, "European"),
 
-    WHITE_MIDDLE_EASTERN("White - Middle Eastern*", "White", "Middle Eastern"),
+    WHITE_MIDDLE_EASTERN("White - Middle Eastern*", Constants.WHITE, "Middle Eastern"),
 
-    WHITE_ROMANIAN("White - Romanian*", "White", "Romanian"),
+    WHITE_ROMANIAN("White - Romanian*", Constants.WHITE, "Romanian"),
 
-    WHITE("White*", "", "White");
+    WHITE("White*", "", Constants.WHITE);
 
     private static final Map<String, IntakeRaceCode> mapper = new HashMap<>();
 
@@ -118,6 +118,7 @@ public class LegacyToIntakeCodeConveter {
 
   private static class Constants {
     public static final String ASIAN = "Asian";
+    public static final String WHITE = "White";
   }
 
 }

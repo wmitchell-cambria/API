@@ -63,7 +63,7 @@ public class CollateralIndividualTranformer implements ParticipantMapper {
         collateralIndividual.getFirstName(), collateralIndividual.getMiddleInitialName(),
         collateralIndividual.getLastName(), collateralIndividual.getSuffixTitleDescription(),
         gender, null, null, null, collateralIndividual.getBirthDate(), new LinkedList<>(), null,
-        null, null, new HashSet<>(), addresses, phoneNumbers, false, false);
+        null, null, new HashSet<>(), addresses, phoneNumbers, Boolean.FALSE, Boolean.FALSE);
   }
 
 }

@@ -69,7 +69,8 @@ public class OtherChildInPlacemtHomeTransformer implements ParticipantMapper {
 
     return new ParticipantIntakeApi(null, null, null, otherChildLegacyDescriptor, firstName, null,
         lastName, null, gender, null, null, null, otherChildInPlacemtHome.getBirthDate(),
-        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, null, false, false);
+        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, null, Boolean.FALSE,
+        Boolean.FALSE);
   }
 
   private String setFirstName(OtherChildInPlacemtHome otherChildInPlacemtHome) {

@@ -4,12 +4,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
+import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
@@ -25,7 +27,8 @@ public class ClientTransformer implements ParticipantMapper {
   @Override
   public ParticipantIntakeApi tranform(CmsPersistentObject object) {
     Client client = (Client) object;
-    RaceAndEthnicityConveter raceAndEthnicityConveter = new RaceAndEthnicityConveter();
+    RaceAndEthnicityConverter raceAndEthnicityConverter = new RaceAndEthnicityConverter();
+    AddressConverter addressConverter = new AddressConverter();
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
             LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
@@ -35,13 +38,15 @@ public class ClientTransformer implements ParticipantMapper {
         : null;
 
     List<String> languages = setLanguages(client);
-    String races = raceAndEthnicityConveter.createRace(client);
-    String hispanic = raceAndEthnicityConveter.createHispanic(client);
+    String races = raceAndEthnicityConverter.createRace(client);
+    String hispanic = raceAndEthnicityConverter.createHispanic(client);
+    Set<AddressIntakeApi> addresses = new HashSet<>(addressConverter.convert(client));
+
     return new ParticipantIntakeApi(null, LegacyTable.CLIENT.getName(), client.getId(),
         legacyDescriptor, client.getFirstName(), client.getMiddleName(), client.getLastName(),
         client.getNameSuffix(), gender, "Age", "AgeUnit", "ssn", client.getBirthDate(), languages,
-        races, hispanic, "screeningId", new HashSet<>(), null, null, setSealedIndicator(client),
-        setSensitivieIndicator(client));
+        races, hispanic, "screeningId", new HashSet<>(), addresses, null,
+        setSealedIndicator(client), setSensitivieIndicator(client));
   }
 
   private List<String> setLanguages(Client client) {
@@ -62,17 +67,17 @@ public class ClientTransformer implements ParticipantMapper {
   }
 
   private Boolean setSealedIndicator(Client client) {
-    Boolean sealed = false;
+    Boolean sealed = Boolean.FALSE;
     if ("R".equals(client.getSensitivityIndicator())) {
-      return true;
+      return Boolean.TRUE;
     }
     return sealed;
   }
 
   private Boolean setSensitivieIndicator(Client client) {
-    Boolean sensitive = false;
+    Boolean sensitive = Boolean.FALSE;
     if ("S".equals(client.getSensitivityIndicator())) {
-      return true;
+      return Boolean.TRUE;
     }
     return sensitive;
   }
