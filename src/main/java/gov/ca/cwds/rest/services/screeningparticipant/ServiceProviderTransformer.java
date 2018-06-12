@@ -50,7 +50,7 @@ public class ServiceProviderTransformer implements ParticipantMapper {
         ? serviceProvider.getSensitivityIndicator()
         : "";
 
-    return new ParticipantIntakeApi(null, null, null, legacyDescriptor,
+    return new ParticipantIntakeApi(null, null, serviceProvider.getId(), legacyDescriptor,
         serviceProvider.getFirstName(), serviceProvider.getMiddleName(),
         serviceProvider.getLastName(), serviceProvider.getSuffixTitleDescription(), null, null,
         null, null, serviceProvider.getBirthDate(), new LinkedList<>(), null, null, null,

@@ -55,9 +55,9 @@ public class SubstituteCareProviderTransformer implements ParticipantMapper {
     return new ParticipantIntakeApi(null, null, substituteCareProvider.getId(), legacyDescriptor,
         substituteCareProvider.getFirstName(), substituteCareProvider.getMiddleName(),
         substituteCareProvider.getLastName(), substituteCareProvider.getSuffixTitleDescription(),
-        null, null, null, null, substituteCareProvider.getBirthDate(), new LinkedList<>(), null,
-        null, null, new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
-        "S".equals(sensitivityIndicator));
+        null, null, null, substituteCareProvider.getSsn(), substituteCareProvider.getBirthDate(),
+        new LinkedList<>(), null, null, null, new HashSet<>(), addresses, phoneNumbers,
+        "R".equals(sensitivityIndicator), "S".equals(sensitivityIndicator));
   }
 
 }
