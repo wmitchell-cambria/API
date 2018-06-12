@@ -36,7 +36,7 @@ public class ParticipantMapperFactoryImpl implements ParticipantMapperFactory {
       mapper = injector.getInstance(participantMapper);
     } catch (ClassNotFoundException e) {
       LOGGER.error("Unable to load the class {}", name);
-      throw new ServiceException();
+      throw new ServiceException(e);
     }
     return mapper;
   }

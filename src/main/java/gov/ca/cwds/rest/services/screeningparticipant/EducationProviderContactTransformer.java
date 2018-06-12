@@ -68,8 +68,8 @@ public class EducationProviderContactTransformer implements ParticipantMapper {
     return new ParticipantIntakeApi(null, null, null, educationProviderContactLegacyDescriptor,
         firstName, middleName, lastName, suffixTitle, educationProviderContact.getGender(), null,
         null, null, educationProviderContact.getBirthDate(), new LinkedList<>(), null, null, ssn,
-        new HashSet<>(), addresses, phoneNumbers, sensitivityIndicator.equals("R"),
-        sensitivityIndicator.equals("S"));
+        new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
+        "S".equals(sensitivityIndicator));
   }
 
 }

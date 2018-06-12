@@ -14,6 +14,10 @@ public class IntakeRaceAndEthnicity {
     // no-opt
   }
 
+  /**
+   * IntakeRace Class
+   *
+   */
   public static class IntakeRace {
     @JsonProperty("race")
     private String race;
