@@ -50,8 +50,10 @@ public class SpecialProjectReferralService {
   /**
    * Process special project for Safely Surrendered Babies.
    * 
-   * @param childClientId Child cleint ID.
+   * @param childClientId Child client ID.
    * @param referralId Referral ID
+   * @param referralReceivedDate Referral Received Date
+   * @param referralReceivedTime Referral Received Time
    * @param ssb Safely Surrendered Babies
    */
   public void processSafelySurrenderedBabies(String childClientId, String referralId,
