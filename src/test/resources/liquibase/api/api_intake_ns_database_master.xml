@@ -8,6 +8,7 @@
   <include file="liquibase/intake_ns_schema.xml"/>
   <!--<include file="../liquibase-local/intake_ns_structure.xml" relativeToChangelogFile="true"/>-->
   <include file="liquibase/intake_ns_structure.xml"/>
+  <include file="structure/api_intake_ns_structure.xml" relativeToChangelogFile="true"/>
   <include file="liquibase/intake_ns_data.xml"/>
   <include file="liquibase/data/201803140950_add_relationship_types.sql"/>
   <include file="liquibase/data/201803181933_update_relationship_types.sql"/>
