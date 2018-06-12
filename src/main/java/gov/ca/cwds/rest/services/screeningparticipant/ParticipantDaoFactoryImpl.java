@@ -33,8 +33,8 @@ public class ParticipantDaoFactoryImpl implements ParticipantDaoFactory {
           (Class<CrudsDao<CmsPersistentObject>>) Class.forName(name);
       crudsDao = injector.getInstance(daoclass);
     } catch (ClassNotFoundException e) {
-      LOGGER.error("Unable to load the class {} {}", e, name);
-      throw new ServiceException();
+      LOGGER.error("Unable to load the class {}", name);
+      throw new ServiceException(e);
     }
     return crudsDao;
   }

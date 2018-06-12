@@ -108,7 +108,7 @@ public class RaceAndEthnicityConverter {
       intakeHispanicList.add(new IntakeRaceAndEthnicity.IntakeEthnicity("No", Arrays.asList()));
     } else if (UNKNOWN.equals(client.getHispanicOriginCode())) {
       intakeHispanicList
-          .add(new IntakeRaceAndEthnicity.IntakeEthnicity("unknown", Arrays.asList()));
+          .add(new IntakeRaceAndEthnicity.IntakeEthnicity("Unknown", Arrays.asList()));
     } else if (ABANDONED.equals(client.getHispanicOriginCode())) {
       intakeHispanicList
           .add(new IntakeRaceAndEthnicity.IntakeEthnicity("Abandoned", Arrays.asList()));
