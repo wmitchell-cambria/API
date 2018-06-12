@@ -132,6 +132,9 @@ public class ScreeningEntity implements PersistentObject {
   @Column(name = "report_type")
   private String reportType;
 
+  @Column(name = "screening_status")
+  private String screeningStatus;
+
   /**
    * Default constructor
    *
@@ -170,12 +173,13 @@ public class ScreeningEntity implements PersistentObject {
    * @param participants The list of participants
    * @param assigneeStaffId The staffId of assignee
    * @param reportType report type
+   * @param screeningStatus screening status
    */
   public ScreeningEntity(String id, String reference, LocalDateTime startedAt, LocalDateTime endedAt,
       String incidentCounty, LocalDate incidentDate, String locationType, String communicationMethod,
       String name, String responseTime, String screeningDecision, String screeningDecisionDetail,
       String narrative, Address contactAddress, String assigneeStaffId,
-      Set<ParticipantEntity> participants, String reportType) {
+      Set<ParticipantEntity> participants, String reportType, String screeningStatus) {
     super();
     this.id = id;
     this.reference = reference;
@@ -193,6 +197,7 @@ public class ScreeningEntity implements PersistentObject {
     this.assigneeStaffId = assigneeStaffId;
     this.participants = participants;
     this.reportType = reportType;
+    this.screeningStatus = screeningStatus;
   }
 
   /**
@@ -511,6 +516,14 @@ public class ScreeningEntity implements PersistentObject {
 
   public void setReportType(String reportType) {
     this.reportType = reportType;
+  }
+
+  public String getScreeningStatus() {
+    return screeningStatus;
+  }
+
+  public void setScreeningStatus(String screeningStatus) {
+    this.screeningStatus = screeningStatus;
   }
 
   /**
