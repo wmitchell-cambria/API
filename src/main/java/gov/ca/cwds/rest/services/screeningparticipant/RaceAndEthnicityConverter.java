@@ -77,25 +77,19 @@ public class RaceAndEthnicityConverter {
    */
   public String createHispanic(Client client) {
     List<IntakeRaceAndEthnicity.IntakeEthnicity> intakeHispanicList = new ArrayList<>();
-    List<Short> systemIds = new ArrayList<>();
     ObjectMapper mapper = new ObjectMapper();
     String stringHispanic = null;
 
-    systemIds.add(client.getPrimaryEthnicityType());
-    client.getClientScpEthnicities().forEach(race -> systemIds.add(race.getEthnicity()));
-
-    for (Short id : systemIds) {
-      final gov.ca.cwds.rest.api.domain.cms.SystemCode systemCode =
-          SystemCodeCache.global().getSystemCode(id);
-      if (systemCode != null && HISPANIC_CODE_OTHER_ID.equals(systemCode.getOtherCd())
-          && (!CARIBBEAN_RACE_CODE.equals(id))) {
-        if (YES.equals(client.getHispanicOriginCode())) {
-          intakeHispanicList.add(new IntakeRaceAndEthnicity.IntakeEthnicity("Yes",
-              Arrays.asList(systemCode.getShortDescription())));
-        }
-      } else {
-        buildOtherHispanicCodes(client, intakeHispanicList);
+    final gov.ca.cwds.rest.api.domain.cms.SystemCode systemCode =
+        SystemCodeCache.global().getSystemCode(client.getPrimaryEthnicityType());
+    if (systemCode != null && HISPANIC_CODE_OTHER_ID.equals(systemCode.getOtherCd())
+        && (!CARIBBEAN_RACE_CODE.equals(client.getPrimaryEthnicityType()))) {
+      if (YES.equals(client.getHispanicOriginCode())) {
+        intakeHispanicList.add(new IntakeRaceAndEthnicity.IntakeEthnicity("Yes",
+            Arrays.asList(systemCode.getShortDescription())));
       }
+    } else {
+      buildOtherHispanicCodes(client, intakeHispanicList);
     }
     try {
       stringHispanic = mapper.writeValueAsString(intakeHispanicList);
