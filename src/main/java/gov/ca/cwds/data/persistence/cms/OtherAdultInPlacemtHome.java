@@ -90,6 +90,10 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
     return placementHome;
   }
 
+  public void setPlacementHome(PlacementHome placementHome) {
+    this.placementHome = placementHome;
+  }
+
   /**
    * {@inheritDoc}
    *

@@ -32,7 +32,7 @@ public class OtherAdultInPlacemtHomeTransformer implements ParticipantMapper {
   public ParticipantIntakeApi tranform(CmsPersistentObject object) {
     OtherAdultInPlacemtHome otherAdultInPlacemtHome = (OtherAdultInPlacemtHome) object;
 
-    LegacyDescriptor otherChildLegacyDescriptor =
+    LegacyDescriptor otherAdultLegacyDescriptor =
         new LegacyDescriptor(otherAdultInPlacemtHome.getId(), null,
             new DateTime(otherAdultInPlacemtHome.getLastUpdatedTime()),
             LegacyTable.ADULT_IN_PLACEMENT_HOME.getName(),
@@ -61,8 +61,9 @@ public class OtherAdultInPlacemtHomeTransformer implements ParticipantMapper {
         streetAddress, placementHome.getCityNm(), state, zip, null, placemtHomeLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
-    return new ParticipantIntakeApi(null, null, null, otherChildLegacyDescriptor, firstName, null,
-        lastName, null, otherAdultInPlacemtHome.getGenderCode(), null, null, null,
+    return new ParticipantIntakeApi(null, null, otherAdultInPlacemtHome.getId(),
+        otherAdultLegacyDescriptor, firstName, null, lastName, null,
+        otherAdultInPlacemtHome.getGenderCode(), null, null, null,
         otherAdultInPlacemtHome.getBirthDate(), new LinkedList<>(), null, null, null,
         new HashSet<>(), addresses, null, Boolean.FALSE, Boolean.FALSE);
   }
