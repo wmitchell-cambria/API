@@ -52,10 +52,17 @@ public class IntakeAddressConverter {
             LegacyTable.ADDRESS.getName(), LegacyTable.ADDRESS.getDescription());
     String streetAddress = address.getStreetNumber() + " " + address.getStreetName();
     String state = IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(address.getStateCd());
-    String zip = address.getZip() + "-" + address.getZip4();
     String type =
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(clientAddress.getAddressType());
-    return new AddressIntakeApi(null, null, streetAddress, address.getCity(), state, zip, type,
-        legacyDescriptor);
+    return new AddressIntakeApi(null, null, streetAddress, address.getCity(), state,
+        getZip(address), type, legacyDescriptor);
+  }
+
+  private String getZip(Address address) {
+    String zip = address.getZip();
+    if (address.getZip4() != null) {
+      return address.getZip() + "-" + address.getZip4();
+    }
+    return zip;
   }
 }

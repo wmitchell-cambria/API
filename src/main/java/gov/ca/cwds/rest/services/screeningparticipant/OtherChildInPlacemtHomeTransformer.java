@@ -39,10 +39,10 @@ public class OtherChildInPlacemtHomeTransformer
             LegacyTable.CHILD_IN_PLACEMENT_HOME.getDescription());
 
     String firstName = StringUtils.isNotBlank(otherChildInPlacemtHome.getName())
-        ? setFirstName(otherChildInPlacemtHome)
+        ? getFirstName(otherChildInPlacemtHome)
         : null;
     String lastName = StringUtils.isNotBlank(otherChildInPlacemtHome.getName())
-        ? setLastName(otherChildInPlacemtHome)
+        ? getLastName(otherChildInPlacemtHome)
         : otherChildInPlacemtHome.getName();
     String gender =
         StringUtils.isNotBlank(otherChildInPlacemtHome.getGenderCode())
@@ -54,7 +54,6 @@ public class OtherChildInPlacemtHomeTransformer
     String streetAddress = placementHome.getStreetNo() + " " + placementHome.getStreetNm();
     String state =
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(placementHome.getStateCode());
-    String zip = placementHome.getZipNo() + "-" + placementHome.getZipSfxNo();
 
     LegacyDescriptor placemtHomeLegacyDescriptor = new LegacyDescriptor(
         placementHome.getIdentifier(), null,
@@ -62,8 +61,9 @@ public class OtherChildInPlacemtHomeTransformer
             placementHome.getLastUpdateTime().withNano(0).format(DateTimeFormatter.ISO_DATE_TIME)),
         LegacyTable.PLACEMENT_HOME.getName(), LegacyTable.PLACEMENT_HOME.getDescription());
 
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, placementHome.getCityNm(), state, zip, null, placemtHomeLegacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(
+        Arrays.asList(new AddressIntakeApi(null, null, streetAddress, placementHome.getCityNm(),
+            state, getZip(placementHome), null, placemtHomeLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
     return new ParticipantIntakeApi(null, null, null, otherChildLegacyDescriptor, firstName, null,
@@ -72,7 +72,7 @@ public class OtherChildInPlacemtHomeTransformer
         Boolean.FALSE);
   }
 
-  private String setFirstName(OtherChildInPlacemtHome otherChildInPlacemtHome) {
+  private String getFirstName(OtherChildInPlacemtHome otherChildInPlacemtHome) {
     String fullName = otherChildInPlacemtHome.getName();
     if (!fullName.contains(" ")) {
       return null;
@@ -80,11 +80,19 @@ public class OtherChildInPlacemtHomeTransformer
     return StringUtils.split(fullName, " ", 2)[0];
   }
 
-  private String setLastName(OtherChildInPlacemtHome otherChildInPlacemtHome) {
+  private String getLastName(OtherChildInPlacemtHome otherChildInPlacemtHome) {
     String fullName = otherChildInPlacemtHome.getName();
     if (!fullName.contains(" ")) {
       return fullName;
     }
     return StringUtils.split(fullName, " ", 2)[1];
+  }
+
+  private String getZip(PlacementHome placementHome) {
+    String zip = placementHome.getZipNo();
+    if (placementHome.getZipSfxNo() != null) {
+      return placementHome.getZipNo() + "-" + placementHome.getZipSfxNo();
+    }
+    return zip;
   }
 }

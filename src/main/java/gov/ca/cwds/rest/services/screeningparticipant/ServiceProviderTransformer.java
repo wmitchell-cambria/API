@@ -35,9 +35,9 @@ public class ServiceProviderTransformer implements ParticipantMapper<ServiceProv
         .getIntakeCodeForLegacySystemCode(serviceProvider.getStateCodeType());
     String streetAddress =
         serviceProvider.getStreetNumber() + " " + serviceProvider.getStreetName();
-    String zip = serviceProvider.getZipNumber() + "-" + serviceProvider.getZipSuffixNumber();
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, serviceProvider.getCity(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses =
+        new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null, streetAddress,
+            serviceProvider.getCity(), state, getZip(serviceProvider), null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     String phoneType =
         serviceProvider.getPhoneType() != null ? serviceProvider.getPhoneType().name() : null;
@@ -53,6 +53,14 @@ public class ServiceProviderTransformer implements ParticipantMapper<ServiceProv
         null, null, serviceProvider.getBirthDate(), new LinkedList<>(), null, null, null,
         new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
         "S".equals(sensitivityIndicator));
+  }
+
+  private String getZip(ServiceProvider serviceProvider) {
+    String zip = serviceProvider.getZipNumber().toString();
+    if (serviceProvider.getZipSuffixNumber() != null) {
+      return serviceProvider.getZipNumber() + "-" + serviceProvider.getZipSuffixNumber();
+    }
+    return zip;
   }
 
 }

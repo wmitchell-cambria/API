@@ -21,7 +21,7 @@ import gov.ca.cwds.fixture.ClientScpEthnicityEntityBuilder;
  * @author CWDS API Team
  *
  */
-public class RaceAndEthnicityConverterTest {
+public class IntakeRaceAndEthnicityConverterTest {
 
   private IntakeRaceAndEthnicityConverter raceAndEthnicityConverter = new IntakeRaceAndEthnicityConverter();
 

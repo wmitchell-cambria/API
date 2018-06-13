@@ -48,16 +48,15 @@ public class EducationProviderContactTransformer
         educationProvider.getStreetNumber() + " " + educationProvider.getStreetName();
     String state =
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(educationProvider.getStateCd());
-    String zip = educationProvider.getZipNumber() + "-" + educationProvider.getZipSuffixNumber();
 
     LegacyDescriptor educationProviderLegacyDescriptor =
         new LegacyDescriptor(educationProvider.getId(), null,
             new org.joda.time.DateTime(educationProvider.getLastUpdatedTime()), "ED_PVDRT",
             "Education Provider");
 
-    Set<AddressIntakeApi> addresses =
-        new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null, streetAddress,
-            educationProvider.getCityName(), state, zip, null, educationProviderLegacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays
+        .asList(new AddressIntakeApi(null, null, streetAddress, educationProvider.getCityName(),
+            state, getZip(educationProvider), null, educationProviderLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
     Set<PhoneNumber> phoneNumbers = new HashSet<>(
@@ -69,6 +68,14 @@ public class EducationProviderContactTransformer
         null, null, educationProviderContact.getBirthDate(), new LinkedList<>(), null, null, ssn,
         new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
         "S".equals(sensitivityIndicator));
+  }
+
+  private String getZip(EducationProvider educationProvider) {
+    String zip = educationProvider.getZipNumber().toString();
+    if (educationProvider.getZipSuffixNumber() != null) {
+      return educationProvider.getZipNumber() + "-" + educationProvider.getZipSuffixNumber();
+    }
+    return zip;
   }
 
 }

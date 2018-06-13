@@ -44,11 +44,10 @@ public class CollateralIndividualTranformer implements ParticipantMapper<Collate
         collateralIndividual.getStreetNumber() + " " + collateralIndividual.getStreetName();
     String state = IntakeCodeCache.global()
         .getIntakeCodeForLegacySystemCode(collateralIndividual.getStateCode());
-    String zip =
-        collateralIndividual.getZipNumber() + "-" + collateralIndividual.getZipSuffixNumber();
 
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, collateralIndividual.getCity(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays
+        .asList(new AddressIntakeApi(null, null, streetAddress, collateralIndividual.getCity(),
+            state, getZip(collateralIndividual), null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
     String phone = collateralIndividual.getPrimaryPhoneNo() != null
@@ -62,6 +61,14 @@ public class CollateralIndividualTranformer implements ParticipantMapper<Collate
         collateralIndividual.getLastName(), collateralIndividual.getSuffixTitleDescription(),
         gender, null, null, null, collateralIndividual.getBirthDate(), new LinkedList<>(), null,
         null, null, new HashSet<>(), addresses, phoneNumbers, Boolean.FALSE, Boolean.FALSE);
+  }
+
+  private String getZip(CollateralIndividual collateralIndividual) {
+    String zip = collateralIndividual.getZipNumber().toString();
+    if (collateralIndividual.getZipSuffixNumber() != null) {
+      return collateralIndividual.getZipNumber() + "-" + collateralIndividual.getZipSuffixNumber();
+    }
+    return zip;
   }
 
 }

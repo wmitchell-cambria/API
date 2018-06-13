@@ -34,9 +34,8 @@ public class ReporterTransformer implements ParticipantMapper<Reporter> {
     String state =
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(reporter.getStateCodeType());
     String streetAddress = reporter.getStreetNumber() + " " + reporter.getStreetName();
-    String zip = reporter.getZipNumber() + "-" + reporter.getZipSuffixNumber();
     Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, reporter.getCity(), state, zip, null, legacyDescriptor)));
+        streetAddress, reporter.getCity(), state, getZip(reporter), null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     Set<PhoneNumber> phoneNumbers = new HashSet<>(
         Arrays.asList(new PhoneNumber(null, reporter.getPrimaryPhoneNumber().toString(), null)));
@@ -45,6 +44,14 @@ public class ReporterTransformer implements ParticipantMapper<Reporter> {
         reporter.getMiddleInitialName(), reporter.getLastName(),
         reporter.getSuffixTitleDescription(), null, null, null, null, null, new LinkedList<>(),
         null, null, null, new HashSet<>(), addresses, phoneNumbers, Boolean.FALSE, Boolean.FALSE);
+  }
+
+  private String getZip(Reporter reporter) {
+    String zip = reporter.getZipNumber().toString();
+    if (reporter.getZipSuffixNumber() != null) {
+      return reporter.getZipNumber() + "-" + reporter.getZipSuffixNumber();
+    }
+    return zip;
   }
 
 }

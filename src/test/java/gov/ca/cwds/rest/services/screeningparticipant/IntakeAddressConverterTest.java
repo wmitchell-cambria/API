@@ -26,7 +26,7 @@ import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
  * @author CWDS API Team
  *
  */
-public class AddressConverterTest {
+public class IntakeAddressConverterTest {
 
   private IntakeAddressConverter addressConverter = new IntakeAddressConverter();
 

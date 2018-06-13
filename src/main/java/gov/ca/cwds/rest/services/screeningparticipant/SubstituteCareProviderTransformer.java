@@ -38,10 +38,9 @@ public class SubstituteCareProviderTransformer
         .getIntakeCodeForLegacySystemCode(substituteCareProvider.getStateCodeType());
     String streetAddress =
         substituteCareProvider.getStreetNumber() + " " + substituteCareProvider.getStreetName();
-    String zip =
-        substituteCareProvider.getZipNumber() + "-" + substituteCareProvider.getZipSuffixNumber();
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, substituteCareProvider.getCityName(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(
+        new AddressIntakeApi(null, null, streetAddress, substituteCareProvider.getCityName(), state,
+            getZip(substituteCareProvider), null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     String sensitivityIndicator = substituteCareProvider.getSensitivityIndicator() != null
         ? substituteCareProvider.getSensitivityIndicator()
@@ -56,6 +55,15 @@ public class SubstituteCareProviderTransformer
         null, null, null, substituteCareProvider.getSsn(), substituteCareProvider.getBirthDate(),
         new LinkedList<>(), null, null, null, new HashSet<>(), addresses, phoneNumbers,
         "R".equals(sensitivityIndicator), "S".equals(sensitivityIndicator));
+  }
+
+  private String getZip(SubstituteCareProvider substituteCareProvider) {
+    String zip = substituteCareProvider.getZipNumber().toString();
+    if (substituteCareProvider.getZipSuffixNumber() != null) {
+      return substituteCareProvider.getZipNumber() + "-"
+          + substituteCareProvider.getZipSuffixNumber();
+    }
+    return zip;
   }
 
 }

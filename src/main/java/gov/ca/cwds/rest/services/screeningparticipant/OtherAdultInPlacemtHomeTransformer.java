@@ -38,17 +38,16 @@ public class OtherAdultInPlacemtHomeTransformer
             LegacyTable.ADULT_IN_PLACEMENT_HOME.getDescription());
 
     String firstName = StringUtils.isNotBlank(otherAdultInPlacemtHome.getName())
-        ? setFirstName(otherAdultInPlacemtHome)
+        ? getFirstName(otherAdultInPlacemtHome)
         : null;
     String lastName = StringUtils.isNotBlank(otherAdultInPlacemtHome.getName())
-        ? setLastName(otherAdultInPlacemtHome)
+        ? getLastName(otherAdultInPlacemtHome)
         : otherAdultInPlacemtHome.getName();
 
     PlacementHome placementHome = otherAdultInPlacemtHome.getPlacementHome();
     String streetAddress = placementHome.getStreetNo() + " " + placementHome.getStreetNm();
     String state =
         IntakeCodeCache.global().getIntakeCodeForLegacySystemCode(placementHome.getStateCode());
-    String zip = placementHome.getZipNo() + "-" + placementHome.getZipSfxNo();
 
     LegacyDescriptor placemtHomeLegacyDescriptor = new LegacyDescriptor(
         placementHome.getIdentifier(), null,
@@ -56,8 +55,9 @@ public class OtherAdultInPlacemtHomeTransformer
             placementHome.getLastUpdateTime().withNano(0).format(DateTimeFormatter.ISO_DATE_TIME)),
         LegacyTable.PLACEMENT_HOME.getName(), LegacyTable.PLACEMENT_HOME.getDescription());
 
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
-        streetAddress, placementHome.getCityNm(), state, zip, null, placemtHomeLegacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(
+        Arrays.asList(new AddressIntakeApi(null, null, streetAddress, placementHome.getCityNm(),
+            state, getZip(placementHome), null, placemtHomeLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
     return new ParticipantIntakeApi(null, null, null, otherAdultLegacyDescriptor, firstName, null,
@@ -66,7 +66,7 @@ public class OtherAdultInPlacemtHomeTransformer
         new HashSet<>(), addresses, null, Boolean.FALSE, Boolean.FALSE);
   }
 
-  private String setFirstName(OtherAdultInPlacemtHome otherAdultInPlacemtHome) {
+  private String getFirstName(OtherAdultInPlacemtHome otherAdultInPlacemtHome) {
     String fullName = otherAdultInPlacemtHome.getName();
     if (!fullName.contains(" ")) {
       return null;
@@ -74,11 +74,19 @@ public class OtherAdultInPlacemtHomeTransformer
     return StringUtils.split(fullName, " ", 2)[0];
   }
 
-  private String setLastName(OtherAdultInPlacemtHome otherAdultInPlacemtHome) {
+  private String getLastName(OtherAdultInPlacemtHome otherAdultInPlacemtHome) {
     String fullName = otherAdultInPlacemtHome.getName();
     if (!fullName.contains(" ")) {
       return fullName;
     }
     return StringUtils.split(fullName, " ", 2)[1];
+  }
+
+  private String getZip(PlacementHome placementHome) {
+    String zip = placementHome.getZipNo();
+    if (placementHome.getZipSfxNo() != null) {
+      return placementHome.getZipNo() + "-" + placementHome.getZipSfxNo();
+    }
+    return zip;
   }
 }
