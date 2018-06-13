@@ -22,11 +22,13 @@ public class FerbDateUtilsTest {
   }
 
   @Test
-  public void testUtcToPst() throws Exception {
-    String ldtValue = "2017-01-03T03:10:09";
-    LocalDateTime ldt = LocalDateTime.parse(ldtValue);
-    LocalDateTime shiftedLdt = FerbDateUtils.utcToPst(ldt);
-    assertEquals("2017-01-02T19:10:09", shiftedLdt.toString());
+  public void testUtcToSystemTime() throws Exception {
+    String supposedSystemValue = "2017-01-03T03:10:09";
+    LocalDateTime supposedSystemTime = LocalDateTime.parse(supposedSystemValue);
+    LocalDateTime utcDateTimeForCurrentSystemTime = FerbDateUtils.shiftTimeZone(supposedSystemTime, ZoneId.systemDefault(), ZoneOffset.UTC);
+
+    LocalDateTime shiftedLdt = FerbDateUtils.utcToSystemTime(utcDateTimeForCurrentSystemTime);
+    assertEquals("2017-01-03T03:10:09", shiftedLdt.toString());
   }
 
 }

@@ -132,8 +132,7 @@ public class HOIReferralService extends
     final Map<String, StaffPerson> staffPersonsMap = staffPersonDao.findByIds(staffPersonIds);
     for (Referral referral : hrd.getReferrals().values()) {
       String staffPersonId = referral.getPrimaryContactStaffPersonId();
-      referral.setStaffPerson(
-          staffPersonId == null ? null : staffPersonsMap.getOrDefault(staffPersonId, null));
+      referral.setStaffPerson(staffPersonsMap.get(staffPersonId));
     }
   }
 

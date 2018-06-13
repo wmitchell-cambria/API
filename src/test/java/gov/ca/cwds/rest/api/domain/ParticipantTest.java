@@ -78,7 +78,7 @@ public class ParticipantTest {
   @ClassRule
   public static JerseyGuiceRule rule = new JerseyGuiceRule();
 
-   @Before
+  @Before
   public void setup() {
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     validator = factory.getValidator();
@@ -98,8 +98,8 @@ public class ParticipantTest {
    */
   @Test
   public void serializesToJSON() throws Exception {
-    
-    Participant participant = new ParticipantResourceBuilder().createParticipant();
+
+    Participant participant = new ParticipantResourceBuilder().createVictimParticipant();
     String expected = MAPPER.writeValueAsString(participant);
 
     String serialized = MAPPER.writeValueAsString(MAPPER
@@ -110,14 +110,14 @@ public class ParticipantTest {
 
   @Test
   public void deserializesFromJSON() throws Exception {
-    Participant participant = new ParticipantResourceBuilder().createParticipant();
- 
+    Participant participant = new ParticipantResourceBuilder().createVictimParticipant();
+
     Participant serialized = MAPPER
         .readValue(fixture("fixtures/domain/participant/valid/valid.json"), Participant.class);
-    
+
     String p = MAPPER.writeValueAsString(participant);
     String e = MAPPER.writeValueAsString(serialized);
-    
+
     assertThat(serialized, is(participant));
   }
 

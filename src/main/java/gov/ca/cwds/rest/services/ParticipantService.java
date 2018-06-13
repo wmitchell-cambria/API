@@ -65,6 +65,7 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ParticipantService implements CrudsService {
 
   private static final String ASSESMENT = "A";
+  private static final String CLIENT = "CLIENT_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 
@@ -131,12 +132,13 @@ public class ParticipantService implements CrudsService {
   /**
    * @param screeningToReferral - screeningToReferral
    * @param dateStarted - dateStarted
+   * @param timeStarted - timeStarted
    * @param referralId - referralId
    * @param messageBuilder - messageBuilder
    * @return the savedParticiants
    */
   public ClientParticipants saveParticipants(ScreeningToReferral screeningToReferral,
-      String dateStarted, String referralId, MessageBuilder messageBuilder) {
+      String dateStarted, String timeStarted, String referralId, MessageBuilder messageBuilder) {
     ClientParticipants clientParticipants = new ClientParticipants();
 
     Set<Participant> participants = screeningToReferral.getParticipants();
@@ -152,7 +154,7 @@ public class ParticipantService implements CrudsService {
         sexAtBirth = incomingParticipant.getGender().toUpperCase().substring(0, 1);
       }
       Set<String> roles = new HashSet<>(incomingParticipant.getRoles());
-      processReporterRole(screeningToReferral, dateStarted, referralId, messageBuilder,
+      processReporterRole(screeningToReferral, dateStarted, timeStarted, referralId, messageBuilder,
           clientParticipants, incomingParticipant, sexAtBirth, roles);
     } // next participant
 
@@ -160,8 +162,9 @@ public class ParticipantService implements CrudsService {
   }
 
   private void processReporterRole(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String sexAtBirth, Set<String> roles) {
+      String timeStarted, String referralId, MessageBuilder messageBuilder,
+      ClientParticipants clientParticipants, Participant incomingParticipant, String sexAtBirth,
+      Set<String> roles) {
     /**
      * process the roles of this participant
      */
@@ -174,8 +177,8 @@ public class ParticipantService implements CrudsService {
             role);
 
       } else if (!ParticipantValidator.roleIsAnyReporter(role)) {
-        saveClient(screeningToReferral, dateStarted, referralId, messageBuilder, clientParticipants,
-            incomingParticipant, sexAtBirth, role);
+        saveClient(screeningToReferral, dateStarted, timeStarted, referralId, messageBuilder,
+            clientParticipants, incomingParticipant, sexAtBirth, role);
       }
       clientParticipants.addParticipant(incomingParticipant);
     } // next role
@@ -187,13 +190,15 @@ public class ParticipantService implements CrudsService {
   }
 
   private void saveClient(ScreeningToReferral screeningToReferral, String dateStarted,
-      String referralId, MessageBuilder messageBuilder, ClientParticipants clientParticipants,
-      Participant incomingParticipant, String sexAtBirth, String role) {
+      String timeStarted, String referralId, MessageBuilder messageBuilder,
+      ClientParticipants clientParticipants, Participant incomingParticipant, String sexAtBirth,
+      String role) {
     String clientId;
 
     LegacyDescriptor clientLegacyDesc = incomingParticipant.getLegacyDescriptor();
     boolean newClient = clientLegacyDesc == null || StringUtils.isBlank(clientLegacyDesc.getId())
         || !StringUtils.equals(clientLegacyDesc.getTableName(), LegacyTable.CLIENT.getName());
+
 
     if (newClient) {
       clientId = createNewClient(screeningToReferral, dateStarted, messageBuilder,
@@ -213,8 +218,9 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, referralId, messageBuilder, incomingParticipant.getCsecs(),
-            incomingParticipant.getSafelySurrenderedBabies(), screeningToReferral.getReportType());
+        processChildClient(clientId, referralId, dateStarted, timeStarted, messageBuilder,
+            incomingParticipant.getCsecs(), incomingParticipant.getSafelySurrenderedBabies(),
+            screeningToReferral.getReportType());
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -416,9 +422,9 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, String referralId,
-      MessageBuilder messageBuilder, List<Csec> csecs, SafelySurrenderedBabies ssb,
-      String reportType) {
+  private ChildClient processChildClient(String clientId, String referralId, String dateStarted,
+      String timeStarted, MessageBuilder messageBuilder, List<Csec> csecs,
+      SafelySurrenderedBabies ssb, String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -432,7 +438,8 @@ public class ParticipantService implements CrudsService {
 
     if (FerbConstants.ReportType.SSB.equals(reportType)
         && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
-      specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId, ssb);
+      specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId,
+          java.time.LocalDate.parse(dateStarted), java.time.LocalTime.parse(timeStarted), ssb);
     }
 
     return exsistingChild;
@@ -581,4 +588,12 @@ public class ParticipantService implements CrudsService {
     this.sexualExploitationTypeDao = sexualExploitationTypeDao;
   }
 
+  public SpecialProjectReferralService getSpecialProjectReferralService() {
+    return specialProjectReferralService;
+  }
+
+  public void setSpecialProjectReferralService(
+      SpecialProjectReferralService specialProjectReferralService) {
+    this.specialProjectReferralService = specialProjectReferralService;
+  }
 }

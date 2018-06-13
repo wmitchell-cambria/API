@@ -164,6 +164,13 @@ public class TestSystemCodeCache implements SystemCodeCache {
         return true;
       }
     }
+
+    if (SystemCodeCategoryId.REMOVEF_FROM_CARE_TAKER_TYPE.equals(metaId)) {
+      if (1592 == systemCodeId.intValue()) {
+        return true;
+      }
+    }
+
     return false;
   }
 

@@ -49,6 +49,7 @@ import gov.ca.cwds.rest.resources.ScreeningToReferralResource;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.ResourceTestRule;
 
+@SuppressWarnings("javadoc")
 public class ScreeningToReferralTest {
 
   private static final String ROOT_RESOURCE = "/" + Api.RESOURCE_REFERRALS + "/";;
@@ -61,9 +62,9 @@ public class ScreeningToReferralTest {
 
   private Integer method = 2095; // "electronic report";
   private String informDate = "2017-03-15";
-  private Set<Participant> participants = new HashSet<Participant>();
-  private Set<CrossReport> crossReports = new HashSet<CrossReport>();
-  private Set<Allegation> allegations = new HashSet<Allegation>();
+  private Set<Participant> participants = new HashSet<>();
+  private Set<CrossReport> crossReports = new HashSet<>();
+  private Set<Allegation> allegations = new HashSet<>();
   private long id = 2;
   private boolean filedOutOfState = false;
   private String countyId = "1101";
@@ -125,7 +126,7 @@ public class ScreeningToReferralTest {
   public void shouldSerializeToJSON() throws Exception {
 
     Address address = new AddressResourceBuilder().createAddress();
-    Participant participant = new ParticipantResourceBuilder().createParticipant();
+    Participant participant = new ParticipantResourceBuilder().createVictimParticipant();
     participants.add(participant);
     CrossReport crossReport = new CrossReport("", "", "", filedOutOfState, method, informDate,
         countyId, Sets.newHashSet());
@@ -222,6 +223,7 @@ public class ScreeningToReferralTest {
       System.out.println(message.getMessage());
     }
     assertThat(messageBuilder.getMessages().isEmpty(), is(true));
+
   }
 
   @Test
@@ -597,6 +599,7 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("R").createScreeningToReferral();
     assertTrue("Expected access to be limited", screeningToReferral.isAccessLimited());
+
   }
 
   @Test
@@ -604,6 +607,7 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode("N").createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
+
   }
 
   @Test
@@ -611,6 +615,7 @@ public class ScreeningToReferralTest {
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setLimitedAccessCode(null).createScreeningToReferral();
     assertFalse("Expected access to not be limited", screeningToReferral.isAccessLimited());
+
   }
 
   private Participant validParticipant() {
@@ -631,5 +636,4 @@ public class ScreeningToReferralTest {
       return null;
     }
   }
-
 }

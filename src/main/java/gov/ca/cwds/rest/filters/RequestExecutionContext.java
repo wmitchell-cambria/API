@@ -2,6 +2,7 @@ package gov.ca.cwds.rest.filters;
 
 import java.util.Date;
 
+import gov.ca.cwds.auth.realms.PerryUserIdentity;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 
 /**
@@ -76,6 +77,13 @@ public interface RequestExecutionContext {
    * @return The request start time
    */
   Date getRequestStartTime();
+
+  /**
+   * Get logged in user's identity
+   * 
+   * @return Logged in user's identity
+   */
+  PerryUserIdentity getUserIdentity();
 
   /**
    * Get the message builder for warnings and errors for this request.

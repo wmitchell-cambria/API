@@ -409,7 +409,7 @@ public class R07577CreateDummyDocsForReferralTest extends Doofenshmirtz<ClientAd
     }
 
     clientParticipants.addParticipants(participants);
-    when(participantService.saveParticipants(any(), any(), any(), any()))
+    when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
   }
 

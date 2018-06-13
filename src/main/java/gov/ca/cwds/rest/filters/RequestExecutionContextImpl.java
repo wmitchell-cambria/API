@@ -101,15 +101,22 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   @Override
   public String getStaffId() {
     String staffId = null;
-    PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
-    if (userIdentity == null) {
-      userIdentity = DEFAULT_IDENTITY;
-    }
+    PerryUserIdentity userIdentity = getUserIdentity();
 
     if (userIdentity != null) {
       staffId = userIdentity.getStaffId();
     }
     return staffId;
+  }
+
+  @Override
+  public PerryUserIdentity getUserIdentity() {
+    PerryUserIdentity userIdentity = (PerryUserIdentity) get(Parameter.USER_IDENTITY);
+    if (userIdentity == null) {
+      userIdentity = DEFAULT_IDENTITY;
+    }
+
+    return userIdentity;
   }
 
   @Override

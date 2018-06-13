@@ -41,9 +41,9 @@ import gov.ca.cwds.rest.services.cms.AllegationService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
-import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 import gov.ca.cwds.rest.validation.StartDateTimeValidator;
+import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Business layer object to work on {@link Screening}.
@@ -84,13 +84,14 @@ public class ScreeningToReferralService implements CrudsService {
    * @param clientRelationshipDao clientRelationshipDao
    */
   @Inject
-  public ScreeningToReferralService(XaCmsReferralService referralService,
+  public ScreeningToReferralService(ReferralService referralService,
       AllegationService allegationService, CrossReportService crossReportService,
       ParticipantService participantService, Validator validator, ReferralDao referralDao,
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
       GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
       ClientRelationshipDao clientRelationshipDao) {
+
     super();
     this.clientRelationshipDao = clientRelationshipDao;
     this.referralService = referralService;
@@ -105,34 +106,38 @@ public class ScreeningToReferralService implements CrudsService {
     this.governmentOrganizationCrossReportService = governmentOrganizationCrossReportService;
   }
 
+  @UnitOfWork(value = "cms")
   @Override
   public Response create(Request request) {
     ScreeningToReferral screeningToReferral = (ScreeningToReferral) request;
     verifyReferralHasValidParticipants(screeningToReferral);
 
     /**
-     * <p>
-     * BUSINESS RULE: "R - 05446" - Default dateStarted and timeStarted.
-     * </p>
+     * <blockquote>
      * 
-     * <p>
-     * Referral received date and received time need to set when referral was created.
-     * </p>
+     * <pre>
+     * BUSINESS RULE: "R - 05446" - Default dateStarted and timeStarted
+     * 
+     * Referral received date and received time need to set when referral was created 
+     * </blockquote>
+     * </pre>
      */
-    final String dateStarted =
+    String dateStarted =
         StartDateTimeValidator.extractStartDate(screeningToReferral.getStartedAt(), messageBuilder);
-    final String timeStarted =
+    String timeStarted =
         StartDateTimeValidator.extractStartTime(screeningToReferral.getStartedAt(), messageBuilder);
-    final String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
-    final ClientParticipants clientParticipants =
-        processParticipants(screeningToReferral, dateStarted, referralId, messageBuilder);
+    String referralId = createCmsReferral(screeningToReferral, dateStarted, timeStarted);
 
-    final Set<CrossReport> resultCrossReports = createCrossReports(screeningToReferral, referralId);
-    final Set<Allegation> resultAllegations = createAllegations(screeningToReferral, referralId,
+    ClientParticipants clientParticipants = processParticipants(screeningToReferral, dateStarted,
+        timeStarted, referralId, messageBuilder);
+
+    Set<CrossReport> resultCrossReports = createCrossReports(screeningToReferral, referralId);
+
+    Set<Allegation> resultAllegations = createAllegations(screeningToReferral, referralId,
         clientParticipants.getVictimIds(), clientParticipants.getPerpetratorIds());
 
-    final PostedScreeningToReferral pstr =
+    PostedScreeningToReferral pstr =
         PostedScreeningToReferral.createWithDefaults(referralId, screeningToReferral,
             clientParticipants.getParticipants(), resultCrossReports, resultAllegations);
 
@@ -177,9 +182,10 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   private ClientParticipants processParticipants(ScreeningToReferral screeningToReferral,
-      String dateStarted, String referralId, MessageBuilder messageBuilder) {
-    return participantService.saveParticipants(screeningToReferral, dateStarted, referralId,
-        messageBuilder);
+      String dateStarted, String timeStarted, String referralId, MessageBuilder messageBuilder) {
+
+    return participantService.saveParticipants(screeningToReferral, dateStarted, timeStarted,
+        referralId, messageBuilder);
   }
 
   private String createCmsReferral(ScreeningToReferral screeningToReferral, String dateStarted,
@@ -211,27 +217,26 @@ public class ScreeningToReferralService implements CrudsService {
   }
 
   /**
-   * <p>
-   * <strong>DocTool Rule R - 00796</strong>
-   * </p>
-   * 
-   * <p>
-   * If the user had originally indicated that the call should be treated as a referral, and that
-   * referral had been committed to the database, that referral must be deleted from the system.
-   * Also deleted would be any referral clients associated with the referral, any clients associated
-   * to the referral if that referral had been their only interaction with the system, and all
-   * allegations associated with the referral. Do NOT delete the client if the client already exists
-   * on the Host and associated to other Case or Referral.
-   * </p>
-   * 
-   * <p>
-   * This rule involves deleting a referral and associated referral clients, clients and
-   * allegations. Since there is no business requirement at this time to delete a referral we will
-   * not be implementing this rule. A NO-OP delete method is provided that gives a Not Implemented
-   * Exception.
-   * </p>
+   * {@inheritDoc}
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#delete(java.io.Serializable)
+   * 
+   *      <pre>
+   * 
+   * DocTool Rule R - 00796 
+   * 
+   * If the user had originally indicated that the call should be treated as a referral,
+   * and that referral had been committed to the database, that referral must be deleted from the
+   * system. Also deleted would be any referral clients associated with the referral, any clients
+   * associated to the referral if that referral had been their only interaction with the system,
+   * and all allegations associated with the referral. Do NOT delete the client if the client
+   * already exists on the Host and associated to other Case or Referral.
+   * 
+   * This rule involves deleting a referral and associated referral clients, clients and
+   * allegations. Since there is no business requirement at this time to delete a referral we will
+   * not be implementing this rule. A NO-OP delete method is provided that gives a Not
+   * Implemented Exception.
+   *      </pre>
    */
   @Override
   public Response delete(Serializable primaryKey) {
@@ -266,13 +271,16 @@ public class ScreeningToReferralService implements CrudsService {
    */
   private Set<gov.ca.cwds.rest.api.domain.CrossReport> processCrossReports(ScreeningToReferral scr,
       String referralId) {
+
     String crossReportId = "";
     Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports = new HashSet<>();
     Set<CrossReport> crossReports;
     crossReports = scr.getCrossReports();
 
     if (crossReports != null) {
+
       for (CrossReport crossReport : crossReports) {
+
         Boolean outStateLawEnforcementIndicator = Boolean.FALSE;
         String outStateLawEnforcementAddr = "";
 
@@ -291,6 +299,7 @@ public class ScreeningToReferralService implements CrudsService {
       String crossReportId, Set<gov.ca.cwds.rest.api.domain.CrossReport> resultCrossReports,
       CrossReport crossReport, Boolean outStateLawEnforcementIndicator,
       String outStateLawEnforcementAddr) {
+
     if (StringUtils.isBlank(crossReport.getLegacyId())) {
       persistCrossReport(screeningToReferral, referralId, crossReportId, resultCrossReports,
           crossReport, outStateLawEnforcementIndicator, outStateLawEnforcementAddr);
@@ -302,6 +311,7 @@ public class ScreeningToReferralService implements CrudsService {
             " Legacy Id on Cross Report does not correspond to an existing CMS/CWS Cross Report ";
         ServiceException se = new ServiceException(message);
         logError(message, se);
+
       }
     }
   }
@@ -376,6 +386,7 @@ public class ScreeningToReferralService implements CrudsService {
    */
   private Set<Allegation> processAllegations(ScreeningToReferral scr, String referralId,
       Map<Long, String> perpatratorClient, Map<Long, String> victimClient) {
+
     Set<Allegation> processedAllegations = new HashSet<>();
     Set<Allegation> allegations;
     String victimClientId = "";
@@ -405,6 +416,7 @@ public class ScreeningToReferralService implements CrudsService {
     }
 
     for (Allegation allegation : allegations) {
+
       if (!validateAllegationHasVictim(scr, allegation)) {
         victimClientId =
             getClientLegacyId(victimClient, victimClientId, allegation.getVictimPersonId());
@@ -422,7 +434,6 @@ public class ScreeningToReferralService implements CrudsService {
         }
       }
     }
-
     return processedAllegations;
   }
 
@@ -432,6 +443,7 @@ public class ScreeningToReferralService implements CrudsService {
     if (allegation.getLegacyId() == null || allegation.getLegacyId().isEmpty()) {
       persistAllegation(scr, referralId, processedAllegations, victimClientId, perpatratorClientId,
           allegationDispositionType, allegation);
+
     } else {
       gov.ca.cwds.rest.api.domain.cms.Allegation foundAllegation =
           this.allegationService.find(allegation.getLegacyId());
@@ -488,6 +500,7 @@ public class ScreeningToReferralService implements CrudsService {
   private void persistAllegation(ScreeningToReferral scr, String referralId,
       Set<Allegation> processedAllegations, String victimClientId, String perpatratorClientId,
       final Short allegationDispositionType, Allegation allegation) {
+
     gov.ca.cwds.rest.api.domain.cms.Allegation cmsAllegation =
         new gov.ca.cwds.rest.api.domain.cms.Allegation("", LegacyDefaultValues.DEFAULT_CODE, "",
             scr.getLocationType(), "", allegationDispositionType, allegation.getType(), "", "",
@@ -522,7 +535,9 @@ public class ScreeningToReferralService implements CrudsService {
             DomainChef.cookDate(RequestExecutionContext.instance().getRequestStartTime()));
 
     messageBuilder.addDomainValidationError(validator.validate(cmsPerpHistory));
-    allegationPerpetratorHistoryService.create(cmsPerpHistory);
+
+    this.allegationPerpetratorHistoryService.create(cmsPerpHistory);
   }
+
 
 }

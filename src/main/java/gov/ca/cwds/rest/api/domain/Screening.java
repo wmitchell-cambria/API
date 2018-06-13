@@ -143,6 +143,9 @@ public class Screening extends ReportingDomain implements Request, Response {
   @JsonProperty("report_type")
   private String reportType;
 
+  @JsonProperty("screening_status")
+  private String screeningStatus;
+
   /**
    * default constructor
    */
@@ -165,7 +168,7 @@ public class Screening extends ReportingDomain implements Request, Response {
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,
       String screeningDecisionDetail, String assignee, LocalDateTime startedAt, String referralId,
-      String assigneeStaffId, String reportType) {
+      String assigneeStaffId, String reportType, String screeningStatus) {
     super();
     this.id = id;
     this.name = name;
@@ -177,6 +180,7 @@ public class Screening extends ReportingDomain implements Request, Response {
     this.referralId = referralId;
     this.assigneeStaffId = assigneeStaffId;
     this.reportType = reportType;
+    this.screeningStatus = screeningStatus;
   }
 
   /**
@@ -412,6 +416,14 @@ public class Screening extends ReportingDomain implements Request, Response {
 
   public void setReportType(String reportType) {
     this.reportType = reportType;
+  }
+
+  public String getScreeningStatus() {
+    return screeningStatus;
+  }
+
+  public void setScreeningStatus(String screeningStatus) {
+    this.screeningStatus = screeningStatus;
   }
 
   /**

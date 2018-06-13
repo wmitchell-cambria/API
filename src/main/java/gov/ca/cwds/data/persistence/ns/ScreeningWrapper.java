@@ -58,10 +58,13 @@ public class ScreeningWrapper implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date startedAt;
 
+  @Column(name = "screening_status")
+  private String screeningStatus;
+
   public ScreeningWrapper() {}
 
   public ScreeningWrapper(String id, String reference, String name, String screeningDecision,
-      String screeningDecisionDetail, String assigneeStaffId, Date startedAt) {
+      String screeningDecisionDetail, String assigneeStaffId, Date startedAt, String screeningStatus) {
     this.id = id;
     this.reference = reference;
     this.name = name;
@@ -70,6 +73,7 @@ public class ScreeningWrapper implements Serializable {
     this.assignee = null;
     this.assigneeStaffId = assigneeStaffId;
     this.startedAt = freshDate(startedAt);
+    this.screeningStatus = screeningStatus;
   }
 
   public String getId() {
@@ -134,6 +138,14 @@ public class ScreeningWrapper implements Serializable {
 
   public void setStartedAt(Date startedAt) {
     this.startedAt = freshDate(startedAt);
+  }
+
+  public String getScreeningStatus() {
+    return screeningStatus;
+  }
+
+  public void setScreeningStatus(String screeningStatus) {
+    this.screeningStatus = screeningStatus;
   }
 
   /**

@@ -10,6 +10,7 @@ import gov.ca.cwds.rest.api.domain.Csec;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
+import gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies;
 
 
 /**
@@ -41,6 +42,7 @@ public class ParticipantResourceBuilder {
   Set<gov.ca.cwds.rest.api.domain.Address> addresses;
   RaceAndEthnicity raceAndEthnicity;
   List<Csec> csecs;
+  SafelySurrenderedBabies safelySurrenderedBabies;
 
   /**
    * 
@@ -59,8 +61,6 @@ public class ParticipantResourceBuilder {
         new AddressResourceBuilder().setStreetAddress("123 First St").setCity("San Jose")
             .setState(1828).setZip("94321").createAddress();
     this.addresses = new HashSet<>(Arrays.asList(address));
-    csecs = new ArrayList<>();
-    csecs.add(new CsecBuilder().createCsec());
   }
 
   /**
@@ -268,6 +268,9 @@ public class ParticipantResourceBuilder {
    */
   public Participant createVictimParticipant() {
     this.roles = new HashSet<>(Arrays.asList("Victim"));
+    csecs = new ArrayList<>();
+    csecs.add(new CsecBuilder().createCsec());
+    safelySurrenderedBabies = new SafelySurrenderedBabiesBuilder().build();
     return createParticipant();
   }
 
@@ -314,11 +317,13 @@ public class ParticipantResourceBuilder {
    * @return the Participant
    */
   public Participant createParticipant() {
-    return new Participant(id, legacySourceTable, legacyId, legacyDescriptor, firstName, middleName,
-        lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage, secondaryLanguage, screeningId,
-        reporterConfidentialWaiver, reporterEmployerName, clientStaffPersonAdded,
-        sensitivityIndicator, approximateAge, approximateAgeUnits, roles, addresses,
-        raceAndEthnicity, csecs);
+    Participant participant = new Participant(id, legacySourceTable, legacyId, legacyDescriptor,
+        firstName, middleName, lastName, suffix, gender, ssn, dateOfBirth, primaryLanguage,
+        secondaryLanguage, screeningId, reporterConfidentialWaiver, reporterEmployerName,
+        clientStaffPersonAdded, sensitivityIndicator, approximateAge, approximateAgeUnits, roles,
+        addresses, raceAndEthnicity, csecs);
+    participant.setSafelySurrenderedBabies(safelySurrenderedBabies);
+    return participant;
   }
 
 }
