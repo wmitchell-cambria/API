@@ -46,9 +46,20 @@ public class ClientTransformer implements ParticipantMapper {
 
     return new ParticipantIntakeApi(null, LegacyTable.CLIENT.getName(), client.getId(),
         legacyDescriptor, client.getFirstName(), client.getMiddleName(), client.getLastName(),
-        client.getNameSuffix(), gender, null, null, "ssn", client.getBirthDate(), languages, races,
-        hispanic, null, new HashSet<>(), addresses, null, setSealedIndicator(client),
-        setSensitivieIndicator(client));
+        client.getNameSuffix(), gender, null, null, setSsn(client), client.getBirthDate(),
+        languages, races, hispanic, null, new HashSet<>(), addresses, null,
+        setSealedIndicator(client), setSensitivieIndicator(client));
+  }
+
+  private String setSsn(Client client) {
+    String ssn = client.getSocialSecurityNumber();
+    if (StringUtils.isNotBlank(ssn) && ssn != "0") {
+      StringBuilder builder = new StringBuilder(client.getSocialSecurityNumber());
+      builder.insert(3, "-");
+      builder.insert(6, "-");
+      return builder.toString();
+    }
+    return ssn;
   }
 
   private List<String> setLanguages(Client client) {

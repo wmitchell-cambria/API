@@ -14,7 +14,6 @@ import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
-import gov.ca.cwds.rest.services.screeningparticipant.ClientTransformer;
 
 /**
  * @author CWDS API Team
@@ -73,6 +72,16 @@ public class ClientTransformerTest {
     ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
     assertThat(participantIntakeApi.getLanguages(),
         containsInAnyOrder("English", "American Sign Language"));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformSsnCorrectly() {
+    Client client = new ClientEntityBuilder().setSocialSecurityNumber("345674389").build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getSsn(), is(equalTo("345-67-4389")));
   }
 
   /**
