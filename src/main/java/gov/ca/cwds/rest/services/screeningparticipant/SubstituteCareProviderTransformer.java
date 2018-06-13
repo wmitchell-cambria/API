@@ -41,9 +41,8 @@ public class SubstituteCareProviderTransformer implements ParticipantMapper {
         substituteCareProvider.getStreetNumber() + " " + substituteCareProvider.getStreetName();
     String zip =
         substituteCareProvider.getZipNumber() + "-" + substituteCareProvider.getZipSuffixNumber();
-    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(
-        new AddressIntakeApi(LegacyTable.SUBSTITUTE_CARE_PROVIDER.getName(), null, streetAddress,
-            substituteCareProvider.getCityName(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
+        streetAddress, substituteCareProvider.getCityName(), state, zip, null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     String sensitivityIndicator = substituteCareProvider.getSensitivityIndicator() != null
         ? substituteCareProvider.getSensitivityIndicator()
@@ -52,7 +51,7 @@ public class SubstituteCareProviderTransformer implements ParticipantMapper {
     Set<PhoneNumber> phoneNumbers = new HashSet<>(Arrays.asList(
         new PhoneNumber(null, substituteCareProvider.getAdditionalPhoneNumber().toString(), null)));
 
-    return new ParticipantIntakeApi(null, null, substituteCareProvider.getId(), legacyDescriptor,
+    return new ParticipantIntakeApi(null, null, null, legacyDescriptor,
         substituteCareProvider.getFirstName(), substituteCareProvider.getMiddleName(),
         substituteCareProvider.getLastName(), substituteCareProvider.getSuffixTitleDescription(),
         null, null, null, substituteCareProvider.getSsn(), substituteCareProvider.getBirthDate(),

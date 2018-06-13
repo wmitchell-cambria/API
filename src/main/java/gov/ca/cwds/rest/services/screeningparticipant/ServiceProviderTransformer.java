@@ -38,9 +38,8 @@ public class ServiceProviderTransformer implements ParticipantMapper {
     String streetAddress =
         serviceProvider.getStreetNumber() + " " + serviceProvider.getStreetName();
     String zip = serviceProvider.getZipNumber() + "-" + serviceProvider.getZipSuffixNumber();
-    Set<AddressIntakeApi> addresses =
-        new HashSet<>(Arrays.asList(new AddressIntakeApi(LegacyTable.SERVICE_PROVIDER.getName(),
-            null, streetAddress, serviceProvider.getCity(), state, zip, null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
+        streetAddress, serviceProvider.getCity(), state, zip, null, legacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
     String phoneType =
         serviceProvider.getPhoneType() != null ? serviceProvider.getPhoneType().name() : null;
@@ -50,7 +49,7 @@ public class ServiceProviderTransformer implements ParticipantMapper {
         ? serviceProvider.getSensitivityIndicator()
         : "";
 
-    return new ParticipantIntakeApi(null, null, serviceProvider.getId(), legacyDescriptor,
+    return new ParticipantIntakeApi(null, null, null, legacyDescriptor,
         serviceProvider.getFirstName(), serviceProvider.getMiddleName(),
         serviceProvider.getLastName(), serviceProvider.getSuffixTitleDescription(), null, null,
         null, null, serviceProvider.getBirthDate(), new LinkedList<>(), null, null, null,

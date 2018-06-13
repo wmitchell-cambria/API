@@ -92,12 +92,11 @@ public class SubstituteCareProviderTransformerTest {
     LegacyDescriptor legacyDescriptor = new LegacyDescriptor("aQqUhBQF11", null, lastUpdated,
         LegacyTable.SUBSTITUTE_CARE_PROVIDER.getName(),
         LegacyTable.SUBSTITUTE_CARE_PROVIDER.getDescription());
-    Set<AddressIntakeApi> addresses = new HashSet<>(
-        Arrays.asList(new AddressIntakeApi(LegacyTable.SUBSTITUTE_CARE_PROVIDER.getName(), null,
-            "Number 5th St", "Sacramento", "CA", "95814-0", null, legacyDescriptor)));
+    Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
+        "Number 5th St", "Sacramento", "CA", "95814-0", null, legacyDescriptor)));
     Set<PhoneNumber> phoneNumbers = new HashSet<>(Arrays.asList(new PhoneNumber(null, "0", null)));
-    ParticipantIntakeApi expected = new ParticipantIntakeApi(null, null, "aQqUhBQF11",
-        legacyDescriptor, "Fish", "N", "Tuna", "Description", null, null, null, "000994415",
+    ParticipantIntakeApi expected = new ParticipantIntakeApi(null, null, null, legacyDescriptor,
+        "Fish", "N", "Tuna", "Description", null, null, null, "000994415",
         validSubstituteCareProvider().getBirthDate(), new LinkedList<>(), null, null, null,
         new HashSet<>(), addresses, phoneNumbers, false, false);
     SubstituteCareProvider substituteCareProvider = validSubstituteCareProvider();

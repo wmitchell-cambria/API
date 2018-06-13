@@ -56,8 +56,8 @@ public class EducationProviderContactTransformer implements ParticipantMapper {
             new org.joda.time.DateTime(educationProvider.getLastUpdatedTime()), "ED_PVDRT",
             "Education Provider");
 
-    Set<AddressIntakeApi> addresses = new HashSet<>(
-        Arrays.asList(new AddressIntakeApi("ED_PVDRT", educationProvider.getId(), streetAddress,
+    Set<AddressIntakeApi> addresses =
+        new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null, streetAddress,
             educationProvider.getCityName(), state, zip, null, educationProviderLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
@@ -65,10 +65,9 @@ public class EducationProviderContactTransformer implements ParticipantMapper {
         Arrays.asList(new PhoneNumber(null, educationProviderContact.getPhoneNumber(), null)));
 
 
-    return new ParticipantIntakeApi(null, null, educationProviderContact.getId(),
-        educationProviderContactLegacyDescriptor, firstName, middleName, lastName, suffixTitle,
-        educationProviderContact.getGender(), null, null, null,
-        educationProviderContact.getBirthDate(), new LinkedList<>(), null, null, ssn,
+    return new ParticipantIntakeApi(null, null, null, educationProviderContactLegacyDescriptor,
+        firstName, middleName, lastName, suffixTitle, educationProviderContact.getGender(), null,
+        null, null, educationProviderContact.getBirthDate(), new LinkedList<>(), null, null, ssn,
         new HashSet<>(), addresses, phoneNumbers, "R".equals(sensitivityIndicator),
         "S".equals(sensitivityIndicator));
   }

@@ -104,10 +104,10 @@ public class OtherAdultInPlacemtHomeTransformerTest {
     Set<AddressIntakeApi> addresses = new HashSet<>(Arrays.asList(new AddressIntakeApi(null, null,
         "streetNumber streetName", "Sacramento", "CA", "99999-0", null, addressLegacyDescriptor)));
     Set<PhoneNumber> phoneNumbers = null;
-    ParticipantIntakeApi expected = new ParticipantIntakeApi(null, null, "AhfOGkK0QO",
-        legacyDescriptor, "Karen", null, "Q", null, "M", null, null, null,
-        validOtherAdultInPlacemtHome().getBirthDate(), new LinkedList<>(), null, null, null,
-        new HashSet<>(), addresses, phoneNumbers, false, false);
+    ParticipantIntakeApi expected =
+        new ParticipantIntakeApi(null, null, null, legacyDescriptor, "Karen", null, "Q", null, "M",
+            null, null, null, validOtherAdultInPlacemtHome().getBirthDate(), new LinkedList<>(),
+            null, null, null, new HashSet<>(), addresses, phoneNumbers, false, false);
     OtherAdultInPlacemtHome otherAdultInPlacemtHome = validOtherAdultInPlacemtHome();
     ParticipantIntakeApi actual =
         otherAdultInPlacemtHomeTransformer.tranform(otherAdultInPlacemtHome);

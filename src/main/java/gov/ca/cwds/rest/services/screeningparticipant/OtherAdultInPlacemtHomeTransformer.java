@@ -61,9 +61,8 @@ public class OtherAdultInPlacemtHomeTransformer implements ParticipantMapper {
         streetAddress, placementHome.getCityNm(), state, zip, null, placemtHomeLegacyDescriptor)));
     addresses = Collections.unmodifiableSet(addresses);
 
-    return new ParticipantIntakeApi(null, null, otherAdultInPlacemtHome.getId(),
-        otherAdultLegacyDescriptor, firstName, null, lastName, null,
-        otherAdultInPlacemtHome.getGenderCode(), null, null, null,
+    return new ParticipantIntakeApi(null, null, null, otherAdultLegacyDescriptor, firstName, null,
+        lastName, null, otherAdultInPlacemtHome.getGenderCode(), null, null, null,
         otherAdultInPlacemtHome.getBirthDate(), new LinkedList<>(), null, null, null,
         new HashSet<>(), addresses, null, Boolean.FALSE, Boolean.FALSE);
   }
