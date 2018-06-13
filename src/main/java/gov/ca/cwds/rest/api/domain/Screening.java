@@ -163,7 +163,8 @@ public class Screening extends ReportingDomain implements Request, Response {
    * @param startedAt - startedAt
    * @param referralId referral id, if provided
    * @param assigneeStaffId - assignee Id
-   * @param reportType report type
+   * @param reportType - report type
+   * @param screeningStatus - screening status
    */
   @SuppressWarnings("squid:S00107")
   public Screening(String id, String name, String reference, String screeningDecision,

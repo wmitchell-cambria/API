@@ -1,6 +1,8 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -35,6 +37,10 @@ public class EducationProviderContact extends BaseEducationProviderContact {
    */
   private static final long serialVersionUID = 1L;
 
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "FKED_PVDRT", nullable = false, updatable = false, insertable = false)
+  private EducationProvider educationProvider;
+
   /**
    * Default constructor
    * 
@@ -63,10 +69,9 @@ public class EducationProviderContact extends BaseEducationProviderContact {
    * @param titleDescription The title description
    */
   public EducationProviderContact(String departmentOfEducationIndicator, String emailAddress,
-      Long faxNumber, String firstName, String fKeyEducationProvider, String id,
-      String lastName, String middleName, String namePrefixDescription, Integer phoneExtension,
-      Long phoneNumber, String primaryContactIndicator, String suffixTitleDescription,
-      String titleDescription) {
+      Long faxNumber, String firstName, String fKeyEducationProvider, String id, String lastName,
+      String middleName, String namePrefixDescription, Integer phoneExtension, Long phoneNumber,
+      String primaryContactIndicator, String suffixTitleDescription, String titleDescription) {
 
     this.departmentOfEducationIndicator = departmentOfEducationIndicator;
     this.emailAddress = emailAddress;
@@ -82,6 +87,18 @@ public class EducationProviderContact extends BaseEducationProviderContact {
     this.primaryContactIndicator = primaryContactIndicator;
     this.suffixTitleDescription = suffixTitleDescription;
     this.titleDescription = titleDescription;
+  }
+
+  /**
+   * @return the education provider
+   */
+  public EducationProvider getEducationProvider() {
+    return educationProvider;
+  }
+
+
+  public void setEducationProvider(EducationProvider educationProvider) {
+    this.educationProvider = educationProvider;
   }
 
   /**

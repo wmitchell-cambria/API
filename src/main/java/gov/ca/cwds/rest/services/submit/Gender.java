@@ -30,7 +30,7 @@ public enum Gender {
    */
   INTERSEX("I", "intersex");
 
-  private static final Map<String, Gender> mapByNsDescription = new HashMap<>();
+  private static final Map<String, Gender> genderMapper = new HashMap<>();
 
   private final String nsDescription;
   private final String cmsDescription;
@@ -44,14 +44,29 @@ public enum Gender {
     return cmsDescription;
   }
 
+  public String getNsDescription() {
+    return nsDescription;
+  }
+
   public static Gender findByNsDescription(String nsDescription) {
-    return mapByNsDescription.containsKey(nsDescription) ? mapByNsDescription.get(nsDescription)
+    return genderMapper.containsKey(nsDescription) ? genderMapper.get(nsDescription)
         : Gender.UNKNOWN;
   }
 
   static {
     for (Gender e : Gender.values()) {
-      mapByNsDescription.put(e.nsDescription, e);
+      genderMapper.put(e.nsDescription, e);
+    }
+  }
+
+  public static Gender findByCmsDescription(String cmsDescription) {
+    return genderMapper.containsKey(cmsDescription) ? genderMapper.get(cmsDescription)
+        : Gender.UNKNOWN;
+  }
+
+  static {
+    for (Gender e : Gender.values()) {
+      genderMapper.put(e.cmsDescription, e);
     }
   }
 

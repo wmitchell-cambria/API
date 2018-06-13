@@ -47,9 +47,9 @@ public class IntakeCodeConveterTest {
    * 
    */
   @Test
-  public void findLegacyDescpretionNull_Args__String() {
+  public void findfindLegacyDescriptionNull_Args__String() {
     String intakeValue = null;
-    IntakeCodeConveter actual = IntakeCodeConveter.findLegacyDescpretion(intakeValue);
+    IntakeCodeConveter actual = IntakeCodeConveter.findLegacyDescription(intakeValue);
     IntakeCodeConveter expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
@@ -58,9 +58,9 @@ public class IntakeCodeConveterTest {
    * 
    */
   @Test
-  public void findLegacyDescpretion_ToGet_LegacyValue() {
+  public void findfindLegacyDescription_ToGet_LegacyValue() {
     String intakeValue = "Unknown";
-    String actual = IntakeCodeConveter.findLegacyDescpretion(intakeValue).getLegacyValue();
+    String actual = IntakeCodeConveter.findLegacyDescription(intakeValue).getLegacyValue();
     String expected = IntakeCodeConveter.UNKNOWN.getLegacyValue();
     assertThat(actual, is(equalTo(expected)));
   }

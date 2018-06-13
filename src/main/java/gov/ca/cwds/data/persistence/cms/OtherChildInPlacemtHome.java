@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQuery;
@@ -13,6 +15,7 @@ import org.hibernate.annotations.NamedQuery;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 
@@ -32,6 +35,10 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 public class OtherChildInPlacemtHome extends BaseOtherChildInPlacemtHome {
 
   private static final long serialVersionUID = 1L;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "FKPLC_HM_T", nullable = false, updatable = false, insertable = false)
+  private PlacementHome placementHome;
 
   /**
    * Default constructor
@@ -59,6 +66,20 @@ public class OtherChildInPlacemtHome extends BaseOtherChildInPlacemtHome {
     this.genderCode = genderCode;
     this.id = id;
     this.name = name;
+  }
+
+  /**
+   * @return the placementHome
+   */
+  public PlacementHome getPlacementHome() {
+    return placementHome;
+  }
+
+  /**
+   * @param placementHome - placementHome
+   */
+  public void setPlacementHome(PlacementHome placementHome) {
+    this.placementHome = placementHome;
   }
 
 }

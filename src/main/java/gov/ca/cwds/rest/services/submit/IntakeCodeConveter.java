@@ -104,7 +104,7 @@ public enum IntakeCodeConveter {
    * @param intakeValue - intakeValue
    * @return the legacy value
    */
-  public static IntakeCodeConveter findLegacyDescpretion(String intakeValue) {
+  public static IntakeCodeConveter findLegacyDescription(String intakeValue) {
     return mapper.containsKey(intakeValue) ? mapper.get(intakeValue) : null;
   }
 

@@ -66,6 +66,10 @@ import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+import gov.ca.cwds.rest.services.screeningparticipant.ClientTransformer;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantDaoFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -211,7 +215,11 @@ public class ServicesModule extends AbstractModule {
     bind(AuthorizationService.class);
     bind(ScreeningRelationshipService.class);
     bind(CsecHistoryService.class);
+    bind(ScreeningParticipantService.class);
+    bind(ParticipantDaoFactoryImpl.class);
+    bind(ParticipantMapperFactoryImpl.class);
     bind(SpecialProjectReferralService.class);
+    bind(ClientTransformer.class);
 
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
