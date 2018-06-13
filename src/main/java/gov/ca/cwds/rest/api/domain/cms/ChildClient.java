@@ -660,6 +660,15 @@ public class ChildClient extends ReportingDomain implements Request, Response {
   }
 
   /**
+   * Sets safelySurrendedBabiesIndicatorVar.
+   * 
+   * @param safelySurrendedBabiesIndicatorVar
+   */
+  public void setSafelySurrendedBabiesIndicatorVar(Boolean safelySurrendedBabiesIndicatorVar) {
+    this.safelySurrendedBabiesIndicatorVar = safelySurrendedBabiesIndicatorVar;
+  }
+
+  /**
    * @return the saw1EligApplicationIndicatorVar
    */
   public Boolean getSaw1EligApplicationIndicatorVar() {
