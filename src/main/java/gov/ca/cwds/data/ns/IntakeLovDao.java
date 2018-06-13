@@ -56,7 +56,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
     final Session session = grabSession();
-    Transaction txn = session.getTransaction();
+    Transaction txn = joinTransaction(session);
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
 
@@ -82,7 +82,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacySystemId";
 
     final Session session = grabSession();
-    Transaction txn = session.getTransaction();
+    Transaction txn = joinTransaction(session);
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
 
