@@ -88,6 +88,26 @@ public class ClientTransformerTest {
    * 
    */
   @Test
+  public void testTranformSsnWhen0() {
+    Client client = new ClientEntityBuilder().setSocialSecurityNumber("0").build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getSsn(), is(equalTo("0")));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testTranformSsnWhenNull() {
+    Client client = new ClientEntityBuilder().setSocialSecurityNumber(null).build();
+    ParticipantIntakeApi participantIntakeApi = clientTransformer.tranform(client);
+    assertThat(participantIntakeApi.getSsn(), is(equalTo("")));
+  }
+
+  /**
+   * 
+   */
+  @Test
   public void testTranformWhenOnlyPrimatyLanguageSet() {
     Client client = new ClientEntityBuilder().setPrimaryLanguageType((short) 1248)
         .setSecondaryLanguageType((short) 0).build();
