@@ -178,7 +178,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
    * @param participationEndDate - participation end date
    */
   public void setParticipationEndDate(Date participationEndDate) {
-    this.participationEndDate = participationEndDate;
+    this.participationEndDate = freshDate(participationEndDate);
   }
 
   /**
@@ -194,7 +194,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
    * @param participationStartDate - participation start date
    */
   public void setParticipationStartDate(Date participationStartDate) {
-    this.participationStartDate = participationStartDate;
+    this.participationStartDate = freshDate(participationStartDate);
   }
 
   /**

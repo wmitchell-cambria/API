@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,16 +77,6 @@ public class SpecialProjectReferralServiceTest {
     assertThat(sprPosted.getClass(), is(PostedSpecialProjectReferral.class));
   }
 
-  @Test
-  public void shouldThrowAssertionErrorCreate() throws Exception {
-    thrown.expect(AssertionError.class);
-    try {
-      PostedSpecialProjectReferral sprPosted = specialProjectReferralService.create(null);
-    } catch (AssertionError e) {
-      assertEquals("Expected AssertionError", e.getMessage());
-    }
-  }
-  
   @Test
   public void shouldReturnPostedSpecialProjectReferralWhenSave() throws Exception {
     List<Csec> csecs = new ArrayList();
