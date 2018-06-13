@@ -21,23 +21,23 @@ public class LegacyToIntakeCodeConveter {
 
     ASIAN_INDIAN("Asian Indian*", Constants.ASIAN, "Asian Indian"),
 
-    BLACK("Black*", "Black or African American", ""),
+    BLACK("Black*", Constants.BLACK_AMERICAN, ""),
 
     COMBODIAN("Cambodian*", Constants.ASIAN, "Cambodian"),
 
-    CARIBBEAN("Caribbean", "Black or African American", "Caribbean"),
+    CARIBBEAN("Caribbean", Constants.BLACK_AMERICAN, "Caribbean"),
 
     CHINESE("Chinese*", Constants.ASIAN, "Chinese"),
 
     DECLINED_TO_STATE("Declines to State*", "Declined to answer", ""),
 
-    ETHIOPIAN("Ethiopian*", "Black or African American", "Ethiopian"),
+    ETHIOPIAN("Ethiopian*", Constants.BLACK_AMERICAN, "Ethiopian"),
 
     FILIPINO("Filipino*", Constants.ASIAN, "Filipino"),
 
-    GUAMANIAN("Guamanian*", "Native Hawaiian or Other Pacific Islander", "Guamanian"),
+    GUAMANIAN("Guamanian*", Constants.NATIVE_HAWAIIAN, "Guamanian"),
 
-    HAWAIIAN("Hawaiian*", "Native Hawaiian or Other Pacific Islander", "Hawaiian"),
+    HAWAIIAN("Hawaiian*", Constants.NATIVE_HAWAIIAN, "Hawaiian"),
 
     HMONG("Hmong*", Constants.ASIAN, "Hmong"),
 
@@ -49,17 +49,17 @@ public class LegacyToIntakeCodeConveter {
 
     OTHER_ASIAN("Other Asian*", Constants.ASIAN, "Other Asian"),
 
-    OTHER_PACIFIC_ISLANDER("Other Pacific Islander*", "Native Hawaiian or Other Pacific Islander",
+    OTHER_PACIFIC_ISLANDER("Other Pacific Islander*", Constants.NATIVE_HAWAIIAN,
         "Other Pacific Islander"),
 
     OTHER_RACE_UNKNOWN("Other Race Unknown*", "Unknown", ""),
 
-    OTHER_ASIAN_ISLANDER("Other Asian/Pacific Islander*",
-        "Native Hawaiian or Other Pacific Islander", "Other Asian/Pacific Islander"),
+    OTHER_ASIAN_ISLANDER("Other Asian/Pacific Islander*", Constants.NATIVE_HAWAIIAN,
+        "Other Asian/Pacific Islander"),
 
-    POLYNESIAN("Polynesian*", "Native Hawaiian or Other Pacific Islander", "Polynesian"),
+    POLYNESIAN("Polynesian*", Constants.NATIVE_HAWAIIAN, "Polynesian"),
 
-    SAMOAN("Samoan*", "Native Hawaiian or Other Pacific Islander", "Samoan"),
+    SAMOAN("Samoan*", Constants.NATIVE_HAWAIIAN, "Samoan"),
 
     UNABLE_TO_DETERMINE("Unable to Determine*", "Abandoned", ""),
 
@@ -119,6 +119,8 @@ public class LegacyToIntakeCodeConveter {
   private static class Constants {
     public static final String ASIAN = "Asian";
     public static final String WHITE = "White";
+    public static final String NATIVE_HAWAIIAN = "Native Hawaiian or Other Pacific Islander";
+    public static final String BLACK_AMERICAN = "Black or African American";
   }
 
 }

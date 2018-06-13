@@ -53,7 +53,7 @@ public class ClientTransformer implements ParticipantMapper {
 
   private String setSsn(Client client) {
     String ssn = client.getSocialSecurityNumber();
-    if (StringUtils.isNotBlank(ssn) && ssn != "0") {
+    if ((ssn != "0") && StringUtils.isNotBlank(ssn)) {
       StringBuilder builder = new StringBuilder(client.getSocialSecurityNumber());
       builder.insert(3, "-");
       builder.insert(6, "-");
