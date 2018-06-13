@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.persistence.cms.Client;
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -23,13 +22,13 @@ import gov.ca.cwds.rest.services.submit.Gender;
  * @author CWDS API Team
  *
  */
-public class ClientTransformer implements ParticipantMapper {
+public class ClientTransformer implements ParticipantMapper<Client> {
 
   @Override
-  public ParticipantIntakeApi tranform(CmsPersistentObject object) {
-    Client client = (Client) object;
-    RaceAndEthnicityConverter raceAndEthnicityConverter = new RaceAndEthnicityConverter();
-    AddressConverter addressConverter = new AddressConverter();
+  public ParticipantIntakeApi tranform(Client client) {
+    IntakeRaceAndEthnicityConverter intakeRaceAndEthnicityConverter =
+        new IntakeRaceAndEthnicityConverter();
+    IntakeAddressConverter intakeAddressConverter = new IntakeAddressConverter();
     LegacyDescriptor legacyDescriptor =
         new LegacyDescriptor(client.getId(), null, new DateTime(client.getLastUpdatedTime()),
             LegacyTable.CLIENT.getName(), LegacyTable.CLIENT.getDescription());
@@ -38,20 +37,20 @@ public class ClientTransformer implements ParticipantMapper {
         ? (Gender.findByCmsDescription(client.getGenderCode().toUpperCase())).getNsDescription()
         : null;
 
-    List<String> languages = setLanguages(client);
-    String races = raceAndEthnicityConverter.createRace(client);
-    String hispanic = raceAndEthnicityConverter.createHispanic(client);
-    Set<AddressIntakeApi> addresses = new HashSet<>(addressConverter.convert(client));
+    List<String> languages = getLanguages(client);
+    String races = intakeRaceAndEthnicityConverter.createRace(client);
+    String hispanic = intakeRaceAndEthnicityConverter.createHispanic(client);
+    Set<AddressIntakeApi> addresses = new HashSet<>(intakeAddressConverter.convert(client));
     addresses = Collections.unmodifiableSet(addresses);
 
     return new ParticipantIntakeApi(null, LegacyTable.CLIENT.getName(), client.getId(),
         legacyDescriptor, client.getFirstName(), client.getMiddleName(), client.getLastName(),
-        client.getNameSuffix(), gender, null, null, setSsn(client), client.getBirthDate(),
+        client.getNameSuffix(), gender, null, null, convertSSN(client), client.getBirthDate(),
         languages, races, hispanic, null, new HashSet<>(), addresses, null,
-        setSealedIndicator(client), setSensitivieIndicator(client));
+        getSealedIndicator(client), getSensitivieIndicator(client));
   }
 
-  private String setSsn(Client client) {
+  private String convertSSN(Client client) {
     String ssn = client.getSocialSecurityNumber();
     if ((ssn != "0") && StringUtils.isNotBlank(ssn)) {
       StringBuilder builder = new StringBuilder(client.getSocialSecurityNumber());
@@ -62,7 +61,7 @@ public class ClientTransformer implements ParticipantMapper {
     return ssn;
   }
 
-  private List<String> setLanguages(Client client) {
+  private List<String> getLanguages(Client client) {
     List<String> languages = new LinkedList<>();
     if (client.getPrimaryLanguageType() == 0) {
       return languages;
@@ -79,7 +78,7 @@ public class ClientTransformer implements ParticipantMapper {
     return languages;
   }
 
-  private Boolean setSealedIndicator(Client client) {
+  private Boolean getSealedIndicator(Client client) {
     Boolean sealed = Boolean.FALSE;
     if ("R".equals(client.getSensitivityIndicator())) {
       return Boolean.TRUE;
@@ -87,7 +86,7 @@ public class ClientTransformer implements ParticipantMapper {
     return sealed;
   }
 
-  private Boolean setSensitivieIndicator(Client client) {
+  private Boolean getSensitivieIndicator(Client client) {
     Boolean sensitive = Boolean.FALSE;
     if ("S".equals(client.getSensitivityIndicator())) {
       return Boolean.TRUE;

@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.cms.EducationProvider;
 import gov.ca.cwds.data.persistence.cms.EducationProviderContact;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
@@ -24,11 +23,11 @@ import gov.ca.cwds.rest.api.domain.PhoneNumber;
  * @author CWDS API Team
  *
  */
-public class EducationProviderContactTransformer implements ParticipantMapper {
+public class EducationProviderContactTransformer
+    implements ParticipantMapper<EducationProviderContact> {
 
   @Override
-  public ParticipantIntakeApi tranform(CmsPersistentObject object) {
-    EducationProviderContact educationProviderContact = (EducationProviderContact) object;
+  public ParticipantIntakeApi tranform(EducationProviderContact educationProviderContact) {
 
     LegacyDescriptor educationProviderContactLegacyDescriptor =
         new LegacyDescriptor(educationProviderContact.getId(), null,

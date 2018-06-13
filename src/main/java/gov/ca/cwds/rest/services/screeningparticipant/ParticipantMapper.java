@@ -5,15 +5,17 @@ import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 
 /**
  * @author CWDS API Team
+ * 
+ * @param <P> - CmsPersistentObject
  *
  */
 @FunctionalInterface
-public interface ParticipantMapper {
+public interface ParticipantMapper<P extends CmsPersistentObject> {
 
   /**
    * @param object - object
    * @return the object
    */
-  ParticipantIntakeApi tranform(CmsPersistentObject object);
+  ParticipantIntakeApi tranform(P object);
 
 }

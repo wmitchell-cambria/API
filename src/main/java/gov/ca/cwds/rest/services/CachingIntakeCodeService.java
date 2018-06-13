@@ -96,11 +96,11 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   }
 
   @Override
-  public IntakeLov getIntakeLov(Number leacySystemCodeId) {
-    if (leacySystemCodeId == null || Integer.valueOf("0").equals(leacySystemCodeId.intValue())) {
+  public IntakeLov getIntakeLov(Number legacySystemCodeId) {
+    if (legacySystemCodeId == null || Integer.valueOf("0").equals(legacySystemCodeId.intValue())) {
       return null;
     }
-    return (IntakeLov) getFromCache(CacheKey.createForSystemCode(leacySystemCodeId));
+    return (IntakeLov) getFromCache(CacheKey.createForSystemCode(legacySystemCodeId));
   }
 
   @Override

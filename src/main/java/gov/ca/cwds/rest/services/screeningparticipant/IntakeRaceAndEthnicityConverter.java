@@ -23,8 +23,8 @@ import gov.ca.cwds.rest.services.ServiceException;
  * @author CWDS API Team
  *
  */
-public class RaceAndEthnicityConverter {
-  private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityConverter.class);
+public class IntakeRaceAndEthnicityConverter {
+  private static final Logger LOGGER = LoggerFactory.getLogger(IntakeRaceAndEthnicityConverter.class);
 
   private static final String HISPANIC_CODE_OTHER_ID = "02";
   private static final Short CARIBBEAN_RACE_CODE = 3162;

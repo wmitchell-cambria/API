@@ -67,7 +67,6 @@ import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
 import gov.ca.cwds.rest.services.screeningparticipant.ClientTransformer;
-// import gov.ca.cwds.rest.api.services.screeningparticipant.ClientTransformer;
 import gov.ca.cwds.rest.services.screeningparticipant.ParticipantDaoFactoryImpl;
 import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
 import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;

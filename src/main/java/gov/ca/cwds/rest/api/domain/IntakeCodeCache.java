@@ -58,10 +58,10 @@ public interface IntakeCodeCache extends ApiMarker {
   /**
    * Get the valid IntakeLov object using legacy systemId
    * 
-   * @param leacySystemCodeId - leacySystemCodeId
+   * @param legacySystemCodeId - legacySystemCodeId
    * @return the intakeLov
    */
-  IntakeLov getIntakeLov(Number leacySystemCodeId);
+  IntakeLov getIntakeLov(Number legacySystemCodeId);
 
   /**
    * Get the valid intake Code based on the legacy systemId

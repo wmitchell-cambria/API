@@ -46,9 +46,9 @@ public class ScreeningParticipantService
     if (StringUtils.isBlank(incomingParticipantIntakeApi.getScreeningId())) {
       LOGGER.error("Screening is required to create the particpant {}",
           incomingParticipantIntakeApi.getScreeningId());
-      throw new ServiceException();
+      throw new ServiceException("Screening is required to create the particpant");
     }
-    isScreeningExists(incomingParticipantIntakeApi);
+    ensureScreeningExists(incomingParticipantIntakeApi);
     ParticipantIntakeApi participantIntakeApi = null;
     LegacyDescriptor legacyDescriptor = incomingParticipantIntakeApi.getLegacyDescriptor();
 
@@ -72,14 +72,14 @@ public class ScreeningParticipantService
       return participantMapper.tranform(persistentObject);
     } else {
       LOGGER.error("Object is not found with the given identifier {}", id);
-      throw new ServiceException();
+      throw new ServiceException("");
     }
   }
 
-  private void isScreeningExists(ParticipantIntakeApi participantIntakeApi) {
+  private void ensureScreeningExists(ParticipantIntakeApi participantIntakeApi) {
     if (screeningDao.find(participantIntakeApi.getScreeningId()) == null) {
       LOGGER.error("Screening not found {}", participantIntakeApi.getScreeningId());
-      throw new EntityNotFoundException();
+      throw new EntityNotFoundException("Screening not found");
     }
   }
 

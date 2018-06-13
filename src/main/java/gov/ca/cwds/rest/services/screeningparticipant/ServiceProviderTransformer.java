@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.cms.ServiceProvider;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
@@ -23,11 +22,10 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
  * @author CWDS API Team
  *
  */
-public class ServiceProviderTransformer implements ParticipantMapper {
+public class ServiceProviderTransformer implements ParticipantMapper<ServiceProvider> {
 
   @Override
-  public ParticipantIntakeApi tranform(CmsPersistentObject object) {
-    ServiceProvider serviceProvider = (ServiceProvider) object;
+  public ParticipantIntakeApi tranform(ServiceProvider serviceProvider) {
 
     LegacyDescriptor legacyDescriptor = new LegacyDescriptor(serviceProvider.getId(), null,
         new DateTime(serviceProvider.getLastUpdatedTime()), LegacyTable.SERVICE_PROVIDER.getName(),

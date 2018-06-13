@@ -55,7 +55,7 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
   public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
-    final Session session = getCurrentSession();
+    final Session session = grabSession();
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
@@ -80,8 +80,8 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
    */
   public IntakeLov findByLegacySystemCodeId(Number legacySystemCodeId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacySystemId";
-    Session session = getCurrentSession();
 
+    final Session session = grabSession();
     Transaction txn = session.getTransaction();
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();

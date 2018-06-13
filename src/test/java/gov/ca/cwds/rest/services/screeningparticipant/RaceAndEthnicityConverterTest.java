@@ -23,7 +23,7 @@ import gov.ca.cwds.fixture.ClientScpEthnicityEntityBuilder;
  */
 public class RaceAndEthnicityConverterTest {
 
-  private RaceAndEthnicityConverter raceAndEthnicityConverter = new RaceAndEthnicityConverter();
+  private IntakeRaceAndEthnicityConverter raceAndEthnicityConverter = new IntakeRaceAndEthnicityConverter();
 
   /**
    * Initialize intake code cache

@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.cms.OtherChildInPlacemtHome;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
@@ -27,11 +26,11 @@ import gov.ca.cwds.rest.services.submit.Gender;
  * @author CWDS API Team
  *
  */
-public class OtherChildInPlacemtHomeTransformer implements ParticipantMapper {
+public class OtherChildInPlacemtHomeTransformer
+    implements ParticipantMapper<OtherChildInPlacemtHome> {
 
   @Override
-  public ParticipantIntakeApi tranform(CmsPersistentObject object) {
-    OtherChildInPlacemtHome otherChildInPlacemtHome = (OtherChildInPlacemtHome) object;
+  public ParticipantIntakeApi tranform(OtherChildInPlacemtHome otherChildInPlacemtHome) {
 
     LegacyDescriptor otherChildLegacyDescriptor =
         new LegacyDescriptor(otherChildInPlacemtHome.getId(), null,

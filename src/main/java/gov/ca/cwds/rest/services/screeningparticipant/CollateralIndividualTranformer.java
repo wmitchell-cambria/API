@@ -9,7 +9,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
-import gov.ca.cwds.data.persistence.cms.CmsPersistentObject;
 import gov.ca.cwds.data.persistence.cms.CollateralIndividual;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
@@ -26,11 +25,10 @@ import gov.ca.cwds.rest.services.submit.Gender;
  * @author CWDS API Team
  *
  */
-public class CollateralIndividualTranformer implements ParticipantMapper {
+public class CollateralIndividualTranformer implements ParticipantMapper<CollateralIndividual> {
 
   @Override
-  public ParticipantIntakeApi tranform(CmsPersistentObject object) {
-    CollateralIndividual collateralIndividual = (CollateralIndividual) object;
+  public ParticipantIntakeApi tranform(CollateralIndividual collateralIndividual) {
 
     LegacyDescriptor legacyDescriptor = new LegacyDescriptor(collateralIndividual.getId(), null,
         new DateTime(collateralIndividual.getLastUpdatedTime()),

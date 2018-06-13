@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
  * @author CWDS API Team
  *
  */
-public class AddressConverter {
+public class IntakeAddressConverter {
 
   private static final Short RESIDENCE = 32;
 
