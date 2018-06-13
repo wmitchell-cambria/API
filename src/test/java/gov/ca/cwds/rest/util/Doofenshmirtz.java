@@ -64,7 +64,7 @@ import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
 import gov.ca.cwds.data.cms.CrossReportDao;
 import gov.ca.cwds.data.cms.CwsOfficeDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
@@ -236,7 +236,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public IntakeLOVCodeDao intakeLOVCodeDao;
   public IntakeLovDao intakeLovDao;
   public LACountyTrigger laCountyTrigger;
-  public LongTextDaoImpl longTextDao;
+  public LongTextDao longTextDao;
   public NonCWSNumberDao nonCWSNumberDao;
   public SafelySurrenderedBabiesDao safelySurrenderedBabiesDao;
   public SpecialProjectDao specialProjectDao;
@@ -701,7 +701,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
 
   public Screening inatorMakeScreening() {
     return new Screening("abc", "screening", "reference", "screeningDecision",
-        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "");
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "", "Open");
   }
 
   public PerryAccount inatorPerryAccountWithPrivileges(String... privileges) {

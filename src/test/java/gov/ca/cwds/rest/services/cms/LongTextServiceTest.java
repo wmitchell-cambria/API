@@ -25,7 +25,7 @@ import org.mockito.stubbing.Answer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
@@ -41,7 +41,7 @@ import io.dropwizard.jackson.Jackson;
 public class LongTextServiceTest {
   private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
   private LongTextService longTextService;
-  private LongTextDaoImpl longTextDao;
+  private LongTextDao longTextDao;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -49,7 +49,7 @@ public class LongTextServiceTest {
   @Before
   public void setup() throws Exception {
     new TestingRequestExecutionContext("02f");
-    longTextDao = mock(LongTextDaoImpl.class);
+    longTextDao = mock(LongTextDao.class);
     longTextService = new LongTextService(longTextDao);
   }
 

@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
@@ -32,7 +32,7 @@ public class RIReferralTest {
   private AddressDao addressDao;
   private StaffPersonDao staffPersonDao;
   private DrmsDocumentDao drmsDocumentDao;
-  private LongTextDaoImpl longTextDao;
+  private LongTextDao longTextDao;
   private ReferralDao referralDao;
 
   /**
@@ -43,7 +43,7 @@ public class RIReferralTest {
     addressDao = mock(AddressDao.class);
     staffPersonDao = mock(StaffPersonDao.class);
     drmsDocumentDao = mock(DrmsDocumentDao.class);
-    longTextDao = mock(LongTextDaoImpl.class);
+    longTextDao = mock(LongTextDao.class);
     referralDao = mock(ReferralDao.class);
   }
 

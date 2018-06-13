@@ -30,7 +30,7 @@ import gov.ca.cwds.fixture.LongTextEntityBuilder;
 public class LongTextDaoIT implements DaoTestTemplate {
 
   private static SessionFactory sessionFactory;
-  private static LongTextDaoImpl longTextDao;
+  private static LongTextDao longTextDao;
   private Session session;
 
   /*
@@ -50,7 +50,7 @@ public class LongTextDaoIT implements DaoTestTemplate {
   @BeforeClass
   public static void beforeClass() {
     sessionFactory = new Configuration().configure().buildSessionFactory();
-    longTextDao = new LongTextDaoImpl(sessionFactory);
+    longTextDao = new LongTextDao(sessionFactory);
   }
 
   /**

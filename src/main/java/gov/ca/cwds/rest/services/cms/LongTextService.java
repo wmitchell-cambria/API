@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
@@ -27,7 +27,7 @@ public class LongTextService implements
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LongTextService.class);
 
-  private LongTextDaoImpl longTextDao;
+  private LongTextDao longTextDao;
 
   /**
    * Constructor
@@ -36,7 +36,7 @@ public class LongTextService implements
    *        objects
    */
   @Inject
-  public LongTextService(LongTextDaoImpl longTextDao) {
+  public LongTextService(LongTextDao longTextDao) {
     super();
     this.longTextDao = longTextDao;
   }

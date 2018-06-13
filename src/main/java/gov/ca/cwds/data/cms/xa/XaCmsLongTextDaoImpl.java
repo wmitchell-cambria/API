@@ -4,10 +4,10 @@ import org.hibernate.SessionFactory;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.inject.XaCmsSessionFactory;
 
-public class XaCmsLongTextDaoImpl extends LongTextDaoImpl {
+public class XaCmsLongTextDaoImpl extends LongTextDao {
 
   /**
    * Constructor

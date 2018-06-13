@@ -13,7 +13,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  * 
  * @author CWDS API Team
  */
-public class LongTextDaoImpl extends CrudsDaoImpl<LongText> {
+public class LongTextDao extends CrudsDaoImpl<LongText> {
 
   /**
    * Constructor
@@ -21,7 +21,7 @@ public class LongTextDaoImpl extends CrudsDaoImpl<LongText> {
    * @param sessionFactory the sessionFactory
    */
   @Inject
-  public LongTextDaoImpl(@CmsSessionFactory SessionFactory sessionFactory) {
+  public LongTextDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
 

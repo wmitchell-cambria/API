@@ -48,7 +48,7 @@ import gov.ca.cwds.data.cms.ExternalInterfaceDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationCrossReportDao;
 import gov.ca.cwds.data.cms.GovernmentOrganizationDao;
 import gov.ca.cwds.data.cms.LawEnforcementDao;
-import gov.ca.cwds.data.cms.LongTextDaoImpl;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.OtherCaseReferralDrmsDocumentDao;
 import gov.ca.cwds.data.cms.OtherClientNameDao;
 import gov.ca.cwds.data.cms.ReferralAssignmentDao;
@@ -453,7 +453,7 @@ public class DataAccessModule extends AbstractModule {
     bind(ExternalInterfaceDao.class).to(XaCmsExternalInterfaceDaoImpl.class);
     bind(gov.ca.cwds.data.cms.AddressDao.class).to(XaCmsAddressDaoImpl.class);
     bind(GovernmentOrganizationDao.class).to(XaCmsGovernmentOrganizationDaoImpl.class);
-    bind(LongTextDaoImpl.class).to(XaCmsLongTextDaoImpl.class);
+    bind(LongTextDao.class).to(XaCmsLongTextDaoImpl.class);
     bind(ReferralAssignmentDao.class).to(XaCmsReferralAssignmentDaoImpl.class);
     bind(ReferralClientDao.class).to(XaCmsReferralClientDaoImpl.class);
     bind(ReferralDao.class).to(XaCmsReferralDaoImpl.class);
