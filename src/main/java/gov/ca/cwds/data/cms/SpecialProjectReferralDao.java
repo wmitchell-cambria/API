@@ -38,12 +38,6 @@ public class SpecialProjectReferralDao extends CrudsDaoImpl<SpecialProjectReferr
     .list();
     
     return ImmutableList.copyOf(specialProjects);
-    
-//    Query<SpecialProjectReferral> query = this.getSessionFactory().getCurrentSession()
-//        .getNamedQuery(SpecialProjectReferral.FIND_BY_REFERRAL_ID_AND_SPECIAL_PROJECT_ID)
-//        .setParameter("referralId", referralId)
-//        .setParameter("specialProjectId", specialProjectId);
-//    return query.list();
   }
   
 }

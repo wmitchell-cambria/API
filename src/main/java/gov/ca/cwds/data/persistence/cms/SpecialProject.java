@@ -98,11 +98,11 @@ public class SpecialProject extends CmsPersistentObject {
     super();
     this.archiveAssociationIndicator = archiveAssociationIndicator;
     this.projectDescription = projectDescription;
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
     this.governmentEntityType = governmentEntityType;
     this.id = id;
     this.name = name;
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
   
   /**
@@ -157,7 +157,7 @@ public class SpecialProject extends CmsPersistentObject {
    * @param endDate - end date
    */
   public void setEndDate(Date endDate) {
-    this.endDate = endDate;
+    this.endDate = freshDate(endDate);
   }
 
   /**
@@ -221,7 +221,7 @@ public class SpecialProject extends CmsPersistentObject {
    * @param startDate - start date
    */
   public void setStartDate(Date startDate) {
-    this.startDate = startDate;
+    this.startDate = freshDate(startDate);
   }
   
   /**

@@ -45,7 +45,7 @@ public class SpecialProjectReferralService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral, 
     gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral> {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SpecialProjectReferral.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(SpecialProjectReferralService.class);
   
   private static final String S_CESC_REFERRAL = "S-CESC Referral";
   private static final short MEDICAL_RECORD_SYSTEM_CODE_ID = 1331;
@@ -105,7 +105,6 @@ public class SpecialProjectReferralService implements
   @Override
   @UnitOfWork(value = "cms")
   public PostedSpecialProjectReferral create(gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral sprDomain) {
-    assert sprDomain instanceof gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral;
     gov.ca.cwds.data.persistence.cms.SpecialProjectReferral persisted = 
         new gov.ca.cwds.data.persistence.cms.SpecialProjectReferral(CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()),
             sprDomain,
@@ -174,13 +173,11 @@ public class SpecialProjectReferralService implements
   }
   
   private Boolean specialProjectReferralExists(String referralId, String specialProjectId) {
+    
     List<gov.ca.cwds.data.persistence.cms.SpecialProjectReferral> specialProjectReferrals = 
         specialProjectReferralDao
         .findSpecialProjectReferralsByReferralIdAndSpecialProjectId(referralId, specialProjectId);
-    if (specialProjectReferrals.size() > 0) {
-      return true;
-    }
-    return false;
+    return specialProjectReferrals.isEmpty() ? Boolean.FALSE : Boolean.TRUE;    
   }
   
   private String findSpecialProjectId(String specialProjectName, Short governmentEntityType) {

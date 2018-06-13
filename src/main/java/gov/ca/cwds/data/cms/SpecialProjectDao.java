@@ -43,14 +43,7 @@ public class SpecialProjectDao extends CrudsDaoImpl<SpecialProject>{
       .setParameter(SpecialProject.PARAM_NAME, name)
       .list();
     return ImmutableList.copyOf(specialProjects);
-    
-//    Query<SpecialProject> query = this.getSessionFactory().getCurrentSession()
-//      .getNamedQuery(SpecialProject.FIND_BY_PROJECT_NAME)
-//      .setParameter("governmentEntityType", governmentEntityType)
-//      .setParameter("name", name);
-//    return query.list();      
     }
-
 
   /**
    * Find active SSB special projects for given government entity.
