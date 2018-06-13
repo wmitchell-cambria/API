@@ -426,18 +426,22 @@ public class ParticipantService implements CrudsService {
       String timeStarted, MessageBuilder messageBuilder, List<Csec> csecs,
       SafelySurrenderedBabies ssb, String reportType) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
+
+    boolean ssbReportType = FerbConstants.ReportType.SSB.equals(reportType);
+    boolean csecReportType = FerbConstants.ReportType.CSEC.equals(reportType);
+
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
+      childClient.setSafelySurrendedBabiesIndicatorVar(ssbReportType);
       messageBuilder.addDomainValidationError(validator.validate(childClient));
       exsistingChild = this.childClientService.create(childClient);
     }
 
-    if (FerbConstants.ReportType.CSEC.equals(reportType) && validateCsec(csecs, messageBuilder)) {
+    if (csecReportType && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
     }
 
-    if (FerbConstants.ReportType.SSB.equals(reportType)
-        && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
+    if (ssbReportType && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
       specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId,
           java.time.LocalDate.parse(dateStarted), java.time.LocalTime.parse(timeStarted), ssb);
     }
