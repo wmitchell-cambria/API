@@ -1,8 +1,12 @@
 package gov.ca.cwds.rest.services;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -32,6 +36,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 
 import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
+import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.data.cms.CaseDao;
 import gov.ca.cwds.data.cms.ClientAddressDao;
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
@@ -775,5 +780,22 @@ public class ParticipantServiceTest {
         defaultVictim.getSensitivityIndicator(),
         clientArgCaptor.getValue().getSensitivityIndicator());
   }
+  
+  @Test
+  public void shouldReturnNullWhenDelete() {
+    Response response = participantService.delete("abc");
+    assertThat(response, is(nullValue()));
+   }
 
+  @Test
+  public void shouldReturnNullWhenFind() {
+    Response response = participantService.find("abc");
+    assertThat(response, is(nullValue()));
+   }
+  
+  @Test
+  public void shouldReturnNullWhenUpdate() {
+    Response response = participantService.update("abc", null);
+    assertThat(response, is(nullValue()));
+  }
 }

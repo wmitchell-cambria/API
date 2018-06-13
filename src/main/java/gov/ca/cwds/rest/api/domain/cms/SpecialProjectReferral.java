@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an Allegation
+ * {@link DomainObject} representing an Special Project Referral
  * 
  * @author CWDS API Team
  */

@@ -8,6 +8,8 @@ import java.util.Date;
 import org.junit.Test;
 import gov.ca.cwds.fixture.SpecialProjectReferralResourceBuilder;
 import gov.ca.cwds.rest.api.domain.DomainChef;
+import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
+import gov.ca.cwds.rest.services.ServiceException;
 
 public class SpecialProjectReferralTest {
   private String lastUpdatedId = "0X5";
@@ -53,5 +55,46 @@ public class SpecialProjectReferralTest {
     assertThat(spr.getSafelySurrenderedBabiesIndicator(), is(equalTo(DomainChef.cookBoolean(domain.getSafelySurrenderedBabiesIndicator()))));
   }
   
+  @Test
+  public void testSetters() throws Exception {
+    Date newDate = new Date();
+    SpecialProjectReferral spr = new SpecialProjectReferral();
+    spr.setCountySpecificCode(countySpecificCode);
+    assertThat(spr.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+    spr.setId(id);
+    assertThat(spr.getId(), is(equalTo(id)));
+    assertThat(spr.getPrimaryKey(), is(equalTo(id)));
+    spr.setLastUpdatedId(lastUpdatedId);
+    assertThat(spr.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
+    spr.setLastUpdatedTime(lastUpdatedTime);
+    assertThat(spr.getLastUpdatedTime(), is(equalTo(lastUpdatedTime)));
+    spr.setParticipationEndDate(newDate);
+    assertThat(spr.getParticipationEndDate(), is(equalTo(newDate)));
+    spr.setParticipationStartDate(newDate);
+    assertThat(spr.getParticipationStartDate(), is(equalTo(newDate)));
+    spr.setReferralId(referralId);
+    assertThat(spr.getReferralId(), is(equalTo(referralId)));
+    spr.setSafelySurrenderedBabiesIndicator(safelySurrenderedBabiesIndicator);
+    assertThat(spr.getSafelySurrenderedBabiesIndicator(), is(equalTo(safelySurrenderedBabiesIndicator)));
+    spr.setSpecialProjectId(specialProjectId);
+    assertThat(spr.getSpecialProjectId(), is(equalTo(specialProjectId)));
+  }
+  
+  @Test
+  public void shouldThrowExceptionWhenPostedSpecialProjectReferralIdIsBlank() throws Exception {
+    
+    SpecialProjectReferral spr = new SpecialProjectReferral(countySpecificCode, referralId, 
+        specialProjectId, participationEndDate, participationStartDate, 
+        safelySurrenderedBabiesIndicator, id);
+    spr.setId("");
+    try {
+      PostedSpecialProjectReferral psp = new PostedSpecialProjectReferral(spr);
+      
+    } catch (ServiceException e) {
+      
+    }
+    
+     
+  }
   
 }

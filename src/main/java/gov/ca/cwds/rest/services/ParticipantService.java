@@ -66,7 +66,6 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ParticipantService implements CrudsService {
 
   private static final String ASSESMENT = "A";
-  private static final String CLIENT = "CLIENT_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 

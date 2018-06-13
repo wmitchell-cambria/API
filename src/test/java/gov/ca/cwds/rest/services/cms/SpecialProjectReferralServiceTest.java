@@ -78,7 +78,7 @@ public class SpecialProjectReferralServiceTest {
   }
 
   @Test
-  public void shouldReturnPostedSpecialProjectReferralWhenSave() throws Exception {
+  public void shouldReturnPostedSpecialProjectReferralWhenSaveCsecSpecialProjectReferral() throws Exception {
     List<Csec> csecs = new ArrayList();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
@@ -145,7 +145,7 @@ public class SpecialProjectReferralServiceTest {
   
   @Test
   public void shouldReturnNullWhenSpecialProjectReferralAlreadyExist() throws Exception {
-    List<Csec> csecs = new ArrayList();
+    List<Csec> csecs = new ArrayList<Csec>();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
     csecs.add(csec);
@@ -160,7 +160,7 @@ public class SpecialProjectReferralServiceTest {
         .setName("test")
         .setId(specialProjectId)
         .build();
-    List<SpecialProject> specialProjects = new ArrayList();
+    List<SpecialProject> specialProjects = new ArrayList<SpecialProject>();
     specialProjects.add(specialProject);
     when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
     .thenReturn(specialProjects);
@@ -190,7 +190,7 @@ public class SpecialProjectReferralServiceTest {
   
   @Test
   public void shouldReturnNullWhenInvalidGovernmentEntityType() throws Exception {
-    List<Csec> csecs = new ArrayList();
+    List<Csec> csecs = new ArrayList<Csec>();
     Csec csec = new CsecBuilder().createCsec();
     csec.setId("S-CSEC Referral");
     csecs.add(csec);
@@ -202,7 +202,7 @@ public class SpecialProjectReferralServiceTest {
     SpecialProject specialProject = new SpecialProjectEntityBuilder()
         .setName("test")
         .build();
-    List<SpecialProject> specialProjects = new ArrayList();
+    List<SpecialProject> specialProjects = new ArrayList<SpecialProject>();
     specialProjects.add(specialProject);    
     when(specialProjectDao.findSpecialProjectsByGovernmentEntityAndName(any(String.class), any(Short.class)))
     .thenReturn(specialProjects);

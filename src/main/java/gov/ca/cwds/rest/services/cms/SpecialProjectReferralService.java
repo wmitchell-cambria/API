@@ -160,8 +160,7 @@ public class SpecialProjectReferralService implements
       messageBuilder.addDomainValidationError(validator.validate(sprDomain));
       
       if (!specialProjectReferralExists(referralId, specialProjectId)) {
-        postedSpecialProjectReferral = this.create(sprDomain);        
-        return postedSpecialProjectReferral;
+        return postedSpecialProjectReferral = this.create(sprDomain);
       } else {
         return null;
       }

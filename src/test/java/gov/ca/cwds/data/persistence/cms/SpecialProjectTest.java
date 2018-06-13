@@ -47,6 +47,29 @@ public class SpecialProjectTest {
   }
   
   @Test
+  public void testSetters() throws Exception {
+    SpecialProject sp = new SpecialProject();
+    sp.setArchiveAssociationIndicator(archiveAssociationIndicator);
+    assertThat(sp.getArchiveAssociationIndicator(), is(equalTo(archiveAssociationIndicator)));
+    sp.setEndDate(endDate);
+    assertThat(sp.getEndDate(), is(equalTo(endDate)));
+    sp.setGovernmentEntityType(governmentEntityType);
+    assertThat(sp.getGovernmentEntityType(), is(equalTo(governmentEntityType)));
+    sp.setId(id);
+    assertThat(sp.getId(), is(equalTo(id)));
+    sp.setLastUpdatedId(lastUpdatedId);
+    assertThat(sp.getLastUpdatedId(), is(equalTo(lastUpdatedId)));
+    sp.setLastUpdatedTime(lastUpdatedTime);
+    assertThat(sp.getLastUpdatedTime(), is(equalTo(lastUpdatedTime)));
+    sp.setName(name);
+    assertThat(sp.getName(), is(equalTo(name)));
+    sp.setProjectDescription(projectDescription);
+    assertThat(sp.getProjectDescription(), is(equalTo(projectDescription)));
+    sp.setStartDate(startDate);
+    assertThat(sp.getStartDate(), is(equalTo(startDate)));
+    
+  }
+  @Test
   public void testEqualsHashCodeWorks() throws Exception {
     EqualsVerifier.forClass(gov.ca.cwds.data.persistence.cms.SpecialProject.class)
         .suppress(Warning.STRICT_INHERITANCE).withRedefinedSuperclass().verify();

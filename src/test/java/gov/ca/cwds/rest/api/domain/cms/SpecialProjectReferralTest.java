@@ -69,6 +69,14 @@ public class SpecialProjectReferralTest {
   }
 
   @Test
+  public void shouldSetIdWhenPostedSpecialProjectCreated() throws Exception {
+    gov.ca.cwds.data.persistence.cms.SpecialProjectReferral persistent = 
+        new SpecialProjectReferralEntityBuilder().build();
+    PostedSpecialProjectReferral pspr = new PostedSpecialProjectReferral(persistent);
+    assertThat(pspr.getId(), is(equalTo(persistent.getId())));    
+  }
+  
+  @Test
   public void testDefaultConstructor() throws Exception {
     assertThat(SpecialProjectReferral.class.newInstance(), is(notNullValue()));
   }
@@ -307,5 +315,23 @@ public class SpecialProjectReferralTest {
       }
     }
     assertThat(theErrorDetected, is(true));                   
+  }
+  
+  @Test
+  public void testSetters() throws Exception {
+    String newDateString = "2018-06-13";
+    SpecialProjectReferral spr = new SpecialProjectReferral();
+    spr.setCountySpecificCode(countySpecificCode);
+    assertThat(spr.getCountySpecificCode(), is(equalTo(countySpecificCode)));
+    spr.setParticipantEndDate(newDateString);
+    assertThat(spr.getParticipationEndDate(), is(equalTo(newDateString)));
+    spr.setParticipantStartDate(newDateString);
+    assertThat(spr.getParticipationStartDate(), is(equalTo(newDateString)));
+    spr.setReferralId(referralId);
+    assertThat(spr.getReferralId(), is(equalTo(referralId)));
+    spr.setSafelySurrenderedBabiesIndicator(safelySurrenderedBabiesIndicator);
+    assertThat(spr.getSafelySurrenderedBabiesIndicator(), is(equalTo(safelySurrenderedBabiesIndicator)));
+    spr.setSpecialProjectId(specialProjectId);
+    assertThat(spr.getSpecialProjectId(), is(equalTo(specialProjectId)));
   }
 }
