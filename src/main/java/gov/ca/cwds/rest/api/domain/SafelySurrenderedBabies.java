@@ -42,6 +42,7 @@ public class SafelySurrenderedBabies extends ReportingDomain implements Request,
   @JsonProperty("bracelet_id")
   @ApiModelProperty(required = true, readOnly = false, example = "1234")
   @NotEmpty
+  @Size(max = 10)
   private String braceletId;
 
   @JsonProperty("parent_guardian_given_bracelet_id")
