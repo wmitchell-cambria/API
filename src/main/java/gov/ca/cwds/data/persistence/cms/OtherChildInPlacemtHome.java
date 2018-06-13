@@ -75,4 +75,11 @@ public class OtherChildInPlacemtHome extends BaseOtherChildInPlacemtHome {
     return placementHome;
   }
 
+  /**
+   * @param placementHome - placementHome
+   */
+  public void setPlacementHome(PlacementHome placementHome) {
+    this.placementHome = placementHome;
+  }
+
 }

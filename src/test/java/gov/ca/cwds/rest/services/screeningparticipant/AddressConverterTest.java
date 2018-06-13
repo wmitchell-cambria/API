@@ -21,7 +21,6 @@ import gov.ca.cwds.fixture.AddressEntityBuilder;
 import gov.ca.cwds.fixture.ClientAddressEntityBuilder;
 import gov.ca.cwds.fixture.ClientEntityBuilder;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
-import gov.ca.cwds.rest.services.screeningparticipant.AddressConverter;
 
 /**
  * @author CWDS API Team

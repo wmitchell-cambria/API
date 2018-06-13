@@ -56,12 +56,15 @@ public class IntakeLovService
    * @param legacyCategoryId - legacyCategoryId
    * @return the intake code in the value based on the category id
    */
-  public List<IntakeLov> loadAllLegacyMetaIds(Serializable legacyCategoryId) {
+  protected List<IntakeLov> loadAllLegacyMetaIds(Serializable legacyCategoryId) {
     return intakeLovDao.findByLegacyMetaId(legacyCategoryId.toString());
   }
 
-  public List<IntakeLov> findAllIntakeLov() {
-    return intakeLovDao.findAll();
+  protected IntakeLov loadLegacySystemCode(Serializable systemCodeId) {
+    if (systemCodeId == null) {
+      return null;
+    }
+    return intakeLovDao.findByLegacySystemCodeId((Number) systemCodeId);
   }
 
 }

@@ -1,6 +1,7 @@
 package gov.ca.cwds.rest.services.screeningparticipant;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,12 +42,13 @@ public class ClientTransformer implements ParticipantMapper {
     String races = raceAndEthnicityConverter.createRace(client);
     String hispanic = raceAndEthnicityConverter.createHispanic(client);
     Set<AddressIntakeApi> addresses = new HashSet<>(addressConverter.convert(client));
+    addresses = Collections.unmodifiableSet(addresses);
 
     return new ParticipantIntakeApi(null, LegacyTable.CLIENT.getName(), client.getId(),
         legacyDescriptor, client.getFirstName(), client.getMiddleName(), client.getLastName(),
-        client.getNameSuffix(), gender, "Age", "AgeUnit", "ssn", client.getBirthDate(), languages,
-        races, hispanic, "screeningId", new HashSet<>(), addresses, null,
-        setSealedIndicator(client), setSensitivieIndicator(client));
+        client.getNameSuffix(), gender, null, null, "ssn", client.getBirthDate(), languages, races,
+        hispanic, null, new HashSet<>(), addresses, null, setSealedIndicator(client),
+        setSensitivieIndicator(client));
   }
 
   private List<String> setLanguages(Client client) {

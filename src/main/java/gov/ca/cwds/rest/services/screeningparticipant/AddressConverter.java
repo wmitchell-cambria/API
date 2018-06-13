@@ -36,8 +36,8 @@ public class AddressConverter {
           .filter(clientAddress -> clientAddress.getEffEndDt() == null)
           .filter(clientAddress -> RESIDENCE.equals(clientAddress.getAddressType()))
           .collect(Collectors.toSet());
-      Comparator<ClientAddress> clientAddressComparator = (ClientAddress c1, ClientAddress c2) -> c1
-          .getLastUpdatedTime().compareTo(c2.getLastUpdatedTime());
+      Comparator<ClientAddress> clientAddressComparator = (ClientAddress c1, ClientAddress c2) -> c2
+          .getLastUpdatedTime().compareTo(c1.getLastUpdatedTime());
       List<ClientAddress> clientAddressList = new ArrayList<>(clientAddresses);
       Collections.sort(clientAddressList, clientAddressComparator);
       clientAddressList.forEach(clientAddress -> addresses.add(convertToAddress(clientAddress)));

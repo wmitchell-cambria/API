@@ -43,24 +43,23 @@ public class ScreeningParticipantService
   @Override
   @UnitOfWork(value = "cms")
   public ParticipantIntakeApi create(ParticipantIntakeApi incomingParticipantIntakeApi) {
-    if (StringUtils.isNotBlank(incomingParticipantIntakeApi.getScreeningId())) {
-      isScreeningExists(incomingParticipantIntakeApi);
-      ParticipantIntakeApi participantIntakeApi = null;
-      LegacyDescriptor legacyDescriptor = incomingParticipantIntakeApi.getLegacyDescriptor();
-
-      if (legacyDescriptor != null && StringUtils.isNotBlank(legacyDescriptor.getId())
-          && StringUtils.isNotBlank(legacyDescriptor.getTableName())) {
-        participantIntakeApi =
-            createParticipant(legacyDescriptor.getId(), legacyDescriptor.getTableName());
-        participantIntakeApi.setScreeningId(incomingParticipantIntakeApi.getScreeningId());
-        return participantIntakeApiService.create(participantIntakeApi);
-      } else {
-        return participantIntakeApiService.create(participantIntakeApi);
-      }
-    } else {
+    if (StringUtils.isBlank(incomingParticipantIntakeApi.getScreeningId())) {
       LOGGER.error("Screening is required to create the particpant {}",
           incomingParticipantIntakeApi.getScreeningId());
       throw new ServiceException();
+    }
+    isScreeningExists(incomingParticipantIntakeApi);
+    ParticipantIntakeApi participantIntakeApi = null;
+    LegacyDescriptor legacyDescriptor = incomingParticipantIntakeApi.getLegacyDescriptor();
+
+    if (legacyDescriptor != null && StringUtils.isNotBlank(legacyDescriptor.getId())
+        && StringUtils.isNotBlank(legacyDescriptor.getTableName())) {
+      participantIntakeApi =
+          createParticipant(legacyDescriptor.getId(), legacyDescriptor.getTableName());
+      participantIntakeApi.setScreeningId(incomingParticipantIntakeApi.getScreeningId());
+      return participantIntakeApiService.create(participantIntakeApi);
+    } else {
+      return participantIntakeApiService.create(incomingParticipantIntakeApi);
     }
   }
 
@@ -85,18 +84,48 @@ public class ScreeningParticipantService
   }
 
   @Override
-  public ParticipantIntakeApi delete(String arg0) {
+  public ParticipantIntakeApi delete(String id) {
     return null;
   }
 
   @Override
-  public ParticipantIntakeApi find(String arg0) {
+  public ParticipantIntakeApi find(String id) {
     return null;
   }
 
   @Override
-  public ParticipantIntakeApi update(String arg0, ParticipantIntakeApi arg1) {
+  public ParticipantIntakeApi update(String id, ParticipantIntakeApi request) {
     return null;
+  }
+
+  /**
+   * @param screeningDao - screeningDao
+   */
+  public void setScreeningDao(ScreeningDao screeningDao) {
+    this.screeningDao = screeningDao;
+  }
+
+  /**
+   * @param participantIntakeApiService - participantIntakeApiService
+   */
+  public void setParticipantIntakeApiService(
+      ParticipantIntakeApiService participantIntakeApiService) {
+    this.participantIntakeApiService = participantIntakeApiService;
+  }
+
+  /**
+   * @param participantDaoFactory - participantDaoFactory
+   */
+  public void setParticipantDaoFactory(ParticipantDaoFactoryImpl participantDaoFactory) {
+    this.participantDaoFactory = participantDaoFactory;
+  }
+
+  /**
+   * @param participantMapperFactoryImpl - participantMapperFactoryImpl
+   */
+  public void setParticipantMapperFactoryImpl(
+      ParticipantMapperFactoryImpl participantMapperFactoryImpl) {
+    this.participantMapperFactoryImpl = participantMapperFactoryImpl;
   }
 
 }

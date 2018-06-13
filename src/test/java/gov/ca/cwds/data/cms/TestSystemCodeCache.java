@@ -224,6 +224,9 @@ public class TestSystemCodeCache implements SystemCodeCache {
     if (SystemCodeCategoryId.ETHNICITY.equals(arg1) && "Mexican".equals(arg0)) {
       return 3164;
     }
+    if (SystemCodeCategoryId.ETHNICITY.equals(arg1) && "White - Central American*".equals(arg0)) {
+      return 841;
+    }
     return null;
   }
 }

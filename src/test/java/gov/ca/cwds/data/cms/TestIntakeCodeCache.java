@@ -105,4 +105,13 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     return null;
   }
 
+  @Override
+  public IntakeLov getIntakeLov(Number leacySystemCodeId) {
+    if (32 == leacySystemCodeId.intValue()) {
+      return new IntakeLov(leacySystemCodeId.longValue(), null, "Residence", null, false, null,
+          null, null, "address_type", "Home", "Home");
+    }
+    return null;
+  }
+
 }

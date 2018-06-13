@@ -293,7 +293,7 @@ public class ServicesModule extends AbstractModule {
   public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
     LOGGER.debug("provide intakeCode service");
     final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
-    return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache, false);
+    return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache);
   }
 
   /**
