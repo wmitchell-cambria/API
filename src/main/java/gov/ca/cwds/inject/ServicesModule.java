@@ -114,6 +114,7 @@ public class ServicesModule extends AbstractModule {
       try {
         UnitOfWork unitOfWorkAnnotation = mi.getMethod().getAnnotation(UnitOfWork.class);
         aspect.beforeStart(unitOfWorkAnnotation);
+        clearHibernateStatistics(unitOfWorkAnnotation.value());
         final Object result = mi.proceed();
         collectAndProvideHibernateStatistics(unitOfWorkAnnotation.value());
         aspect.afterEnd();
@@ -123,6 +124,14 @@ public class ServicesModule extends AbstractModule {
         throw e;
       } finally {
         aspect.onFinish();
+      }
+    }
+
+    private void clearHibernateStatistics(String bundleTag) {
+      if (CMS_BUNDLE_TAG.equals(bundleTag)) {
+        cmsHibernateBundle.getSessionFactory().getStatistics().clear();
+      } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
+        nsHibernateBundle.getSessionFactory().getStatistics().clear();
       }
     }
 

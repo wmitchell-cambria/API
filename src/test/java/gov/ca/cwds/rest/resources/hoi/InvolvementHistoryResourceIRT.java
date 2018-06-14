@@ -38,7 +38,7 @@ public class InvolvementHistoryResourceIRT extends HOIBaseTest {
         actualInvolvementHistory.getScreenings());
 
     assertQueryExecutionCount(CMS_BUNDLE_TAG, 27);
-    assertQueryExecutionCount(NS_BUNDLE_TAG, 4);
+    assertQueryExecutionCount(NS_BUNDLE_TAG, 5);
   }
 
   private String doGet(String id) throws IOException {

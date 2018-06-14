@@ -1,6 +1,7 @@
 package gov.ca.cwds.data.persistence.cms;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -14,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import gov.ca.cwds.data.persistence.PersistentObject;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 /**
  * {@link PersistentObject} representing a EducationProviderContact.
@@ -37,7 +40,8 @@ public class EducationProviderContact extends BaseEducationProviderContact {
    */
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne(optional = false)
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKED_PVDRT", nullable = false, updatable = false, insertable = false)
   private EducationProvider educationProvider;
 
@@ -99,6 +103,11 @@ public class EducationProviderContact extends BaseEducationProviderContact {
 
   public void setEducationProvider(EducationProvider educationProvider) {
     this.educationProvider = educationProvider;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   /**

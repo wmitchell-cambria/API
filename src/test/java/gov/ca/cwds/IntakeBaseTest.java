@@ -4,9 +4,11 @@ import static gov.ca.cwds.data.HibernateStatisticsConsumerRegistry.registerHiber
 import static gov.ca.cwds.data.HibernateStatisticsConsumerRegistry.unRegisterHibernateStatisticsConsumer;
 import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
 import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gov.ca.cwds.rest.IntegratedResourceTestSuiteIT;
@@ -115,9 +117,10 @@ public abstract class IntakeBaseTest extends BaseApiTest<ApiConfiguration> {
     unRegisterHibernateStatisticsConsumer(NS_BUNDLE_TAG);
   }
 
-  protected void assertQueryExecutionCount(String bundleTag, int expectedCount) {
+  protected void assertQueryExecutionCount(String bundleTag, long maxCount) {
     assertNotNull(hibernateStatisticsMap.get(bundleTag));
-    assertEquals(expectedCount, hibernateStatisticsMap.get(bundleTag).getQueryExecutionCount());
+    assertThat(hibernateStatisticsMap.get(bundleTag).getQueryExecutionCount(),
+        is(lessThanOrEqualTo(maxCount)));
   }
 
   protected void assertDbNotTouched(String bundleTag) {

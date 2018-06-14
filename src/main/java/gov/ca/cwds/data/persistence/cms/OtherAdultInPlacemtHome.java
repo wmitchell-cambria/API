@@ -5,12 +5,17 @@ import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -36,7 +41,10 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
 
   private static final long serialVersionUID = 1L;
 
-  @ManyToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "FKPLC_HM_T", nullable = false, updatable = false, insertable = false)
   private PlacementHome placementHome;
 
@@ -92,6 +100,11 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
 
   public void setPlacementHome(PlacementHome placementHome) {
     this.placementHome = placementHome;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   /**
