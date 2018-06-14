@@ -50,8 +50,10 @@ public class SpecialProjectReferralService {
   /**
    * Process special project for Safely Surrendered Babies.
    * 
-   * @param childClientId Child cleint ID.
+   * @param childClientId Child client ID.
    * @param referralId Referral ID
+   * @param referralReceivedDate Referral Received Date
+   * @param referralReceivedTime Referral Received Time
    * @param ssb Safely Surrendered Babies
    */
   public void processSafelySurrenderedBabies(String childClientId, String referralId,
@@ -60,11 +62,11 @@ public class SpecialProjectReferralService {
 
     LocalDateTime now = LocalDateTime.now();
 
-    PerryUserIdentity perruUser = RequestExecutionContext.instance().getUserIdentity();
+    PerryUserIdentity perryUser = RequestExecutionContext.instance().getUserIdentity();
 
     String staffId = RequestExecutionContext.instance().getStaffId();
-    String staffCountySpecificCode = perruUser.getCountyCode(); // 2 gigit
-    String staffCountyCode = perruUser.getCountyCwsCode(); // 4 digit
+    String staffCountySpecificCode = perryUser.getCountyCode(); // 2 gigit
+    String staffCountyCode = perryUser.getCountyCwsCode(); // 4 digit
 
     /**
      * Find SSB special project for staff county
@@ -91,6 +93,7 @@ public class SpecialProjectReferralService {
     spr.setPartStartDate(referralReceivedDate);
     spr.setReferralId(referralId);
     spr.setSpecialProjectId(ssbSpecialProject.getId());
+    spr.setSsbIndicator(Boolean.TRUE);
     spr.setLastUpdateId(staffId);
     spr.setLastUpdateTime(now);
     SpecialProjectReferral createdSpr = specialProjectReferralDao.create(spr);
@@ -160,4 +163,5 @@ public class SpecialProjectReferralService {
   public void setNonCWSNumberDao(NonCWSNumberDao nonCWSNumberDao) {
     this.nonCWSNumberDao = nonCWSNumberDao;
   }
+
 }

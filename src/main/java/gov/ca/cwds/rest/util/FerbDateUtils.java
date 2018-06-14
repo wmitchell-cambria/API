@@ -21,8 +21,8 @@ public class FerbDateUtils {
     return incoming != null ? new Date(incoming.getTime()) : null;
   }
 
-  public static LocalDateTime utcToPst(LocalDateTime dateTime) {
-    return shiftTimeZone(dateTime, ZoneOffset.UTC, ZoneId.of("America/Los_Angeles"));
+  public static LocalDateTime utcToSystemTime(LocalDateTime dateTime) {
+    return shiftTimeZone(dateTime, ZoneOffset.UTC, ZoneId.systemDefault());
   }
 
   public static LocalDateTime shiftTimeZone(LocalDateTime dateTime, ZoneId from, ZoneId to) {

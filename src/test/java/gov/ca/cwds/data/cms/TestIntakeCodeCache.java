@@ -88,4 +88,30 @@ public class TestIntakeCodeCache implements IntakeCodeCache {
     return null;
   }
 
+  @Override
+  public String getIntakeCodeForLegacySystemCode(Number systemCodeId) {
+    if (1828 == systemCodeId.intValue()) {
+      return "CA";
+    }
+    if (32 == systemCodeId.intValue()) {
+      return "Residence";
+    }
+    if (1248 == systemCodeId.intValue()) {
+      return "American Sign Language";
+    }
+    if (1253 == systemCodeId.intValue()) {
+      return "English";
+    }
+    return null;
+  }
+
+  @Override
+  public IntakeLov getIntakeLov(Number leacySystemCodeId) {
+    if (32 == leacySystemCodeId.intValue()) {
+      return new IntakeLov(leacySystemCodeId.longValue(), null, "Residence", null, false, null,
+          null, null, "address_type", "Home", "Home");
+    }
+    return null;
+  }
+
 }

@@ -9,7 +9,7 @@ import gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies;
  */
 public class SafelySurrenderedBabiesBuilder {
 
-  private String braceletId = "ssb-braceletId";
+  private String braceletId = "ssb-bracId";
   private String braceletInfoCode = "U";
   private String comments = "ssb-comments";
   private String medicalQuestionaireCode = "U";

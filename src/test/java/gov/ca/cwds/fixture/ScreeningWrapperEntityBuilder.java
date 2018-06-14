@@ -14,11 +14,12 @@ public class ScreeningWrapperEntityBuilder {
   private String screeningDecisionDetail = "screening decision detail";
   private String assignee = "Test User";
   private String assigneeStaffId = "abb";
+  private String screeningStatus = "Open";
   private Date startedAt;
 
   public ScreeningWrapper build() {
     return new ScreeningWrapper(id, reference, name, screeningDecision, screeningDecisionDetail,
-        assigneeStaffId, startedAt);
+        assigneeStaffId, startedAt, screeningStatus);
 
   }
 
@@ -54,6 +55,11 @@ public class ScreeningWrapperEntityBuilder {
 
   public ScreeningWrapperEntityBuilder setStartedAt(String startedAt) {
     this.startedAt = DomainChef.uncookDateString(startedAt);
+    return this;
+  }
+
+  public ScreeningWrapperEntityBuilder setScreeningStatus(String screeningStatus) {
+    this.screeningStatus = screeningStatus;
     return this;
   }
 }

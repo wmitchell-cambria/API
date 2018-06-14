@@ -194,8 +194,6 @@ public class ParticipantIntakeApiService implements CrudsService {
         safelySurrenderedBabiesMapper.map(participantEntityManaged.getSafelySurrenderedBabies());
     participantIntakeApiPosted.setSafelySurenderedBabies(createdSsb);
 
-
-
     // Save legacy descriptor entity
     if (participantIntakeApi.getLegacyDescriptor() != null) {
       LegacyDescriptorEntity legacyDescriptorEntityManaged = legacyDescriptorDao

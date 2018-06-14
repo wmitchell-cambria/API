@@ -17,11 +17,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import gov.ca.cwds.data.cms.TestIntakeCodeCache;
+import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.ns.IntakeLov;
 import gov.ca.cwds.rest.api.domain.SystemCodeCategoryId;
 
-/**
+/***
+ * 
  * @author CWDS API Team
  *
  */
@@ -31,13 +33,14 @@ public class CachingIntakeCodeServiceTest {
    * Initialize intake code cache
    */
   private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
+  private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
   private CachingIntakeCodeService cachingIntakeCodeService;
   private static IntakeLovDao intakeLovDao;
 
   /**
-   * 
-   */
+  *
+  */
   @BeforeClass
   public static void setupClass() {
     intakeLovDao = mock(IntakeLovDao.class);
@@ -52,18 +55,17 @@ public class CachingIntakeCodeServiceTest {
   }
 
   /**
-   * 
-   */
+  *
+  */
   @Test
   public void instantiation() {
     CachingIntakeCodeService target = new CachingIntakeCodeService(intakeLovDao, 1);
     assertThat(target, notNullValue());
-
   }
 
   /**
-   * 
-   */
+  *
+  */
   @Test
   public void testToGetValidLegacyId() {
     IntakeLov intakeLov = new IntakeLov(1251L, "lang_tpc", "Cambodian", "19", false, "LANG_TPC", "",
@@ -81,8 +83,8 @@ public class CachingIntakeCodeServiceTest {
   }
 
   /**
-   * 
-   */
+  *
+  */
   @Test
   public void testToWhenCacheNull() {
     when(intakeLovDao.findByLegacyMetaId(null)).thenReturn(new ArrayList<>());
@@ -93,8 +95,8 @@ public class CachingIntakeCodeServiceTest {
   }
 
   /**
-   * 
-   */
+  *
+  */
   @Test
   public void testToGetAllLegacySystemCodesForMeta() {
     IntakeLov intakeLov = new IntakeLov(1251L, "lang_tpc", "Cambodian", "19", false, "LANG_TPC", "",
@@ -113,8 +115,8 @@ public class CachingIntakeCodeServiceTest {
   }
 
   /**
-   * 
-   */
+  *
+  */
   @Test
   public void testToGetAllLegacySystemCodesForMetaEmpty() {
     when(intakeLovDao.findAll()).thenReturn(new ArrayList<>());
@@ -122,6 +124,50 @@ public class CachingIntakeCodeServiceTest {
     List<IntakeLov> actualLovCode = cachingIntakeCodeService.getAllLegacySystemCodesForMeta("");
     Assert.assertNotNull(actualLovCode);
     assertThat(actualLovCode.size(), is(equalTo(0)));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testToGetLegacySystemIdForRaceCode() {
+    cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
+    Short sysId = cachingIntakeCodeService
+        .getLegacySystemCodeForRaceAndEthnicity(SystemCodeCategoryId.ETHNICITY, "Central American");
+    assertThat(sysId, is(equalTo((short) 841)));
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testWhenIntakeCodeConverterNull() {
+    cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
+    Short sysId = cachingIntakeCodeService
+        .getLegacySystemCodeForRaceAndEthnicity(SystemCodeCategoryId.ETHNICITY, "Central Indian");
+    Assert.assertNull(sysId);
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testWhenIntakeCodeNull() {
+    cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
+    Short sysId = cachingIntakeCodeService
+        .getLegacySystemCodeForRaceAndEthnicity(SystemCodeCategoryId.ETHNICITY, null);
+    Assert.assertNull(sysId);
+  }
+
+  /**
+   * 
+   */
+  @Test
+  public void testWhenMetaNullAndReturnNull() {
+    cachingIntakeCodeService = new CachingIntakeCodeService(intakeLovDao, 1500);
+    Short sysId =
+        cachingIntakeCodeService.getLegacySystemCodeForRaceAndEthnicity(null, "Central American");
+    Assert.assertNull(sysId);
   }
 
 }
