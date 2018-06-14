@@ -1,7 +1,6 @@
 package gov.ca.cwds.data.cms;
 import java.util.List;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import gov.ca.cwds.data.CrudsDaoImpl;
