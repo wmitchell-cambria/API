@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.rest.resources.parameter.ScreeningParticipantResourceParameters;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -93,7 +94,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   public void testFindThrowsAssertionError() throws Exception {
     thrown.expect(AssertionError.class);
     try {
-      participantIntakeApiService.find(1L);
+      participantIntakeApiService.find(new ScreeningParticipantResourceParameters("-1", "1"));
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
@@ -135,7 +136,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     expected.addPhoneNumbers(new HashSet<>(Arrays.asList(phoneNumber1, phoneNumber2)));
     expected.setSafelySurenderedBabies(null);
 
-    ParticipantIntakeApi found = participantIntakeApiService.find(pId);
+    ParticipantIntakeApi found = participantIntakeApiService.find(new ScreeningParticipantResourceParameters("-1", "pId"));
     assertThat(found, is(expected));
 
   }
@@ -144,7 +145,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   @Test
   public void testFindReturnsNullWhenNotFound() throws Exception {
     when(participantDao.find("000")).thenReturn(null);
-    ParticipantIntakeApi found = participantIntakeApiService.find("000");
+    ParticipantIntakeApi found = participantIntakeApiService.find(new ScreeningParticipantResourceParameters("-1", "000"));
 
     assertThat(found, is(nullValue()));
 
@@ -248,7 +249,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   public void testDeleteThrowsAssertionError() throws Exception {
     thrown.expect(AssertionError.class);
     try {
-      participantIntakeApiService.delete(1L);
+      participantIntakeApiService.delete(new ScreeningParticipantResourceParameters("-1", "1"));
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
@@ -308,7 +309,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
 
     ParticipantIntakeApi expected = new ParticipantIntakeApi(participantEntity);
 
-    ParticipantIntakeApi found = participantIntakeApiService.delete(pId);
+    ParticipantIntakeApi found = participantIntakeApiService.delete(new ScreeningParticipantResourceParameters("-1", "pId"));
 
     assertThat(found, is(expected));
   }
@@ -408,7 +409,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     expected.addPhoneNumbers(new HashSet<>(Arrays.asList(phoneNumber1, phoneNumber3)));
     expected00.addPhoneNumbers(new HashSet<>(Arrays.asList(phoneNumber11, phoneNumber33)));
 
-    ParticipantIntakeApi found = participantIntakeApiService.update(pId, expected);
+    ParticipantIntakeApi found = participantIntakeApiService.update(new ScreeningParticipantResourceParameters("-1", "pId"), expected);
     assertThat(found, is(expected00));
 
   }
