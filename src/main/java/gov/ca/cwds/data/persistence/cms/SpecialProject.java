@@ -54,7 +54,7 @@ public class SpecialProject extends CmsPersistentObject {
   private String projectDescription;
   
   @Column(name = "END_DT", nullable = true, length = 10)
-  private LocalDate endDate;
+  private transient LocalDate endDate;
   
   @Column(name = "GVR_ENTC", nullable = false, length = 5)
   private Short governmentEntityType;
@@ -68,7 +68,7 @@ public class SpecialProject extends CmsPersistentObject {
   private String name;
   
   @Column(name = "START_DT", nullable = false, length = 10)
-  private LocalDate startDate;
+  private transient LocalDate startDate;
   
   /**
    * Default constructor

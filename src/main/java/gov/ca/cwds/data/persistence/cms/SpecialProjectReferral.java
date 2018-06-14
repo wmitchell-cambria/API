@@ -1,7 +1,5 @@
 package gov.ca.cwds.data.persistence.cms;
 
-import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Date;
@@ -9,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 import gov.ca.cwds.rest.api.domain.DomainChef;
 import liquibase.util.StringUtils;
@@ -232,7 +232,25 @@ import liquibase.util.StringUtils;
   public void setId(String id) {
     this.id = id;
   }
-  
-  
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public final int hashCode() {
+    return HashCodeBuilder.reflectionHashCode(this, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public final boolean equals(Object obj) {
+    return EqualsBuilder.reflectionEquals(this, obj, false);
+  }
 
 }

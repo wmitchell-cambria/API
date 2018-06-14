@@ -26,7 +26,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   
   private static final long serialVersionUID = 1L;
   private static final String DATE_FORMAT = "yyyy-MM-dd";
-  private DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+  private transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
   @NotNull
   @Size(max = 2)
@@ -203,8 +203,7 @@ public class SpecialProjectReferral extends ReportingDomain implements Request, 
   
   private String cookLocalDate(LocalDate date) {
     if (date != null) {
-      String newDate = date.format(formatter);
-      return newDate;
+      return date.format(formatter);
     }
     return null;
   }

@@ -25,7 +25,6 @@ import gov.ca.cwds.data.persistence.cms.SpecialProject;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.api.domain.Csec;
-import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.cms.LegacyTable;
 import gov.ca.cwds.rest.api.domain.cms.PostedSpecialProjectReferral;
 import gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral;
@@ -35,7 +34,6 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RISpecialProjectReferral;
-import gov.ca.cwds.security.utils.PrincipalUtils;
 import io.dropwizard.hibernate.UnitOfWork;
 /**
  * Business layer object to work on {@link SpecialProjectReferral}
@@ -161,7 +159,7 @@ public class SpecialProjectReferralService implements
       messageBuilder.addDomainValidationError(validator.validate(sprDomain));
       
       if (!specialProjectReferralExists(referralId, specialProjectId)) {
-        return postedSpecialProjectReferral = this.create(sprDomain);
+        return this.create(sprDomain);
       } else {
         return null;
       }

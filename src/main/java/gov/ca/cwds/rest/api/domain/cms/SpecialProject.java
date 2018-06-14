@@ -25,7 +25,7 @@ public class SpecialProject implements Request, Response{
   private static final long serialVersionUID = 1L;
       
   private static final String DATE_FORMAT = "yyyy-MM-dd";
-  private DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+  private transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
   @NotNull
   @ApiModelProperty(required = false, readOnly = false)
@@ -167,8 +167,7 @@ public class SpecialProject implements Request, Response{
 
   private String cookLocalDate(LocalDate date) {
     if (date != null) {
-      String newDate = date.format(formatter);
-      return newDate;
+      return date.format(formatter);
     }
     return null;
   }
