@@ -425,21 +425,25 @@ public class ParticipantService implements CrudsService {
       String dateStarted, String timeStarted, MessageBuilder messageBuilder, List<Csec> csecs, SafelySurrenderedBabies ssb,
       ScreeningToReferral screeningToReferral) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
+
+    boolean ssbReportType = FerbConstants.ReportType.SSB.equals(screeningToReferral.getReportType());
+    boolean csecReportType = FerbConstants.ReportType.CSEC.equals(screeningToReferral.getReportType());
+
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
+      childClient.setSafelySurrendedBabiesIndicatorVar(ssbReportType);
       messageBuilder.addDomainValidationError(validator.validate(childClient));
       exsistingChild = this.childClientService.create(childClient);
     }
 
-    if (FerbConstants.ReportType.CSEC.equals(screeningToReferral.getReportType()) && validateCsec(csecs, messageBuilder)) {
+    if (csecReportType && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
       // create a special project for this referral
       specialProjectReferralService.saveCsecSpecialProjectReferral(csecs, referralId, 
           screeningToReferral.getIncidentCounty(), messageBuilder);
     }
 
-    if (FerbConstants.ReportType.SSB.equals(screeningToReferral.getReportType())
-        && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
+    if (ssbReportType && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
       specialProjectReferralService.processSafelySurrenderedBabies(clientId, referralId,
           java.time.LocalDate.parse(dateStarted), java.time.LocalTime.parse(timeStarted), ssb);
     }

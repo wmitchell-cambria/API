@@ -3,10 +3,10 @@ package gov.ca.cwds.data.ns;
 import java.util.List;
 
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +55,8 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
   public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
-    final Session session = getCurrentSession();
-    Transaction txn = session.getTransaction();
+    final Session session = grabSession();
+    Transaction txn = joinTransaction(session);
     boolean transactionExists = txn != null && txn.isActive();
     txn = transactionExists ? txn : session.beginTransaction();
 
@@ -68,6 +68,31 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
       if (!transactionExists)
         txn.commit();
       return intakeCodes;
+    } catch (HibernateException h) {
+      txn.rollback();
+      throw new DaoException(h);
+    }
+  }
+
+  /**
+   * @param legacySystemCodeId - legacySystemCodeId
+   * @return the intakeLov
+   */
+  public IntakeLov findByLegacySystemCodeId(Number legacySystemCodeId) {
+    final String namedQueryName = IntakeLov.class.getName() + ".findByLegacySystemId";
+
+    final Session session = grabSession();
+    Transaction txn = joinTransaction(session);
+    boolean transactionExists = txn != null && txn.isActive();
+    txn = transactionExists ? txn : session.beginTransaction();
+
+    try {
+      final Query query = session.getNamedQuery(namedQueryName).setShort("legacySystemCodeId",
+          legacySystemCodeId.shortValue());
+      final IntakeLov intakeLov = (IntakeLov) query.getSingleResult();
+      if (!transactionExists)
+        txn.commit();
+      return intakeLov;
     } catch (HibernateException h) {
       txn.rollback();
       throw new DaoException(h);

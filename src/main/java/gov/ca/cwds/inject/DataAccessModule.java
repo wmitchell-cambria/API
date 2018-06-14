@@ -157,6 +157,7 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.cms.CollateralIndividual.class,
           gov.ca.cwds.data.persistence.cms.CrossReport.class,
           gov.ca.cwds.data.persistence.cms.EducationProviderContact.class,
+          gov.ca.cwds.data.persistence.cms.EducationProvider.class,
           gov.ca.cwds.data.persistence.cms.OtherAdultInPlacemtHome.class,
           gov.ca.cwds.data.persistence.cms.OtherChildInPlacemtHome.class,
           gov.ca.cwds.data.persistence.cms.OtherClientName.class,

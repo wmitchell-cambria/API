@@ -5,6 +5,8 @@ import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -14,6 +16,7 @@ import org.hibernate.annotations.NamedQuery;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import gov.ca.cwds.data.legacy.cms.entity.PlacementHome;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
@@ -32,6 +35,10 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
 
   private static final long serialVersionUID = 1L;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "FKPLC_HM_T", nullable = false, updatable = false, insertable = false)
+  private PlacementHome placementHome;
 
   /**
    * Default constructor
@@ -75,13 +82,25 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
     this.startDate = freshDate(startDate);
   }
 
+
+  /**
+   * @return the placementHome
+   */
+  public PlacementHome getPlacementHome() {
+    return placementHome;
+  }
+
+  public void setPlacementHome(PlacementHome placementHome) {
+    this.placementHome = placementHome;
+  }
+
   /**
    * {@inheritDoc}
    *
    * @see java.lang.Object#hashCode()
    */
   @Override
-  public final int hashCode() {
+  public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, false);
   }
 
@@ -91,7 +110,7 @@ public class OtherAdultInPlacemtHome extends BaseOtherAdultInPlacemtHome {
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override
-  public final boolean equals(Object obj) {
+  public boolean equals(Object obj) {
     return EqualsBuilder.reflectionEquals(this, obj, false);
   }
 

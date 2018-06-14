@@ -1,6 +1,5 @@
 package gov.ca.cwds.fixture;
 
-import java.math.BigInteger;
 import java.util.Date;
 
 import gov.ca.cwds.data.persistence.cms.CollateralIndividual;
@@ -32,12 +31,12 @@ public class CollateralIndividualEntityBuilder {
   Integer primaryExtensionNumber = 123;
   Long primaryPhoneNo = 1L;
   String residedOutOfStateIndicator = "Y";
-  Short stateCode = (short) 890;
+  Short stateCode = (short) 1828;
   String streetName = "West River";
   String streetNumber = "2751";
-  String suffixTitleDescription = "Junior";
-  Integer zipNumber = 945833;
-  Short zipSuffixNumber = (short) 78;
+  String suffixTitleDescription = "Jr";
+  Integer zipNumber = 95833;
+  Short zipSuffixNumber = (short) 7812;
 
   public CollateralIndividual build() {
     return new CollateralIndividual(badgeNumber, birthDate, cityName, commentDescription,

@@ -11,8 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
-
-
+import gov.ca.cwds.auth.realms.PerryUserIdentity;
 import gov.ca.cwds.data.cms.SpecialProjectDao;
 import gov.ca.cwds.data.cms.SpecialProjectReferralDao;
 
@@ -203,23 +202,31 @@ public class SpecialProjectReferralService implements
    * @param ssb Safely Surrendered Babies
    */
   public void processSafelySurrenderedBabies(String childClientId, String referralId,
-      LocalDate referralReceivedDate, LocalTime referralRecievedTime, gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
+      LocalDate referralReceivedDate, LocalTime referralRecievedTime, 
+      gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies ssb) {
 
     LocalDateTime now = LocalDateTime.now();
-    String userId = PrincipalUtils.getStaffPersonId();
-    String countyCode = PrincipalUtils.getPrincipal().getCountyCode();
-    String countyCwsCode = PrincipalUtils.getPrincipal().getCountyCwsCode();
+    
+    PerryUserIdentity perryUser = RequestExecutionContext.instance().getUserIdentity();
 
+    String staffId = RequestExecutionContext.instance().getStaffId();
+    String staffCountySpecificCode = perryUser.getCountyCode(); // 2 gigit
+    String staffCountyCode = perryUser.getCountyCwsCode(); // 4 digit
+
+    /**
+     * Find SSB special project for staff county
+     */
     List<SpecialProject> ssbSpecialProjects =
         specialProjectDao.findActiveSafelySurrenderedBabiesSpecialProjectByGovernmentEntity(
-            Short.valueOf(countyCode));
+            Short.valueOf(staffCountyCode));
     SpecialProject ssbSpecialProject =
         (ssbSpecialProjects != null && !ssbSpecialProjects.isEmpty()) ? ssbSpecialProjects.get(0)
             : null;
 
     if (ssbSpecialProject == null) {
       throw new ServiceException(
-          "Special project not found for Safely Surrendered Babies for county " + countyCode);
+          "Special project not found for Safely Surrendered Babies for staff county "
+              + staffCountyCode);
     }
 
     /**
@@ -227,8 +234,12 @@ public class SpecialProjectReferralService implements
      */
     gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral spr = 
         new gov.ca.cwds.rest.api.domain.cms.SpecialProjectReferral();
-    spr.setCountySpecificCode(countyCwsCode);
-    spr.setParticipantStartDate(referralReceivedDate.toString() );
+    spr.setCountySpecificCode(staffCountySpecificCode);
+    if (null == referralReceivedDate) {
+      spr.setParticipantStartDate("");
+    } else {
+      spr.setParticipantStartDate(referralReceivedDate.toString());
+    }
     spr.setReferralId(referralId);
     spr.setSpecialProjectId(ssbSpecialProject.getId());
     
@@ -246,7 +257,7 @@ public class SpecialProjectReferralService implements
     ssbEntity.setMedicalQuestionnaireCode(ssb.getMedicalQuestionaireCode());
     ssbEntity.setQuestionnaireReceivedDate(ssb.getMedicalQuestionaireReturnDate());
     ssbEntity.setCpsNotofiedTime(referralRecievedTime);
-    ssbEntity.setLastUpdateId(userId);
+    ssbEntity.setLastUpdateId(staffId);
     ssbEntity.setLastUpdateTime(now);
     ssbEntity.setRelationToClient(ssb.getRelationToChild().shortValue());
     ssbEntity.setSpecialProjectReferral(createdSpr.getId());
@@ -260,8 +271,8 @@ public class SpecialProjectReferralService implements
      */
     NonCWSNumber braceltInfo = new NonCWSNumber();
     braceltInfo.setClientId(childClientId);
-    braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(userId));
-    braceltInfo.setLastUpdateId(userId);
+    braceltInfo.setThirdId(CmsKeyIdGenerator.getNextValue(staffId));
+    braceltInfo.setLastUpdateId(staffId);
     braceltInfo.setLastUpdateTime(now);
     braceltInfo.setOtherId(ssb.getBraceletId());
     braceltInfo.setOtherIdCode(MEDICAL_RECORD_SYSTEM_CODE_ID);
