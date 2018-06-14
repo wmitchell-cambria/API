@@ -24,9 +24,9 @@ import gov.ca.cwds.rest.services.ServiceException;
  * {@link RaceAndEthnicity} for an valid participants.
  * 
  * @author CWDS API Team
- *
  */
 public class RaceAndEthnicityTransformer {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(RaceAndEthnicityTransformer.class);
 
   private static final String DECLINED_TO_ANSWER = "D";
