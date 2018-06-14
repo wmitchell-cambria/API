@@ -5,17 +5,22 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import gov.ca.cwds.data.ns.NsPersistentObject;
 import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.rest.util.FerbDateUtils;
+import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 /**
  * {@link NsPersistentObject} representing SafelySurrenderedBabies
@@ -52,7 +57,10 @@ public class SafelySurrenderedBabiesEntity implements PersistentObject, Serializ
   @Column(name = "comments")
   private String comments;
 
-  @OneToOne(optional = false)
+  @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
+  @OneToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "participant_child", nullable = false, updatable = false, insertable = false)
   private ParticipantEntity participantEntity;
 
@@ -167,7 +175,10 @@ public class SafelySurrenderedBabiesEntity implements PersistentObject, Serializ
     this.participantEntity = participantEntity;
   }
 
-
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
 
   @Override
   public final int hashCode() {
