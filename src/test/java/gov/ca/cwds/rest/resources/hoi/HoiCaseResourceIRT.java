@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
+import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CASE_HISTORY_OF_INVOLVEMENT;
 import static org.junit.Assert.assertEquals;
 
@@ -25,6 +27,9 @@ public class HoiCaseResourceIRT extends HOIBaseTest {
         });
     assertEquals(expectedHOICases, actualHOICases);
     assertHOICasesAreSorted(new String[]{"Co8uaDi0DW", "IdQImWo0DW"}, actualHOICases);
+
+    assertQueryExecutionCount(CMS_BUNDLE_TAG, 17);
+    assertDbNotTouched(NS_BUNDLE_TAG);
   }
 
   private String doGet() throws Exception {

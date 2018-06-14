@@ -1,5 +1,9 @@
 package gov.ca.cwds.inject;
 
+import static gov.ca.cwds.data.HibernateStatisticsConsumerRegistry.provideHibernateStatistics;
+import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
+import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
+
 import java.util.Properties;
 
 import javax.validation.Validation;
@@ -104,8 +108,10 @@ public class ServicesModule extends AbstractModule {
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
-        aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
+        UnitOfWork unitOfWorkAnnotation = mi.getMethod().getAnnotation(UnitOfWork.class);
+        aspect.beforeStart(unitOfWorkAnnotation);
         final Object result = mi.proceed();
+        collectAndProvideHibernateStatistics(unitOfWorkAnnotation.value());
         aspect.afterEnd();
         return result;
       } catch (Exception e) {
@@ -116,6 +122,13 @@ public class ServicesModule extends AbstractModule {
       }
     }
 
+    private void collectAndProvideHibernateStatistics(String bundleTag) {
+      if (CMS_BUNDLE_TAG.equals(bundleTag)) {
+        provideHibernateStatistics(bundleTag, cmsHibernateBundle.getSessionFactory().getStatistics());
+      } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
+        provideHibernateStatistics(bundleTag, nsHibernateBundle.getSessionFactory().getStatistics());
+      }
+    }
   }
 
   /**

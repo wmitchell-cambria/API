@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
+import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_HOI_SCREENINGS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -31,6 +33,9 @@ public class HoiScreeningResourceIRT extends HOIBaseTest {
     assertHOIScreeningsAreSorted(new String[]{"750", "885", "862", "714"}, actualHOIScreenings);
     // assert HOI Screenings are sorted with Null StartDate on top
     assertNull(actualHOIScreenings.get(0).getStartDate());
+
+    assertQueryExecutionCount(CMS_BUNDLE_TAG, 1);
+    assertQueryExecutionCount(NS_BUNDLE_TAG, 4);
   }
 
   private String doGet() throws Exception {
