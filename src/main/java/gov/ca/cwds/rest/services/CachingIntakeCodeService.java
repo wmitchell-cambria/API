@@ -21,15 +21,15 @@ import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
 import gov.ca.cwds.rest.services.submit.IntakeCodeConverter;
 
 /**
- * Intake list of values (LOV) code cache implementation.
+ * Intake code cache Implementation
  * 
  * @author CWDS API Team
  */
 public class CachingIntakeCodeService extends IntakeLovService implements IntakeCodeCache {
 
-  private static final long serialVersionUID = 1L;
-
   private transient LoadingCache<CacheKey, Object> intakeCodeCache;
+
+  private static final long serialVersionUID = 1L;
 
   /**
    * Default no-arg constructor.
@@ -42,16 +42,16 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
   /**
    * Construct the object.
    * 
-   * @param intakeLovDao Intake Lov Dao
+   * @param intakeLovDao Intake LOV Dao
    * @param secondsToRefreshCache Seconds after which cache entries will be invalidated for refresh.
    */
   @Inject
   public CachingIntakeCodeService(IntakeLovDao intakeLovDao, long secondsToRefreshCache) {
     super(intakeLovDao);
 
-    final IntakeCodeCacheLoader cacheLoader = new IntakeCodeCacheLoader(this);
-    intakeCodeCache = CacheBuilder.newBuilder()
-        .refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS).build(cacheLoader);
+    intakeCodeCache =
+        CacheBuilder.newBuilder().refreshAfterWrite(secondsToRefreshCache, TimeUnit.SECONDS)
+            .build(new IntakeCodeCacheLoader(this));
   }
 
   @SuppressWarnings("unchecked")
@@ -89,6 +89,24 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
       sysId = SystemCodeCache.global().getSystemCodeId(intakeCodeConveter.getLegacyValue(), metaId);
     }
     return sysId;
+  }
+
+  @Override
+  public IntakeLov getIntakeLov(Number legacySystemCodeId) {
+    if (legacySystemCodeId == null || Integer.valueOf("0").equals(legacySystemCodeId.intValue())) {
+      return null;
+    }
+    return (IntakeLov) getFromCache(CacheKey.createForSystemCode(legacySystemCodeId));
+  }
+
+  @Override
+  public String getIntakeCodeForLegacySystemCode(Number systemCodeId) {
+    String intakeCode = null;
+    final IntakeLov intakeLov = getIntakeLov(systemCodeId);
+    if (intakeLov != null) {
+      intakeCode = intakeLov.getIntakeCode();
+    }
+    return intakeCode;
   }
 
   /**
@@ -132,6 +150,10 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
       if (CacheKey.META_ID_TYPE.equals(key.getType())) {
         List<IntakeLov> intakeCodeList = intakeLovService.loadAllLegacyMetaIds(key.getValue());
         objectToCache = intakeCodeList;
+      } else if (CacheKey.SYSTEM_CODE_ID_TYPE.equals(key.getType())) {
+        // Add intakeLov objects keyed by Leagcy System Code ID.
+        IntakeLov intakeLov = intakeLovService.loadLegacySystemCode(key.getValue());
+        objectToCache = intakeLov;
       }
       return objectToCache;
     }
@@ -148,6 +170,7 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
     private static final long serialVersionUID = 1L;
 
     private static final String META_ID_TYPE = "META_ID";
+    private static final String SYSTEM_CODE_ID_TYPE = "SYSTEM_CODE_ID";
 
     private Serializable value;
     private String type;
@@ -167,6 +190,10 @@ public class CachingIntakeCodeService extends IntakeLovService implements Intake
 
     private static CacheKey createForMeta(Serializable value) {
       return new CacheKey(META_ID_TYPE, value);
+    }
+
+    private static CacheKey createForSystemCode(Serializable value) {
+      return new CacheKey(SYSTEM_CODE_ID_TYPE, value);
     }
   }
 
