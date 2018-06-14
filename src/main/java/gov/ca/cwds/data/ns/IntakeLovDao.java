@@ -5,7 +5,10 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -21,6 +24,8 @@ import gov.ca.cwds.inject.NsSessionFactory;
  */
 public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(IntakeLovDao.class);
+
   /**
    * Constructor.
    * 
@@ -31,32 +36,69 @@ public class IntakeLovDao extends BaseDaoImpl<IntakeLov> {
     super(sessionFactory);
   }
 
+  protected Session getCurrentSession() {
+    Session session;
+    try {
+      session = getSessionFactory().getCurrentSession();
+    } catch (HibernateException e) { // NOSONAR
+      LOGGER.warn("NO SESSION!");
+      session = getSessionFactory().openSession();
+    }
+
+    return session;
+  }
+
   /**
    * @param legacyCategoryId - legacyCategoryId
    * @return the intake code based on the category id
    */
-  @SuppressWarnings({"rawtypes", "unchecked"})
+  @SuppressWarnings("unchecked")
   public List<IntakeLov> findByLegacyMetaId(String legacyCategoryId) {
     final String namedQueryName = IntakeLov.class.getName() + ".findByLegacyCategoryId";
 
+    // TODO: DRS: NO! Kills XA!
     final Session session = grabSession();
-    joinTransaction(session);
-
-    // DRS: breaks managed transactions, like XA.
-    // Transaction txn = session.getTransaction();
-    // boolean transactionExists = txn != null && txn.isActive();
-    // txn = transactionExists ? txn : session.beginTransaction();
+    Transaction txn = joinTransaction(session);
+    boolean transactionExists = txn != null && txn.isActive();
+    txn = transactionExists ? txn : session.beginTransaction();
 
     try {
-      final Query query =
+      final Query<IntakeLov> query =
           session.getNamedQuery(namedQueryName).setParameter("legacyCategoryId", legacyCategoryId);
       final List<IntakeLov> intakeCodes = query.list();
 
-      // if (!transactionExists)
-      // txn.commit();
+      if (!transactionExists)
+        txn.commit();
       return intakeCodes;
     } catch (HibernateException h) {
-      // txn.rollback();
+      txn.rollback();
+      throw new DaoException(h);
+    }
+  }
+
+  /**
+   * @param legacySystemCodeId - legacySystemCodeId
+   * @return the intakeLov
+   */
+  @SuppressWarnings("unchecked")
+  public IntakeLov findByLegacySystemCodeId(Number legacySystemCodeId) {
+    final String namedQueryName = IntakeLov.class.getName() + ".findByLegacySystemId";
+
+    // TODO: DRS: NO! Kills XA!
+    final Session session = grabSession();
+    Transaction txn = joinTransaction(session);
+    boolean transactionExists = txn != null && txn.isActive();
+    txn = transactionExists ? txn : session.beginTransaction();
+
+    try {
+      final Query<IntakeLov> query = session.getNamedQuery(namedQueryName)
+          .setShort("legacySystemCodeId", legacySystemCodeId.shortValue());
+      final IntakeLov intakeLov = query.getSingleResult();
+      if (!transactionExists)
+        txn.commit();
+      return intakeLov;
+    } catch (HibernateException h) {
+      txn.rollback();
       throw new DaoException(h);
     }
   }

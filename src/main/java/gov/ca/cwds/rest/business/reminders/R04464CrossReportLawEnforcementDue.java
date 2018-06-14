@@ -25,16 +25,16 @@ import gov.ca.cwds.rest.services.cms.TickleService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
- * 
  * <p>
  * BUSINESS RULE: "R - 04464" - TICKLE for Cross Report for Law Enforcement Due
+ * </p>
  * 
+ * <p>
  * If the Allegation types is not a general Neglect and substantial risk, crossReport and reporter
  * doesn't have a lawEnforcement Id. Then create this reminder.
- * <p>
+ * </p>
  * 
  * @author CWDS API Team
- *
  */
 public class R04464CrossReportLawEnforcementDue {
 
