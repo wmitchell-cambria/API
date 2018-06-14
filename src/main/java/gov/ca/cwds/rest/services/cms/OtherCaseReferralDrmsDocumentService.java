@@ -62,19 +62,16 @@ public class OtherCaseReferralDrmsDocumentService
 
   @Override
   public OtherCaseReferralDrmsDocument find(String s) {
-    throw new NotImplementedException("find not implement");
+    throw new NotImplementedException("find not implemented");
   }
 
   @Override
   public OtherCaseReferralDrmsDocument delete(String s) {
-    throw new NotImplementedException("delete not implement");
+    throw new NotImplementedException("delete not implemented");
   }
 
   @Override
   public OtherCaseReferralDrmsDocument update(String s, OtherCaseReferralDrmsDocument request) {
-    throw new NotImplementedException("update not implement");
+    throw new NotImplementedException("update not implemented");
   }
-
-
-
 }

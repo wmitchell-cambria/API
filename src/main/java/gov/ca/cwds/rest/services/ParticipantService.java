@@ -55,6 +55,7 @@ import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
 import gov.ca.cwds.rest.services.cms.ClientService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.SpecialProjectReferralService;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
@@ -65,7 +66,6 @@ import gov.ca.cwds.rest.validation.ParticipantValidator;
 public class ParticipantService implements CrudsService {
 
   private static final String ASSESMENT = "A";
-  private static final String CLIENT = "CLIENT_T";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParticipantService.class);
 
@@ -218,9 +218,8 @@ public class ParticipantService implements CrudsService {
       clientParticipants.addVictimIds(incomingParticipant.getId(), clientId);
       // since this is the victim - process the ChildClient
       try {
-        processChildClient(clientId, referralId, dateStarted, timeStarted, messageBuilder,
-            incomingParticipant.getCsecs(), incomingParticipant.getSafelySurrenderedBabies(),
-            screeningToReferral.getReportType());
+        processChildClient(clientId, referralId, dateStarted, timeStarted, messageBuilder, incomingParticipant.getCsecs(),
+            incomingParticipant.getSafelySurrenderedBabies(), screeningToReferral);
       } catch (ServiceException e) {
         String message = e.getMessage();
         messageBuilder.addMessageAndLog(message, e, LOGGER);
@@ -422,13 +421,13 @@ public class ParticipantService implements CrudsService {
     return theReporter;
   }
 
-  private ChildClient processChildClient(String clientId, String referralId, String dateStarted,
-      String timeStarted, MessageBuilder messageBuilder, List<Csec> csecs,
-      SafelySurrenderedBabies ssb, String reportType) {
+  private ChildClient processChildClient(String clientId, String referralId,
+      String dateStarted, String timeStarted, MessageBuilder messageBuilder, List<Csec> csecs, SafelySurrenderedBabies ssb,
+      ScreeningToReferral screeningToReferral) {
     ChildClient exsistingChild = this.childClientService.find(clientId);
 
-    boolean ssbReportType = FerbConstants.ReportType.SSB.equals(reportType);
-    boolean csecReportType = FerbConstants.ReportType.CSEC.equals(reportType);
+    boolean ssbReportType = FerbConstants.ReportType.SSB.equals(screeningToReferral.getReportType());
+    boolean csecReportType = FerbConstants.ReportType.CSEC.equals(screeningToReferral.getReportType());
 
     if (exsistingChild == null) {
       ChildClient childClient = ChildClient.createWithDefaults(clientId);
@@ -439,6 +438,9 @@ public class ParticipantService implements CrudsService {
 
     if (csecReportType && validateCsec(csecs, messageBuilder)) {
       saveOrUpdateCsec(clientId, csecs, messageBuilder);
+      // create a special project for this referral
+      specialProjectReferralService.saveCsecSpecialProjectReferral(csecs, referralId, 
+          screeningToReferral.getIncidentCounty(), messageBuilder);
     }
 
     if (ssbReportType && validateSafelySurrenderedBabies(ssb, messageBuilder)) {
