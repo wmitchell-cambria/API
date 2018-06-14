@@ -22,19 +22,16 @@ import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing a ChildClient
+ * {@link DomainObject} representing a ChildClient.
  * 
  * @author CWDS API Team
  */
 public class ChildClient extends ReportingDomain implements Request, Response {
 
+  private static final long serialVersionUID = 1L;
+
   private static final short DEFAULT_CODE = 0;
   private static final int DEFAULT_INT = 0;
-
-  /**
-   * Serialization version
-   */
-  private static final long serialVersionUID = 1L;
 
   @NotNull
   @Size(min = CMS_ID_LEN, max = CMS_ID_LEN)

@@ -37,7 +37,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   /**
    * Context parameters
    */
-  private Map<Parameter, Object> contextParameters = new EnumMap<>(Parameter.class);
+  private final Map<Parameter, Object> contextParameters = new EnumMap<>(Parameter.class);
 
   /**
    * Private constructor
@@ -49,6 +49,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
     put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
+    put(Parameter.RESOURCE_READ_ONLY, true);
   }
 
   /**
@@ -131,6 +132,12 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   @Override
   public Date getRequestStartTime() {
     return (Date) get(Parameter.REQUEST_START_TIME);
+  }
+
+  @Override
+  public boolean isResourceReadOnly() {
+    final Boolean readOnly = (Boolean) get(Parameter.RESOURCE_READ_ONLY);
+    return readOnly != null && readOnly.booleanValue();
   }
 
   /**

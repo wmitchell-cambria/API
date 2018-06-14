@@ -16,7 +16,6 @@ import gov.ca.cwds.rest.util.ParticipantUtils;
  * for the victim.
  * 
  * @author CWDS API team
- *
  */
 public class VictimBirthValidator
     implements ConstraintValidator<ValidVictimBirth, ScreeningToReferral> {

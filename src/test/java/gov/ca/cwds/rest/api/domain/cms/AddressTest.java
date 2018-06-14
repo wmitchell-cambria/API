@@ -5,7 +5,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -27,7 +26,6 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.resources.cms.JerseyGuiceRule;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.ResourceTestRule;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
@@ -35,7 +33,6 @@ import nl.jqno.equalsverifier.Warning;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class AddressTest {
 
   @ClassRule
@@ -212,14 +209,14 @@ public class AddressTest {
         cmsAddr.getFrgAdrtB());
     assertEquals("Expected governmentEntityCd field to be initialized with default values",
         new Short("0"), cmsAddr.getGovernmentEntityCd());
-    assertEquals("Expected messageNumber field to be initialized with default values",
-        new Long(0), cmsAddr.getMessageNumber());
+    assertEquals("Expected messageNumber field to be initialized with default values", new Long(0),
+        cmsAddr.getMessageNumber());
     assertEquals("Expected messageExtension field to be initialized with default values",
         new Integer(0), cmsAddr.getMessageExtension());
     assertEquals("Expected headerAddress field to be initialized with default values", " ",
         cmsAddr.getHeaderAddress());
-    assertEquals("Expected primaryNumber field to be initialized with default values",
-        new Long(0), cmsAddr.getPrimaryNumber());
+    assertEquals("Expected primaryNumber field to be initialized with default values", new Long(0),
+        cmsAddr.getPrimaryNumber());
     assertEquals("Expected primaryExtension field to be initialized with default values",
         new Integer(0), cmsAddr.getPrimaryExtension());
     assertEquals("Expected postDirCd field to be initialized with default values", " ",

@@ -16,10 +16,10 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.ScreeningToReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.PostedScreeningToReferral;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -60,10 +60,9 @@ public class ScreeningToReferralResource {
    * Finds an referral by id.
    * 
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -80,10 +79,9 @@ public class ScreeningToReferralResource {
    * Create an {@link ScreeningToReferral}.
    * 
    * @param screeningToReferral The {@link ScreeningToReferral}
-   * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 406, message = "Accept Header not supported"),

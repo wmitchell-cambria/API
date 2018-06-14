@@ -28,7 +28,7 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * Business layer object to work on {@link DeliveredServiceEntity}
+ * Business layer object to work on {@link DeliveredServiceEntity}.
  * 
  * @author CWDS API Team
  */
@@ -47,7 +47,6 @@ public class DeliveredService {
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects.
    * @param longTextHelper the helper class handling
    *        {@link gov.ca.cwds.data.persistence.cms.LongText} objects
-   * 
    */
   @Inject
   public DeliveredService(DeliveredServiceDao deliveredServiceDao, StaffPersonDao staffPersonDao,
@@ -110,7 +109,6 @@ public class DeliveredService {
    * @return the DeliveredServiceDomain
    */
   public String create(ContactReferralRequest request, String countySpecificCode) {
-
     List<DeliveredServiceDomain> deliveredServiceDomains =
         constructDeliveredServiceDomainForCreate(request, countySpecificCode);
     String primaryDeliveredServiceId = null;
@@ -137,10 +135,7 @@ public class DeliveredService {
     }
 
     return primaryDeliveredServiceId;
-
   }
-
-
 
   /**
    * Construct the DeliveredService object for create
@@ -179,7 +174,6 @@ public class DeliveredService {
       deliveredServiceDomains.add(deliveredServiceDomain);
     }
     return deliveredServiceDomains;
-
   }
 
   private DeliveredServiceDomain createDeliveredServiceDomain(String countySpecificCode,
@@ -197,16 +191,12 @@ public class DeliveredService {
         ? longTextHelper.createLongText(noteContinuation, countySpecificCode)
         : null;
 
-
-
     return DeliveredServiceDomain.createWithDefaultsForFieldsNotPopulatedByUI(
         Integer.valueOf(contactRequest.getCommunicationMethod()),
         Integer.valueOf(contactRequest.getLocation()), countySpecificCode, longTextId,
         longTextContinuationId, endDate, endTime, serviceContactType, startDate, startTime,
         contactRequest.getStatus());
   }
-
-
 
   /**
    * Update a record in DeliveredService and return the DeliveredServiceDomain object
@@ -218,7 +208,6 @@ public class DeliveredService {
    */
   public DeliveredServiceDomain update(String contactId, ContactReferralRequest request,
       String countySpecificCode) {
-
     DeliveredServiceDomain deliveredServiceDomain =
         constructDeliveredServiceDomainForUpdate(contactId, request, countySpecificCode);
 
@@ -234,10 +223,7 @@ public class DeliveredService {
       LOGGER.info("deliveredServiceEntity Exception ", e);
       throw new ServiceException(e);
     }
-
   }
-
-
 
   /**
    * Construct the DeliveredService object for update
@@ -295,8 +281,6 @@ public class DeliveredService {
         : null;
   }
 
-
-
   /**
    * 
    * @param longNote - complete full long text which comes from UI.
@@ -342,14 +326,13 @@ public class DeliveredService {
     // changing endIndex if full long text is smaller than estimated count.
     endIndex = (note.length() < endIndex) ? note.length() : endIndex;
     return note.substring(beginIndex, endIndex);
-
   }
 
   /**
    * determining end index count based on last period(.) or space (" ") or can fit entire text.
    * 
    * @param temptext - temp text to create longText
-   * @param endIndex - end inex
+   * @param endIndex - end index
    * @param count - count of chars to be stored
    * @param note - complete full long text which comes from UI.
    * @return - end index
@@ -370,7 +353,6 @@ public class DeliveredService {
 
     }
     return tempEndIndex > 0 ? tempEndIndex : endIndex;
-
   }
 
   /**
@@ -382,8 +364,6 @@ public class DeliveredService {
    */
   private String getNextText(int index, List<String> splitNotes) {
     return (splitNotes.size() > index) ? splitNotes.get(index) : null;
-
   }
-
 
 }

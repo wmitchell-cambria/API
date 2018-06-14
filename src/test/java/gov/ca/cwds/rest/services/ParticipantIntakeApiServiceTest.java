@@ -18,8 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AllegationDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
@@ -73,7 +71,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
   private ParticipantIntakeApiService participantIntakeApiService =
       new ParticipantIntakeApiService();
 
-
   @Before
   @Override
   public void setup() throws Exception {
@@ -81,12 +78,9 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     participantIntakeApiService
         .setSafelySurrenderedBabiesMapper(SafelySurrenderedBabiesMapper.INSTANCE);
 
-    MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-
+    // MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
     MockitoAnnotations.initMocks(this);
-
   }
-
 
   @Override
   @Test
@@ -97,8 +91,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
-
-
   }
 
   @Override
@@ -109,7 +101,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     String aId2 = "2";
     String pN1 = "11";
     String pN2 = "22";
-
 
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
@@ -137,7 +128,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
 
     ParticipantIntakeApi found = participantIntakeApiService.find(pId);
     assertThat(found, is(expected));
-
   }
 
   @Override
@@ -147,7 +137,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     ParticipantIntakeApi found = participantIntakeApiService.find("000");
 
     assertThat(found, is(nullValue()));
-
   }
 
   @Override
@@ -164,7 +153,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
-
   }
 
   @Override
@@ -180,7 +168,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     String aId2 = "2";
     String pN1 = "11";
     String pN2 = "22";
-
 
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
@@ -252,8 +239,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
-
-
   }
 
   @Override
@@ -280,9 +265,7 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     String pN1 = "11";
     String pN2 = "22";
 
-
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
-
     Addresses addresses1 = new AddressesEntityBuilder().setId(aId1).build();
     Addresses addresses2delete = new AddressesEntityBuilder().setId(aId2).build();
     PhoneNumbers phoneNumbers1 =
@@ -307,7 +290,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     when(participantDao.find(pId)).thenReturn(participantEntity);
 
     ParticipantIntakeApi expected = new ParticipantIntakeApi(participantEntity);
-
     ParticipantIntakeApi found = participantIntakeApiService.delete(pId);
 
     assertThat(found, is(expected));
@@ -323,7 +305,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     } catch (AssertionError e) {
       assertEquals("Expected AssertionError", e.getMessage());
     }
-
   }
 
   @Override
@@ -341,7 +322,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     String pN1 = "11";
     String pN2 = "22";
     String pN3 = "33";
-
 
     ParticipantEntity participantEntity = new ParticipantEntityBuilder().setId(pId).build();
 
@@ -389,7 +369,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
     when(participantDao.find(pId)).thenReturn(participantEntity);
     when(participantDao.update(any())).thenReturn(participantEntity);
 
-
     ParticipantIntakeApi expected = new ParticipantIntakeApi(participantEntity);
     ParticipantIntakeApi expected00 = new ParticipantIntakeApi(participantEntity);
 
@@ -410,7 +389,6 @@ public class ParticipantIntakeApiServiceTest implements ServiceTestTemplate {
 
     ParticipantIntakeApi found = participantIntakeApiService.update(pId, expected);
     assertThat(found, is(expected00));
-
   }
 
   @Override

@@ -24,9 +24,11 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
  */
 public class ReporterService implements
     TypedCrudsService<String, gov.ca.cwds.rest.api.domain.cms.Reporter, gov.ca.cwds.rest.api.domain.cms.Reporter> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ReporterService.class);
 
   private ReporterDao reporterDao;
+
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIReporter riReporter;
 
@@ -50,7 +52,6 @@ public class ReporterService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Reporter find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Reporter persistedReporter = reporterDao.find(primaryKey);
     if (persistedReporter != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Reporter(persistedReporter);
@@ -79,7 +80,6 @@ public class ReporterService implements
    */
   @Override
   public PostedReporter create(gov.ca.cwds.rest.api.domain.cms.Reporter request) {
-
     gov.ca.cwds.rest.api.domain.cms.Reporter reporter = request;
     try {
       Reporter managed = new Reporter(reporter, RequestExecutionContext.instance().getStaffId(),
@@ -90,7 +90,6 @@ public class ReporterService implements
       LOGGER.info("Reporter already exists : {}", reporter);
       throw new ServiceException(e);
     }
-
   }
 
   /**

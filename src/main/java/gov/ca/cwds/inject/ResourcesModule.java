@@ -10,7 +10,6 @@ import gov.ca.cwds.rest.SwaggerConfiguration;
 import gov.ca.cwds.rest.api.contact.DeliveredServiceDomain;
 import gov.ca.cwds.rest.api.domain.IntakeLovEntry;
 import gov.ca.cwds.rest.api.domain.IntakeLovResponse;
-import gov.ca.cwds.rest.api.domain.ParticipantIntakeApi;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationRequest;
 import gov.ca.cwds.rest.api.domain.auth.AuthorizationResponse;
@@ -78,7 +77,6 @@ import gov.ca.cwds.rest.resources.investigation.HistoryOfInvolvementResource;
 import gov.ca.cwds.rest.resources.investigation.PeopleResource;
 import gov.ca.cwds.rest.resources.investigation.RelationshipListResource;
 import gov.ca.cwds.rest.resources.investigation.SafetyAlertsResource;
-import gov.ca.cwds.rest.resources.screeningparticipant.ScreeningParticipantResource;
 import gov.ca.cwds.rest.resources.submit.ScreeningSubmitResource;
 import gov.ca.cwds.rest.services.AddressService;
 import gov.ca.cwds.rest.services.IntakeLovService;
@@ -122,7 +120,6 @@ import gov.ca.cwds.rest.services.investigation.InvestigationService;
 import gov.ca.cwds.rest.services.investigation.PeopleService;
 import gov.ca.cwds.rest.services.investigation.SafetyAlertsService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
-import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 
 
@@ -142,42 +139,41 @@ public class ResourcesModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(ApplicationResource.class);
-    bind(SwaggerResource.class);
     bind(AddressResource.class);
-    bind(ParticipantIntakeApiResource.class);
-    bind(PersonResource.class);
-    bind(ScreeningResource.class);
-    bind(ScreeningSubmitResource.class);
-    bind(ScreeningIntakeResource.class);
-    bind(ScreeningDashboardResource.class);
+    bind(ApplicationResource.class);
+    bind(AuthorizationResource.class);
+    bind(ClientCollateralResource.class);
     bind(CmsDocReferralClientResource.class);
     bind(CmsDocumentResource.class);
     bind(CmsNSReferralResource.class);
-    bind(ScreeningToReferralResource.class);
-    bind(ScreeningRelationshipResource.class);
-    bind(ClientCollateralResource.class);
-    bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
-    bind(DeliveredServiceResource.class);
     bind(ContactResource.class);
-    bind(HistoryOfInvolvementResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
+    bind(DeliveredServiceResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.AllegationListResource.class);
-    bind(gov.ca.cwds.rest.resources.investigation.CrossReportResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.AllegationResource.class);
     bind(gov.ca.cwds.rest.resources.investigation.CrossReportListResource.class);
-    bind(RelationshipListResource.class);
-    bind(PeopleResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.CrossReportResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.InvestigationsResource.class);
+    bind(gov.ca.cwds.rest.resources.investigation.ScreeningSummaryResource.class);
+    bind(gov.ca.cwds.rest.resources.StaffPersonResource.class);
     bind(GovernmentOrganizationResource.class);
-    bind(SafetyAlertsResource.class);
-    bind(InvolvementHistoryResource.class);
-    bind(HoiReferralResource.class);
+    bind(HistoryOfInvolvementResource.class);
     bind(HoiCaseResource.class);
+    bind(HoiReferralResource.class);
     bind(HoiScreeningResource.class);
-    bind(AuthorizationResource.class);
     bind(HoiUsingClientIdResource.class);
-    bind(ScreeningParticipantResource.class);
+    bind(InvolvementHistoryResource.class);
+    bind(ParticipantIntakeApiResource.class);
+    bind(PeopleResource.class);
+    bind(PersonResource.class);
+    bind(RelationshipListResource.class);
+    bind(SafetyAlertsResource.class);
+    bind(ScreeningDashboardResource.class);
+    bind(ScreeningIntakeResource.class);
+    bind(ScreeningRelationshipResource.class);
+    bind(ScreeningResource.class);
+    bind(ScreeningSubmitResource.class);
+    bind(ScreeningToReferralResource.class);
+    bind(SwaggerResource.class);
   }
 
   @Provides
@@ -270,14 +266,6 @@ public class ResourcesModule extends AbstractModule {
       Injector injector) {
     return new TypedServiceBackedResourceDelegate<>(
         injector.getInstance(HistoryOfInvolvementService.class));
-  }
-
-  @Provides
-  @ScreeningParticipantServiceBackedResource
-  public TypedResourceDelegate<String, ParticipantIntakeApi> screeningParticipantResource(
-      Injector injector) {
-    return new TypedServiceBackedResourceDelegate<>(
-        injector.getInstance(ScreeningParticipantService.class));
   }
 
   @Provides

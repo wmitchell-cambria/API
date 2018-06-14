@@ -6,13 +6,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.inject.Inject;
 
-import gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity;
 import gov.ca.cwds.rest.api.domain.cms.LongText;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 
 /**
- * Business layer object to work on {@link DeliveredServiceEntity}
+ * Business layer object facilitates work on {@link LongText} and service {@link LongTextService}.
  * 
  * @author CWDS API Team
  */
@@ -52,13 +51,10 @@ public class LongTextHelper {
    * @return identifier of the posted LongText entity
    */
   public String createLongText(String textDescription, String countySpecificCode) {
-
     gov.ca.cwds.rest.api.domain.cms.LongText longText =
         new gov.ca.cwds.rest.api.domain.cms.LongText(countySpecificCode, textDescription);
-    PostedLongText postedLongText = longTextService.create(longText);
-
+    final PostedLongText postedLongText = longTextService.create(longText);
     return postedLongText.getId();
-
   }
 
   /**

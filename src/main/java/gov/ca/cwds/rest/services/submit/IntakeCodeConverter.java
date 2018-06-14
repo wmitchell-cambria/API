@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Enum converts CWS/CMS codes to Intake LOV equivalents.
+ * 
  * @author CWDS API Team
- *
  */
-public enum IntakeCodeConveter {
+public enum IntakeCodeConverter {
 
   ROMANIAN("Romanian", "White - Romanian*"),
 
@@ -75,13 +76,13 @@ public enum IntakeCodeConveter {
 
   ABANDONED("Abandoned", "Unable to Determine*");
 
-  private static final Map<String, IntakeCodeConveter> mapper = new HashMap<>();
+  private static final Map<String, IntakeCodeConverter> mapper = new HashMap<>();
 
   private final String intakeValue;
 
   private final String legacyValue;
 
-  private IntakeCodeConveter(String intakeValue, String legacyValue) {
+  private IntakeCodeConverter(String intakeValue, String legacyValue) {
     this.intakeValue = intakeValue;
     this.legacyValue = legacyValue;
   }
@@ -104,13 +105,13 @@ public enum IntakeCodeConveter {
    * @param intakeValue - intakeValue
    * @return the legacy value
    */
-  public static IntakeCodeConveter findLegacyDescription(String intakeValue) {
+  public static IntakeCodeConverter findLegacyDescription(String intakeValue) {
     return mapper.containsKey(intakeValue) ? mapper.get(intakeValue) : null;
   }
 
   static {
-    for (IntakeCodeConveter intakeCodeConveter : IntakeCodeConveter.values()) {
-      mapper.put(intakeCodeConveter.intakeValue, intakeCodeConveter);
+    for (IntakeCodeConverter intakeCodeConverter : IntakeCodeConverter.values()) {
+      mapper.put(intakeCodeConverter.intakeValue, intakeCodeConverter);
     }
   }
 

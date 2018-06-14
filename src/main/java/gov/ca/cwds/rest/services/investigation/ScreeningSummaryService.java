@@ -5,8 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.SessionFactory;
-import org.hibernate.context.internal.ManagedSessionContext;
+import org.hibernate.Session;
 
 import com.google.inject.Inject;
 
@@ -65,16 +64,17 @@ public class ScreeningSummaryService
   private ScreeningSummary findScreeningSummaryByReferralId(String referralId) {
     ScreeningSummary screeningSummary = null;
     // SessionFactory from postgres DB and need to open session in order to execute.
-    SessionFactory sessionFactory = screeningDao.getSessionFactory();
-    org.hibernate.Session session = sessionFactory.openSession();
-    ManagedSessionContext.bind(session);
+    // SessionFactory sessionFactory = screeningDao.getSessionFactory();
+    // Session session = sessionFactory.openSession(); // NO!!
+    final Session session = screeningDao.grabSession();
+    // ManagedSessionContext.bind(session);
 
     ScreeningEntity[] screeningEntities = screeningDao.findScreeningsByReferralId(referralId);
     ScreeningEntity screeningEntity = screeningEntities.length > 0 ? screeningEntities[0] : null;
     screeningSummary = screeningEntity != null
         ? new ScreeningSummary(screeningEntity, this.populateSimpleAllegations(screeningEntity))
         : new ScreeningSummary();
-    session.close();
+    // session.close(); // NO!!
     return screeningSummary;
   }
 

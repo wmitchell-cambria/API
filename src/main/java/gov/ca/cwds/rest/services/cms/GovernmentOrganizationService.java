@@ -37,9 +37,6 @@ public class GovernmentOrganizationService
     extends SimpleResourceService<String, GovernmentOrganization, GovernmentOrganizationResponse>
     implements ApiMarker {
 
-  /**
-   * Default serialization.
-   */
   private static final long serialVersionUID = 1L;
 
   private static final String ALL_COUNTY_CACHE_KEY = "ALL_COUNTIES";

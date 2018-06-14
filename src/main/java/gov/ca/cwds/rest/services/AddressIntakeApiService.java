@@ -5,8 +5,9 @@ import org.apache.commons.lang3.NotImplementedException;
 import com.google.inject.Inject;
 
 import gov.ca.cwds.data.Dao;
-import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDaoImpl;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.rest.api.domain.AddressIntakeApi;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
@@ -19,8 +20,8 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 public class AddressIntakeApiService
     implements TypedCrudsService<String, AddressIntakeApi, AddressIntakeApi> {
 
-  private AddressesDao addressesDao;
-  private LegacyDescriptorDao legacyDescriptorDao;
+  private XaNsAddressesDaoImpl addressesDao;
+  private XaNsLegacyDescriptorDaoImpl legacyDescriptorDao;
 
   /**
    * Constructor
@@ -30,8 +31,8 @@ public class AddressIntakeApiService
    * @param legacyDescriptorDao - {@link Dao} for {@link LegacyDescriptorDao}
    */
   @Inject
-  public AddressIntakeApiService(AddressesDao addressesDao,
-      LegacyDescriptorDao legacyDescriptorDao) {
+  public AddressIntakeApiService(XaNsAddressesDaoImpl addressesDao,
+      XaNsLegacyDescriptorDaoImpl legacyDescriptorDao) {
     this.addressesDao = addressesDao;
     this.legacyDescriptorDao = legacyDescriptorDao;
   }
@@ -99,6 +100,7 @@ public class AddressIntakeApiService
     if (legacyDescriptor == null || describableId == null) {
       return null;
     }
+
     // Save legacy descriptor entity
     LegacyDescriptorEntity legacyDescriptorEntity = new LegacyDescriptorEntity(legacyDescriptor,
         LegacyDescriptorEntity.DESCRIBABLE_TYPE_ADDRESS, Long.valueOf(describableId));

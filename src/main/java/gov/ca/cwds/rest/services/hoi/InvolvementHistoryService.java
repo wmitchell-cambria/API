@@ -15,8 +15,6 @@ import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.InvolvementHistory;
 import gov.ca.cwds.rest.services.TypedCrudsService;
-import io.dropwizard.hibernate.UnitOfWork;
-import org.hibernate.FlushMode;
 
 /**
  * Business layer object to work on Screening History Of Involvement.
@@ -27,16 +25,16 @@ public class InvolvementHistoryService
     implements TypedCrudsService<String, InvolvementHistory, Response> {
 
   @Inject
-  private ParticipantDao participantDao;
+  ParticipantDao participantDao;
 
   @Inject
-  private HOICaseService hoiCaseService;
+  HOICaseService hoiCaseService;
 
   @Inject
-  private HOIReferralService hoiReferralService;
+  HOIReferralService hoiReferralService;
 
   @Inject
-  private HOIScreeningService hoiScreeningService;
+  HOIScreeningService hoiScreeningService;
 
   public InvolvementHistoryService() {
     super();
@@ -68,7 +66,7 @@ public class InvolvementHistoryService
         ihd.getHoiScreenings());
   }
 
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
+  // Use XAUnitOfWork instead at the resource level.
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();
@@ -81,7 +79,7 @@ public class InvolvementHistoryService
     }
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
+  // Use XAUnitOfWork instead at the resource level.
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(InvolvementHistoryData ihd) {
     HOIScreeningData hsd = ihd.getHoiScreeningData();
@@ -94,8 +92,8 @@ public class InvolvementHistoryService
   }
 
   private void buildHoiScreenings(InvolvementHistoryData ihd) {
-    Set<HOIScreening> hoiScreeningSet = hoiScreeningService
-        .buildHoiScreenings(ihd.getHoiScreeningData());
+    Set<HOIScreening> hoiScreeningSet =
+        hoiScreeningService.buildHoiScreenings(ihd.getHoiScreeningData());
     List<HOIScreening> hoiScreenings = new ArrayList<>(hoiScreeningSet);
     if (ihd.getScreeningId() != null) {
       // exclude the screening with the incoming screening ID

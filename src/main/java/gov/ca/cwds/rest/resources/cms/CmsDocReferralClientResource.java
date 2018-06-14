@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CMS_DOC_REFRRAL_CLIENT;
 
 import javax.validation.Valid;
@@ -19,11 +20,11 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.CmsDocumentReferralClientServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocReferralClient;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -63,10 +64,9 @@ public class CmsDocReferralClientResource {
    * Finds a document by id (doc_handle).
    * 
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -83,9 +83,9 @@ public class CmsDocReferralClientResource {
    * Delete a document by id.
    * 
    * @param id The id of the {@link CmsDocReferralClient}
-   * 
    * @return {@link Response}
    */
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -100,10 +100,9 @@ public class CmsDocReferralClientResource {
    * Create an {@link CmsDocReferralClient}.
    * 
    * @param doc The {@link CmsDocReferralClient}
-   * 
    * @return The {@link CmsDocReferralClient}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -124,10 +123,9 @@ public class CmsDocReferralClientResource {
    * @param id the id
    * @param doc {@link CmsDocReferralClient}
    * @param acceptHeader The accept header.
-   *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
@@ -145,4 +143,5 @@ public class CmsDocReferralClientResource {
       @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
+
 }

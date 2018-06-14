@@ -3,8 +3,6 @@ package gov.ca.cwds.rest.api.domain;
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
 import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
 
-
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -251,8 +249,6 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
   @JsonProperty("report_type")
   private String reportType;
 
-
-  @SuppressWarnings("javadoc")
   public ScreeningToReferral() {
     super();
   }
@@ -295,17 +291,15 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
    */
   public ScreeningToReferral(long id, String legacySourceTable, String referralId,
       @Date(format = "yyyy-MM-ddTHH:mm:ss") String endedAt, String incidentCounty,
-      @Date String incidentDate, String locationType,
-      Short communicationMethod, String currentLocationOfChildren, String name,
-      String reportNarrative, String reference, Short responseTime,
-      @Date(format = "yyyy-MM-ddTHH:mm:ss") String startedAt,
-      String assignee, String assigneeStaffId, String additionalInformation,
-      String screeningDecision, String screeningDecisionDetail, int approvalStatus,
-      boolean familyAwareness, boolean filedWithLawEnforcement, String responsibleAgency,
-      String limitedAccessCode, String limitedAccessDescription, String limitedAccessAgency,
-      java.util.Date limitedAccessDate, Set<String> alerts, String alertInformation,
-      Address address, Set<Participant> participants, Set<CrossReport> crossReports,
-      Set<Allegation> allegations, String reportType) {
+      @Date String incidentDate, String locationType, Short communicationMethod,
+      String currentLocationOfChildren, String name, String reportNarrative, String reference,
+      Short responseTime, @Date(format = "yyyy-MM-ddTHH:mm:ss") String startedAt, String assignee,
+      String assigneeStaffId, String additionalInformation, String screeningDecision,
+      String screeningDecisionDetail, int approvalStatus, boolean familyAwareness,
+      boolean filedWithLawEnforcement, String responsibleAgency, String limitedAccessCode,
+      String limitedAccessDescription, String limitedAccessAgency, java.util.Date limitedAccessDate,
+      Set<String> alerts, String alertInformation, Address address, Set<Participant> participants,
+      Set<CrossReport> crossReports, Set<Allegation> allegations, String reportType) {
     super();
     this.id = id;
     this.referralId = referralId;
@@ -562,7 +556,6 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.alertInformation = alertInformation;
   }
 
-  @SuppressWarnings("javadoc")
   public Address getAddress() {
     return address;
   }
@@ -574,17 +567,14 @@ public class ScreeningToReferral extends ReportingDomain implements Request {
     this.address = address;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<Participant> getParticipants() {
     return participants;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<Allegation> getAllegations() {
     return allegations;
   }
 
-  @SuppressWarnings("javadoc")
   public Set<CrossReport> getCrossReports() {
     return crossReports;
   }

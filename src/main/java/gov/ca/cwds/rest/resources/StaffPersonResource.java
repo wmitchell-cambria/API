@@ -12,10 +12,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.StaffPersonsServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.PostedStaffPerson;
 import gov.ca.cwds.rest.api.domain.StaffPerson;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -38,6 +38,7 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class StaffPersonResource {
+
   private TypedResourceDelegate<String, StaffPerson> typedResourceDelegate;
 
   /**
@@ -51,15 +52,13 @@ public class StaffPersonResource {
     this.typedResourceDelegate = typedResourceDelegate;
   }
 
-
   /**
    * Finds an {@link StaffPerson} by id.
    * 
    * @param id the id
-   * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),

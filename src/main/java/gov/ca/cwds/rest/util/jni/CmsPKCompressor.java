@@ -20,9 +20,17 @@ import org.slf4j.LoggerFactory;
 import com.pkware.deflate.DeflateOutputStream;
 import com.pkware.deflate.InflateInputStream;
 
+import gov.ca.cwds.rest.services.ServiceException;
+
 /**
+ * <strong><font color="red">WARNING</font>: you break it, you bought it</strong> -- and your
+ * children will be given a <strong><font color="red">double espresso</font></strong> and a
+ * <strong><font color="red">free puppy</font></strong>. Good luck.
+ * 
+ * <p>
  * Compresses (deflates) and decompresses (inflates) PK archives created by the Windows PKWare
  * library.
+ * </p>
  * 
  * <p>
  * <strong>NOTE: </strong>This class only works with PK-compressed docs, not the LZW variable 15-bit
@@ -84,14 +92,12 @@ public class CmsPKCompressor {
       throw new IOException("REQUIRED: file names cannot be null");
     }
 
-    try (
-      final FileInputStream fis = new FileInputStream(createFile(inputFileName));
-      final InputStream iis = new InflateInputStream(fis, true);
-      final FileOutputStream fos = new FileOutputStream(createFile(outputFileName));
-    ){
+    try (final FileInputStream fis = new FileInputStream(createFile(inputFileName));
+        final InputStream iis = new InflateInputStream(fis, true);
+        final FileOutputStream fos = new FileOutputStream(createFile(outputFileName));) {
       IOUtils.copy(iis, fos);
-    } catch (Exception e){
-      throw new RuntimeException("Error copying file", e);
+    } catch (Exception e) {
+      throw new ServiceException("Error copying file", e);
     }
   }
 
@@ -190,14 +196,12 @@ public class CmsPKCompressor {
       throw new IOException("REQUIRED: file names cannot be null");
     }
 
-    try(
-       final FileInputStream fis = new FileInputStream(createFile(inputFileName));
-       final OutputStream fos = new DeflateOutputStream(
-         new FileOutputStream(createFile(outputFileName)), DEFAULT_COMPRESSION_LEVEL, true);
-       ){
+    try (final FileInputStream fis = new FileInputStream(createFile(inputFileName));
+        final OutputStream fos = new DeflateOutputStream(
+            new FileOutputStream(createFile(outputFileName)), DEFAULT_COMPRESSION_LEVEL, true);) {
       IOUtils.copy(fis, fos);
-    }catch(RuntimeException e){
-      throw new RuntimeException("Unable to copy file", e);
+    } catch (RuntimeException e) {
+      throw new ServiceException("Unable to copy file", e);
     }
   }
 
@@ -230,7 +234,7 @@ public class CmsPKCompressor {
   }
 
   private File createFile(String file) {
-    return new File(FilenameUtils.getFullPath(file), FilenameUtils.getName(file)); //NOSONAR
+    return new File(FilenameUtils.getFullPath(file), FilenameUtils.getName(file)); // NOSONAR
   }
 
 }

@@ -53,7 +53,8 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Referral extends CmsPersistentObject implements AccessLimitationAware {
 
-  public static final String FIND_REFERRALS_WITH_REPORTERS_BY_IDS = "gov.ca.cwds.data.persistence.cms.Referral.findReferralsWithReportersByIds";
+  public static final String FIND_REFERRALS_WITH_REPORTERS_BY_IDS =
+      "gov.ca.cwds.data.persistence.cms.Referral.findReferralsWithReportersByIds";
 
   @Id
   @Column(name = "IDENTIFIER", length = CMS_ID_LEN)
@@ -231,11 +232,14 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   @JoinColumn(name = "FKADDRS_T", nullable = true, updatable = false, insertable = false)
   private Address addresses;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  // DRS: question: which cascade type?
+  // Don't fire updates on read-only operations or set an Allegation's non-nullable foreign key to
+  // Referral to null.
+  @OneToMany(cascade = {CascadeType.DETACH})
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<Allegation> allegations = new HashSet<>();
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<CrossReport> crossReports = new HashSet<>();
 
@@ -245,14 +249,14 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
   private Reporter reporter;
 
   @ToStringExclude
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "FKREFERL_T", referencedColumnName = "IDENTIFIER")
   private Set<ReferralClient> referralClients = new HashSet<>();
 
   /**
    * #147241489: referential integrity check.
    * <p>
-   * Doesn't actually load the data. Just checks the existence of the parent client record.
+   * Shouldn't load the data. Just checks the existence of the parent client record.
    * </p>
    */
   @HashCodeExclude
@@ -331,9 +335,9 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    * @param closureDate closure date
    * @param communicationMethodType communication method type
    * @param currentLocationOfChildren current location of children
-   * @param drmsAllegationDescriptionDoc drms allegation description doc
-   * @param drmsErReferralDoc drms er referral doc
-   * @param drmsInvestigationDoc drms investigation doc
+   * @param drmsAllegationDescriptionDoc DRMS allegation description doc
+   * @param drmsErReferralDoc DRMS er referral doc
+   * @param drmsInvestigationDoc DRMS investigation doc
    * @param filedSuspectedChildAbuseReporttoLawEnforcementIndicator filed suspected child abuse
    *        report to law enforcement indicator
    * @param familyAwarenessIndicator family awareness indicator
@@ -978,6 +982,10 @@ public class Referral extends CmsPersistentObject implements AccessLimitationAwa
    */
   public Set<ReferralClient> getReferralClients() {
     return referralClients;
+  }
+
+  public void addReferralClient(ReferralClient rc) {
+    this.referralClients.add(rc);
   }
 
   @Override

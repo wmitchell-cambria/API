@@ -16,7 +16,7 @@ import gov.ca.cwds.inject.NsSessionFactory;
 /**
  * Participant Phone Numbers DAO
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class ParticipantPhoneNumbersDao extends CrudsDaoImpl<ParticipantPhoneNumbers> {
 

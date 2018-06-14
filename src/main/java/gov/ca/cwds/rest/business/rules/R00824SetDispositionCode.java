@@ -11,18 +11,20 @@ import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
 import gov.ca.cwds.rest.business.RuleValidator;
 
 /**
- * 
  * <p>
  * BUSINESS RULE: "R - 00824"
+ * </p>
  * 
+ * <p>
  * IF referralResponseTypeCode is set to Evaluate Out, Approval Status is set to Approved and Client
  * age is below 19
+ * </p>
  * 
- * THEN referralClient - dispositionCode is set to the "A"
  * <p>
+ * THEN referralClient - dispositionCode is set to the "A"
+ * </p>
  * 
  * @author CWDS API Team
- *
  */
 public class R00824SetDispositionCode implements RuleValidator {
 

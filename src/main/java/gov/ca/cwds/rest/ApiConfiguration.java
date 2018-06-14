@@ -2,6 +2,7 @@ package gov.ca.cwds.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.data.persistence.XADataSourceFactory;
 import io.dropwizard.db.DataSourceFactory;
 
 /**
@@ -11,11 +12,11 @@ import io.dropwizard.db.DataSourceFactory;
  */
 public class ApiConfiguration extends BaseApiConfiguration {
 
-  private DataSourceFactory rsDataSourceFactory;
+  private XADataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
 
-  public void setRsDataSourceFactory(DataSourceFactory rsDataSourceFactory) {
+  public void setRsDataSourceFactory(XADataSourceFactory rsDataSourceFactory) {
     this.rsDataSourceFactory = rsDataSourceFactory;
   }
 

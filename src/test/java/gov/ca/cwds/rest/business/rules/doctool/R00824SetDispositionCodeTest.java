@@ -34,8 +34,6 @@ public class R00824SetDispositionCodeTest {
   private static final short IMMEDIATE = 1520;
   private static final String ASSESMENT = "A";
 
-
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -59,7 +57,6 @@ public class R00824SetDispositionCodeTest {
    * 
    * @throws Exception - Exception
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSetReferralClientDispositionCodeToAssesment() throws Exception {
     Participant victim =
@@ -78,7 +75,6 @@ public class R00824SetDispositionCodeTest {
 
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSetReferralClientDispositionCodeToBlank() throws Exception {
     Participant victim =

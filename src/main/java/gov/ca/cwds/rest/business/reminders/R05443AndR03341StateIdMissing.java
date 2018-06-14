@@ -104,7 +104,6 @@ public class R05443AndR03341StateIdMissing {
   private StateIdDao stateIdDao;
   private TickleService tickleService;
 
-
   /**
    * @param clientDao - The {@link Dao} handling {@link gov.ca.cwds.data.persistence.cms.Client}
    *        objects

@@ -24,7 +24,6 @@ import gov.ca.cwds.rest.services.PersonService;
 
 /**
  * @author CWDS API Team
- *
  */
 public class CmsNSReferralService implements CrudsService {
 
@@ -66,7 +65,6 @@ public class CmsNSReferralService implements CrudsService {
    */
   @Override
   public Response create(Request request) {
-
     assert request instanceof CmsNSReferral;
     CmsNSReferral cmsReferral = (CmsNSReferral) request;
 
@@ -82,9 +80,7 @@ public class CmsNSReferralService implements CrudsService {
         helper.handleResponse(cmsRequest, nsRequest);
     return new PostedCmsNSReferral((PostedReferral) response.get("cms").get(referralService),
         (PostedPerson) response.get("ns").get(personService));
-
   }
-
 
   /**
    * {@inheritDoc}

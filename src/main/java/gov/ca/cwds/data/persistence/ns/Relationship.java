@@ -1,23 +1,32 @@
 package gov.ca.cwds.data.persistence.ns;
 
-import gov.ca.cwds.data.persistence.PersistentObject;
+import static gov.ca.cwds.rest.util.FerbDateUtils.freshDate;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
+
+import gov.ca.cwds.data.persistence.PersistentObject;
 
 @Entity
 @Table(name = "relationships")
 public class Relationship implements PersistentObject {
+
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GenericGenerator(name = "relationships_id",
-      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator", parameters = {
-      @org.hibernate.annotations.Parameter(name = "sequence_name", value = "relationships_id_seq")})
+      strategy = "gov.ca.cwds.data.persistence.ns.utils.StringSequenceIdGenerator",
+      parameters = {@org.hibernate.annotations.Parameter(name = "sequence_name",
+          value = "relationships_id_seq")})
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "relationships_id")
 
   @Column(name = "id")
@@ -38,16 +47,18 @@ public class Relationship implements PersistentObject {
   @Column(name = "updated_at")
   private Date updatedAt;
 
-  public Relationship() { }
+  public Relationship() {}
 
-  public Relationship(String id, String clientId, String relativeId, int relationshipType, Date createdAt, Date updatedAt ) {
+  public Relationship(String id, String clientId, String relativeId, int relationshipType,
+      Date createdAt, Date updatedAt) {
     this.id = id;
     this.clientId = clientId;
     this.relativeId = relativeId;
     this.relationshipType = relationshipType;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.createdAt = freshDate(createdAt);
+    this.updatedAt = freshDate(updatedAt);
   }
+
   @Override
   public Serializable getPrimaryKey() {
     return null;
@@ -86,18 +97,18 @@ public class Relationship implements PersistentObject {
   }
 
   public Date getCreatedAt() {
-    return createdAt;
+    return freshDate(createdAt);
   }
 
   public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+    this.createdAt = freshDate(createdAt);
   }
 
   public Date getUpdatedAt() {
-    return updatedAt;
+    return freshDate(updatedAt);
   }
 
   public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
+    this.updatedAt = freshDate(updatedAt);
   }
 }

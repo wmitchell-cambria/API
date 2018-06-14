@@ -16,7 +16,7 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an LongText
+ * {@link DomainObject} representing a LongText entry.
  * 
  * @author CWDS API Team
  */

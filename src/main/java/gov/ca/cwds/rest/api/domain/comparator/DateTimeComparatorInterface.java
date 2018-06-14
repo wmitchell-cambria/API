@@ -3,7 +3,6 @@ package gov.ca.cwds.rest.api.domain.comparator;
 import org.joda.time.DateTime;
 
 /**
- * 
  * <p>
  * Date time comparator interface compares the time difference between the incoming object and the
  * saved object.
@@ -11,8 +10,8 @@ import org.joda.time.DateTime;
  * 
  * @author CWDS API Team
  * @see DateTimeComparator
- *
  */
+@FunctionalInterface
 public interface DateTimeComparatorInterface {
 
   /**

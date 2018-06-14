@@ -23,7 +23,6 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ServiceException;
 import gov.ca.cwds.rest.services.TypedCrudsService;
 
-
 /**
  * @author CWDS API Team
  */
@@ -93,9 +92,7 @@ public class AddressService implements
     try {
       gov.ca.cwds.rest.api.domain.cms.Address domainAddress =
           gov.ca.cwds.rest.api.domain.cms.Address.createWithDefaults(address);
-
       messageBuilder.addDomainValidationError(validator.validate(domainAddress));
-
       PostedAddress postedAddress = this.create(domainAddress);
 
       address.setLegacyId(postedAddress.getExistingAddressId());
@@ -105,7 +102,6 @@ public class AddressService implements
     }
 
     return address;
-
   }
 
   @Override
@@ -121,7 +117,6 @@ public class AddressService implements
 
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Address find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Address persistedAddress = addressDao.find(primaryKey);
     if (persistedAddress != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Address(persistedAddress, true);
@@ -132,7 +127,6 @@ public class AddressService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Address update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.Address request) {
-
     try {
       Address managed =
           new Address(primaryKey, request, RequestExecutionContext.instance().getStaffId(),

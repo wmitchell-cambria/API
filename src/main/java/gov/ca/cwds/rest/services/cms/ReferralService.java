@@ -57,7 +57,7 @@ import gov.ca.cwds.rest.util.DocUtils;
 import gov.ca.cwds.rest.validation.ParticipantValidator;
 
 /**
- * Business layer object to work on {@link Referral}
+ * Business layer object to work on {@link Referral}.
  *
  * @author CWDS API Team
  */
@@ -98,7 +98,7 @@ public class ReferralService implements
    *        {@link gov.ca.cwds.data.persistence.cms.StaffPerson} objects
    * @param assignmentService the Assignment Service
    * @param validator the validator used for entity validation
-   * @param cmsDocumentService the service for storing Cms Documents
+   * @param cmsDocumentService the service for storing CMS Documents
    * @param drmsDocumentService the service for generating DRMS Documents
    * @param drmsDocumentTemplateService the service for DRMS Document Templates
    * @param addressService the service for creating addresses
@@ -134,7 +134,6 @@ public class ReferralService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Referral find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Referral persistedReferral = referralDao.find(primaryKey);
     if (persistedReferral != null) {
       return new gov.ca.cwds.rest.api.domain.cms.Referral(persistedReferral);
@@ -164,7 +163,7 @@ public class ReferralService implements
   @Override
   public PostedReferral create(gov.ca.cwds.rest.api.domain.cms.Referral request) {
     try {
-      StaffPerson staffperson =
+      final StaffPerson staffperson =
           staffPersonValidate(RequestExecutionContext.instance().getStaffId());
       validateCountyOfAssignedStaffWorker(request);
 
@@ -189,7 +188,7 @@ public class ReferralService implements
       createLACountyTrigger(staffperson, managed);
       return new PostedReferral(managed);
     } catch (EntityExistsException e) {
-      LOGGER.info("Referral already exists : {}", request);
+      LOGGER.error("Referral already exists : {}", request);
       throw new ServiceException(e);
     }
   }
@@ -228,12 +227,11 @@ public class ReferralService implements
    */
   public String createCmsReferralFromScreening(ScreeningToReferral screeningToReferral,
       String dateStarted, String timeStarted, MessageBuilder strsMessageBuilder) {
-
     String referralId;
 
     if (screeningToReferral.getReferralId() == null
         || screeningToReferral.getReferralId().isEmpty()) {
-      // the legacy id is not set - create the referral
+      // The legacy id is not set - create the referral.
       // create a CMS Referral
       gov.ca.cwds.rest.api.domain.cms.Referral referral = null;
       try {
@@ -258,30 +256,30 @@ public class ReferralService implements
        * Attach default screener narrative created from template
        */
       referralId = CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId());
-      String screenerNarrativeId =
+      final String screenerNarrativeId =
           createDefaultSreenerNarrativeForNewReferral(screeningToReferral, referral, referralId);
       if (!StringUtils.isBlank(screenerNarrativeId)) {
         // Pass the referral Id
         referral.setUiIdentifier(referralId);
         referral.setDrmsAllegationDescriptionDoc(screenerNarrativeId);
       }
-      PostedReferral postedReferral = this.create(referral);
+
+      final PostedReferral postedReferral = this.create(referral);
       referralId = postedReferral.getId();
 
       // when creating a referral - create the default assignment to 0XA staff person
       assignmentService.createDefaultAssignmentForNewReferral(screeningToReferral, referralId,
           referral, strsMessageBuilder);
-
     } else {
       // Referral ID passed - validate that Referral exist in CWS/CMS - no update for now
       referralId = screeningToReferral.getReferralId();
-      gov.ca.cwds.rest.api.domain.cms.Referral foundReferral = this.find(referralId);
+      final gov.ca.cwds.rest.api.domain.cms.Referral foundReferral = this.find(referralId);
       if (foundReferral == null) {
-        String message = "Legacy Id does not correspond to an existing CMS/CWS Referral";
-        ServiceException se = new ServiceException(message);
-        strsMessageBuilder.addMessageAndLog(message, se, LOGGER);
+        final String message = "Legacy Id does not correspond to an existing CMS/CWS Referral";
+        strsMessageBuilder.addMessageAndLog(message, new ServiceException(message), LOGGER);
       }
     }
+
     return referralId;
   }
 
@@ -297,34 +295,35 @@ public class ReferralService implements
   public gov.ca.cwds.rest.api.domain.cms.Referral createReferralWithDefaults(
       ScreeningToReferral screeningToReferral, String dateStarted, String timeStarted,
       MessageBuilder strsMessageBuilder) {
-    String screenerAlertLongTextId = generateScreenerAlert(screeningToReferral, strsMessageBuilder);
-    String responseRationalLongTextId =
+    final String screenerAlertLongTextId =
+        generateScreenerAlert(screeningToReferral, strsMessageBuilder);
+    final String responseRationalLongTextId =
         generateResponseRationalText(screeningToReferral, strsMessageBuilder);
-    String currentLocationOfChildrenLongTextId =
+    final String currentLocationOfChildrenLongTextId =
         generateCurrentLocationOfChildren(screeningToReferral, strsMessageBuilder);
 
     /*
-     * create a three dummy records using generateDrmsDocumentId method
+     * Create a three dummy records using generateDrmsDocumentId method.
      */
-    String drmsAllegationDescriptionDoc =
+    final String drmsAllegationDescriptionDoc =
         drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
-    String drmsErReferralDoc = drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
-    String drmsInvestigationDoc = drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
+    final String drmsErReferralDoc = drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
+    final String drmsInvestigationDoc =
+        drmsDocumentService.generateDrmsDocumentId(strsMessageBuilder);
 
     /*
-     * create the referralAddress and assign the value to the
-     * allegesAbuseOccurredAtAddressId(FKADDRS_T)
+     * Create the referralAddress and assign the value to the
+     * allegesAbuseOccurredAtAddressId(FKADDRS_T).
      */
     createReferralAddress(screeningToReferral, strsMessageBuilder);
-    String allegesAbuseOccurredAtAddressId = screeningToReferral.getAddress().getLegacyId();
+    final String allegesAbuseOccurredAtAddressId = screeningToReferral.getAddress().getLegacyId();
+    final String limitedAccessDate =
+        DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
 
-    String limitedAccessDate = DomainChef.cookDate(screeningToReferral.getLimitedAccessDate());
-
-    int govEnt = convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(),
+    final int govEnt = convertLogicalIdToSystemCodeFor(screeningToReferral.getIncidentCounty(),
         LegacyTable.GOVERNMENT_ORGANIZATION_ENTITY.getName());
-    Short agencyCode = convertLimitedAccessAgencyToNumericCode(screeningToReferral);
-
-    boolean referredToResourceType =
+    final Short agencyCode = convertLimitedAccessAgencyToNumericCode(screeningToReferral);
+    final boolean referredToResourceType =
         new R00818SetReferredResourceType(screeningToReferral).isValid();
 
     return gov.ca.cwds.rest.api.domain.cms.Referral.createWithDefaults(
@@ -359,7 +358,6 @@ public class ReferralService implements
     return foundCode;
   }
 
-
   private void createReferralAddress(ScreeningToReferral screeningToReferral,
       MessageBuilder messageBuilder) {
     try {
@@ -382,7 +380,7 @@ public class ReferralService implements
    * THEN  firstResponseDeterminedByStaffPersonId is set to the staffpersonId
    *
    * </pre>
-   *
+   * 
    * </blockquote>
    */
   private static String firstResponseDeterminedByStaffPersonId() {
@@ -393,8 +391,8 @@ public class ReferralService implements
     String longTextId = null;
     if (screening.getAlertInformation() != null && !screening.getAlertInformation().isEmpty()) {
       try {
-        longTextId = createLongText(screening.getIncidentCounty(), 
-            screening.getAlertInformation(), mb);
+        longTextId =
+            createLongText(screening.getIncidentCounty(), screening.getAlertInformation(), mb);
       } catch (ServiceException e) {
         mb.addMessageAndLog(e.getMessage(), e, LOGGER);
       }
@@ -436,10 +434,8 @@ public class ReferralService implements
 
   private String createLongText(String countySpecificCode, String textDescription,
       MessageBuilder messageBuilder) {
-
     LongText longText = new LongText(countySpecificCode, textDescription);
     PostedLongText postedLongText = longTextService.create(longText);
-
     messageBuilder.addDomainValidationError(validator.validate(longText));
 
     return postedLongText.getId();
@@ -465,6 +461,7 @@ public class ReferralService implements
           new Referral(primaryKey, request, RequestExecutionContext.instance().getStaffId(),
               RequestExecutionContext.instance().getRequestStartTime());
       managed = referralDao.update(managed);
+
       // checking the staffPerson county code
       StaffPerson staffperson = staffpersonDao.find(managed.getLastUpdatedId());
       createLACountyTrigger(staffperson, managed);
@@ -478,7 +475,7 @@ public class ReferralService implements
 
   private void validateMaxReferralStartDateTime(String referralId,
       gov.ca.cwds.rest.api.domain.cms.Referral request) {
-    Assignment firstAssignment = assignmentService.findReferralFirstAssignment(referralId);
+    final Assignment firstAssignment = assignmentService.findReferralFirstAssignment(referralId);
     if (isReferralStartDateTimeValid(request, firstAssignment)) {
       new R04611ReferralStartDateTimeAction(assignmentService, request, firstAssignment).execute();
     } else {
@@ -502,15 +499,14 @@ public class ReferralService implements
     if (drmsTemplate != null) {
       CmsDocument cmsTemplate = cmsDocumentService.find(drmsTemplate.getCmsDocumentId());
 
-      // Make Word doc from Template with new DOC_HANDLE etc.
+      // Make Word doc from Template with new DOC_HANDLE, etc.
+      final Date now = RequestExecutionContext.instance().getRequestStartTime();
+      final String docAuth = RequestExecutionContext.instance().getUserId();
 
-      Date now = new Date();
-      String docAuth = RequestExecutionContext.instance().getUserId();
-
-      SecureRandom random = new SecureRandom();
-      String docHandle = DocUtils.generateDocHandle(now, docAuth);
-      Short segments = 1;
-      Long docLength = 1L;
+      final SecureRandom random = new SecureRandom();
+      final String docHandle = DocUtils.generateDocHandle(now, docAuth);
+      final Short segments = 1;
+      final Long docLength = 1L;
 
       // TO1DO ??? The server name through which the document was added.
       String docServ = "AUTOCRTD";
@@ -536,15 +532,14 @@ public class ReferralService implements
 
       PostedDrmsDocument posted = drmsDocumentService.create(document);
       screenerNarrativeId = posted.getId();
-
     }
+
     return screenerNarrativeId;
   }
 
   private byte[] screenerNarrativeFromTemplate(ScreeningToReferral screeningToReferral,
       String referralId, gov.ca.cwds.rest.api.domain.cms.Referral referral, byte[] template) {
     Map<String, String> keyValuePairs = new HashMap<>();
-
     String childName = "";
     String childNumber = "";
 
@@ -560,10 +555,8 @@ public class ReferralService implements
 
     keyValuePairs.put("ChildName", childName.substring(min(childName.length(), 1)).trim());
     keyValuePairs.put("ChildNumber", childNumber.substring(min(childNumber.length(), 1)).trim());
-
     keyValuePairs.put("ReferralNumber", CmsKeyIdGenerator.getUIIdentifierFromKey(referralId));
     keyValuePairs.put("ReferralDate", referral.getReceivedDate());
-
     keyValuePairs.put("bkBody", screeningToReferral.getReportNarrative());
 
     return DocUtils.createFromTemplateUseBookmarks(template, keyValuePairs);
@@ -571,6 +564,10 @@ public class ReferralService implements
 
   public RIReferral getRiReferral() {
     return riReferral;
+  }
+
+  public NonLACountyTriggers getNonLaTriggers() {
+    return nonLaTriggers;
   }
 
 }

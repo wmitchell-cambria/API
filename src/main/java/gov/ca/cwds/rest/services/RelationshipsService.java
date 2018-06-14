@@ -32,7 +32,7 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
   AuthorizationService authCheckService;
 
   /**
-   * Constructor and injecting the beans
+   * Constructor and injecting the beans.
    *
    * @param relationshipDao - relationshipDao instance
    * @param genealogist - genealogist instance
@@ -57,7 +57,7 @@ public class RelationshipsService implements TypedCrudsService<String, Relations
   }
 
   /**
-   * Find the relationships for a list of clients
+   * Find the relationships for a list of clients that the current user is authorized to view.
    * 
    * @param clientIds - clientIds
    * @return the relationships

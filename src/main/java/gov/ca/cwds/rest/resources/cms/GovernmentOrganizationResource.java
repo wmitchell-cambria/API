@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_GOVERNMENT_ORG;
 
 import javax.ws.rs.Consumes;
@@ -14,12 +15,12 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.GovernmentOrganizationServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganization;
 import gov.ca.cwds.rest.api.domain.cms.GovernmentOrganizationResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceDelegate;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationService;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -59,7 +60,7 @@ public class GovernmentOrganizationResource {
    * @param countyId - countyId
    * @return the all the cross report agencies
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_CMS)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),

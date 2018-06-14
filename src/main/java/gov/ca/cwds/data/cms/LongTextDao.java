@@ -24,4 +24,5 @@ public class LongTextDao extends CrudsDaoImpl<LongText> {
   public LongTextDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
 }

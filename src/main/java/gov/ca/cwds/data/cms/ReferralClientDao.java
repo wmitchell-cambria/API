@@ -32,26 +32,26 @@ public class ReferralClientDao extends CrudsDaoImpl<ReferralClient> {
   /**
    * Find by referral id
    * 
-   * @param referralId - referralId
+   * @param referralId - referral id
    * @return the referralClient,
    */
   public ReferralClient[] findByReferralId(String referralId) {
     @SuppressWarnings("unchecked")
-    final Query<ReferralClient> query = this.getSessionFactory().getCurrentSession()
+    final Query<ReferralClient> query = grabSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByReferral");
     query.setParameter("referralId", referralId, StringType.INSTANCE);
     return query.list().toArray(new ReferralClient[0]);
   }
 
   /**
-   * Find by client ids
+   * Find by client id's
    * 
-   * @param clientIds - clientlIds
+   * @param clientIds - client id's
    * @return the referalClients
    */
   public ReferralClient[] findByClientIds(Collection<String> clientIds) {
     @SuppressWarnings("unchecked")
-    final Query<ReferralClient> query = this.getSessionFactory().getCurrentSession()
+    final Query<ReferralClient> query = grabSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.ReferralClient.findByClientIds");
     query.setParameterList("clientIds", clientIds, StringType.INSTANCE);
     return query.list().toArray(new ReferralClient[0]);

@@ -56,4 +56,5 @@ public class AllegationDao extends CrudsDaoImpl<Allegation> {
     }
     return referralAllegationsMap;
   }
+  
 }

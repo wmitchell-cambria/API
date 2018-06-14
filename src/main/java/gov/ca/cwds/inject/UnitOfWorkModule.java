@@ -6,6 +6,7 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 
 /**
+ * Aspect Oriented Programming (AOP) proxies for Hibernate bundles.
  * 
  * @author CWDS API Team
  */
@@ -16,7 +17,7 @@ public class UnitOfWorkModule {
   private static XAUnitOfWorkAwareProxyFactory xaProxyFactory;
 
   private UnitOfWorkModule() {
-
+    // no-op
   }
 
   /**

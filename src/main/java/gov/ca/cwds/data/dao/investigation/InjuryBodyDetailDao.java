@@ -2,7 +2,9 @@ package gov.ca.cwds.data.dao.investigation;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+
 import com.google.inject.Inject;
+
 import gov.ca.cwds.data.CrudsDaoImpl;
 import gov.ca.cwds.data.persistence.cms.InjuryBodyDetail;
 import gov.ca.cwds.inject.CmsSessionFactory;
@@ -27,7 +29,7 @@ public class InjuryBodyDetailDao extends CrudsDaoImpl<InjuryBodyDetail> {
    */
   public InjuryBodyDetail[] findInjuryBodyDetailsByInjuryHarmDetailId(
       String secondaryInjuryHarmDetailId) {
-    Query<InjuryBodyDetail> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
+    final Query<InjuryBodyDetail> query = grabSession().getNamedQuery(
         "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByInjuryHarmDetailId")
         .setParameter("secondaryInjuryHarmDetailId", secondaryInjuryHarmDetailId);
     return query.list().toArray(new InjuryBodyDetail[0]);
@@ -41,7 +43,7 @@ public class InjuryBodyDetailDao extends CrudsDaoImpl<InjuryBodyDetail> {
    * @return list of Injury Harm details
    */
   public InjuryBodyDetail[] findInjuryBodyDetailsByAllegationId(String allegationId) {
-    Query<InjuryBodyDetail> query = this.getSessionFactory().getCurrentSession().getNamedQuery(
+    final Query<InjuryBodyDetail> query = grabSession().getNamedQuery(
         "gov.ca.cwds.data.dao.investigation.InjuryBodyDetail.findInjuryBodyDetailsByAllegationId")
         .setParameter("allegationId", allegationId);
     return query.list().toArray(new InjuryBodyDetail[0]);

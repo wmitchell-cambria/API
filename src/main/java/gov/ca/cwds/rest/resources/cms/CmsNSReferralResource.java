@@ -1,5 +1,6 @@
 package gov.ca.cwds.rest.resources.cms;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_CMSNSREFERRAL;
 
 import javax.validation.Valid;
@@ -18,10 +19,10 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.CmsNSReferralServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.CmsNSReferral;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -60,7 +61,7 @@ public class CmsNSReferralResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -80,7 +81,7 @@ public class CmsNSReferralResource {
    * 
    * @return {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -98,7 +99,7 @@ public class CmsNSReferralResource {
    * 
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -121,7 +122,7 @@ public class CmsNSReferralResource {
    *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork(DATASOURCE_XA_NS)
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

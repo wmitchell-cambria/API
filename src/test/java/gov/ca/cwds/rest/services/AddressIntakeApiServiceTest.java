@@ -12,8 +12,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
 
-import gov.ca.cwds.data.ns.AddressesDao;
-import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsLegacyDescriptorDaoImpl;
 import gov.ca.cwds.data.persistence.ns.Addresses;
 import gov.ca.cwds.data.persistence.ns.LegacyDescriptorEntity;
 import gov.ca.cwds.fixture.AddressIntakeApiResourceBuilder;
@@ -30,16 +30,16 @@ import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 public class AddressIntakeApiServiceTest {
 
   private AddressIntakeApiService addressIntakeApiService;
-  private AddressesDao addressesDao;
-  private LegacyDescriptorDao legacyDescriptorDao;
+  private XaNsAddressesDaoImpl addressesDao;
+  private XaNsLegacyDescriptorDaoImpl legacyDescriptorDao;
 
   /**
    * @throws Exception - Exception
    */
   @Before
   public void setup() throws Exception {
-    addressesDao = mock(AddressesDao.class);
-    legacyDescriptorDao = mock(LegacyDescriptorDao.class);
+    addressesDao = mock(XaNsAddressesDaoImpl.class);
+    legacyDescriptorDao = mock(XaNsLegacyDescriptorDaoImpl.class);
     addressIntakeApiService = new AddressIntakeApiService(addressesDao, legacyDescriptorDao);
   }
 

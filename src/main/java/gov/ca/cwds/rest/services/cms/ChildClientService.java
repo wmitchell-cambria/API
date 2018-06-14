@@ -17,7 +17,7 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
 import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
 
 /**
- * Business layer object to work on {@link ChildClient}
+ * Business layer object to work on {@link ChildClient}.
  * 
  * @author CWDS API Team
  */
@@ -27,6 +27,7 @@ public class ChildClientService implements
   private static final Logger LOGGER = LoggerFactory.getLogger(ChildClientService.class);
 
   private ChildClientDao childClientDao;
+
   // Used to implicitly check for referential Integrity. Better to find way to make explicit
   private RIChildClient riChildClient;
 
@@ -51,7 +52,6 @@ public class ChildClientService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.ChildClient create(
       gov.ca.cwds.rest.api.domain.cms.ChildClient request) {
-
     gov.ca.cwds.rest.api.domain.cms.ChildClient childClient = request;
 
     if (childClient.getVictimClientId() == null) {
@@ -93,7 +93,6 @@ public class ChildClientService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.ChildClient delete(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.ChildClient persistedChildClient =
         childClientDao.delete(primaryKey);
     if (persistedChildClient != null) {

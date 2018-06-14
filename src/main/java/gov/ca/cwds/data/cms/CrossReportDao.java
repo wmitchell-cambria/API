@@ -26,4 +26,3 @@ public class CrossReportDao extends CrudsDaoImpl<CrossReport> {
   }
 
 }
-

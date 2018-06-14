@@ -13,13 +13,13 @@ import org.hibernate.validator.constraints.NotEmpty;
 import gov.ca.cwds.data.persistence.PersistentObject;
 
 /**
- * {@link PersistentObject} representing an County Trigger Embeddable
+ * {@link PersistentObject} representing a County Trigger {@link Embeddable}.
  * 
  * <p>
  * CountyTriggerEmbeddable is the primaryKey representation of countyTrigger and making the two
  * columns(logicId, countyOwnership0, countyOwnership0 and integratorEntity) as composite keys in
  * the trigger table values, as the primary can be repeatable.
- * <p>
+ * </p>
  * 
  * @author CWDS API Team
  * 
@@ -27,9 +27,6 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 @Embeddable
 public class CountyTriggerEmbeddable implements Serializable {
 
-  /**
-   * Serialization Version
-   */
   private static final long serialVersionUID = 1L;
 
   protected static final int CMS_ID_LEN = CmsPersistentObject.CMS_ID_LEN;

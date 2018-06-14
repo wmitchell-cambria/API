@@ -18,10 +18,10 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.AddressServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,7 +62,7 @@ public class AddressResource {
    * @param id The id
    * @return The response
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -80,7 +80,7 @@ public class AddressResource {
    * @param id The id of the {@link Address}
    * @return {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -97,7 +97,7 @@ public class AddressResource {
    * @param address The {@link Address}
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "ns")
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -118,7 +118,7 @@ public class AddressResource {
    * @param address - {@link Address}
    * @return The {@link Response}
    */
-  // @XAUnitOfWork
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

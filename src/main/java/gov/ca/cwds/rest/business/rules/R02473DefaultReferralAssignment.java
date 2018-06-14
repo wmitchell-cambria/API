@@ -20,15 +20,15 @@ import gov.ca.cwds.rest.validation.StartDateTimeValidator;
 /**
  * <p>
  * BUSINESS RULE: "R - 02473 Default Referral Assignment"
+ * </p>
  * 
+ * <p>
  * The initial assignment to a referral defaults to the caseLoad of the worker entering the referral
  * into the application (when that staff person has only one active caseLoad which is not on hold.)
- * <p>
+ * </p>
  * 
- * @author CWS-NS2
- * 
+ * @author CWDS API Team
  * @see Assignment
- *
  */
 public class R02473DefaultReferralAssignment implements RuleAction {
 
@@ -71,7 +71,6 @@ public class R02473DefaultReferralAssignment implements RuleAction {
 
   @Override
   public void execute() {
-
     if (isValidAssigneeStaffId(screeningToReferral)) {
       CaseLoad caseLoad = null;
       String caseLoadId = null;
@@ -82,6 +81,7 @@ public class R02473DefaultReferralAssignment implements RuleAction {
       if (caseLoads != null && caseLoads.length > 0) {
         caseLoad = caseLoads[0];
       }
+
       if (caseLoad == null) {
         String message = "R - 02473 Caseload is either inactive or on hold";
         ServiceException se = new ServiceException(message);
@@ -106,7 +106,6 @@ public class R02473DefaultReferralAssignment implements RuleAction {
         strsMessageBuilder.addMessageAndLog(message, e, LOGGER);
       }
     }
-
   }
 
   private void setStartTime(gov.ca.cwds.rest.api.domain.cms.Assignment da) {

@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -36,9 +36,7 @@ import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHis
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTemplate {
 
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
@@ -132,7 +130,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
   @Override
   public void testDeleteThrowsNotImplementedException() throws Exception {
     // delete is implemented
-
   }
 
   @Override
@@ -166,7 +163,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
     assertThat(retval.getClass(), is(AllegationPerpetratorHistory.class));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testUpdateThrowsExceptionWhenNotFound() throws Exception {
     try {
@@ -174,7 +170,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
           new AllegationPerpetratorHistoryResourceBuilder().createAllegationPerpetratorHistory();
 
       when(allegationPerpetratorHistoryDao.update(any())).thenThrow(EntityNotFoundException.class);
-
       allegationPerpetratorHistoryService.update("ZZZZZZZZZZ", allegationPerpetratorHistoryRequest);
     } catch (Exception e) {
       assertEquals(e.getClass(), ServiceException.class);
@@ -275,7 +270,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
     assertThat(returned, is(expected));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testCreateWithSingleTimestampReturnsCorrectEntity() throws Exception {
     String id = "AbjFyc80It";
@@ -315,7 +309,6 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
     } catch (ServiceException e) {
       assertEquals("AllegationPerpetratorHistory ID cannot be blank", e.getMessage());
     }
-
   }
 
   @Override
@@ -338,13 +331,11 @@ public class AllegationPerpetratorHistoryServiceTest implements ServiceTestTempl
     } catch (ServiceException e) {
       assertEquals("AllegationPerpetratorHistory ID cannot be blank", e.getMessage());
     }
-
   }
 
   /*
-   * Test for checking the new Allegation Id generated and lenght is 10
+   * Test for checking the new Allegation Id generated and length is 10.
    */
-  @SuppressWarnings("javadoc")
   @Test
   public void testCreateReturnsGeneratedId() throws Exception {
     AllegationPerpetratorHistory allegationPerpetratorHistoryDomain =

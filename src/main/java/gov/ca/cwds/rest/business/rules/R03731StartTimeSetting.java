@@ -20,9 +20,7 @@ import gov.ca.cwds.rest.business.RuleValidator;
  * <p>
  * 
  * @author CWDS API Team
- *
  */
-
 public class R03731StartTimeSetting implements RuleValidator {
   private Referral referral;
   private Assignment assignment;
@@ -36,8 +34,10 @@ public class R03731StartTimeSetting implements RuleValidator {
     this.assignment = assignment;
   }
 
+
   @Override
   public boolean isValid() {
+    // DRS: WARNING: default assignment could have null start date and time.
     return (referral.getReceivedDate().equals(assignment.getStartDate())
         && referral.getReceivedTime().equals(assignment.getStartTime()));
   }

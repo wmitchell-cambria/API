@@ -7,12 +7,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Date;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
@@ -20,23 +18,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
-import gov.ca.cwds.data.cms.XaCmsAddressDao;
-import gov.ca.cwds.data.ns.AddressDao;
-import gov.ca.cwds.data.ns.XaNsAddressDao;
-import gov.ca.cwds.data.persistence.ns.Addresses;
-import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.Address;
 import gov.ca.cwds.rest.api.domain.LegacyDescriptor;
 import gov.ca.cwds.rest.api.domain.PostedAddress;
-import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.services.junit.template.ServiceTestTemplate;
 import gov.ca.cwds.rest.util.Doofenshmirtz;
-import io.dropwizard.jackson.Jackson;
 
 /**
  * @author CWDS API Team
@@ -44,11 +32,6 @@ import io.dropwizard.jackson.Jackson;
 public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persistence.ns.Address>
     implements ServiceTestTemplate {
 
-  private static final ObjectMapper MY_MAPPER = Jackson.newObjectMapper();
-
-  AddressDao addressDao;
-  XaNsAddressDao xaNsAddressDao;
-  XaCmsAddressDao xaCmsAddressDao;
   AddressService target;
 
   private LegacyDescriptor legacyDescriptor = new LegacyDescriptor();
@@ -61,40 +44,14 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   public void setup() throws Exception {
     super.setup();
 
-    addressDao = mock(AddressDao.class);
-    xaNsAddressDao = mock(XaNsAddressDao.class);
-    xaCmsAddressDao = mock(XaCmsAddressDao.class);
-    target = new AddressService(addressDao, xaNsAddressDao, xaCmsAddressDao);
-
+    target = new AddressService(xaNsAddressDao, xaNsAddressesDao, addressDao);
     legacyDescriptor.setId(DEFAULT_CLIENT_ID);
 
-    Addresses adr1 = new Addresses(DEFAULT_PARTICIPANT_ID, "123 main street", "Elk Grove", "1838",
-        "95757", "32", DEFAULT_CLIENT_ID, "ADDRS_T");
-    when(xaNsAddressDao.find(any())).thenReturn(adr1);
-    when(xaNsAddressDao.create(any())).thenReturn(adr1);
-    when(xaNsAddressDao.update(any())).thenReturn(adr1);
-
-    gov.ca.cwds.data.persistence.ns.Address adr2 = new gov.ca.cwds.data.persistence.ns.Address(10L,
-        "123 main street", "Elk Grove", "1838", "95757", "32");
-    when(addressDao.find(any())).thenReturn(adr2);
-    when(addressDao.create(any())).thenReturn(adr2);
-
-    gov.ca.cwds.rest.api.domain.cms.Address addressDomain =
-        new CmsAddressResourceBuilder().buildCmsAddress();
-
-    gov.ca.cwds.data.persistence.cms.Address adrCms = new gov.ca.cwds.data.persistence.cms.Address(
-        DEFAULT_CLIENT_ID, addressDomain, "ABC", new Date());
-
-    when(xaCmsAddressDao.find(any())).thenReturn(adrCms);
-    when(xaCmsAddressDao.update(any())).thenReturn(adrCms);
-    when(xaCmsAddressDao.create(any())).thenReturn(adrCms);
-
-    MY_MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
-    new RequestExecutionContextImplTest().setup();
+    // MAPPER.configure(SerializationFeature.INDENT_OUTPUT, true);
   }
 
   protected void printObject(Object obj) throws Exception {
-    String e = MY_MAPPER.writeValueAsString(obj);
+    String e = MAPPER.writeValueAsString(obj);
     System.out.println(e);
   }
 
@@ -115,8 +72,8 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   @Override
   @Test
   public void testFindReturnsCorrectEntity() throws Exception {
-    when(addressDao.find(new Long(1))).thenReturn(new gov.ca.cwds.data.persistence.ns.Address(1L,
-        "742 Evergreen Terrace", "Springfield", "1877", "98700", "32"));
+    when(xaNsAddressDao.find(new Long(1))).thenReturn(new gov.ca.cwds.data.persistence.ns.Address(
+        1L, "742 Evergreen Terrace", "Springfield", "1877", "98700", "32"));
     Address expected = new Address("", "", "742 Evergreen Terrace", "Springfield", 1877, "98700",
         32, legacyDescriptor);
     Address found = target.find(new Long(1));
@@ -127,7 +84,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   @Override
   @Test
   public void testFindReturnsNullWhenNotFound() throws Exception {
-    when(addressDao.find(new Long(-1))).thenReturn(null);
+    when(xaNsAddressDao.find(new Long(-1))).thenReturn(null);
     Address found = target.find(new Long(-1));
     assertThat(found, is(nullValue()));
   }
@@ -157,7 +114,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
     gov.ca.cwds.data.persistence.ns.Address toCreate = new gov.ca.cwds.data.persistence.ns.Address(
         1L, "742 Evergreen Terrace", "Springfield", "1877", "98700", "32");
     Address request = new Address(toCreate);
-    when(addressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
+    when(xaNsAddressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
         .thenReturn(toCreate);
     PostedAddress postedAddress = target.create(request);
     assertThat(postedAddress.getClass(), is(PostedAddress.class));
@@ -169,7 +126,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
     gov.ca.cwds.data.persistence.ns.Address toCreate = new gov.ca.cwds.data.persistence.ns.Address(
         10L, "742 Evergreen Terrace", "Springfield", "1877", "98700", "32");
     Address request = new Address(toCreate);
-    when(addressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
+    when(xaNsAddressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
         .thenReturn(toCreate);
     PostedAddress expected = new PostedAddress(10, "", "", "742 Evergreen Terrace", "Springfield",
         1877, "98700", 32, legacyDescriptor);
@@ -206,7 +163,7 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
         (long) 1, "742 Evergreen Terrace", "Springfield", "1877", "98700", "32");
     Address request = new Address(toCreate);
     request.setLegacyId(DEFAULT_CLIENT_ID);
-    when(addressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
+    when(xaNsAddressDao.create(any(gov.ca.cwds.data.persistence.ns.Address.class)))
         .thenReturn(toCreate);
     PostedAddress expected = new PostedAddress(1, "", "", "742 Evergreen Terrace", "Springfield",
         1877, "98700", 32, legacyDescriptor);
@@ -266,9 +223,9 @@ public class AddressServiceTest extends Doofenshmirtz<gov.ca.cwds.data.persisten
   }
 
   @Override
-  @Test(expected = SQLException.class)
+  @Test(expected = ServiceException.class)
   public void testUpdateThrowsNotImplementedException() throws Exception {
-    when(xaCmsAddressDao.update(any())).thenThrow(SQLException.class);
+    when(addressDao.update(any())).thenThrow(SQLException.class);
     target.update(1L, new Address("", "", "street", "city", 1828, "95555", 32, legacyDescriptor));
   }
 

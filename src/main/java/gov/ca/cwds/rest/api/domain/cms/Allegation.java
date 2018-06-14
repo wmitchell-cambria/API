@@ -1,14 +1,18 @@
 package gov.ca.cwds.rest.api.domain.cms;
 
 import static gov.ca.cwds.data.persistence.cms.CmsPersistentObject.CMS_ID_LEN;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.data.SystemCodeSerializer;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -21,16 +25,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * {@link DomainObject} representing an Allegation
+ * {@link DomainObject} representing an Allegation.
  * 
  * @author CWDS API Team
  */
 @ApiModel("cmsAllegation")
 @NotEqual(ifProperty = "victimClientId", thenProperty = "perpetratorClientId")
 public class Allegation extends ReportingDomain implements Request, Response {
-  /**
-   * Serialization version
-   */
+
   private static final long serialVersionUID = 1L;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
@@ -360,7 +362,7 @@ public class Allegation extends ReportingDomain implements Request, Response {
    *
    * @param nonProtectingParentCode non protecting parent code
    */
-  public void update(String nonProtectingParentCode){
+  public void update(String nonProtectingParentCode) {
     this.nonProtectingParentCode = nonProtectingParentCode;
   }
 

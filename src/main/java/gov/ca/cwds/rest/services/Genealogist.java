@@ -12,7 +12,18 @@ import gov.ca.cwds.data.persistence.cms.RelationshipWrapper;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.api.domain.investigation.RelationshipTo;
 
+/**
+ * Genealogist. Noun. A researcher who discovers a person's hereditary relationships in order to
+ * answer the question, "Who's your daddy?" Or your daddy's daddy's daddy's daddy, etc.
+ * 
+ * <p>
+ * Any clients that the current user is not authorized to view are omitted from results.
+ * </p>
+ * 
+ * @author CWDS API Team
+ */
 public class Genealogist {
+
   ClientDao clientDao;
 
   /**
@@ -30,13 +41,13 @@ public class Genealogist {
       return new Relationship();
     }
 
-    Set<RelationshipTo> relations = new HashSet<>(relationships.size());
+    final Set<RelationshipTo> relations = new HashSet<>(relationships.size());
     for (RelationshipWrapper relationship : relationships) {
       boolean clientIsPrimary = clientId.equals(relationship.getPrimaryLegacyId());
       relations.add(createBar(relationship, clientIsPrimary));
     }
 
-    Client primaryClient = findClient(clientId);
+    final Client primaryClient = findClient(clientId);
     Relationship relationship;
     if (primaryClient != null) {
       relationship = new Relationship(primaryClient, relations);
@@ -57,7 +68,7 @@ public class Genealogist {
       relationshipTo = createRelationShipTo(relationship.getPrimaryLegacyId(),
           relationship.getSecondaryRelationshipCode(), relationship.getPrimaryRelationshipCode(),
           relationship.getPrimaryFirstName(), relationship.getPrimaryLastName(),
-          relationship.getPrimaryNameSuffix(),"");
+          relationship.getPrimaryNameSuffix(), "");
     }
     return relationshipTo;
   }
@@ -67,10 +78,10 @@ public class Genealogist {
       String nameSuffix, String relationContext) {
     return new RelationshipTo(secondaryFirstname, secodnaryLastName, nameSuffix, secondaryRelation,
         relationContext, primaryRelationCode, relationId);
-
   }
 
   private Client findClient(String id) {
     return this.clientDao.find(id);
   }
+
 }

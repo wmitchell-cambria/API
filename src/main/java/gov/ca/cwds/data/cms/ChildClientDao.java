@@ -35,7 +35,7 @@ public class ChildClientDao extends CrudsDaoImpl<ChildClient> {
    */
   @SuppressWarnings("unchecked")
   public ChildClient[] findVictimClients(String referralId) {
-    final NativeQuery<ChildClient> query = this.getSessionFactory().getCurrentSession()
+    final NativeQuery<ChildClient> query = grabSession()
         .getNamedNativeQuery("gov.ca.cwds.data.persistence.cms.ChildClient.findVictimClients");
     query.setParameter("referralId", referralId, StringType.INSTANCE);
     return query.list().toArray(new ChildClient[0]);

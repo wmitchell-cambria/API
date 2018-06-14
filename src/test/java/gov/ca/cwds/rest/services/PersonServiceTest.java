@@ -57,7 +57,6 @@ import gov.ca.cwds.rest.api.domain.Race;
 // 2) Review possible conditions in ElasticsearchDao.queryPersonOr(), such as wildcards ("*" or
 // "?").
 
-@SuppressWarnings("javadoc")
 public class PersonServiceTest {
 
   private PersonService personService;

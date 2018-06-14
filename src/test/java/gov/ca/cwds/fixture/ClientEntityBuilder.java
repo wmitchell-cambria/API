@@ -7,7 +7,6 @@ import java.util.Set;
 import gov.ca.cwds.data.persistence.cms.Client;
 import gov.ca.cwds.data.persistence.cms.ClientAddress;
 
-@SuppressWarnings("javadoc")
 public class ClientEntityBuilder {
 
   protected String adjudicatedDelinquentIndicator = "";

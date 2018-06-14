@@ -1,34 +1,32 @@
 package gov.ca.cwds.rest.services.hoi;
 
-import gov.ca.cwds.data.cms.StaffPersonDao;
-import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
-import gov.ca.cwds.data.ns.LegacyDescriptorDao;
-import gov.ca.cwds.data.ns.ParticipantDao;
-import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
-import io.dropwizard.hibernate.UnitOfWork;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.LegacyDescriptorDao;
+import gov.ca.cwds.data.ns.ParticipantDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
+import gov.ca.cwds.data.persistence.ns.ParticipantEntity;
 import gov.ca.cwds.data.persistence.ns.ScreeningEntity;
 import gov.ca.cwds.rest.api.domain.hoi.HOIRequest;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreening;
 import gov.ca.cwds.rest.api.domain.hoi.HOIScreeningResponse;
 import gov.ca.cwds.rest.resources.SimpleResourceService;
 import gov.ca.cwds.rest.services.auth.AuthorizationService;
-import org.hibernate.FlushMode;
 
 /**
- * Business layer object to work on Screening History Of Involvement
+ * Business layer object to work on Screening History Of Involvement.
  *
  * @author CWDS API Team
  */
@@ -75,7 +73,7 @@ public class HOIScreeningService
   }
 
   /**
-   * @param hoiRequest HOI Request containing a list of Client Id-s
+   * @param hoiRequest HOI Request containing a list of Client Id's
    * @return list of HOI Screenings
    */
   @Override
@@ -86,7 +84,6 @@ public class HOIScreeningService
     return new HOIScreeningResponse(buildHoiScreenings(hoiScreeningData));
   }
 
-  @UnitOfWork(value = "ns", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromNS(HOIScreeningData hoiScreeningData) {
     fetchDataFromNS(hoiScreeningData);
@@ -98,16 +95,18 @@ public class HOIScreeningService
      * of code back at this spot:<br/>
      * authorizationService&#46;ensureClientAccessAuthorized&#40;clientIds&#41;&#59;
      */
-    Set<ScreeningEntity> screeningEntities = screeningDao
-        .findScreeningsByClientIds(hsd.getClientIds());
+    final Set<ScreeningEntity> screeningEntities =
+        screeningDao.findScreeningsByClientIds(hsd.getClientIds());
     hsd.getScreeningEntities().addAll(screeningEntities);
 
-    Map<String, Set<ParticipantEntity>> participantEntitiesMap = participantDao.findByScreeningIds(
-        screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
+    final Map<String, Set<ParticipantEntity>> participantEntitiesMap =
+        participantDao.findByScreeningIds(
+            screeningEntities.stream().map(ScreeningEntity::getId).collect(Collectors.toSet()));
 
-    Set<String> counties = new HashSet<>();
-    Set<String> participantIds = new HashSet<>();
-    Collection<String> assigneeStaffIds = new HashSet<>();
+    final Set<String> counties = new HashSet<>();
+    final Set<String> participantIds = new HashSet<>();
+    final Collection<String> assigneeStaffIds = new HashSet<>();
+
     for (ScreeningEntity screeningEntity : screeningEntities) {
       if (participantEntitiesMap.containsKey(screeningEntity.getId())) {
         screeningEntity.setParticipants(participantEntitiesMap.get(screeningEntity.getId()));
@@ -130,7 +129,6 @@ public class HOIScreeningService
     hsd.setAssigneeStaffIds(assigneeStaffIds);
   }
 
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
   @SuppressWarnings("WeakerAccess") // can't be private because the @UnitOfWork will not play
   protected void loadDataFromCMS(HOIScreeningData hoiScreeningData) {
     fetchDataFromCMS(hoiScreeningData);
@@ -148,12 +146,10 @@ public class HOIScreeningService
        * line of code back at this spot:<br/>
        * authorizationService&#46;ensureScreeningAccessAuthorized&#40;screeningEntity&#41;&#59;
        */
-      screenings.add(hoiScreeningFactory.buildHOIScreening(
-          screeningEntity,
+      screenings.add(hoiScreeningFactory.buildHOIScreening(screeningEntity,
           hsd.getCountyIntakeLOVCodeEntityMap().get(screeningEntity.getIncidentCounty()),
           hsd.getParticipantLegacyDescriptors(),
-          hsd.getStaffPersonMap().get(screeningEntity.getAssigneeStaffId()))
-      );
+          hsd.getStaffPersonMap().get(screeningEntity.getAssigneeStaffId())));
     }
     return screenings;
   }
@@ -163,4 +159,5 @@ public class HOIScreeningService
     LOGGER.info("HOIScreeningService handle request not implemented");
     throw new NotImplementedException("handle request not implemented");
   }
+
 }

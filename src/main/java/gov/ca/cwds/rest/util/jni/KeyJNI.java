@@ -3,37 +3,47 @@ package gov.ca.cwds.rest.util.jni;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gov.ca.cwds.data.persistence.cms.CmsKeyIdGenerator;
 import gov.ca.cwds.data.persistence.cms.StaffPerson;
 
-//
-// http://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html
-//
-
-// COMPILE JAVA:
-// javac gov/ca/cwds/rest/util/jni/KeyJNI.java
-
-// GENERATE C HEADERS:
-// javah -jni gov.ca.cwds.rest.util.jni.KeyJNI
-
-// JAVA EXECUTE: OS X:
-// java -Djava.library.path=.:/usr/local/lib/ gov.ca.cwds.rest.util.jni.KeyJNI
-
 /**
- * Calls native CWDS key generation library via JNI.
+ * Calls native CWDS key generation library (C++) via JNI.
  *
+ * Read the
+ * <a href="http://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/functions.html">JNI
+ * guide</a>.
+ *
+ * <h2>Steps to build and run</h2>
+ * 
+ * <blockquote>
+ * 
+ * <pre>
+ * COMPILE JAVA:
+ * javac gov/ca/cwds/rest/util/jni/KeyJNI.java
+ * 
+ * GENERATE C HEADERS:
+ * javah -jni gov.ca.cwds.rest.util.jni.KeyJNI
+ * 
+ * JAVA EXECUTE: OS X:
+ * java -Djava.library.path=.:/usr/local/lib/ gov.ca.cwds.rest.util.jni.KeyJNI
+ * </pre>
+ * 
+ * </blockquote>
  * <p>
  * <strong>WARNING: DO NOT CHANGE METHOD SIGNATURES!</strong> Any signature change necessitates
  * regeneration of JNI headers and recompilation of shared libraries!
  * </p>
  * 
  * <p>
- * You break it, you buy it. :-)
+ * WARNING: you break it, you buy it. :-)
  * </p>
  * 
- * <h2>Steps to build and run</h2>
- * 
+ * @deprecated rely on pure Java key generation in {@link CmsKeyIdGenerator}
  * @author CWDS API Team
+ * @see CmsKeyIdGenerator
  */
+@Deprecated
+@SuppressWarnings("squid:S1133 ")
 public final class KeyJNI {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KeyJNI.class);
@@ -87,7 +97,7 @@ public final class KeyJNI {
    * in shared library. <strong>DO NOT CHANGE!</strong>
    * </p>
    */
-  @SuppressWarnings("javadoc")
+  @SuppressWarnings("findbugs:UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD")
   public static final class KeyDetail {
     public String key; // NOSONAR
     public String staffId; // NOSONAR

@@ -8,15 +8,14 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * {@link Response} adding an id to the {@link Referral}
+ * {@link Response} adding an id to the {@link Referral}.
  * 
  * @author CWDS API Team
  */
 public class PostedReferral extends Referral {
-  /**
-   * 
-   */
+
   private static final long serialVersionUID = 1L;
+
   @JsonProperty("id")
   private String id;
 
@@ -26,7 +25,6 @@ public class PostedReferral extends Referral {
    * @param referral The persisted referral
    */
   public PostedReferral(gov.ca.cwds.data.persistence.cms.Referral referral) {
-
     super(referral);
 
     if (StringUtils.isBlank(referral.getId())) {
@@ -42,6 +40,5 @@ public class PostedReferral extends Referral {
   public String getId() {
     return id;
   }
-
 
 }

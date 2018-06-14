@@ -41,13 +41,11 @@ import io.swagger.annotations.ApiModelProperty;
     required = false, ifValue = true, thenNotValue = Referral.EVALUATE_OUT)
 @AfterDateValid(ifProperty = "receivedDate", thenProperty = "limitedAccessDate")
 public class Referral extends ReportingDomain implements Request, Response {
+
   static final int EVALUATE_OUT = 1519;
   private static final String DEFAULT_NO = "N";
   private static final String DEFAULT_LIMITIED_ACCESS_CODE = "N";
 
-  /**
-   * Serialization version
-   */
   private static final long serialVersionUID = 1L;
 
   @NotNull
@@ -113,11 +111,10 @@ public class Referral extends ReportingDomain implements Request, Response {
   /**
    * R - 02535 - Do not report to In-State Law
    * 
-   * Do not cross report to Law Enforcement on referrals reported by Law Enforcement. 
-   * If Referral mandated reporter is Law Enforcement, do not enable.
+   * Do not cross report to Law Enforcement on referrals reported by Law Enforcement. If Referral
+   * mandated reporter is Law Enforcement, do not enable.
    * 
-   * API referrals/POST does not allow for a Law Enforcement agency to be specified
-   * for a Reporter.  
+   * API referrals/POST does not allow for a Law Enforcement agency to be specified for a Reporter.
    * 
    */
   @NotNull
@@ -525,8 +522,9 @@ public class Referral extends ReportingDomain implements Request, Response {
     this.openAdequateCaseCode = persistedReferral.getOpenAdequateCaseCode();
     this.receivedDate = DomainChef.cookDate(persistedReferral.getReceivedDate());
     this.receivedTime = DomainChef.cookTime(persistedReferral.getReceivedTime());
-    this.referralResponseType = persistedReferral.getReferralResponseType() == null ? Short.valueOf((short)0)
-        : persistedReferral.getReferralResponseType();
+    this.referralResponseType =
+        persistedReferral.getReferralResponseType() == null ? Short.valueOf((short) 0)
+            : persistedReferral.getReferralResponseType();
     this.referredToResourceType = persistedReferral.getReferredToResourceType();
     this.responseDeterminationDate =
         DomainChef.cookDate(persistedReferral.getResponseDeterminationDate());
@@ -636,10 +634,9 @@ public class Referral extends ReportingDomain implements Request, Response {
       boolean familyAwareness, int governmentEntity, String referalName, String dateStarted,
       String timeStarted, short referralResponseTypeCode, short referredToResourceType,
       String allegesAbuseOccurredAtAddressId, String firstResponseDeterminedByStaffPersonId,
-      String screenerNoteLongTextId, String countyCode,
-      short approvalCode, String staffId, String responseRationalLongTextId, String responsibleAgencyCode,
-      String limitedAccessCode, String limitedAccessDesc, String limitedAccessDate,
-      Short limitedAccessGovtAgencyType) {
+      String screenerNoteLongTextId, String countyCode, short approvalCode, String staffId,
+      String responseRationalLongTextId, String responsibleAgencyCode, String limitedAccessCode,
+      String limitedAccessDesc, String limitedAccessDate, Short limitedAccessGovtAgencyType) {
 
     return new Referral(Boolean.FALSE, anonymousReporter, Boolean.FALSE, "", approvalCode,
         Boolean.FALSE, "", communicationsMethodCode, currentLocationOfChildren,
@@ -739,7 +736,7 @@ public class Referral extends ReportingDomain implements Request, Response {
   }
 
   /**
-   * @param  drmsAllegationDescriptionDoc - Screener Narrative DRMS Document Id
+   * @param drmsAllegationDescriptionDoc - Screener Narrative DRMS Document Id
    */
   public void setDrmsAllegationDescriptionDoc(String drmsAllegationDescriptionDoc) {
     this.drmsAllegationDescriptionDoc = drmsAllegationDescriptionDoc;

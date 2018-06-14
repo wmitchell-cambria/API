@@ -102,7 +102,6 @@ public class AssignmentService implements
    */
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Assignment find(String primaryKey) {
-
     gov.ca.cwds.data.persistence.cms.Assignment persistedAssignment =
         assignmentDao.find(primaryKey);
     if (persistedAssignment != null) {
@@ -134,7 +133,6 @@ public class AssignmentService implements
    */
   @Override
   public PostedAssignment create(gov.ca.cwds.rest.api.domain.cms.Assignment request) {
-
     try {
       Assignment managed = new Assignment(
           CmsKeyIdGenerator.getNextValue(RequestExecutionContext.instance().getStaffId()), request,
@@ -209,7 +207,6 @@ public class AssignmentService implements
   @Override
   public gov.ca.cwds.rest.api.domain.cms.Assignment update(String primaryKey,
       gov.ca.cwds.rest.api.domain.cms.Assignment request) {
-
     try {
       Assignment managed =
           new Assignment(primaryKey, request, RequestExecutionContext.instance().getStaffId(),
@@ -234,7 +231,7 @@ public class AssignmentService implements
   // used by DocTool Rule R04611 - R04611ReferralStartDateTimeValidator
   public Assignment findReferralFirstAssignment(String referralId) {
     Assignment firstAssignment = null;
-    Set<Assignment> assignmentSet = assignmentDao.findAssignmentsByReferralId(referralId);
+    final Set<Assignment> assignmentSet = assignmentDao.findAssignmentsByReferralId(referralId);
     for (Assignment assignment : assignmentSet) {
       if (firstAssignment == null || isAssignmentStartedEarlier(assignment, firstAssignment)) {
         firstAssignment = assignment;
@@ -254,4 +251,5 @@ public class AssignmentService implements
   public MessageBuilder getMessageBuilder() {
     return messageBuilder;
   }
+
 }

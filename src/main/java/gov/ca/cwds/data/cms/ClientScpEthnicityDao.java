@@ -2,8 +2,8 @@ package gov.ca.cwds.data.cms;
 
 import java.util.List;
 
-import org.hibernate.query.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 import com.google.inject.Inject;
 
@@ -17,6 +17,7 @@ import gov.ca.cwds.inject.CmsSessionFactory;
  * @author CWDS API Team
  */
 public class ClientScpEthnicityDao extends CrudsDaoImpl<ClientScpEthnicity> {
+
   /**
    * Constructor
    * 
@@ -32,7 +33,7 @@ public class ClientScpEthnicityDao extends CrudsDaoImpl<ClientScpEthnicity> {
    * @return the list of race and hispanic codes
    */
   public List<ClientScpEthnicity> getClientScp(String establishedId) {
-    Query query = this.getSessionFactory().getCurrentSession()
+    final Query query = grabSession()
         .getNamedQuery("gov.ca.cwds.data.persistence.cms.ClientScpEthnicity.createOrUpdate")
         .setParameter("establishedId", establishedId);
     return query.list();

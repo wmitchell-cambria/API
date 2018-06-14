@@ -6,7 +6,6 @@ import org.junit.Test;
 
 /**
  * @author CWDS API Team
- *
  */
 public class TokenCredentialsTest {
 

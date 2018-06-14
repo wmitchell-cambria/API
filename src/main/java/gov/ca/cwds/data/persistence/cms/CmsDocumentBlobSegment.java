@@ -17,7 +17,8 @@ import gov.ca.cwds.data.persistence.PersistentObject;
 import gov.ca.cwds.data.persistence.TypedPersistentObject;
 
 /**
- * {@link PersistentObject} represents a document blob record in TSBLOBT.
+ * {@link PersistentObject} represents a document blob record in TSBLOBT, the document segments
+ * table.
  * 
  * <p>
  * Note that this entity class <strong>does not extend {@link CmsPersistentObject}</strong>, because
@@ -73,7 +74,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     super();
     this.docHandle = docHandle;
     this.segmentSequence = segmentSequence;
-    this.docBlob = docBlob;
+    this.docBlob = docBlob != null ? Arrays.copyOf(docBlob, docBlob.length) : null;
   }
 
   /**
@@ -141,8 +142,8 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
     // 3) if you got this far, well ... ;)
     if (docBlob == null) {
       return other.docBlob == null;
-    } else return Arrays.equals(docBlob, other.docBlob);
-
+    } else
+      return Arrays.equals(docBlob, other.docBlob);
   }
 
   // ==================
@@ -183,7 +184,7 @@ public class CmsDocumentBlobSegment implements TypedPersistentObject<VarargPrima
    * @param docBlob hex of binary, compressed data for this segment
    */
   public void setDocBlob(byte[] docBlob) {
-    this.docBlob = docBlob;
+    this.docBlob = Arrays.copyOf(docBlob, docBlob.length);
   }
 
   /**

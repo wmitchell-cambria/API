@@ -15,11 +15,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.domain.investigation.Relationship;
 import gov.ca.cwds.rest.resources.converter.ResponseConverter;
 import gov.ca.cwds.rest.services.RelationshipsService;
-
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,12 +40,13 @@ import io.swagger.annotations.ApiResponses;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientRelationshipResource {
+
   private RelationshipsService relationshipsService;
 
   /**
    * Constructor
    *
-   * @param relationshipsService The service to delgate to
+   * @param relationshipsService The service to delegate to
    */
   @Inject
   public ClientRelationshipResource(RelationshipsService relationshipsService) {
@@ -57,19 +57,16 @@ public class ClientRelationshipResource {
    * Finds a Relationship for a Client id.
    *
    * @param id the id
-   *
    * @return client relationships
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @GET
   @Path("/{id}/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-
   @ApiOperation(value = "Find relationships by client id", response = Relationship.class,
       code = 200)
-
   public Response get(@PathParam("id") @ApiParam(required = true, name = "id",
       value = "The id of the client to find relationships for") String id) {
     gov.ca.cwds.rest.api.Response relationship = relationshipsService.find(id);
@@ -79,24 +76,22 @@ public class ClientRelationshipResource {
   /**
    * Finds a Relationship for a Client id.
    *
-   * @param clientIds the list of client ids to return relationships for
-   *
+   * @param clientIds the list of client id's to return relationships for
    * @return A list of client relationships
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @GET
   @Path("/relationships")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
       @ApiResponse(code = 406, message = "Accept Header not supported")})
-
   @ApiOperation(value = "Find relationships by client id's", response = Relationship.class,
       code = 200)
-
   public Response getRelationships(
       @QueryParam("clientIds") @ApiParam(required = true, name = "clientIds",
           value = "A list of client id's to find relationships for") final List<String> clientIds) {
     gov.ca.cwds.rest.api.Response relationships = relationshipsService.findForIds(clientIds);
     return new ResponseConverter().withDataResponse(relationships);
   }
+
 }

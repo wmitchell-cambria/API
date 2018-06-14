@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.cms.Allegation;
@@ -26,16 +25,11 @@ import gov.ca.cwds.rest.api.domain.cms.PostedReporter;
 import gov.ca.cwds.rest.api.domain.cms.ReferralClient;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.services.CrudsService;
-import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * @author CWDS API Team
- *
  */
 public class CmsReferralService implements CrudsService {
-
-  @SuppressWarnings("unused")
-  private static final Logger LOGGER = LoggerFactory.getLogger(CmsReferralService.class);
 
   private ReferralService referralService;
   private ClientService clientService;
@@ -72,7 +66,7 @@ public class CmsReferralService implements CrudsService {
    * 
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @Override
   public Response create(Request request) {
     assert request instanceof CmsReferral;
@@ -97,7 +91,6 @@ public class CmsReferralService implements CrudsService {
         resultReferralClient);
 
     PostedReporter savedreporter = saveReporter(cmsReferral, referralId);
-
     return new PostedCmsReferral(referral, postedClients, resultAllegation, resultCrossReport,
         resultReferralClient, savedreporter);
   }

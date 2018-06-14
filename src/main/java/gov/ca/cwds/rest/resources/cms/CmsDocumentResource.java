@@ -18,17 +18,16 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.CmsDocumentBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.CmsDocument;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.TypedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.hibernate.FlushMode;
 
 /**
  * A resource providing a RESTful interface for {@link CmsDocument}. It delegates functions to
@@ -69,7 +68,7 @@ public class CmsDocumentResource {
    * 
    * @return the response
    */
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
+  @XAUnitOfWork
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -86,10 +85,9 @@ public class CmsDocumentResource {
    * Delete a document by id.
    * 
    * @param id The id of the {@link CmsDocument}
-   * 
    * @return {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -103,10 +101,9 @@ public class CmsDocumentResource {
    * Create an {@link CmsDocument}
    * 
    * @param doc The {@link CmsDocument}
-   * 
    * @return The {@link CmsDocument}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @POST
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),
       @ApiResponse(code = 401, message = "Not Authorized"),
@@ -126,10 +123,9 @@ public class CmsDocumentResource {
    * 
    * @param id the id
    * @param doc {@link CmsDocument}
-   *
    * @return The {@link Response}
    */
-  @UnitOfWork(value = "cms")
+  @XAUnitOfWork
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 400, message = "Unable to process JSON"),

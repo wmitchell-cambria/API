@@ -48,7 +48,8 @@ public class StaffPerson extends CmsPersistentObject {
   @ColumnTransformer(read = ("trim(FIRST_NM)"))
   private String firstName;
 
-  @Column(name = "JOB_TL_DSC")
+  @Column(name = "JOB_TL_DSC", length = 30, nullable = false)
+  @ColumnTransformer(read = ("trim(JOB_TL_DSC)"))
   private String jobTitle;
 
   @Column(name = "LAST_NM", length = 25, nullable = false)
@@ -84,7 +85,8 @@ public class StaffPerson extends CmsPersistentObject {
   @Column(name = "FKCWS_OFFT")
   private String cwsOffice;
 
-  @Column(name = "AVLOC_DSC")
+  @Column(name = "AVLOC_DSC", length = 160, nullable = false)
+  @ColumnTransformer(read = ("trim(AVLOC_DSC)"))
   private String availabilityAndLocationDescription;
 
   @Column(name = "SSRS_WKRID")

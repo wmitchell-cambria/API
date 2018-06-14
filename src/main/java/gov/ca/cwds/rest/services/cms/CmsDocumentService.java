@@ -11,8 +11,6 @@ import javax.persistence.EntityExistsException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Session;
-import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
@@ -34,6 +32,66 @@ import gov.ca.cwds.rest.services.TypedCrudsService;
  * @author CWDS API Team
  */
 public class CmsDocumentService implements TypedCrudsService<String, CmsDocument, CmsDocument> {
+
+  /**
+   * Hibernate Work implementation deletes document blob segments.
+   * 
+   * @author CWDS API Team
+   */
+  private static final class WorkDeleteBlobSegments implements Work {
+
+    final String docId;
+    final CmsDocumentService parent;
+
+    WorkDeleteBlobSegments(String docId, CmsDocumentService parent) {
+      this.docId = docId;
+      this.parent = parent;
+    }
+
+    @Override
+    @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
+    public void execute(Connection con) throws SQLException {
+      try (final PreparedStatement delStmt = con.prepareStatement(parent.blobsDelete())) {
+        delStmt.setString(1, docId);
+        delStmt.executeUpdate();
+      }
+    }
+
+  }
+
+  /**
+   * Hibernate Work implementation overwrites document blob segments.
+   * 
+   * @author CWDS API Team
+   */
+  private static final class WorkInsertBlobSegments implements Work {
+
+    final String docId;
+    final CmsDocumentService parent;
+    final List<CmsDocumentBlobSegment> blobs;
+
+    WorkInsertBlobSegments(String docId, CmsDocumentService parent,
+        List<CmsDocumentBlobSegment> blobs) {
+      this.docId = docId;
+      this.parent = parent;
+      this.blobs = blobs;
+    }
+
+    @Override
+    @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
+    public void execute(Connection con) throws SQLException {
+      try (final PreparedStatement delStmt = con.prepareStatement(parent.blobsDelete());
+          final Statement insStmt = con.createStatement()) {
+        delStmt.setString(1, docId);
+        delStmt.executeUpdate();
+
+        for (CmsDocumentBlobSegment blob : blobs) {
+          insStmt.executeUpdate(parent.blobToInsert(blob));
+        }
+      }
+    }
+
+  }
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsDocumentService.class);
   private static final String PRIMARY_KEY = "primaryKey={}";
@@ -80,7 +138,8 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   /**
-   * Create binary document.
+   * Create binary document. Force PKWare compression for new documents. LZW is for legacy documents
+   * only.
    *
    * @param request domain document
    */
@@ -100,9 +159,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
       doc.setDocServ(request.getDocServ().trim());
     }
 
-    // Force PKWare compression for new documents
     doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
-
     final List<CmsDocumentBlobSegment> blobs = dao.compressDoc(doc, request.getBase64Blob().trim());
     doc.setBlobSegments(new HashSet<>(blobs));
     insertBlobs(doc, blobs);
@@ -120,7 +177,9 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
   }
 
   /**
-   * Update binary document.
+   * Update binary document. Force PKWare compression
+   * ({@link CmsDocumentDao#COMPRESSION_TYPE_PK_FULL}) for new documents.
+   * {@link CmsDocumentDao#COMPRESSION_TYPE_LZW_FULL} is for legacy documents only.
    * 
    * @param primaryKey primary key
    * @param request domain document
@@ -145,9 +204,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         doc.setCompressionMethod(request.getCompressionMethod().trim());
       }
 
-      // Force PKWare compression for updated documents
       doc.setCompressionMethod(CmsDocumentDao.COMPRESSION_TYPE_PK_FULL);
-
       final List<CmsDocumentBlobSegment> blobs =
           dao.compressDoc(doc, request.getBase64Blob().trim());
       doc.getBlobSegments().clear();
@@ -163,6 +220,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         LOGGER.error("FAILED TO UPDATE DOCUMENT! {}", e.getMessage(), e);
         throw new ServiceException("FAILED TO UPDATE DOCUMENT! {" + request + "}", e);
       }
+
       retval = new CmsDocument(managed);
       String base64Doc = dao.decompressDoc(managed);
       retval.setBase64Blob(base64Doc);
@@ -190,72 +248,30 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         .getDefaultSchemaName();
   }
 
-  @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
+  @SuppressFBWarnings("SQL_INJECTION_JDBC") // No SQL injection here
   private void insertBlobsJdbc(final Connection con,
       gov.ca.cwds.data.persistence.cms.CmsDocument doc, List<CmsDocumentBlobSegment> blobs)
       throws SQLException {
     try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete());
         final Statement insStmt = con.createStatement()) {
-
       delStmt.setString(1, doc.getId());
       delStmt.executeUpdate();
 
       for (CmsDocumentBlobSegment blob : blobs) {
         insStmt.executeUpdate(blobToInsert(blob));
       }
-
-      con.commit(); // WARNING: deadlock without this.
     } catch (SQLException e) {
-      con.rollback();
-      throw e;
-    }
-  }
-
-  @SuppressFBWarnings("SQL_INJECTION_JDBC") // There is no sql injection here
-  private void deleteBlobsJdbc(final Connection con, String docId) throws SQLException {
-    try (final PreparedStatement delStmt = con.prepareStatement(blobsDelete())) {
-
-      delStmt.setString(1, docId);
-      delStmt.executeUpdate();
-
-      con.commit(); // WARNING: deadlock without this.
-    } catch (SQLException e) {
-      con.rollback();
       throw e;
     }
   }
 
   protected void deleteBlobs(String docId) {
-    try (final Connection con = getConnection()) {
-      deleteBlobsJdbc(con, docId);
-    } catch (SQLException e) {
-      throw new ServiceException("FAILED TO DELETE DOCUMENT SEGMENTS", e);
-    }
+    this.dao.grabSession().doWork(new WorkDeleteBlobSegments(docId, this));
   }
 
   protected void insertBlobs(gov.ca.cwds.data.persistence.cms.CmsDocument doc,
       List<CmsDocumentBlobSegment> blobs) {
-    try (final Connection con = getConnection()) {
-      insertBlobsJdbc(con, doc, blobs);
-    } catch (SQLException e) {
-      throw new ServiceException("FAILED TO INSERT DOCUMENT SEGMENTS", e);
-    }
-  }
-
-  /**
-   * Synchronize grabbing connections from the connection pool to prevent deadlocks in C3P0.
-   * 
-   * <p>
-   * ALTERNATIVE: call Hibernate {@link Session#doWork(Work)} to execute JDBC statements in the same
-   * session.
-   * </p>
-   * 
-   * @return a connection
-   * @throws SQLException on database error
-   */
-  protected synchronized Connection getConnection() throws SQLException {
-    return dao.getSessionFactory().getSessionFactoryOptions().getServiceRegistry()
-        .getService(ConnectionProvider.class).getConnection();
+    this.dao.grabSession().doWork(new WorkInsertBlobSegments(doc.getId(), this, blobs));
   }
 
   /**

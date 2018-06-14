@@ -18,11 +18,6 @@ public final class Api {
   public static final String RESOURCE_APPLICATION = "application";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_CASE_HISTORY_OF_INVOLVEMENT} API..
-   */
-  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_CLIENT} API..
    */
   public static final String RESOURCE_CLIENT = "clients";
@@ -68,6 +63,16 @@ public final class Api {
   public static final String RESOURCE_GOVERNMENT_ORG = "cross_report_agency";
 
   /**
+   * A {@code String} constant representing {@value #RESOURCE_CASE_HISTORY_OF_INVOLVEMENT} API..
+   */
+  public static final String RESOURCE_CASE_HISTORY_OF_INVOLVEMENT = "hoi_cases";
+
+  /**
+   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT} API..
+   */
+  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
+
+  /**
    * A {@code String} constant representing {@value #RESOURCE_HOI_SCREENINGS} API..
    */
   public static final String RESOURCE_HOI_SCREENINGS = "hoi_screenings";
@@ -103,11 +108,6 @@ public final class Api {
   public static final String RESOURCE_REFERRALS = "referrals";
 
   /**
-   * A {@code String} constant representing {@value #RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT} API..
-   */
-  public static final String RESOURCE_REFERRAL_HISTORY_OF_INVOLVEMENT = "hoi_referrals";
-
-  /**
    * A {@code String} constant representing {@value #RESOURCE_SCREENINGS} API..
    */
   public static final String RESOURCE_SCREENINGS = "screenings";
@@ -133,9 +133,24 @@ public final class Api {
   public static final String DATASOURCE_CMS = "cms";
 
   /**
+   * Identifer for CMS DB2 replicated datasources.
+   */
+  public static final String DATASOURCE_CMS_REP = "rs";
+
+  /**
    * Identifer for CMS DB2 datasources for XA transactions.
    */
   public static final String DATASOURCE_XA_CMS = "xa_cms";
+
+  /**
+   * Identifer for NS Postgres datasources.
+   */
+  public static final String DATASOURCE_NS = "ns";
+
+  /**
+   * Identifer for NS Postgres datasources for XA transactions.
+   */
+  public static final String DATASOURCE_XA_NS = "xa_ns";
 
   /**
    * Default private constructor

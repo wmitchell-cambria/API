@@ -18,7 +18,7 @@ public class IntakeCodeConveterTest {
    */
   @Test
   public void type() {
-    assertThat(IntakeCodeConveter.class, notNullValue());
+    assertThat(IntakeCodeConverter.class, notNullValue());
   }
 
   /**
@@ -26,7 +26,7 @@ public class IntakeCodeConveterTest {
    */
   @Test
   public void getIntakeValue_Args__() {
-    IntakeCodeConveter target = IntakeCodeConveter.ABANDONED;
+    IntakeCodeConverter target = IntakeCodeConverter.ABANDONED;
     String actual = target.getIntakeValue();
     String expected = "Abandoned";
     assertThat(actual, is(equalTo(expected)));
@@ -37,7 +37,7 @@ public class IntakeCodeConveterTest {
    */
   @Test
   public void getLegacyValue_Args__() {
-    IntakeCodeConveter target = IntakeCodeConveter.AMERICAN_INDIAN;
+    IntakeCodeConverter target = IntakeCodeConverter.AMERICAN_INDIAN;
     String actual = target.getLegacyValue();
     String expected = "American Indian*";
     assertThat(actual, is(equalTo(expected)));
@@ -47,10 +47,10 @@ public class IntakeCodeConveterTest {
    * 
    */
   @Test
-  public void findfindLegacyDescriptionNull_Args__String() {
+  public void findLegacyDescpretionNull_Args__String() {
     String intakeValue = null;
-    IntakeCodeConveter actual = IntakeCodeConveter.findLegacyDescription(intakeValue);
-    IntakeCodeConveter expected = null;
+    IntakeCodeConverter actual = IntakeCodeConverter.findLegacyDescription(intakeValue);
+    IntakeCodeConverter expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
@@ -58,10 +58,10 @@ public class IntakeCodeConveterTest {
    * 
    */
   @Test
-  public void findfindLegacyDescription_ToGet_LegacyValue() {
+  public void findLegacyDescpretion_ToGet_LegacyValue() {
     String intakeValue = "Unknown";
-    String actual = IntakeCodeConveter.findLegacyDescription(intakeValue).getLegacyValue();
-    String expected = IntakeCodeConveter.UNKNOWN.getLegacyValue();
+    String actual = IntakeCodeConverter.findLegacyDescription(intakeValue).getLegacyValue();
+    String expected = IntakeCodeConverter.UNKNOWN.getLegacyValue();
     assertThat(actual, is(equalTo(expected)));
   }
 

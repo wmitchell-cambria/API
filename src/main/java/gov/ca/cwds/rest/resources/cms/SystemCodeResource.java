@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources.cms;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,6 +17,7 @@ import org.apache.http.HttpStatus;
 
 import com.google.inject.Inject;
 
+import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.inject.SystemCodeServiceBackedResource;
 import gov.ca.cwds.rest.api.domain.cms.SystemCode;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeListResponse;
@@ -22,12 +25,10 @@ import gov.ca.cwds.rest.api.domain.cms.SystemMeta;
 import gov.ca.cwds.rest.api.domain.cms.SystemMetaListResponse;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
-import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.hibernate.FlushMode;
 
 /**
  * A resource providing a RESTful interface for {@link SystemCode}. It delegates functions to
@@ -40,10 +41,6 @@ import org.hibernate.FlushMode;
  * 
  * @author CWDS API Team
  */
-// @Api(value = RESOURCE_LOV, tags = {RESOURCE_LOV})
-// @Path(value = RESOURCE_LOV)
-// @Produces(MediaType.APPLICATION_JSON)
-// @Consumes(MediaType.APPLICATION_JSON)
 public class SystemCodeResource {
 
   private ResourceDelegate resourceDelegate;
@@ -62,10 +59,9 @@ public class SystemCodeResource {
    * Finds a {@link SystemCode} by id.
    * 
    * @param id The id
-   *
    * @return the response
    */
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
@@ -79,12 +75,11 @@ public class SystemCodeResource {
   }
 
   /**
-   * Finds list of {@link SystemMeta}
-   * 
+   * Finds list of {@link SystemMeta}.
    *
    * @return the response
    */
-  @UnitOfWork(value = "cms", readOnly = true, transactional = false, flushMode = FlushMode.MANUAL)
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS, readOnly = true)
   @GET
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized"),
       @ApiResponse(code = 404, message = "Not found"),
@@ -97,13 +92,13 @@ public class SystemCodeResource {
   }
 
   /**
-   * Delete a {@link SystemCode}
+   * Delete a {@link SystemCode}.
    * 
    * @param id The id of the {@link SystemCode}
    * @param acceptHeader The accept header.
-   * 
    * @return {@link Response}
    */
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @DELETE
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -121,12 +116,12 @@ public class SystemCodeResource {
    * @param acceptHeader The accept header
    * @return The {@link Response}
    */
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @POST
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
   @ApiOperation(hidden = true, value = "Delete SystemCode - not currently implemented",
       code = HttpStatus.SC_OK, response = Object.class)
-  public Response create(
-      @HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
+  public Response create(@HeaderParam("Accept") @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
 
@@ -135,9 +130,9 @@ public class SystemCodeResource {
    *
    * @param id The id of the {@link SystemCode}
    * @param acceptHeader The accept header.
-   *
    * @return The {@link Response}
    */
+  @XAUnitOfWork(value = DATASOURCE_XA_CMS)
   @PUT
   @Path("/{id}")
   @ApiResponses(value = {@ApiResponse(code = 401, message = "Not Authorized")})
@@ -150,4 +145,5 @@ public class SystemCodeResource {
       @ApiParam(hidden = true) String acceptHeader) {
     return Response.status(Response.Status.NOT_IMPLEMENTED).entity(null).build();
   }
+
 }

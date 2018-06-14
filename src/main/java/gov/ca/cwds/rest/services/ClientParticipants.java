@@ -11,14 +11,14 @@ import gov.ca.cwds.rest.api.domain.Participant;
  * 
  * @author CWDS API Team
  */
-@SuppressWarnings("javadoc")
 public class ClientParticipants {
+
   Set<Participant> participants;
   Map<Long, String> victimIds;
   Map<Long, String> perpetratorIds;
 
   /**
-   * 
+   * Default constructor.
    */
   public ClientParticipants() {
     this.participants = new HashSet<>();

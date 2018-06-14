@@ -21,7 +21,7 @@ import gov.ca.cwds.rest.api.domain.ReportingDomain;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * This domain class created only for demo purpose and will be removed later
+ * This domain class created only for demo purpose and will be removed later.
  * 
  * @author CWDS API Team
  */
@@ -71,7 +71,6 @@ public class AllegationPerpetratorHistory extends ReportingDomain
     this.perpetratorUpdateDate = perpetratorUpdateDate;
   }
 
-  @SuppressWarnings("javadoc")
   public AllegationPerpetratorHistory(
       gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory persistedAllegationPerpetratorHistory) {
     this.countySpecificCode = persistedAllegationPerpetratorHistory.getCountySpecificCode();
@@ -81,22 +80,18 @@ public class AllegationPerpetratorHistory extends ReportingDomain
         DomainChef.cookDate(persistedAllegationPerpetratorHistory.getPerpetratorUpdateDate());
   }
 
-  @SuppressWarnings("javadoc")
   public String getCountySpecificCode() {
     return countySpecificCode;
   }
 
-  @SuppressWarnings("javadoc")
   public String getPerpetratorClientId() {
     return perpetratorClientId;
   }
 
-  @SuppressWarnings("javadoc")
   public String getAllegationId() {
     return allegationId;
   }
 
-  @SuppressWarnings("javadoc")
   public String getPerpetratorUpdateDate() {
     return perpetratorUpdateDate;
   }

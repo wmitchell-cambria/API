@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,8 +13,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,16 +55,114 @@ import org.mockito.MockitoAnnotations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import gov.ca.cwds.ObjectMapperUtils;
+import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
+import gov.ca.cwds.data.cms.AssignmentDao;
+import gov.ca.cwds.data.cms.AssignmentUnitDao;
+import gov.ca.cwds.data.cms.CaseDao;
+import gov.ca.cwds.data.cms.ChildClientDao;
+import gov.ca.cwds.data.cms.ClientScpEthnicityDao;
+import gov.ca.cwds.data.cms.CrossReportDao;
+import gov.ca.cwds.data.cms.CwsOfficeDao;
+import gov.ca.cwds.data.cms.DrmsDocumentDao;
+import gov.ca.cwds.data.cms.LongTextDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsAddressDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAllegationDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAllegationPerpetratorHistoryDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsAssignmentUnitDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCaseDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCaseLoadDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsChildClientDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsClientAddressDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsClientDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCrossReportDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsCwsOfficeDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDocumentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsDrmsDocumentDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsLongTextDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralClientDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReferralDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsReporterDaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsSsaName3DaoImpl;
+import gov.ca.cwds.data.cms.xa.XaCmsStaffPersonDaoImpl;
+import gov.ca.cwds.data.dao.investigation.PeopleDao;
+import gov.ca.cwds.data.es.ElasticSearchPerson;
+import gov.ca.cwds.data.es.ElasticsearchDao;
+import gov.ca.cwds.data.legacy.cms.dao.NonCWSNumberDao;
+import gov.ca.cwds.data.legacy.cms.dao.SafelySurrenderedBabiesDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
+import gov.ca.cwds.data.ns.AllegationIntakeDao;
+import gov.ca.cwds.data.ns.IntakeLOVCodeDao;
+import gov.ca.cwds.data.ns.IntakeLovDao;
+import gov.ca.cwds.data.ns.xa.XaNsAddressDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAddressesDaoImpl;
+import gov.ca.cwds.data.ns.xa.XaNsAllegationIntakeDaoImpl;
 import gov.ca.cwds.data.persistence.PersistentObject;
+import gov.ca.cwds.data.persistence.cms.CmsCase;
+import gov.ca.cwds.data.persistence.cms.CmsDocument;
+import gov.ca.cwds.data.persistence.cms.Referral;
+import gov.ca.cwds.data.persistence.cms.ReferralClient;
+import gov.ca.cwds.data.persistence.cms.Reporter;
+import gov.ca.cwds.data.persistence.cms.StaffPerson;
+import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.data.persistence.ns.AllegationEntity;
+import gov.ca.cwds.data.rules.TriggerTablesDao;
+import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
+import gov.ca.cwds.fixture.ClientEntityBuilder;
+import gov.ca.cwds.fixture.CmsAddressResourceBuilder;
+import gov.ca.cwds.fixture.ParticipantResourceBuilder;
+import gov.ca.cwds.fixture.ScreeningResourceBuilder;
+import gov.ca.cwds.fixture.ScreeningToReferralResourceBuilder;
+import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
+import gov.ca.cwds.rest.ElasticsearchConfiguration;
+import gov.ca.cwds.rest.api.domain.LimitedAccessType;
+import gov.ca.cwds.rest.api.domain.Participant;
+import gov.ca.cwds.rest.api.domain.Screening;
+import gov.ca.cwds.rest.api.domain.cms.Client;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
+import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
+import gov.ca.cwds.rest.business.rules.LACountyTrigger;
+import gov.ca.cwds.rest.business.rules.Reminders;
+import gov.ca.cwds.rest.business.rules.xa.XaNonLACountyTriggers;
+import gov.ca.cwds.rest.business.rules.xa.XaUpperCaseTables;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import gov.ca.cwds.rest.filters.RequestExecutionContextImplTest;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
+import gov.ca.cwds.rest.messages.MessageBuilder;
+import gov.ca.cwds.rest.services.ParticipantService;
+import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
+import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
+import gov.ca.cwds.rest.services.cms.AllegationService;
+import gov.ca.cwds.rest.services.cms.AssignmentService;
+import gov.ca.cwds.rest.services.cms.ChildClientService;
+import gov.ca.cwds.rest.services.cms.ClientAddressService;
+import gov.ca.cwds.rest.services.cms.ClientScpEthnicityService;
+import gov.ca.cwds.rest.services.cms.ClientService;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
+import gov.ca.cwds.rest.services.cms.CrossReportService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
+import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
+import gov.ca.cwds.rest.services.cms.LongTextService;
+import gov.ca.cwds.rest.services.cms.ReferralClientService;
+import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
+import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
+import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
+import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
+import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
+import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReferral;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReferralClient;
+import gov.ca.cwds.rest.services.referentialintegrity.RIReporter;
+import gov.ca.cwds.security.realm.PerryAccount;
 
 /**
  * <a href="http://phineasandferb.wikia.com/wiki/Heinz_Doofenshmirtz">Heinz Doofenshmirtz</a> is the
@@ -77,13 +180,12 @@ import gov.ca.cwds.rest.services.cms.AbstractShiroTest;
  */
 public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest {
 
-  protected static final ObjectMapper MAPPER = ObjectMapperUtils.createObjectMapper();
+  public static final ObjectMapper MAPPER = ElasticSearchPerson.MAPPER;
 
   public static final String DEFAULT_CLIENT_ID = "Jtq8ab8H3N";
   public static final String DEFAULT_PARTICIPANT_ID = "10";
 
-  private static Validator validator;
-  private static SystemCodeCache systemCodeCache;
+  public static SystemCodeCache systemCodeCache;
 
   public SessionFactoryImplementor sessionFactoryImplementor;
   public org.hibernate.SessionFactory sessionFactory;
@@ -101,27 +203,111 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
   public Settings settings;
   PreparedStatement prepStmt;
 
+  public Validator validator;
+  public ScreeningToReferralResourceBuilder defaultReferralBuilder;
+
+  public XaCmsAddressDaoImpl addressDao;
+  public XaCmsAllegationDaoImpl allegationDao;
+  public XaCmsCaseLoadDaoImpl caseLoadDao;
+  public XaCmsClientAddressDaoImpl clientAddressDao;
+  public XaCmsClientDaoImpl clientDao;
+  public XaCmsClientRelationshipDaoImpl clientRelationshipDao;
+  public XaCmsDocumentDaoImpl cmsDocumentDao;
+  public XaCmsReferralClientDaoImpl referralClientDao;
+  public XaCmsReferralDaoImpl referralDao;
+  public XaCmsReporterDaoImpl reporterDao;
+  public XaCmsSsaName3DaoImpl ssaName3Dao;
+  public XaCmsStaffPersonDaoImpl staffpersonDao;
+  public XaCmsStaffPersonDaoImpl staffPersonDao;
+  public XaNonLACountyTriggers nonLACountyTriggers;
+  public XaNsAddressDaoImpl xaNsAddressDao;
+  public XaNsAddressesDaoImpl xaNsAddressesDao;
+  public XaUpperCaseTables upperCaseTables;
+
+  public AllegationIntakeDao allegationIntakeDao;
+  public AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
+  public AssignmentDao assignmentDao;
+  public AssignmentUnitDao assignmentUnitDao;
+  public CaseDao caseDao;
+  public ChildClientDao childClientDao;
+  public CrossReportDao crossReportDao;
+  public CwsOfficeDao cwsOfficeDao;
+  public DrmsDocumentDao drmsDocumentDao;
+  public IntakeLOVCodeDao intakeLOVCodeDao;
+  public IntakeLovDao intakeLovDao;
+  public LACountyTrigger laCountyTrigger;
+  public LongTextDao longTextDao;
+  public NonCWSNumberDao nonCWSNumberDao;
+  public SafelySurrenderedBabiesDao safelySurrenderedBabiesDao;
+  public SpecialProjectDao specialProjectDao;
+  public SpecialProjectReferralDao specialProjectReferralDao;
   public SystemCodeDao systemCodeDao;
   public SystemMetaDao systemMetaDao;
+  public TriggerTablesDao triggerTablesDao;
+  public ClientScpEthnicityDao clientScpEthnicityDao;
+  public PeopleDao peopleDao;
 
-  Subject mockSubject;
-  PrincipalCollection principalCollection;
-  RequestExecutionContext ctx;
+  public RIChildClient riChildClient;
+  public RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
+  public RIClientAddress riClientAddress;
+  public RIAllegation riAllegation;
+  public RICrossReport riCrossReport;
+  public RIReporter riReporter;
+  public RIReferral riReferral;
+  public RIReferralClient riReferralClient;
+
+  public AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
+  public AllegationService allegationService;
+  public AssignmentService assignmentService;
+  public ChildClientService childClientService;
+  public ClientAddressService clientAddressService;
+  public ClientScpEthnicityService clientScpEthnicityService;
+  public ClientService clientService;
+  public CmsDocumentService cmsDocumentService;
+  public CrossReportService crossReportService;
+  public DrmsDocumentService drmsDocumentService;
+  public DrmsDocumentTemplateService drmsDocumentTemplateService;
+  public LongTextService longTextService;
+  public ParticipantService participantService;
+  public ReferralClientService referralClientService;
+  public ReporterService reporterService;
+  public ScreeningToReferralService screeningToReferralService;
+  public XaCmsAddressService addressService;
+  public XaCmsReferralService referralService;
+
+  public Reminders reminders;
+  public ExternalInterfaceTables externalInterfaceTables;
+  public GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+
+  public Query<CmsDocument> docQuery;
+  public CmsDocument doc;
+
+  public MessageBuilder messageBuilder;
+  public StaffPerson staffPerson;
+
+  public ElasticsearchConfiguration esConfig = mock(ElasticsearchConfiguration.class);
+  public ElasticsearchDao esDao = mock(ElasticsearchDao.class);
+
+  public Subject mockSubject;
+  public PrincipalCollection principalCollection;
+  public RequestExecutionContext ctx;
 
   @BeforeClass
   public static void setupClass() {
     systemCodeCache = new TestSystemCodeCache();
-    validator = Validation.buildDefaultValidatorFactory().getValidator();
   }
 
+  @SuppressWarnings("unchecked")
   @Before
   public void setup() throws Exception {
     MockitoAnnotations.initMocks(this);
 
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
+    validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     // Authentication, authorization:
+    messageBuilder = mock(MessageBuilder.class);
     mockSubject = mock(Subject.class);
     principalCollection = mock(PrincipalCollection.class);
 
@@ -132,6 +318,7 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     setSubject(mockSubject);
 
     // Request context:
+    new RequestExecutionContextImplTest().setup();
     RequestExecutionContextImplTest.startRequest();
     ctx = RequestExecutionContext.instance();
 
@@ -214,39 +401,249 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(con.prepareStatement(any(String.class))).thenReturn(prepStmt);
     when(prepStmt.executeUpdate()).thenReturn(10);
 
+    // =================
+    // DAO's:
+    // =================
+
     systemCodeDao = mock(SystemCodeDao.class);
     systemMetaDao = mock(SystemMetaDao.class);
+
+    addressDao = mock(XaCmsAddressDaoImpl.class);
+    allegationDao = mock(XaCmsAllegationDaoImpl.class);
+    allegationIntakeDao = mock(XaNsAllegationIntakeDaoImpl.class);
+    allegationPerpetratorHistoryDao = mock(XaCmsAllegationPerpetratorHistoryDaoImpl.class);
+    assignmentDao = mock(XaCmsAssignmentDaoImpl.class);
+    assignmentUnitDao = mock(XaCmsAssignmentUnitDaoImpl.class);
+    caseDao = mock(XaCmsCaseDaoImpl.class);
+    caseLoadDao = mock(XaCmsCaseLoadDaoImpl.class);
+    childClientDao = mock(XaCmsChildClientDaoImpl.class);
+    clientAddressDao = mock(XaCmsClientAddressDaoImpl.class);
+    clientDao = mock(XaCmsClientDaoImpl.class);
+    clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
+    cmsDocumentDao = mock(XaCmsDocumentDaoImpl.class);
+    crossReportDao = mock(XaCmsCrossReportDaoImpl.class);
+    cwsOfficeDao = mock(XaCmsCwsOfficeDaoImpl.class);
+    drmsDocumentDao = mock(XaCmsDrmsDocumentDaoImpl.class);
+    intakeLOVCodeDao = mock(IntakeLOVCodeDao.class);
+    intakeLovDao = mock(IntakeLovDao.class);
+    laCountyTrigger = mock(LACountyTrigger.class);
+    longTextDao = mock(XaCmsLongTextDaoImpl.class);
+    nonLACountyTriggers = mock(XaNonLACountyTriggers.class);
+    referralClientDao = mock(XaCmsReferralClientDaoImpl.class);
+    referralDao = mock(XaCmsReferralDaoImpl.class);
+    reporterDao = mock(XaCmsReporterDaoImpl.class);
+    ssaName3Dao = mock(XaCmsSsaName3DaoImpl.class);
+    staffpersonDao = mock(XaCmsStaffPersonDaoImpl.class);
+    staffPersonDao = mock(XaCmsStaffPersonDaoImpl.class);
+    triggerTablesDao = mock(TriggerTablesDao.class);
+    upperCaseTables = mock(XaUpperCaseTables.class);
+    xaNsAddressDao = mock(XaNsAddressDaoImpl.class);
+    xaNsAddressesDao = mock(XaNsAddressesDaoImpl.class);
+    specialProjectDao = mock(SpecialProjectDao.class);
+    specialProjectReferralDao = mock(SpecialProjectReferralDao.class);
+    safelySurrenderedBabiesDao = mock(SafelySurrenderedBabiesDao.class);
+    nonCWSNumberDao = mock(NonCWSNumberDao.class);
+    peopleDao = mock(PeopleDao.class);
+    clientScpEthnicityDao = mock(ClientScpEthnicityDao.class);
+
+    when(addressDao.grabSession()).thenReturn(session);
+    when(allegationDao.grabSession()).thenReturn(session);
+    when(allegationPerpetratorHistoryDao.grabSession()).thenReturn(session);
+    when(assignmentDao.grabSession()).thenReturn(session);
+    when(assignmentUnitDao.grabSession()).thenReturn(session);
+    when(caseDao.grabSession()).thenReturn(session);
+    when(caseLoadDao.grabSession()).thenReturn(session);
+    when(childClientDao.grabSession()).thenReturn(session);
+    when(clientAddressDao.grabSession()).thenReturn(session);
+    when(clientDao.grabSession()).thenReturn(session);
+    when(clientRelationshipDao.grabSession()).thenReturn(session);
+    when(cmsDocumentDao.grabSession()).thenReturn(session);
+    when(crossReportDao.grabSession()).thenReturn(session);
+    when(cwsOfficeDao.grabSession()).thenReturn(session);
+    when(drmsDocumentDao.grabSession()).thenReturn(session);
+    when(intakeLOVCodeDao.grabSession()).thenReturn(session);
+    when(longTextDao.grabSession()).thenReturn(session);
+    when(referralClientDao.grabSession()).thenReturn(session);
+    when(referralDao.grabSession()).thenReturn(session);
+    when(reporterDao.grabSession()).thenReturn(session);
+    when(staffpersonDao.grabSession()).thenReturn(session);
+    when(staffPersonDao.grabSession()).thenReturn(session);
+    when(xaNsAddressDao.grabSession()).thenReturn(session);
+    when(xaNsAddressesDao.grabSession()).thenReturn(session);
+
+    Addresses adr1 = new Addresses(DEFAULT_PARTICIPANT_ID, "123 main street", "Elk Grove", "1838",
+        "95757", "32", DEFAULT_CLIENT_ID, "ADDRS_T");
+    when(xaNsAddressesDao.find(any())).thenReturn(adr1);
+    when(xaNsAddressesDao.create(any())).thenReturn(adr1);
+    when(xaNsAddressesDao.update(any())).thenReturn(adr1);
+
+    gov.ca.cwds.data.persistence.ns.Address adr2 = new gov.ca.cwds.data.persistence.ns.Address(10L,
+        "123 main street", "Elk Grove", "1838", "95757", "32");
+    when(xaNsAddressDao.find(any())).thenReturn(adr2);
+    when(xaNsAddressDao.create(any())).thenReturn(adr2);
+
+    gov.ca.cwds.rest.api.domain.cms.Address addressDomain =
+        new CmsAddressResourceBuilder().buildCmsAddress();
+
+    gov.ca.cwds.data.persistence.cms.Address adrCms = new gov.ca.cwds.data.persistence.cms.Address(
+        DEFAULT_CLIENT_ID, addressDomain, "ABC", new java.util.Date());
+
+    when(addressDao.find(any())).thenReturn(adrCms);
+    when(addressDao.update(any())).thenReturn(adrCms);
+    when(addressDao.create(any())).thenReturn(adrCms);
+
+    final Screening screening = new ScreeningResourceBuilder().build();
+    when(allegationIntakeDao.findByScreeningId(any(String.class)))
+        .thenReturn(Arrays.asList(screening.getAllegations().toArray(new AllegationEntity[0])));
+
+    staffPerson = new StaffPersonEntityBuilder().setId("0X5").setCountyCode("34").build();
+    when(staffPersonDao.find(any(String.class))).thenReturn(staffPerson);
+    when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("52");
+
+    final Reporter reporter = new Reporter("AbiQCgu0AA", "  ", "City", (short) 591, (short) 0, "N",
+        null, " ", null, "N", "Fred", "Reporter", "N", 0, 0L, " ", " ", 0L, 0, (short) 1828,
+        "Street", "12345", " ", new Integer(95845), null, (short) 0, "51");
+    when(reporterDao.create(any(Reporter.class))).thenReturn(reporter);
+
+    riAllegationPerpetratorHistory = mock(RIAllegationPerpetratorHistory.class);
+    riAllegation = mock(RIAllegation.class);
+    riCrossReport = mock(RICrossReport.class);
+    riReporter = mock(RIReporter.class);
+    riClientAddress = mock(RIClientAddress.class);
+    riChildClient = mock(RIChildClient.class);
+    riReferral = mock(RIReferral.class);
+
+    reminders = mock(Reminders.class);
+    externalInterfaceTables = mock(ExternalInterfaceTables.class);
+
+    when(peopleDao.find(any(String.class))).thenReturn(new ClientEntityBuilder().build());
+
+    // =================
+    // SERVICES:
+    // =================
+
+    defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
+
+    cmsDocumentService = new CmsDocumentService(cmsDocumentDao);
+    T t = null;
+    docQuery = queryInator(this, Arrays.asList(t).toArray());
+
+    doc = readPersistedDocumentPkCompression();
+    when(cmsDocumentDao.grabSession()).thenReturn(session);
+    when(cmsDocumentDao.find(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.find(any(String.class))).thenReturn(doc);
+    when(cmsDocumentDao.create(any(CmsDocument.class))).thenReturn(doc);
+    when(cmsDocumentDao.getSessionFactory()).thenReturn(sessionFactoryImplementor);
+
+    drmsDocumentDao = mock(DrmsDocumentDao.class);
+    drmsDocumentTemplateService = mock(DrmsDocumentTemplateService.class);
+    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
+
+    when(caseDao.findAllRelatedByVictimClientId(any(String.class)))
+        .thenReturn(inatorCreateCases(LimitedAccessType.SENSITIVE, LimitedAccessType.NONE));
+
+    final Participant victim =
+        new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createVictimParticipant();
+    final Participant perp =
+        new ParticipantResourceBuilder().setDateOfBirth("1987-06-18").createPerpParticipant();
+
+    final Client client = Client.createWithDefaults(victim, "2016-09-02", "", (short) 0, true);
+    gov.ca.cwds.data.persistence.cms.Client savedClient =
+        new gov.ca.cwds.data.persistence.cms.Client("ABC1234567", client, "0X5",
+            new java.util.Date());
+    savedClient.setLastUpdatedTime(new java.util.Date());
+    when(clientDao.find(any(String.class))).thenReturn(savedClient);
+    when(clientDao.update(any(gov.ca.cwds.data.persistence.cms.Client.class)))
+        .thenReturn(savedClient);
+    when(referralClientDao.findByClientIds(any(Collection.class)))
+        .thenReturn(inatorCreateReferralClients(LimitedAccessType.NONE, LimitedAccessType.NONE));
+
+    clientScpEthnicityService = mock(ClientScpEthnicityService.class);
+    addressService = new XaCmsAddressService(addressDao, ssaName3Dao, upperCaseTables, validator);
+    governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+
+    assignmentService = new AssignmentService(assignmentDao, nonLACountyTriggers, staffPersonDao,
+        triggerTablesDao, validator, externalInterfaceTables, caseLoadDao, referralDao,
+        assignmentUnitDao, cwsOfficeDao, messageBuilder);
+
+    clientService = new ClientService(clientDao, staffPersonDao, triggerTablesDao,
+        nonLACountyTriggers, ssaName3Dao, upperCaseTables, externalInterfaceTables);
+
+    referralClientService = new ReferralClientService(referralClientDao, nonLACountyTriggers,
+        laCountyTrigger, triggerTablesDao, staffPersonDao, riReferralClient);
+
+    gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory allegationPerpHistoryToCreate =
+        new AllegationPerpetratorHistoryEntityBuilder().build();
+    when(allegationPerpetratorHistoryDao
+        .create(any(gov.ca.cwds.data.persistence.cms.AllegationPerpetratorHistory.class)))
+            .thenReturn(allegationPerpHistoryToCreate);
+
+    allegationService = new AllegationService(allegationDao, riAllegation);
+    allegationPerpetratorHistoryService = new AllegationPerpetratorHistoryService(
+        allegationPerpetratorHistoryDao, riAllegationPerpetratorHistory);
+
+    crossReportService = new CrossReportService(crossReportDao, riCrossReport);
+    reporterService = new ReporterService(reporterDao, riReporter);
+
+    clientAddressService =
+        new ClientAddressService(clientAddressDao, staffPersonDao, triggerTablesDao,
+            laCountyTrigger, nonLACountyTriggers, riClientAddress, validator, addressService);
+
+    longTextService = new LongTextService(longTextDao);
+    childClientService = new ChildClientService(childClientDao, riChildClient);
+    participantService = new ParticipantService(clientService, referralClientService,
+        reporterService, childClientService, clientAddressService, validator,
+        clientScpEthnicityService, caseDao, referralClientDao);
+
+    referralService = new XaCmsReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
+        triggerTablesDao, staffPersonDao, assignmentService, validator, cmsDocumentService,
+        drmsDocumentService, drmsDocumentTemplateService, addressService, longTextService,
+        riReferral);
+
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
 
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
   }
 
-  /**
-   * Pass variable arguments of type T.
-   * 
-   * @param values any number of T values
-   * @return mock Hibernate Query of type T
-   */
-  @SuppressWarnings("unchecked")
-  protected Query<T> queryInator(T... values) {
+  public CmsDocument readPersistedDocumentPkCompression() throws IOException {
+    return MAPPER.readValue(
+        "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"PKWare02\",\"blobSegments\":[]}",
+        CmsDocument.class);
+  }
+
+  public CmsDocument readPersistedDocumentLzwCompression() throws IOException {
+    return MAPPER.readValue(
+        "{\"id\":\"0131351421120020*JONESMF     00004\",\"segmentCount\":1,\"docLength\":3,\"docAuth\":\"RAMESHA\",\"docServ\":\"D7706001\",\"docDate\":\"2007-01-31\",\"docTime\":\"19:59:07\",\"docName\":\"1234\",\"compressionMethod\":\"COMPRESSION_TYPE_LZW_FULL\",\"blobSegments\":[]}",
+        CmsDocument.class);
+  }
+
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public static <T> Query queryInator(Doofenshmirtz<?> heinz, T... values) {
     final Query<T> q = Mockito.mock(Query.class);
     if (values != null && values.length != 0) {
       final T t = ArrayUtils.toArray(values)[0];
-      when(session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class))).thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
+
+      // In recognition of Heinz Doofenshmirtz.
+      when(heinz.session.get(any(Class.class), any(Serializable.class))).thenReturn(t);
+      when(heinz.session.get(any(String.class), any(Serializable.class))).thenReturn(t);
+      when(heinz.session.get(any(String.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
+      when(heinz.session.get(any(String.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
-      when(session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
+      when(heinz.session.get(any(Class.class), any(Serializable.class), any(LockMode.class)))
           .thenReturn(t);
-      when(session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
+      when(heinz.session.get(any(Class.class), any(Serializable.class), any(LockOptions.class)))
           .thenReturn(t);
     }
 
     final List<T> list = new ArrayList<>();
-    when(sessionFactory.getCurrentSession()).thenReturn(session);
-    when(session.getNamedQuery(any())).thenReturn(q);
+    when(heinz.sessionFactory.getCurrentSession()).thenReturn(heinz.session);
+    when(heinz.session.getNamedQuery(any())).thenReturn(q);
     when(q.list()).thenReturn(list);
 
     when(q.setHibernateFlushMode(any(FlushMode.class))).thenReturn(q);
@@ -268,6 +665,51 @@ public class Doofenshmirtz<T extends PersistentObject> extends AbstractShiroTest
     when(results.get()).thenReturn(new Object[0]);
 
     return q;
+  }
+
+  /**
+   * Pass variable arguments of type T.
+   * 
+   * @param values any number of T values
+   * @return mock Hibernate Query of type T
+   */
+  @SuppressWarnings("unchecked")
+  public Query<T> queryInator(T... values) {
+    return Doofenshmirtz.<T>queryInator(this, values);
+  }
+
+  public CmsCase[] inatorCreateCases(LimitedAccessType firstCaseLimitedAccessCode,
+      LimitedAccessType secondCaseLimitedAccessCode) {
+    CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
+    cmsCases[0].setLimitedAccessCode(firstCaseLimitedAccessCode.getValue());
+    cmsCases[1].setLimitedAccessCode(secondCaseLimitedAccessCode.getValue());
+    return cmsCases;
+  }
+
+  public ReferralClient[] inatorCreateReferralClients(
+      LimitedAccessType firstReferralLimitedAccessCode,
+      LimitedAccessType secondReferralLimitedAccessCode) {
+    ReferralClient[] referralClients = {new ReferralClient(), new ReferralClient()};
+    referralClients[0].setReferral(new Referral());
+    referralClients[0].getReferral()
+        .setLimitedAccessCode(firstReferralLimitedAccessCode.getValue());
+    referralClients[1].setReferral(new Referral());
+    referralClients[1].getReferral()
+        .setLimitedAccessCode(secondReferralLimitedAccessCode.getValue());
+    return referralClients;
+  }
+
+  public Screening inatorMakeScreening() {
+    return new Screening("abc", "screening", "reference", "screeningDecision",
+        "screeningDecisionDetail", "assignee", LocalDateTime.now(), null, "0X5", "", "Open");
+  }
+
+  public PerryAccount inatorPerryAccountWithPrivileges(String... privileges) {
+    final PerryAccount perryAccount = new PerryAccount();
+    final HashSet<String> privilegeSet = new HashSet<>();
+    privilegeSet.addAll(Arrays.asList(privileges));
+    perryAccount.setPrivileges(privilegeSet);
+    return perryAccount;
   }
 
 }

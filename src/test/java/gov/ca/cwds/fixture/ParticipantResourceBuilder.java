@@ -12,8 +12,8 @@ import gov.ca.cwds.rest.api.domain.Participant;
 import gov.ca.cwds.rest.api.domain.RaceAndEthnicity;
 import gov.ca.cwds.rest.api.domain.SafelySurrenderedBabies;
 
+
 /**
- * 
  * @author CWDS API Team
  */
 public class ParticipantResourceBuilder {
@@ -325,4 +325,5 @@ public class ParticipantResourceBuilder {
     participant.setSafelySurrenderedBabies(safelySurrenderedBabies);
     return participant;
   }
+
 }

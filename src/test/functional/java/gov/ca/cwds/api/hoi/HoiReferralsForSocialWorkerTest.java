@@ -23,7 +23,6 @@ import io.restassured.response.Response;
  * Functional Testing for hoi referrals end point with Social Worker Privilege Only.
  * 
  * @author CWDS API Team
- *
  */
 public class HoiReferralsForSocialWorkerTest extends FunctionalTest {
 
@@ -55,7 +54,7 @@ public class HoiReferralsForSocialWorkerTest extends FunctionalTest {
     mapper.registerModule(new JodaModule());
     ScreeningToReferral screeningToReferral = mapper.readValue(json, ScreeningToReferral.class);
 
-    Optional<Participant> victim = screeningToReferral.getParticipants().stream()
+    final Optional<Participant> victim = screeningToReferral.getParticipants().stream()
         .filter(value -> value.getRoles().contains("Victim")).findFirst();
     String referralId = screeningToReferral.getReferralId();
     String clientId = "";

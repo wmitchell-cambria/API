@@ -25,9 +25,7 @@ import gov.ca.cwds.rest.api.domain.DomainChef;
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class AddressDaoIT {
 
   private static SessionFactory sessionFactory;

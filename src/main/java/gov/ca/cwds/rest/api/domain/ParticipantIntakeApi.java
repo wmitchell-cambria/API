@@ -75,7 +75,7 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
 
   @JsonProperty("ssn")
   @ApiModelProperty(required = false, readOnly = false, value = "", example = "123456789")
-  // This regualr expression(regexp) validates the ssn should be only numeric and length 9
+  // This regular expression(regexp) validates the SSN, which should be only numeric and length 9.
   @Pattern(regexp = "^(|[0-9]{9})$")
   private String ssn;
 
@@ -111,10 +111,8 @@ public class ParticipantIntakeApi extends ReportingDomain implements Request, Re
       example = "CLIENT_T")
   private String legacySourceTable;
 
-
-  /*
-   * Workafoung for fields containing raw json races ethnicity
-   *
+  /**
+   * Work-around for fields containing raw JSON races ethnicity.
    */
   @ApiModelProperty(required = true, readOnly = false, value = "Races",
       example = "['White', 'Black or African American']")

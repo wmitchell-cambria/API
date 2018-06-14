@@ -24,4 +24,5 @@ public class DrmsDocumentDao extends CrudsDaoImpl<DrmsDocument> {
   public DrmsDocumentDao(@CmsSessionFactory SessionFactory sessionFactory) {
     super(sessionFactory);
   }
+
 }

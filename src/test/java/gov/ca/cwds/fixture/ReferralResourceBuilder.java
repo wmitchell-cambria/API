@@ -12,10 +12,9 @@ import gov.ca.cwds.rest.api.domain.cms.Reporter;
 
 /**
  * @author CWDS API Team
- *
  */
-@SuppressWarnings("javadoc")
 public class ReferralResourceBuilder {
+
   public static final String DEFAULT_REFERRAL_RECEIVED_DATE = "2017-01-01";
   public static final String DEFAULT_REFERRAL_RECEIVED_TIME = "16:41:49";
 

@@ -33,6 +33,8 @@ public class PKCompressionTest {
   public static final String ZIP_HEX_3 = TEST_BASE + "third.hex";
   public static final String ZIP_DOC_3 = TEST_BASE + "third.doc";
 
+  public static final String PLAIN_B64_1 = TEST_BASE + "first_plain.b64";
+
   private CmsPKCompressor inst;
 
   @Before

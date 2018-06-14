@@ -1,17 +1,20 @@
 package gov.ca.cwds.data.ns;
 
-import com.google.inject.Inject;
-import gov.ca.cwds.data.CrudsDaoImpl;
-import gov.ca.cwds.data.persistence.ns.Addresses;
-import gov.ca.cwds.inject.NsSessionFactory;
 import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
+import com.google.inject.Inject;
+
+import gov.ca.cwds.data.CrudsDaoImpl;
+import gov.ca.cwds.data.persistence.ns.Addresses;
+import gov.ca.cwds.inject.NsSessionFactory;
+
 /**
- * Address DAO
+ * Postgres Addresses DAO.
  *
- * @author Intake Team 4
+ * @author CWDS API Team
  */
 public class AddressesDao extends CrudsDaoImpl<Addresses> {
 
@@ -27,9 +30,9 @@ public class AddressesDao extends CrudsDaoImpl<Addresses> {
 
   public List<Addresses> findByParticipant(String participantId) {
     @SuppressWarnings("unchecked")
-    final Query<Addresses> query = this.getSessionFactory().getCurrentSession()
-        .getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
+    final Query<Addresses> query = grabSession().getNamedQuery(Addresses.FIND_BY_PARTICIPANT_ID)
         .setParameter(Addresses.PARAM_PARTICIPANT_ID, participantId);
     return query.getResultList();
   }
+
 }

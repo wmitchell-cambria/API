@@ -24,10 +24,9 @@ import gov.ca.cwds.fixture.StaffPersonEntityBuilder;
 
 /**
  * @author CWDS API Team
- *
  */
 public class StaffPersonDaoIT implements DaoTestTemplate {
-  @SuppressWarnings("javadoc")
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -35,14 +34,12 @@ public class StaffPersonDaoIT implements DaoTestTemplate {
   private static SessionFactory sessionFactory;
   private Session session;
 
-  @SuppressWarnings("javadoc")
   @BeforeClass
   public static void beforeClass() {
     sessionFactory = new Configuration().configure().buildSessionFactory();
     staffPersonDao = new StaffPersonDao(sessionFactory);
   }
 
-  @SuppressWarnings("javadoc")
   @AfterClass
   public static void afterClass() {
     sessionFactory.close();

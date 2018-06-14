@@ -1,6 +1,6 @@
 package gov.ca.cwds.rest.business.rules;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -177,7 +177,6 @@ public class R04466ClientSensitivityIndicatorTest {
     Assert.assertEquals(LimitedAccessType.SENSITIVE.getValue(), client.getSensitivityIndicator());
   }
 
-
   private CmsCase[] createCases(LimitedAccessType firstCaseLimitedAccessCode,
       LimitedAccessType secondCaseLimitedAccessCode) {
     CmsCase[] cmsCases = {new CmsCase(), new CmsCase()};
@@ -197,4 +196,5 @@ public class R04466ClientSensitivityIndicatorTest {
         .setLimitedAccessCode(secondReferralLimitedAccessCode.getValue());
     return referralClients;
   }
+
 }

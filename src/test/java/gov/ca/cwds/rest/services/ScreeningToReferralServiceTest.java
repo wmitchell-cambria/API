@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.validation.Validation;
-import javax.validation.Validator;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
@@ -34,27 +33,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import gov.ca.cwds.data.cms.AddressDao;
-import gov.ca.cwds.data.cms.AllegationDao;
-import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
-import gov.ca.cwds.data.cms.AssignmentDao;
-import gov.ca.cwds.data.cms.ChildClientDao;
-import gov.ca.cwds.data.cms.ClientAddressDao;
-import gov.ca.cwds.data.cms.ClientDao;
-import gov.ca.cwds.data.cms.ClientRelationshipDao;
-import gov.ca.cwds.data.cms.CrossReportDao;
-import gov.ca.cwds.data.cms.DrmsDocumentDao;
-import gov.ca.cwds.data.cms.LongTextDao;
-import gov.ca.cwds.data.cms.ReferralClientDao;
-import gov.ca.cwds.data.cms.ReferralDao;
-import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.SsaName3Dao;
-import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
+import gov.ca.cwds.data.cms.xa.XaCmsClientRelationshipDaoImpl;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
-import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.fixture.AddressResourceBuilder;
 import gov.ca.cwds.fixture.AllegationEntityBuilder;
 import gov.ca.cwds.fixture.AllegationPerpetratorHistoryEntityBuilder;
@@ -90,20 +71,14 @@ import gov.ca.cwds.rest.api.domain.cms.PostedDrmsDocument;
 import gov.ca.cwds.rest.api.domain.cms.PostedLongText;
 import gov.ca.cwds.rest.api.domain.cms.Reporter;
 import gov.ca.cwds.rest.api.domain.cms.SystemCodeCache;
-import gov.ca.cwds.rest.business.rules.ExternalInterfaceTables;
-import gov.ca.cwds.rest.business.rules.LACountyTrigger;
-import gov.ca.cwds.rest.business.rules.NonLACountyTriggers;
 import gov.ca.cwds.rest.business.rules.Reminders;
-import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
 import gov.ca.cwds.rest.exception.IssueDetails;
 import gov.ca.cwds.rest.exception.IssueType;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
-import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
 import gov.ca.cwds.rest.services.cms.AllegationService;
-import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
@@ -112,80 +87,27 @@ import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
-import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAllegation;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAllegationPerpetratorHistory;
-import gov.ca.cwds.rest.services.referentialintegrity.RIAssignment;
-import gov.ca.cwds.rest.services.referentialintegrity.RIChildClient;
-import gov.ca.cwds.rest.services.referentialintegrity.RIClientAddress;
-import gov.ca.cwds.rest.services.referentialintegrity.RICrossReport;
-import io.dropwizard.jackson.Jackson;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsAddressService;
+import gov.ca.cwds.rest.services.cms.xa.XaCmsReferralService;
+import gov.ca.cwds.rest.util.Doofenshmirtz;
 
 /**
  * 
  * @author CWDS API Team
  */
 @SuppressWarnings("unused")
-public class ScreeningToReferralServiceTest {
+public class ScreeningToReferralServiceTest
+    extends Doofenshmirtz<gov.ca.cwds.data.persistence.cms.Client> {
 
   private final String validReferralId = "X2WXo678Ac";
 
   private ScreeningToReferralResourceBuilder defaultReferralBuilder;
-  private ScreeningToReferralService screeningToReferralService;
-  private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-
-  private ReferralService referralService;
-  private ClientService clientService;
-  private ReferralClientService referralClientService;
-  private AllegationService allegationService;
-  private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
-  private CrossReportService crossReportService;
-  private ReporterService reporterService;
-  private AddressService addressService;
-  private ClientAddressService clientAddressService;
-  private ChildClientService childClientService;
-  private LongTextService longTextService;
-  private AssignmentService assignmentService;
-  private ParticipantService participantService;
-  private RIChildClient riChildClient;
-  private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
-  private RIAssignment riAssignment;
-  private RIClientAddress riClientAddress;
-  private RIAllegation riAllegation;
-  private RICrossReport riCrossReport;
-
-  private ReferralDao referralDao;
-  private ClientDao clientDao;
-  private ReferralClientDao referralClientDao;
-  private AllegationDao allegationDao;
-  private AllegationPerpetratorHistoryDao allegationPerpetratorHistoryDao;
-  private CrossReportDao crossReportDao;
-  private ReporterDao reporterDao;
-  private AddressDao addressDao;
-  private ClientAddressDao clientAddressDao;
-  private ChildClientDao childClientDao;
-  private LongTextDao longTextDao;
-  private StaffPersonDao staffpersonDao;
-  private NonLACountyTriggers nonLACountyTriggers;
-  private LACountyTrigger laCountyTrigger;
-  private TriggerTablesDao triggerTablesDao;
-  private DrmsDocumentService drmsDocumentService;
-  private AssignmentDao assignmentDao;
-  private SsaName3Dao ssaName3Dao;
-  private ClientRelationshipDao clientRelationshipDao;
-  private Reminders reminders;
-  private UpperCaseTables upperCaseTables;
-  private Validator validator;
-  private ExternalInterfaceTables externalInterfaceTables;
-  private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
 
   private Participant defaultVictim;
   private Participant defaultReporter;
   private Participant defaultMandatedReporter;
   private Participant defaultPerpetrator;
-
-  private MessageBuilder messageBuilder;
 
   private gov.ca.cwds.data.persistence.cms.Referral referral;
   private static gov.ca.cwds.data.persistence.cms.Referral createdReferal = null;
@@ -198,25 +120,22 @@ public class ScreeningToReferralServiceTest {
    */
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
 
-  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @SuppressWarnings("javadoc")
+  @Override
   @Before
   public void setup() throws Exception {
+    super.setup();
     new TestingRequestExecutionContext("02f");
     SystemCodeCache.global().getAllSystemCodes();
 
     validator = Validation.buildDefaultValidatorFactory().getValidator();
     defaultReferralBuilder = new ScreeningToReferralResourceBuilder();
 
-    DrmsDocumentDao drmsDocumentDao = mock(DrmsDocumentDao.class);
-    drmsDocumentService = new DrmsDocumentService(drmsDocumentDao);
-
     reminders = mock(Reminders.class);
 
-    clientRelationshipDao = mock(ClientRelationshipDao.class);
+    clientRelationshipDao = mock(XaCmsClientRelationshipDaoImpl.class);
 
     lastUpdateDate = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
         .parseDateTime("2010-03-14T13:33:12.456-0700");
@@ -246,7 +165,7 @@ public class ScreeningToReferralServiceTest {
     ChildClient childClient = mock(ChildClient.class);
     when(childClientService.create(any())).thenReturn(childClient);
 
-    addressService = mock(AddressService.class);
+    addressService = mock(XaCmsAddressService.class);
 
     allegationService = mock(AllegationService.class);
     gov.ca.cwds.data.persistence.cms.Allegation allegation = new AllegationEntityBuilder().build();
@@ -276,7 +195,7 @@ public class ScreeningToReferralServiceTest {
     when(longTextService.create(any())).thenReturn(longText);
 
     ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
-    referralService = mock(ReferralService.class);
+    referralService = mock(XaCmsReferralService.class);
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
 
@@ -304,43 +223,35 @@ public class ScreeningToReferralServiceTest {
 
   }
 
-  @SuppressWarnings("javadoc")
   @Test(expected = NotImplementedException.class)
   public void deleteThrowsNotImplementedException() throws Exception {
     screeningToReferralService.delete("string");
   }
 
-  @SuppressWarnings("javadoc")
   @Test(expected = AssertionError.class)
   public void deleteThrowsAssertionError() throws Exception {
     screeningToReferralService.delete(new Long(1));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldReturnPostedCmsReferralWhenSaveIsSuccessfull() throws Exception {
     ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
     mockParticipantService(screeningToReferral);
 
     Response response = screeningToReferralService.create(screeningToReferral);
-
     assertThat(response.getClass(), is(PostedScreeningToReferral.class));
   }
 
-
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldContainNoErrorMessageWhenSavingAValidReferral() throws Exception {
     ScreeningToReferral screeningToReferral = defaultReferralBuilder.createScreeningToReferral();
 
     mockParticipantService(screeningToReferral);
-
     Response response = screeningToReferralService.create(screeningToReferral);
 
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotUpdateClientWhenUserDoesNotExists() throws Exception {
     String victimClientLegacyId = "";
@@ -363,7 +274,6 @@ public class ScreeningToReferralServiceTest {
     verify(clientService, never()).update(any(), any());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSuccessfullyCreateReferralWithParticipantsThatHaveBlankRoles()
       throws Exception {
@@ -385,7 +295,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testScreeningToReferralMultipleCrossReportsSuccess() throws Exception {
     Set<gov.ca.cwds.rest.api.domain.CrossReport> crossReports = new HashSet<>();
@@ -408,7 +317,6 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test(expected = RuntimeException.class)
   public void shouldLogErrorIfUnableToCreateDRMSDocument() throws Exception {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -420,7 +328,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse("Expected exception to have been thrown", true);
   }
 
-  @SuppressWarnings("javadoc")
   @Test()
   public void testScreeningToReferralWithoutCrossReportsSuccess() throws Exception {
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
@@ -435,7 +342,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   // R - 00836 Self rep Ind Limit
   public void testMoreThanOneSelfReportedFail() throws Exception {
@@ -466,7 +372,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testMoreThanOneReporterFail() throws Exception {
     Participant reporter1 =
@@ -493,12 +398,11 @@ public class ScreeningToReferralServiceTest {
       assertThat(issues.size(), is(equalTo(3)));
       IssueDetails issue = issues.iterator().next();
       assertThat(IssueType.CONSTRAINT_VALIDATION, is(equalTo(issue.getType())));
-      // assertThat("Incompatiable participants included in request",
+      // assertThat("Incompatible participants included in request",
       // is(equalTo(issue.getUserMessage())));
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testMoreThanOneVictimSuccess() throws Exception {
     Participant victim1 = new ParticipantResourceBuilder().createVictimParticipant();
@@ -517,7 +421,6 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailCreateWhenNoVictimIsProvided() throws Exception {
     Set<Participant> participants = new HashSet<>(Arrays.asList(defaultReporter));
@@ -526,7 +429,6 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     try {
@@ -539,7 +441,7 @@ public class ScreeningToReferralServiceTest {
       assertTrue("Expected to contain missing victim error message", exceptionContainsErrorMessage(
           e, "Allegation/Victim Person Id does not contain a Participant with a role of Victim"));
       assertThat(IssueType.CONSTRAINT_VALIDATION, is(equalTo(issue.getType())));
-      // assertThat("Incompatiable participants included in request",
+      // assertThat("Incompatible participants included in request",
       // is(equalTo(issue.getUserMessage())));
     }
   }
@@ -555,7 +457,6 @@ public class ScreeningToReferralServiceTest {
     return containsMessage;
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldThrowExceptionWhenMessageBuilderContainsError() {
     Participant reporterVictim = new ParticipantResourceBuilder()
@@ -567,7 +468,6 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     String message = "Some Error Occured";
@@ -585,7 +485,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testMoreThanOneParticipantRoleSuccess() throws Exception {
     Participant victimAndReporter = new ParticipantResourceBuilder()
@@ -606,7 +505,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testMultipleAddressPerParticipantSuccess() throws Exception {
     screeningToReferralService = new MockedScreeningToReferralServiceBuilder()
@@ -631,20 +529,17 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveSucessfullyWhenPerpHasNoAddress() throws Exception {
     Participant perpWithNoAddress =
         new ParticipantResourceBuilder().setAddresses(null).setId(12345).createPerpParticipant();
     Set<Participant> participants =
         new HashSet<>(Arrays.asList(perpWithNoAddress, defaultVictim, defaultReporter));
-
     ScreeningToReferral screeningToReferral = new ScreeningToReferralResourceBuilder()
         .setParticipants(participants).createScreeningToReferral();
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     Response response = screeningToReferralService.create(screeningToReferral);
@@ -652,7 +547,6 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveSucessfullyWhenReporterHasNoAddress() throws Exception {
     Participant reporter = new ParticipantResourceBuilder()
@@ -674,7 +568,6 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testNoAddressForPerpetratorSuccess() throws Exception {
     Participant perp =
@@ -695,7 +588,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testSelfReportedReporterWithNoAddressSuccess() throws Exception {
     String perpId = "PERP_ID_12";
@@ -735,8 +627,6 @@ public class ScreeningToReferralServiceTest {
     assertFalse(response.hasMessages());
   }
 
-
-  @SuppressWarnings("javadoc")
   @Test
   // R - 03895
   public void shouldFailSavingReferralWhenAllegationIsMissing() throws Exception {
@@ -761,7 +651,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveSuccessfullyWhenReferraHasMultipleAllegations() throws Exception {
     Set<gov.ca.cwds.rest.api.domain.Allegation> allegations = new HashSet<>();
@@ -788,7 +677,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenAllegationDoesNotHaveMatchingVictim() throws Exception {
     int nonExistentVictimId = -999999999;
@@ -803,7 +691,6 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     Boolean theErrorDetected = false;
@@ -821,7 +708,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenReferralDoesNotContainAPerpatratorMatchingAllegation()
       throws Exception {
@@ -836,7 +722,6 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     try {
@@ -854,7 +739,6 @@ public class ScreeningToReferralServiceTest {
   }
 
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldNotUpdatePerpetratorWhenClientIsNotFound() throws Exception {
     String existingPerpId = "1234567ABC";
@@ -886,7 +770,6 @@ public class ScreeningToReferralServiceTest {
     when(clientService.find(any())).thenReturn(null);
 
     when(clientAddressService.find(any())).thenReturn(mock(ClientAddress.class));
-
     mockParticipantService(referral);
 
     try {
@@ -900,7 +783,6 @@ public class ScreeningToReferralServiceTest {
         any(), any(), any());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void testAllegationExistSuccess() throws Exception {
     gov.ca.cwds.rest.api.domain.Allegation allegation =
@@ -914,20 +796,17 @@ public class ScreeningToReferralServiceTest {
         .thenReturn("REFERRALID");
 
     mockParticipantService(referral);
-
     Response response = screeningToReferralService.create(referral);
 
     verify(allegationService).find(eq(allegation.getLegacyId()));
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveAlligationPerpetratorHistoryDate() throws Exception {
     int perpId = 999;
     int vicId = 123;
     String perpLegacyId = "perpIdABCD";
-
     Date now = new Date();
 
     defaultPerpetrator = new ParticipantResourceBuilder().setId(perpId).setLegacyId(perpLegacyId)
@@ -963,7 +842,6 @@ public class ScreeningToReferralServiceTest {
     assertEquals(DomainChef.cookDate(now), perpHistory.getValue().getPerpetratorUpdateDate());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSavePerpetratorInAlligationPerpetratorHistory() throws Exception {
     int perpId = 999;
@@ -1004,7 +882,6 @@ public class ScreeningToReferralServiceTest {
   }
 
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenAllegationIdIsNotFound() throws Exception {
     Participant victim = new ParticipantResourceBuilder().setId(1234).createVictimParticipant();
@@ -1020,7 +897,6 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     mockParticipantService(screeningToReferral);
 
     try {
@@ -1036,7 +912,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenCrossReportIdIsNotFound() throws Exception {
     gov.ca.cwds.rest.api.domain.CrossReport crossReport =
@@ -1048,11 +923,8 @@ public class ScreeningToReferralServiceTest {
 
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
-
     when(crossReportService.find(eq(crossReport.getLegacyId()))).thenReturn(null);
-
     mockParticipantService(screeningToReferral);
-
 
     try {
       Response response = screeningToReferralService.create(screeningToReferral);
@@ -1074,14 +946,12 @@ public class ScreeningToReferralServiceTest {
 
     ScreeningToReferral referral = new ScreeningToReferralResourceBuilder()
         .setCrossReports(new HashSet<>(Arrays.asList(crossReport))).createScreeningToReferral();
-
     mockParticipantService(referral);
 
     Response response = screeningToReferralService.create(referral);
     assertFalse(response.hasMessages());
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenCrossReportIdIsDoesNotExist() throws Exception {
     gov.ca.cwds.rest.api.domain.CrossReport crossReport =
@@ -1094,7 +964,6 @@ public class ScreeningToReferralServiceTest {
     when(referralService.createCmsReferralFromScreening(eq(screeningToReferral), any(), any(),
         any())).thenReturn(validReferralId);
     when(crossReportService.find(eq(crossReport.getLegacyId()))).thenReturn(null);
-
     mockParticipantService(screeningToReferral);
 
     try {
@@ -1111,7 +980,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldFailSavingWhenClientAddressDoesNotExist() throws Exception {
     String nonExistantPerpAddressId = "999999999";
@@ -1143,7 +1011,7 @@ public class ScreeningToReferralServiceTest {
     Address perpLegacyAddress = new Address().createWithDefaults(perpAddress);
     Set perpLegacyAddresses = new HashSet<>();
     perpAddresses.add(perpLegacyAddress);
-    addressService = mock(AddressService.class);
+
     when(addressService.find(nonExistentVictimAddressId)).thenReturn(victimLegacyAddress);
     when(addressService.find(nonExistantPerpAddressId)).thenReturn(perpLegacyAddress);
 
@@ -1168,7 +1036,6 @@ public class ScreeningToReferralServiceTest {
     }
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveWhenReporterExists() throws Exception {
     Participant reporter =
@@ -1192,7 +1059,6 @@ public class ScreeningToReferralServiceTest {
     assertThat(response.hasMessages(), is(equalTo(false)));
   }
 
-  @SuppressWarnings("javadoc")
   @Test
   public void shouldSaveReferralWhenReporterIsANonReporter() throws Exception {
     Set<String> roles = new HashSet<>();
@@ -1216,7 +1082,6 @@ public class ScreeningToReferralServiceTest {
   }
 
   private void mockParticipantService(ScreeningToReferral screeningToReferral) {
-
     ClientParticipants clientParticipants = new ClientParticipants();
     Set<Participant> participants = screeningToReferral.getParticipants();
 
@@ -1228,4 +1093,5 @@ public class ScreeningToReferralServiceTest {
     when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(clientParticipants);
   }
+
 }
