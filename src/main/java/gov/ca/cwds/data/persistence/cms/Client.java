@@ -53,6 +53,7 @@ public class Client extends BaseClient {
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   private Set<ClientAddress> clientAddress = new HashSet<>();
 
+  @ToStringExclude
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER")
   private Set<ClientScpEthnicity> clientScpEthnicities = new HashSet<>();
@@ -387,16 +388,16 @@ public class Client extends BaseClient {
     this.clientScpEthnicities = clientScpEthnicities;
   }
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
-
   /**
    * @param clientAddress - clientAddress
    */
   public void setClientAddress(Set<ClientAddress> clientAddress) {
     this.clientAddress = clientAddress;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override

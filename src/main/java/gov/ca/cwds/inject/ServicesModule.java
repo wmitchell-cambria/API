@@ -1,6 +1,10 @@
 package gov.ca.cwds.inject;
 
-import java.lang.reflect.Method;
+import static gov.ca.cwds.data.HibernateStatisticsConsumerRegistry.provideHibernateStatistics;
+import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
+import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
+
+import java.util.Properties;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -12,6 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
 
 import gov.ca.cwds.cms.data.access.service.impl.CsecHistoryService;
 import gov.ca.cwds.data.CmsSystemCodeSerializer;
@@ -54,6 +59,7 @@ import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
+import gov.ca.cwds.rest.services.cms.SpecialProjectReferralService;
 import gov.ca.cwds.rest.services.cms.StaffPersonIdRetriever;
 import gov.ca.cwds.rest.services.cms.StaffPersonService;
 import gov.ca.cwds.rest.services.cms.SystemCodeService;
@@ -64,6 +70,10 @@ import gov.ca.cwds.rest.services.hoi.HOIReferralService;
 import gov.ca.cwds.rest.services.hoi.InvolvementHistoryService;
 import gov.ca.cwds.rest.services.investigation.contact.ContactService;
 import gov.ca.cwds.rest.services.investigation.contact.DeliveredToIndividualService;
+import gov.ca.cwds.rest.services.screeningparticipant.ClientTransformer;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantDaoFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ParticipantMapperFactoryImpl;
+import gov.ca.cwds.rest.services.screeningparticipant.ScreeningParticipantService;
 import gov.ca.cwds.rest.services.submit.ScreeningSubmitService;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -81,14 +91,6 @@ public class ServicesModule extends AbstractModule {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServicesModule.class);
 
   /**
-   * AOP method interception for DropWizard annotation {@link UnitOfWork}.
-   * 
-   * <p>
-   * Note that {@link UnitOfWork} gets a <strong>new connection</strong> every time an annotated
-   * method is encountered. By definition, this annotation is not re-entrant and does not
-   * participate in existing transactions on the same request.
-   * </p>
-   * 
    * @author CWDS API Team
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {
@@ -110,8 +112,11 @@ public class ServicesModule extends AbstractModule {
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
-        aspect.beforeStart(mi.getMethod().getAnnotation(UnitOfWork.class));
+        UnitOfWork unitOfWorkAnnotation = mi.getMethod().getAnnotation(UnitOfWork.class);
+        aspect.beforeStart(unitOfWorkAnnotation);
+        clearHibernateStatistics(unitOfWorkAnnotation.value());
         final Object result = mi.proceed();
+        collectAndProvideHibernateStatistics(unitOfWorkAnnotation.value());
         aspect.afterEnd();
         return result;
       } catch (Exception e) {
@@ -122,6 +127,21 @@ public class ServicesModule extends AbstractModule {
       }
     }
 
+    private void clearHibernateStatistics(String bundleTag) {
+      if (CMS_BUNDLE_TAG.equals(bundleTag)) {
+        cmsHibernateBundle.getSessionFactory().getStatistics().clear();
+      } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
+        nsHibernateBundle.getSessionFactory().getStatistics().clear();
+      }
+    }
+
+    private void collectAndProvideHibernateStatistics(String bundleTag) {
+      if (CMS_BUNDLE_TAG.equals(bundleTag)) {
+        provideHibernateStatistics(bundleTag, cmsHibernateBundle.getSessionFactory().getStatistics());
+      } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
+        provideHibernateStatistics(bundleTag, nsHibernateBundle.getSessionFactory().getStatistics());
+      }
+    }
   }
 
   /**
@@ -149,22 +169,17 @@ public class ServicesModule extends AbstractModule {
     @XaNsHibernateBundle
     FerbHibernateBundle xaNsHibernateBundle;
 
-    @Inject
-    @CwsRsHibernateBundle
-    FerbHibernateBundle xaRsHibernateBundle;
-
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {
-      proxyFactory = UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle,
-          xaNsHibernateBundle, xaRsHibernateBundle);
+      proxyFactory =
+          UnitOfWorkModule.getXAUnitOfWorkProxyFactory(xaCmsHibernateBundle, xaNsHibernateBundle);
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
-        LOGGER.debug("Before XA annotation");
-        final Method method = mi.getMethod();
-        aspect.beforeStart(method, method.getAnnotation(XAUnitOfWork.class));
+        LOGGER.info("Before XA annotation");
+        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
-        LOGGER.debug("After XA annotation");
+        LOGGER.info("After XA annotation");
         return result;
       } catch (Exception e) {
         aspect.onError();
@@ -191,7 +206,6 @@ public class ServicesModule extends AbstractModule {
     bind(AddressService.class);
     bind(AllegationService.class);
     bind(AssignmentService.class);
-    bind(AuthorizationService.class);
     bind(ClientCollateralService.class);
     bind(ClientRelationshipService.class);
     bind(CmsDocReferralClientService.class);
@@ -200,30 +214,35 @@ public class ServicesModule extends AbstractModule {
     bind(CmsReferralService.class);
     bind(ContactService.class);
     bind(CrossReportService.class);
-    bind(CsecHistoryService.class);
     bind(DeliveredService.class);
     bind(DeliveredToIndividualService.class);
     bind(DrmsDocumentService.class);
     bind(DrmsDocumentTemplateService.class);
-    bind(GovernmentOrganizationCrossReportService.class);
-    bind(HOICaseService.class);
-    bind(HOIReferralService.class);
-    bind(InvolvementHistoryService.class);
-    bind(LegacyKeyService.class);
     bind(OtherCaseReferralDrmsDocumentService.class);
+    bind(GovernmentOrganizationCrossReportService.class);
+    bind(LegacyKeyService.class);
     bind(PersonService.class);
     bind(ReferralClientService.class);
     bind(ReferralService.class);
     bind(ReporterService.class);
-    bind(ScreeningRelationshipService.class);
     bind(ScreeningService.class);
     bind(ScreeningSubmitService.class);
     bind(ScreeningToReferral.class);
     bind(StaffPersonIdRetriever.class);
     bind(StaffPersonService.class);
     bind(TickleService.class);
+    bind(HOIReferralService.class);
+    bind(InvolvementHistoryService.class);
+    bind(HOICaseService.class);
+    bind(AuthorizationService.class);
+    bind(ScreeningRelationshipService.class);
+    bind(CsecHistoryService.class);
+    bind(ScreeningParticipantService.class);
+    bind(ParticipantDaoFactoryImpl.class);
+    bind(ParticipantMapperFactoryImpl.class);
+    bind(SpecialProjectReferralService.class);
+    bind(ClientTransformer.class);
 
-    // NEXT: Schedule for removal??
     // Enable AOP for DropWizard @UnitOfWork.
     final UnitOfWorkInterceptor interceptor = new UnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(UnitOfWork.class), interceptor);
@@ -233,6 +252,10 @@ public class ServicesModule extends AbstractModule {
     final XAUnitOfWorkInterceptor xaInterceptor = new XAUnitOfWorkInterceptor();
     bindInterceptor(Matchers.any(), Matchers.annotatedWith(XAUnitOfWork.class), xaInterceptor);
     requestInjection(xaInterceptor);
+
+    final Properties p = new Properties();
+    p.setProperty("something", "Some String");
+    Names.bindProperties(binder(), p);
 
     // @Singleton does not work with DropWizard Guice.
     bind(GovernmentOrganizationService.class).toProvider(GovtOrgSvcProvider.class);
@@ -290,7 +313,7 @@ public class ServicesModule extends AbstractModule {
   @Provides
   public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
     LOGGER.debug("provide intakeCode service");
-    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days -- NEXT: soft-code me
+    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
     return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache);
   }
 
@@ -315,5 +338,4 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode serializer");
     return new CmsSystemCodeSerializer(systemCodeCache);
   }
-
 }

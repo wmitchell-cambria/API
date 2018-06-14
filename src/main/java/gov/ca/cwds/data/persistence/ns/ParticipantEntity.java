@@ -25,8 +25,11 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.EqualsExclude;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.HashCodeExclude;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringExclude;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NamedQuery;
 import org.hibernate.annotations.Type;
@@ -138,6 +141,8 @@ public class ParticipantEntity
   private List<CsecEntity> csecs = new ArrayList<>();
 
   @HashCodeExclude
+  @EqualsExclude
+  @ToStringExclude
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "id", insertable = false, updatable = false)
   private SafelySurrenderedBabiesEntity safelySurrenderedBabies;
@@ -401,6 +406,11 @@ public class ParticipantEntity
 
   public void setApproximateAgeUnits(String approximateAgeUnits) {
     this.approximateAgeUnits = approximateAgeUnits;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   /**

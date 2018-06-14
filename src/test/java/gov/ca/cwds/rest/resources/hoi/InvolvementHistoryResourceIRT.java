@@ -1,5 +1,7 @@
 package gov.ca.cwds.rest.resources.hoi;
 
+import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
+import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
 import static gov.ca.cwds.rest.core.Api.RESOURCE_SCREENINGS;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.junit.Assert.assertEquals;
@@ -39,6 +41,9 @@ public class InvolvementHistoryResourceIRT extends HOIBaseTest {
         actualInvolvementHistory.getReferrals());
     assertHOIScreeningsAreSorted(new String[] {"750", "885", "862"},
         actualInvolvementHistory.getScreenings());
+
+    assertQueryExecutionCount(CMS_BUNDLE_TAG, 27);
+    assertQueryExecutionCount(NS_BUNDLE_TAG, 5);
   }
 
   private String doGet(String id) throws IOException {
