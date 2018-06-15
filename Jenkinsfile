@@ -46,13 +46,17 @@ node ('tpt4-slave'){
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
    stage('Preparation') {
-		  git branch: '$branch', url: 'git@github.com:ca-cwds/API.git'
+		  git branch: '$branch', credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/API.git'
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
 		  rtGradle.useWrapper = false
    }
    stage('Build'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
+   }
+   stage('Tag Git') {
+       // git the git repository
+        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
    }
    stage('Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
