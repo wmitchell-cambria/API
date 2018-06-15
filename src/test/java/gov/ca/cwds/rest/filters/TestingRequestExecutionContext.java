@@ -81,4 +81,9 @@ public class TestingRequestExecutionContext implements RequestExecutionContext {
     return (MessageBuilder) contextParameters.get(Parameter.MESSAGE_BUILDER);
   }
 
+  @Override
+  public boolean isXaTransaction() {
+    return false;
+  }
+
 }

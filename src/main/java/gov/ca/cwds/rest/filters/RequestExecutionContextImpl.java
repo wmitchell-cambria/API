@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.filters;
 
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,7 +37,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   /**
    * Context parameters
    */
-  private Map<Parameter, Object> contextParameters = new EnumMap<>(Parameter.class);
+  private Map<Parameter, Object> contextParameters = new ConcurrentHashMap<>();
 
   /**
    * Private constructor
