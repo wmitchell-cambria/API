@@ -35,8 +35,10 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Ferb session factory facade. Candace is the emotionally volatile sister of Phineas and Ferb. She
- * always tries -- and fails -- to prove her brothers' involvement in grand activities.
+ * Ferb session factory facade.
+ * <a href="http://phineasandferb.wikia.com/wiki/Candace_Flynn">Candace</a> is the emotionally
+ * volatile sister of Phineas and Ferb. She always tries -- and fails -- to prove her brothers'
+ * involvement in grand activities.
  * 
  * @param <N> normal session factory ({@link UnitOfWork}
  * @param <X> XA session factory ({@link XAUnitOfWork}
