@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest.filters;
 
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,7 +37,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   /**
    * Context parameters
    */
-  private Map<Parameter, Object> contextParameters = new ConcurrentHashMap<>();
+  private final Map<Parameter, Object> contextParameters = new EnumMap<>(Parameter.class);
 
   /**
    * Private constructor
@@ -49,7 +49,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
     put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
-    put(Parameter.XA_TRANSACTION, false);
+    put(Parameter.RESOURCE_READ_ONLY, true);
   }
 
   /**
@@ -135,8 +135,9 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   }
 
   @Override
-  public boolean isXaTransaction() {
-    return (Boolean) get(Parameter.XA_TRANSACTION);
+  public boolean isResourceReadOnly() {
+    final Boolean readOnly = (Boolean) get(Parameter.RESOURCE_READ_ONLY);
+    return readOnly != null && readOnly.booleanValue();
   }
 
   /**

@@ -4,6 +4,7 @@ import static gov.ca.cwds.data.HibernateStatisticsConsumerRegistry.provideHibern
 import static gov.ca.cwds.inject.FerbHibernateBundle.CMS_BUNDLE_TAG;
 import static gov.ca.cwds.inject.FerbHibernateBundle.NS_BUNDLE_TAG;
 
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 import javax.validation.Validation;
@@ -137,9 +138,11 @@ public class ServicesModule extends AbstractModule {
 
     private void collectAndProvideHibernateStatistics(String bundleTag) {
       if (CMS_BUNDLE_TAG.equals(bundleTag)) {
-        provideHibernateStatistics(bundleTag, cmsHibernateBundle.getSessionFactory().getStatistics());
+        provideHibernateStatistics(bundleTag,
+            cmsHibernateBundle.getSessionFactory().getStatistics());
       } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
-        provideHibernateStatistics(bundleTag, nsHibernateBundle.getSessionFactory().getStatistics());
+        provideHibernateStatistics(bundleTag,
+            nsHibernateBundle.getSessionFactory().getStatistics());
       }
     }
   }
@@ -176,7 +179,8 @@ public class ServicesModule extends AbstractModule {
       final XAUnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
         LOGGER.info("Before XA annotation");
-        aspect.beforeStart(mi.getMethod().getAnnotation(XAUnitOfWork.class));
+        final Method method = mi.getMethod();
+        aspect.beforeStart(method, method.getAnnotation(XAUnitOfWork.class));
         final Object result = mi.proceed();
         aspect.afterEnd();
         LOGGER.info("After XA annotation");

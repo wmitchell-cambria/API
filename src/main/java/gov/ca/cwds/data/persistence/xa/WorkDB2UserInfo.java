@@ -14,6 +14,11 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 /**
  * Set DB2 user information on the active connection, including user logon and staff id.
  * 
+ * <p>
+ * Shockingly, SonarQube complains about vendor-specific JDBC methods, thus the SuppressWarnings
+ * annotation.
+ * </p>
+ * 
  * @author CWDS API Team
  */
 public class WorkDB2UserInfo implements Work {
@@ -36,6 +41,8 @@ public class WorkDB2UserInfo implements Work {
       db2conn.setClientInfo("ApplicationName", "FERB");
       db2conn.setClientInfo("ClientUser", staffId);
       db2conn.setDB2ClientUser(staffId);
+
+      // ALTERNATIVE: call proc SYSPROC.WLM_SET_CLIENT_INFO.
     }
   }
 

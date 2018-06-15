@@ -14,31 +14,31 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 public interface RequestExecutionContext {
 
   /**
-   * Registered request execution parameters.
+   * Known request execution parameters.
    */
   public enum Parameter {
 
     /**
-     * Current user's user id or staff id.
+     * Type: String. Current user's user id or staff id.
      */
     USER_IDENTITY,
 
     /**
-     * The request's start time.
+     * Type: Date. The request's start time.
      */
     REQUEST_START_TIME,
-
-    /**
-     * Request uses distributed XA transactions.
-     */
-    XA_TRANSACTION,
 
     SEQUENCE_EXTERNAL_TABLE,
 
     /**
-     * Default error/warning message builder.
+     * Type: {@link MessageBuilder}. Default error/warning message builder.
      */
-    MESSAGE_BUILDER
+    MESSAGE_BUILDER,
+
+    /**
+     * Type: Boolean. Is the current REST endpoint read-only?
+     */
+    RESOURCE_READ_ONLY
   }
 
   /**
@@ -79,13 +79,6 @@ public interface RequestExecutionContext {
   Date getRequestStartTime();
 
   /**
-   * Is the request using XA transactions?
-   * 
-   * @return true = request is using XA
-   */
-  boolean isXaTransaction();
-
-  /**
    * Get logged in user's identity
    * 
    * @return Logged in user's identity
@@ -98,6 +91,13 @@ public interface RequestExecutionContext {
    * @return message builder for warnings and errors
    */
   MessageBuilder getMessageBuilder();
+
+  /**
+   * Is the current REST endpoint read-only?
+   * 
+   * @return true if current operation is read-only
+   */
+  boolean isResourceReadOnly();
 
   /**
    * Get instance of RequestExecutionContext from registry.

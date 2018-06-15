@@ -133,9 +133,24 @@ public final class Api {
   public static final String DATASOURCE_CMS = "cms";
 
   /**
+   * Identifer for CMS DB2 replicated datasources.
+   */
+  public static final String DATASOURCE_CMS_REP = "rs";
+
+  /**
    * Identifer for CMS DB2 datasources for XA transactions.
    */
   public static final String DATASOURCE_XA_CMS = "xa_cms";
+
+  /**
+   * Identifer for NS Postgres datasources.
+   */
+  public static final String DATASOURCE_NS = "ns";
+
+  /**
+   * Identifer for NS Postgres datasources for XA transactions.
+   */
+  public static final String DATASOURCE_XA_NS = "xa_ns";
 
   /**
    * Default private constructor
