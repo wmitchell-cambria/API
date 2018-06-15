@@ -49,6 +49,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.USER_IDENTITY, userIdentity);
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
     put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
+    put(Parameter.XA_TRANSACTION, false);
   }
 
   /**
@@ -131,6 +132,11 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   @Override
   public Date getRequestStartTime() {
     return (Date) get(Parameter.REQUEST_START_TIME);
+  }
+
+  @Override
+  public boolean isXaTransaction() {
+    return (Boolean) get(Parameter.XA_TRANSACTION);
   }
 
   /**

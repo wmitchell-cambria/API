@@ -14,7 +14,7 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 public interface RequestExecutionContext {
 
   /**
-   * Known request execution parameters.
+   * Registered request execution parameters.
    */
   public enum Parameter {
 
@@ -27,6 +27,11 @@ public interface RequestExecutionContext {
      * The request's start time.
      */
     REQUEST_START_TIME,
+
+    /**
+     * Request uses distributed XA transactions.
+     */
+    XA_TRANSACTION,
 
     SEQUENCE_EXTERNAL_TABLE,
 
@@ -72,6 +77,13 @@ public interface RequestExecutionContext {
    * @return The request start time
    */
   Date getRequestStartTime();
+
+  /**
+   * Is the request using XA transactions?
+   * 
+   * @return true = request is using XA
+   */
+  boolean isXaTransaction();
 
   /**
    * Get logged in user's identity
