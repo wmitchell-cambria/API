@@ -54,10 +54,6 @@ node ('tpt4-slave'){
    stage('Build'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -D build=${BUILD_NUMBER}'
    }
-   stage('Tag Git') {
-       // git the git repository
-        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
-   }
    stage('Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport javadoc', switches: '--stacktrace -D build=${BUILD_NUMBER}'
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnit Report', reportTitles: 'JUnit tests summary'])
@@ -85,6 +81,10 @@ node ('tpt4-slave'){
            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publishDocker -D build=${BUILD_NUMBER}'
        }
 	}
+  stage('Tag Git') {
+       // git the git repository
+        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+  }
 	stage('Clean Workspace') {
 		cleanWs()
 	}
