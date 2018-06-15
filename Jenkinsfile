@@ -83,7 +83,7 @@ node ('tpt4-slave'){
 	}
   stage('Tag Git') {
        // git the git repository
-        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -D build=${BUILD_NUMBER}'
   }
 	stage('Clean Workspace') {
 		cleanWs()
