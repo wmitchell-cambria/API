@@ -23,9 +23,11 @@ import com.pkware.deflate.InflateInputStream;
 import gov.ca.cwds.rest.services.ServiceException;
 
 /**
- * <strong><font color="red">WARNING</font>: you break it, you bought it</strong> -- and your
- * children will be given a <strong><font color="red">double espresso</font></strong> and a
- * <strong><font color="red">free puppy</font></strong>. Good luck.
+ * <p>
+ * <strong style="font-size:1em; color:red;">WARNING: you break it, you bought it</strong> -- and
+ * your children will be given a <strong>double espresso</strong> and a <strong>free puppy</strong>.
+ * Good luck.
+ * </p>
  * 
  * <p>
  * Compresses (deflates) and decompresses (inflates) PK archives created by the Windows PKWare

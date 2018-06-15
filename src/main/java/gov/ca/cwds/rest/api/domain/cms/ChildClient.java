@@ -659,7 +659,7 @@ public class ChildClient extends ReportingDomain implements Request, Response {
   /**
    * Sets safelySurrendedBabiesIndicatorVar.
    * 
-   * @param safelySurrendedBabiesIndicatorVar
+   * @param safelySurrendedBabiesIndicatorVar true if should safely surrender
    */
   public void setSafelySurrendedBabiesIndicatorVar(Boolean safelySurrendedBabiesIndicatorVar) {
     this.safelySurrendedBabiesIndicatorVar = safelySurrendedBabiesIndicatorVar;
