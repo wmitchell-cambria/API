@@ -80,7 +80,7 @@ public final class Relationship extends ReportingDomain implements Request, Resp
   @NotNull
   @Size(max = 1)
   @ApiModelProperty(required = true, readOnly = false, value = "Gender Code", example = "M")
-  @OneOf(value = {"M", "F", "I", "U"}, ignoreCase = true, ignoreWhitespace = true)
+  @OneOf(value = {"M", "F", "I", "U"}, ignoreCase = false, ignoreWhitespace = true)
   private String gender;
 
   @JsonProperty("date_of_death")
