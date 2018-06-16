@@ -14,31 +14,33 @@ import gov.ca.cwds.rest.messages.MessageBuilder;
 public interface RequestExecutionContext {
 
   /**
-   * Known request execution parameters.
+   * Registered request execution parameters.
    */
   public enum Parameter {
 
     /**
-     * Type: String. Current user's user id or staff id.
+     * Current user's user id or staff id.
      */
     USER_IDENTITY,
 
     /**
-     * Type: Date. The request's start time.
+     * The request's start time.
      */
     REQUEST_START_TIME,
+
+    /**
+     * Request uses distributed XA transactions.
+     */
+    XA_TRANSACTION,
+
+    RESOURCE_READ_ONLY,
 
     SEQUENCE_EXTERNAL_TABLE,
 
     /**
-     * Type: {@link MessageBuilder}. Default error/warning message builder.
+     * Default error/warning message builder.
      */
-    MESSAGE_BUILDER,
-
-    /**
-     * Type: Boolean. Is the current REST endpoint read-only?
-     */
-    RESOURCE_READ_ONLY
+    MESSAGE_BUILDER
   }
 
   /**
@@ -79,11 +81,20 @@ public interface RequestExecutionContext {
   Date getRequestStartTime();
 
   /**
+   * Is the request using XA transactions?
+   * 
+   * @return true = request is using XA
+   */
+  boolean isXaTransaction();
+
+  /**
    * Get logged in user's identity
    * 
    * @return Logged in user's identity
    */
   PerryUserIdentity getUserIdentity();
+
+  boolean isResourceReadOnly();
 
   /**
    * Get the message builder for warnings and errors for this request.
@@ -91,13 +102,6 @@ public interface RequestExecutionContext {
    * @return message builder for warnings and errors
    */
   MessageBuilder getMessageBuilder();
-
-  /**
-   * Is the current REST endpoint read-only?
-   * 
-   * @return true if current operation is read-only
-   */
-  boolean isResourceReadOnly();
 
   /**
    * Get instance of RequestExecutionContext from registry.

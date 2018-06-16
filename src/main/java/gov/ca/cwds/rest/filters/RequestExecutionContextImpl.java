@@ -50,6 +50,7 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
     put(Parameter.SEQUENCE_EXTERNAL_TABLE, Integer.valueOf(0));
     put(Parameter.MESSAGE_BUILDER, new MessageBuilder());
     put(Parameter.RESOURCE_READ_ONLY, true);
+    put(Parameter.XA_TRANSACTION, false);
   }
 
   /**
@@ -138,6 +139,11 @@ class RequestExecutionContextImpl implements RequestExecutionContext {
   public boolean isResourceReadOnly() {
     final Boolean readOnly = (Boolean) get(Parameter.RESOURCE_READ_ONLY);
     return readOnly != null && readOnly.booleanValue();
+  }
+
+  @Override
+  public boolean isXaTransaction() {
+    return (Boolean) get(Parameter.XA_TRANSACTION);
   }
 
   /**
