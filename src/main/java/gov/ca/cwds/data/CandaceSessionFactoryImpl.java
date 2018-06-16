@@ -64,9 +64,9 @@ public class CandaceSessionFactoryImpl<N extends SessionFactory, X extends Sessi
         : normSessionFactory;
   }
 
-  // =============================
+  // ==================================
   // SessionFactory delegate:
-  // =============================
+  // ==================================
 
   @Override
   public SessionFactoryImplementor getSessionFactory() {

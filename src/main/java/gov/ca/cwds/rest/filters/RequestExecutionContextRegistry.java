@@ -55,7 +55,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
 
   private static final long serialVersionUID = 1L;
 
-  private static final ThreadLocal<RequestExecutionContext> pegged = new ThreadLocal<>();
+  private static final ThreadLocal<RequestExecutionContext> bound = new ThreadLocal<>();
 
   private static final CallbackRegistry callbackRegistry = new CallbackRegistry();
 
@@ -69,7 +69,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    * @param ctx request context for this thread
    */
   static void register(RequestExecutionContext ctx) {
-    pegged.set(ctx);
+    bound.set(ctx);
     callbackRegistry.startRequest(ctx);
   }
 
@@ -77,8 +77,8 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    * Remove RequestExecutionContext from ThreadLocal
    */
   static void remove() {
-    final RequestExecutionContext ctx = pegged.get();
-    pegged.remove();
+    final RequestExecutionContext ctx = bound.get();
+    bound.remove();
     callbackRegistry.endRequest(ctx);
   }
 
@@ -86,7 +86,7 @@ public class RequestExecutionContextRegistry implements ApiMarker {
    * Get RequestExecutionContext from ThreadLocal
    */
   static RequestExecutionContext get() {
-    return pegged.get();
+    return bound.get();
   }
 
 }
