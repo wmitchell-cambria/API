@@ -16,7 +16,7 @@ public class UnitOfWorkModule {
   private static XAUnitOfWorkAwareProxyFactory xaProxyFactory;
 
   private UnitOfWorkModule() {
-
+    // Hidden, no-op
   }
 
   /**

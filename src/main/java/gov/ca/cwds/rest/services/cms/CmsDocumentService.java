@@ -164,8 +164,7 @@ public class CmsDocumentService implements TypedCrudsService<String, CmsDocument
         throw new ServiceException("FAILED TO UPDATE DOCUMENT! {" + request + "}", e);
       }
       retval = new CmsDocument(managed);
-      String base64Doc = dao.decompressDoc(managed);
-      retval.setBase64Blob(base64Doc);
+      retval.setBase64Blob(dao.decompressDoc(managed));
     } else {
       LOGGER.warn("EMPTY document! {}", primaryKey);
     }

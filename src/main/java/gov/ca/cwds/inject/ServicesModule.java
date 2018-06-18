@@ -113,7 +113,7 @@ public class ServicesModule extends AbstractModule {
           UnitOfWorkModule.getUnitOfWorkProxyFactory(cmsHibernateBundle, nsHibernateBundle);
       final UnitOfWorkAspect aspect = proxyFactory.newAspect();
       try {
-        UnitOfWork unitOfWorkAnnotation = mi.getMethod().getAnnotation(UnitOfWork.class);
+        final UnitOfWork unitOfWorkAnnotation = mi.getMethod().getAnnotation(UnitOfWork.class);
         aspect.beforeStart(unitOfWorkAnnotation);
         clearHibernateStatistics(unitOfWorkAnnotation.value());
         final Object result = mi.proceed();
