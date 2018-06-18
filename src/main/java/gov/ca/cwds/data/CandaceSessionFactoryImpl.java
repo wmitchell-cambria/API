@@ -35,7 +35,7 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import io.dropwizard.hibernate.UnitOfWork;
 
 /**
- * Ferb session factory facade.
+ * Ferb {@link SessionFactory} facade.
  * <a href="http://phineasandferb.wikia.com/wiki/Candace_Flynn">Candace</a> is the emotionally
  * volatile sister of Phineas and Ferb. She always tries -- and fails -- to prove her brothers'
  * involvement in grand activities.

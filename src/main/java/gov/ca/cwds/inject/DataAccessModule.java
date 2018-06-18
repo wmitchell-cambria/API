@@ -1,5 +1,11 @@
 package gov.ca.cwds.inject;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS_REP;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_NS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -258,7 +264,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "cms";
+          return DATASOURCE_CMS;
         }
       };
 
@@ -272,7 +278,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "ns";
+          return DATASOURCE_NS;
         }
       };
 
@@ -285,7 +291,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "rs";
+          return DATASOURCE_CMS_REP;
         }
       };
 
@@ -301,7 +307,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "xa_cms";
+          return DATASOURCE_XA_CMS;
         }
       };
 
@@ -317,7 +323,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "xa_ns";
+          return DATASOURCE_XA_NS;
         }
       };
 
@@ -386,8 +392,8 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
-    bind(XaCmsAddressDao.class);
     bind(SpecialProjectDao.class);
+    bind(XaCmsAddressDao.class);
 
     // NS:
     bind(AddressDao.class);
