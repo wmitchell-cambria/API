@@ -29,8 +29,9 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final XAUnitOfWorkAspectFactory aspectFactory;
 
+  private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
+
   public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
-    final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
     for (FerbHibernateBundle bundle : bundles) {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
     }

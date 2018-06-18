@@ -6,6 +6,11 @@ import gov.ca.cwds.rest.ApiConfiguration;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.SessionFactoryFactory;
 
+/**
+ * Extension of DropWizard's {@link HibernateBundle} increases the visibility of {@link #name()}.
+ * 
+ * @author CWDS API Team
+ */
 public abstract class FerbHibernateBundle extends HibernateBundle<ApiConfiguration> {
 
   public static final String CMS_BUNDLE_TAG = "cms";

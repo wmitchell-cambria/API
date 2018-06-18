@@ -92,6 +92,8 @@ public class ServicesModule extends AbstractModule {
   private static final Logger LOGGER = LoggerFactory.getLogger(ServicesModule.class);
 
   /**
+   * AOP method interceptor manages database transactions outside of DropWizard resource classes.
+   * 
    * @author CWDS API Team
    */
   public static class UnitOfWorkInterceptor implements org.aopalliance.intercept.MethodInterceptor {
