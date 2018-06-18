@@ -121,20 +121,6 @@ public class DataAccessModuleTest {
   }
 
   @Test
-  public void xaNsSessionFactory_A$() throws Exception {
-    SessionFactory actual = target.xaNsSessionFactory();
-    SessionFactory expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
-  public void xaCmsSessionFactory_A$() throws Exception {
-    SessionFactory actual = target.xaCmsSessionFactory();
-    SessionFactory expected = null;
-    assertThat(actual, is(equalTo(expected)));
-  }
-
-  @Test
   public void getXaNsHibernateBundle_A$() throws Exception {
     HibernateBundle<ApiConfiguration> actual = target.getXaNsHibernateBundle();
     assertThat(actual, is(notNullValue()));

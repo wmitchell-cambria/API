@@ -1,4 +1,4 @@
-package gov.ca.cwds.data;
+package gov.ca.cwds.data.persistence.xa;
 
 import java.sql.Connection;
 import java.util.List;
@@ -30,7 +30,6 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.Statistics;
 
-import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
 import io.dropwizard.hibernate.UnitOfWork;
 

@@ -92,6 +92,7 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
+import gov.ca.cwds.data.persistence.xa.CandaceSessionFactoryImpl;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -453,13 +454,15 @@ public class DataAccessModule extends AbstractModule {
   @Provides
   @CmsSessionFactory
   public SessionFactory cmsSessionFactory() {
-    return cmsHibernateBundle.getSessionFactory();
+    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
+        cmsHibernateBundle.getSessionFactory(), xaCmsHibernateBundle.getSessionFactory());
   }
 
   @Provides
   @NsSessionFactory
   public SessionFactory nsSessionFactory() {
-    return nsHibernateBundle.getSessionFactory();
+    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
+        nsHibernateBundle.getSessionFactory(), xaNsHibernateBundle.getSessionFactory());
   }
 
   @Provides
@@ -490,18 +493,6 @@ public class DataAccessModule extends AbstractModule {
   @XaCmsHibernateBundle
   public FerbHibernateBundle getXaCmsHibernateBundle() {
     return xaCmsHibernateBundle;
-  }
-
-  @Provides
-  @XaNsSessionFactory
-  public SessionFactory xaNsSessionFactory() {
-    return xaNsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
-  @XaCmsSessionFactory
-  public SessionFactory xaCmsSessionFactory() {
-    return xaCmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
