@@ -55,7 +55,8 @@ public class Client extends BaseClient {
 
   @ToStringExclude
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER", nullable = false,
+      updatable = false, insertable = false)
   private Set<ClientScpEthnicity> clientScpEthnicities = new HashSet<>();
 
   /**
