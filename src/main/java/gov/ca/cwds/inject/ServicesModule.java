@@ -172,12 +172,12 @@ public class ServicesModule extends AbstractModule {
     FerbHibernateBundle xaCmsHibernateBundle;
 
     @Inject
-    @XaNsHibernateBundle
-    FerbHibernateBundle xaNsHibernateBundle;
-
-    @Inject
     @XaCmsRsHibernateBundle
     FerbHibernateBundle xaCmsRsHibernateBundle;
+
+    @Inject
+    @XaNsHibernateBundle
+    FerbHibernateBundle xaNsHibernateBundle;
 
     @Override
     public Object invoke(org.aopalliance.intercept.MethodInvocation mi) throws Throwable {

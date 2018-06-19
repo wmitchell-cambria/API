@@ -95,6 +95,7 @@ import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import gov.ca.cwds.data.persistence.xa.CandaceSessionFactoryImpl;
+import gov.ca.cwds.data.persistence.xa.XaCmsRsHibernateBundle;
 import gov.ca.cwds.data.persistence.xa.XaCmsRsSessionFactory;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
@@ -358,6 +359,7 @@ public class DataAccessModule extends AbstractModule {
     bootstrap.addBundle(rsHibernateBundle);
     bootstrap.addBundle(xaCmsHibernateBundle);
     bootstrap.addBundle(xaNsHibernateBundle);
+    bootstrap.addBundle(xaCmsRsHibernateBundle);
   }
 
   /**
@@ -526,7 +528,7 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @XaCmsRsSessionFactory
+  @XaCmsRsHibernateBundle
   public FerbHibernateBundle getXaCmsRsHibernateBundle() {
     return xaCmsRsHibernateBundle;
   }
