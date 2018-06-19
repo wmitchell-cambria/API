@@ -81,7 +81,7 @@ public class R04631ReferralInvestigationContactDueTest {
   }
 
   /**
-   * Test if the allegation depsotion type is Entered in Error(5918) CrossReport reminder is not
+   * Test if the allegation disposition type is Entered in Error(5918) CrossReport reminder is not
    * created
    * 
    * @throws Exception - exception
@@ -152,7 +152,7 @@ public class R04631ReferralInvestigationContactDueTest {
     r05443AndR03341StateIdMissing.stateIdMissing(postedScreeningToReferral);
     r04631ReferralInvestigationContactDue
         .referralInvestigationContactDue(postedScreeningToReferral);
-    verify(tickleService, times(3)).create(any());
+    verify(tickleService, times(2)).create(any());
   }
 
   /**
