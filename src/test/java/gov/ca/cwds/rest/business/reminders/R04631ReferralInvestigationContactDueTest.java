@@ -81,7 +81,7 @@ public class R04631ReferralInvestigationContactDueTest {
   }
 
   /**
-   * Test if the allegation depsotion type is Entered in Error(5918) CrossReport reminder is not
+   * Test if the allegation disposition type is Entered in Error(5918) CrossReport reminder is not
    * created
    * 
    * @throws Exception - exception
