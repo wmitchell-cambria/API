@@ -32,6 +32,11 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
 
+  /**
+   * Construct from specialized Hibernate bundles.
+   * 
+   * @param bundles XA Hibernate bundles
+   */
   public XAUnitOfWorkAwareProxyFactory(final FerbHibernateBundle... bundles) {
     for (FerbHibernateBundle bundle : bundles) {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
@@ -40,6 +45,11 @@ public class XAUnitOfWorkAwareProxyFactory {
     aspectFactory = new ReentrantXAUnitOfWorkAspectFactoryImpl(sessionFactories);
   }
 
+  /**
+   * Alternate ctor takes session factory name and session factory itself.
+   * 
+   * @param factories session factories
+   */
   @SafeVarargs
   public XAUnitOfWorkAwareProxyFactory(final Pair<String, SessionFactory>... factories) {
     for (Pair<String, SessionFactory> pair : factories) {

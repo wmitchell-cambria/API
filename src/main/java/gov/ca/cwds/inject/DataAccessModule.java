@@ -1,5 +1,12 @@
 package gov.ca.cwds.inject;
 
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS_REP;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_NS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS_RS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,8 +54,6 @@ import gov.ca.cwds.data.cms.ReferralAssignmentDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
-import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
@@ -61,6 +66,8 @@ import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.ReferralClientDeliveredServiceDao;
 import gov.ca.cwds.data.es.ElasticsearchDao;
 import gov.ca.cwds.data.legacy.cms.dao.SexualExploitationTypeDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
 import gov.ca.cwds.data.ns.AddressDao;
 import gov.ca.cwds.data.ns.AddressesDao;
 import gov.ca.cwds.data.ns.AgencyDao;
@@ -87,6 +94,8 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
+import gov.ca.cwds.data.persistence.xa.CandaceSessionFactoryImpl;
+import gov.ca.cwds.data.persistence.xa.XaCmsRsSessionFactory;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -259,7 +268,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "cms";
+          return DATASOURCE_CMS;
         }
       };
 
@@ -273,7 +282,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "ns";
+          return DATASOURCE_NS;
         }
       };
 
@@ -286,12 +295,12 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "rs";
+          return DATASOURCE_CMS_REP;
         }
       };
 
   /**
-   * XA pooled datasource factory for CMS DB2.
+   * XA pooled datasource factory for CMS DB2, transactional schema.
    */
   private final FerbHibernateBundle xaCmsHibernateBundle =
       new FerbHibernateBundle(cmsEntities, new ApiSessionFactoryFactory()) {
@@ -302,7 +311,23 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "xa_cms";
+          return DATASOURCE_XA_CMS;
+        }
+      };
+
+  /**
+   * XA pooled datasource factory for CMS DB2, replicated schema.
+   */
+  private final FerbHibernateBundle xaCmsRsHibernateBundle =
+      new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
+        @Override
+        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
+          return configuration.getXaCmsDataSourceFactory();
+        }
+
+        @Override
+        public String name() {
+          return DATASOURCE_XA_CMS_RS;
         }
       };
 
@@ -318,7 +343,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return "xa_ns";
+          return DATASOURCE_XA_NS;
         }
       };
 
@@ -343,88 +368,85 @@ public class DataAccessModule extends AbstractModule {
   @Override
   protected void configure() {
     // CMS:
-    // CmsReferral participants:
+    bind(AddressUcDao.class);
     bind(AllegationDao.class);
-    bind(ClientDao.class);
-    bind(ReferralClientDao.class);
-    bind(ReferralDao.class);
-    bind(ReporterDao.class);
-    bind(CrossReportDao.class);
-    bind(CaseDao.class);
-    bind(ReferralAssignmentDao.class);
-    bind(CaseAssignmentDao.class);
-    bind(ClientRelationshipDao.class);
-    bind(ClientCollateralDao.class);
-
-    bind(AttorneyDao.class);
-    bind(CmsDocReferralClientDao.class);
-    bind(CmsDocumentDao.class);
-    bind(OtherClientNameDao.class);
-    bind(StaffPersonDao.class);
-    bind(StateIdDao.class);
-    bind(LongTextDao.class);
     bind(AllegationPerpetratorHistoryDao.class);
-    bind(ClientUcDao.class);
-    bind(ChildClientDao.class);
-    bind(SexualExploitationTypeDao.class);
-    bind(SystemCodeDao.class);
-    bind(SystemMetaDao.class);
-    bind(DrmsDocumentDao.class);
-    bind(DrmsDocumentTemplateDao.class);
-    bind(OtherCaseReferralDrmsDocumentDao.class);
     bind(AssignmentDao.class);
     bind(AssignmentUnitDao.class);
-    bind(CwsOfficeDao.class);
-    bind(TickleDao.class);
-    bind(AddressUcDao.class);
-    bind(ExternalInterfaceDao.class);
-    bind(DeliveredServiceDao.class);
+    bind(AttorneyDao.class);
+    bind(CaseAssignmentDao.class);
+    bind(CaseDao.class);
+    bind(CaseLoadDao.class);
+    bind(ChildClientDao.class);
+    bind(ClientCollateralDao.class);
+    bind(ClientDao.class);
+    bind(ClientRelationshipDao.class);
+    bind(ClientScpEthnicityDao.class);
+    bind(ClientUcDao.class);
+    bind(CmsDocReferralClientDao.class);
+    bind(CmsDocumentDao.class);
     bind(ContactPartyDeliveredServiceDao.class);
-    bind(ReferralClientDeliveredServiceDao.class);
+    bind(CrossReportDao.class);
+    bind(CwsOfficeDao.class);
+    bind(DeliveredServiceDao.class);
+    bind(DrmsDocumentDao.class);
+    bind(DrmsDocumentTemplateDao.class);
+    bind(ExternalInterfaceDao.class);
+    bind(GovernmentOrganizationCrossReportDao.class);
+    bind(GovernmentOrganizationDao.class);
     bind(IndividualDeliveredServiceDao.class);
     bind(LawEnforcementDao.class);
-    bind(CaseLoadDao.class);
-    bind(ClientScpEthnicityDao.class);
-    bind(GovernmentOrganizationDao.class);
-    bind(GovernmentOrganizationCrossReportDao.class);
-    bind(XaCmsAddressDao.class);
+    bind(LongTextDao.class);
+    bind(OtherCaseReferralDrmsDocumentDao.class);
+    bind(OtherClientNameDao.class);
+    bind(ReferralAssignmentDao.class);
+    bind(ReferralClientDao.class);
+    bind(ReferralClientDeliveredServiceDao.class);
+    bind(ReferralDao.class);
+    bind(ReporterDao.class);
+    bind(SexualExploitationTypeDao.class);
     bind(SpecialProjectDao.class);
     bind(SpecialProjectReferralDao.class);
+    bind(StaffPersonDao.class);
+    bind(StateIdDao.class);
+    bind(SystemCodeDao.class);
+    bind(SystemMetaDao.class);
+    bind(TickleDao.class);
+    bind(XaCmsAddressDao.class);
 
     // NS:
     bind(AddressDao.class);
     bind(AddressesDao.class);
-    bind(CsecDao.class);
-    bind(XaNsAddressDao.class);
-
-    bind(PersonDao.class);
-    bind(ScreeningDao.class);
-    bind(ScreeningAddressDao.class);
     bind(AgencyDao.class);
-    bind(gov.ca.cwds.data.ns.CrossReportDao.class);
     bind(AllegationIntakeDao.class);
-    bind(ParticipantDao.class);
-    bind(PhoneNumberDao.class);
-    bind(LanguageDao.class);
-    bind(PersonAddressDao.class);
-    bind(PersonPhoneDao.class);
-    bind(PersonLanguageDao.class);
-    bind(PersonEthnicityDao.class);
+    bind(CsecDao.class);
     bind(EthnicityDao.class);
-    bind(PersonRaceDao.class);
-    bind(RaceDao.class);
+    bind(gov.ca.cwds.data.ns.CrossReportDao.class);
     bind(IntakeLOVCodeDao.class);
     bind(IntakeLovDao.class);
+    bind(LanguageDao.class);
     bind(PaperTrailDao.class);
     bind(PaperTrailInterceptor.class);
+    bind(ParticipantDao.class);
+    bind(PersonAddressDao.class);
+    bind(PersonDao.class);
+    bind(PersonEthnicityDao.class);
+    bind(PersonLanguageDao.class);
+    bind(PersonPhoneDao.class);
+    bind(PersonRaceDao.class);
+    bind(PhoneNumberDao.class);
+    bind(RaceDao.class);
+    bind(ScreeningAddressDao.class);
+    bind(ScreeningDao.class);
+    bind(XaNsAddressDao.class);
 
     // Trigger Tables:
     bind(CountyOwnershipDao.class);
     bind(CountyTriggerDao.class);
-    bind(NonLACountyTriggers.class);
-    bind(LACountyTrigger.class);
-    bind(TriggerTablesDao.class);
     bind(CountyTriggerEmbeddable.class);
+    bind(LACountyTrigger.class);
+    bind(NonLACountyTriggers.class);
+    bind(TriggerTablesDao.class);
 
     // Downstream Tables:
     bind(Reminders.class);
@@ -446,23 +468,34 @@ public class DataAccessModule extends AbstractModule {
     bind(RIGovernmentOrganizationCrossReport.class);
   }
 
+  // ==========================
+  // NON-XA session factories
+  // ==========================
+
   @Provides
   @CmsSessionFactory
   public SessionFactory cmsSessionFactory() {
-    return cmsHibernateBundle.getSessionFactory();
+    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
+        cmsHibernateBundle.getSessionFactory(), xaCmsHibernateBundle.getSessionFactory());
   }
 
   @Provides
   @NsSessionFactory
   public SessionFactory nsSessionFactory() {
-    return nsHibernateBundle.getSessionFactory();
+    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
+        nsHibernateBundle.getSessionFactory(), xaNsHibernateBundle.getSessionFactory());
   }
 
   @Provides
   @CwsRsSessionFactory
   public SessionFactory rsSessionFactory() {
-    return rsHibernateBundle.getSessionFactory();
+    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
+        rsHibernateBundle.getSessionFactory(), xaCmsRsHibernateBundle.getSessionFactory());
   }
+
+  // ==========================
+  // NON-XA Hibernate bundles
+  // ==========================
 
   @Provides
   @CmsHibernateBundle
@@ -482,11 +515,31 @@ public class DataAccessModule extends AbstractModule {
     return rsHibernateBundle;
   }
 
+  // ==========================
+  // XA Hibernate bundles
+  // ==========================
+
   @Provides
   @XaCmsHibernateBundle
   public FerbHibernateBundle getXaCmsHibernateBundle() {
     return xaCmsHibernateBundle;
   }
+
+  @Provides
+  @XaCmsRsSessionFactory
+  public FerbHibernateBundle getXaCmsRsHibernateBundle() {
+    return xaCmsRsHibernateBundle;
+  }
+
+  @Provides
+  @XaNsHibernateBundle
+  public FerbHibernateBundle getXaNsHibernateBundle() {
+    return xaNsHibernateBundle;
+  }
+
+  // ==========================
+  // XA session factories
+  // ==========================
 
   @Provides
   @XaNsSessionFactory
@@ -501,10 +554,14 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @XaNsHibernateBundle
-  public FerbHibernateBundle getXaNsHibernateBundle() {
-    return xaNsHibernateBundle;
+  @XaCmsRsSessionFactory
+  public SessionFactory xaCmsRsSessionFactory() {
+    return xaCmsRsHibernateBundle.getSessionFactory();
   }
+
+  // ==========================
+  // Elasticsearch
+  // ==========================
 
   @Provides
   public Map<String, ElasticsearchConfiguration> elasticSearchConfigs(

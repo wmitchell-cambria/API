@@ -29,6 +29,7 @@ import gov.ca.cwds.data.ns.IntakeLovDao;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWork;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAspect;
 import gov.ca.cwds.data.persistence.xa.XAUnitOfWorkAwareProxyFactory;
+import gov.ca.cwds.data.persistence.xa.XaCmsRsHibernateBundle;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.api.domain.IntakeCodeCache;
 import gov.ca.cwds.rest.api.domain.ScreeningToReferral;
@@ -175,6 +176,7 @@ public class ServicesModule extends AbstractModule {
     FerbHibernateBundle xaNsHibernateBundle;
 
     @Inject
+    @XaCmsRsHibernateBundle
     FerbHibernateBundle xaCmsRsHibernateBundle;
 
     @Override
