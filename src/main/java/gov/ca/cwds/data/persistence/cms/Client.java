@@ -20,6 +20,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.HashCodeExclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringExclude;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -53,8 +55,11 @@ public class Client extends BaseClient {
   @JoinColumn(name = "FKCLIENT_T", referencedColumnName = "IDENTIFIER")
   private Set<ClientAddress> clientAddress = new HashSet<>();
 
+  @ToStringExclude
+  @Fetch(FetchMode.SELECT)
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER")
+  @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER", nullable = false,
+      updatable = false, insertable = false)
   private Set<ClientScpEthnicity> clientScpEthnicities = new HashSet<>();
 
   /**
@@ -387,16 +392,16 @@ public class Client extends BaseClient {
     this.clientScpEthnicities = clientScpEthnicities;
   }
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
-
   /**
    * @param clientAddress - clientAddress
    */
   public void setClientAddress(Set<ClientAddress> clientAddress) {
     this.clientAddress = clientAddress;
+  }
+
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
   }
 
   @Override
