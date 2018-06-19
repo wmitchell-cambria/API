@@ -6,6 +6,7 @@ import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.hibernate.UnitOfWorkAwareProxyFactory;
 
 /**
+ * Provide factories to manage Hibernate sessions and transactions.
  * 
  * @author CWDS API Team
  */
@@ -28,6 +29,10 @@ public class UnitOfWorkModule {
       HibernateBundle<ApiConfiguration>... bundles) {
     if (proxyFactory == null) {
       proxyFactory = new UnitOfWorkAwareProxyFactory(bundles);
+
+      // TODO: alternate ctor.
+      // public UnitOfWorkAwareProxyFactory(String name, SessionFactory sessionFactory)
+
     }
     return proxyFactory;
   }

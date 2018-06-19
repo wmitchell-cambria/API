@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,18 @@ public class XAUnitOfWorkAwareProxyFactory {
 
   private final Map<String, SessionFactory> sessionFactories = new ConcurrentHashMap<>();
 
-  public XAUnitOfWorkAwareProxyFactory(FerbHibernateBundle... bundles) {
+  public XAUnitOfWorkAwareProxyFactory(final FerbHibernateBundle... bundles) {
     for (FerbHibernateBundle bundle : bundles) {
       sessionFactories.put(bundle.name(), bundle.getSessionFactory());
+    }
+
+    aspectFactory = new ReentrantXAUnitOfWorkAspectFactoryImpl(sessionFactories);
+  }
+
+  @SafeVarargs
+  public XAUnitOfWorkAwareProxyFactory(final Pair<String, SessionFactory>... factories) {
+    for (Pair<String, SessionFactory> pair : factories) {
+      sessionFactories.put(pair.getLeft(), pair.getRight());
     }
 
     aspectFactory = new ReentrantXAUnitOfWorkAspectFactoryImpl(sessionFactories);
