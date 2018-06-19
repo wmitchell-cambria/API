@@ -39,6 +39,10 @@ import io.dropwizard.hibernate.UnitOfWork;
  * volatile sister of Phineas and Ferb. She always tries -- and fails -- to prove her brothers'
  * involvement in grand activities.
  * 
+ * <p>
+ * <a href="https://www.youtube.com/watch?v=0ZzN83mWpUo">More Phineas, less Candace.</a>
+ * </p>
+ * 
  * @param <N> normal session factory ({@link UnitOfWork}
  * @param <X> XA session factory ({@link XAUnitOfWork}
  * @author CWDS API Team
