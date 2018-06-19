@@ -15,7 +15,7 @@ public class RelationshipToEntityBuilder {
   protected String relationshipToPerson = "Sister";
   protected String relationshipContext = "step";
   protected String relatedDateOfBirth = "2000-10-01";
-  protected String relatedDateOfDeath = "2001=10-01";
+  protected String relatedDateOfDeath = "2001-10-01";
   protected String absentParentCode = "N";
   protected String sameHomeCode = "U";
 
