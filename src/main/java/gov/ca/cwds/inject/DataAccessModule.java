@@ -1,12 +1,5 @@
 package gov.ca.cwds.inject;
 
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS_REP;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_NS;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS_RS;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,7 +47,8 @@ import gov.ca.cwds.data.cms.ReferralAssignmentDao;
 import gov.ca.cwds.data.cms.ReferralClientDao;
 import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
-import gov.ca.cwds.data.cms.SpecialProjectDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectDao;
+import gov.ca.cwds.data.legacy.cms.dao.SpecialProjectReferralDao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
 import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
@@ -93,8 +87,6 @@ import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
-import gov.ca.cwds.data.persistence.xa.CandaceSessionFactoryImpl;
-import gov.ca.cwds.data.persistence.xa.XaCmsRsSessionFactory;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -216,8 +208,8 @@ public class DataAccessModule extends AbstractModule {
           gov.ca.cwds.data.persistence.contact.DeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.IndividualDeliveredServiceEntity.class,
           gov.ca.cwds.data.persistence.contact.ReferralClientDeliveredServiceEntity.class,
-          gov.ca.cwds.data.persistence.cms.SpecialProject.class,
-          gov.ca.cwds.data.persistence.cms.SpecialProjectReferral.class,
+          gov.ca.cwds.data.legacy.cms.entity.SpecialProject.class,
+          gov.ca.cwds.data.legacy.cms.entity.SpecialProjectReferral.class,
           gov.ca.cwds.data.legacy.cms.entity.SafelySurrenderedBabies.class,
           gov.ca.cwds.data.legacy.cms.entity.NonCWSNumber.class)
       .build();
@@ -267,7 +259,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return DATASOURCE_CMS;
+          return "cms";
         }
       };
 
@@ -281,7 +273,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return DATASOURCE_NS;
+          return "ns";
         }
       };
 
@@ -294,12 +286,12 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return DATASOURCE_CMS_REP;
+          return "rs";
         }
       };
 
   /**
-   * XA pooled datasource factory for CMS DB2, transactional schema.
+   * XA pooled datasource factory for CMS DB2.
    */
   private final FerbHibernateBundle xaCmsHibernateBundle =
       new FerbHibernateBundle(cmsEntities, new ApiSessionFactoryFactory()) {
@@ -310,23 +302,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return DATASOURCE_XA_CMS;
-        }
-      };
-
-  /**
-   * XA pooled datasource factory for CMS DB2, replicated schema.
-   */
-  private final FerbHibernateBundle xaCmsRsHibernateBundle =
-      new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
-        @Override
-        public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
-        }
-
-        @Override
-        public String name() {
-          return DATASOURCE_XA_CMS_RS;
+          return "xa_cms";
         }
       };
 
@@ -342,7 +318,7 @@ public class DataAccessModule extends AbstractModule {
 
         @Override
         public String name() {
-          return DATASOURCE_XA_NS;
+          return "xa_ns";
         }
       };
 
@@ -411,8 +387,9 @@ public class DataAccessModule extends AbstractModule {
     bind(ClientScpEthnicityDao.class);
     bind(GovernmentOrganizationDao.class);
     bind(GovernmentOrganizationCrossReportDao.class);
-    bind(SpecialProjectDao.class);
     bind(XaCmsAddressDao.class);
+    bind(SpecialProjectDao.class);
+    bind(SpecialProjectReferralDao.class);
 
     // NS:
     bind(AddressDao.class);
@@ -469,34 +446,23 @@ public class DataAccessModule extends AbstractModule {
     bind(RIGovernmentOrganizationCrossReport.class);
   }
 
-  // ==========================
-  // Smart session factories
-  // ==========================
-
   @Provides
   @CmsSessionFactory
   public SessionFactory cmsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        cmsHibernateBundle.getSessionFactory(), xaCmsHibernateBundle.getSessionFactory());
+    return cmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @NsSessionFactory
   public SessionFactory nsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        nsHibernateBundle.getSessionFactory(), xaNsHibernateBundle.getSessionFactory());
+    return nsHibernateBundle.getSessionFactory();
   }
 
   @Provides
   @CwsRsSessionFactory
   public SessionFactory rsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        rsHibernateBundle.getSessionFactory(), xaCmsRsHibernateBundle.getSessionFactory());
+    return rsHibernateBundle.getSessionFactory();
   }
-
-  // ==========================
-  // NON-XA Hibernate bundles
-  // ==========================
 
   @Provides
   @CmsHibernateBundle
@@ -516,10 +482,6 @@ public class DataAccessModule extends AbstractModule {
     return rsHibernateBundle;
   }
 
-  // ==========================
-  // XA Hibernate bundles
-  // ==========================
-
   @Provides
   @XaCmsHibernateBundle
   public FerbHibernateBundle getXaCmsHibernateBundle() {
@@ -527,9 +489,15 @@ public class DataAccessModule extends AbstractModule {
   }
 
   @Provides
-  @XaCmsRsSessionFactory
-  public FerbHibernateBundle getXaCmsRsHibernateBundle() {
-    return xaCmsRsHibernateBundle;
+  @XaNsSessionFactory
+  public SessionFactory xaNsSessionFactory() {
+    return xaNsHibernateBundle.getSessionFactory();
+  }
+
+  @Provides
+  @XaCmsSessionFactory
+  public SessionFactory xaCmsSessionFactory() {
+    return xaCmsHibernateBundle.getSessionFactory();
   }
 
   @Provides
@@ -537,10 +505,6 @@ public class DataAccessModule extends AbstractModule {
   public FerbHibernateBundle getXaNsHibernateBundle() {
     return xaNsHibernateBundle;
   }
-
-  // ==========================
-  // Elasticsearch
-  // ==========================
 
   @Provides
   public Map<String, ElasticsearchConfiguration> elasticSearchConfigs(

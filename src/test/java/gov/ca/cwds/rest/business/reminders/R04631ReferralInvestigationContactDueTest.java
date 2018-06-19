@@ -43,6 +43,7 @@ import gov.ca.cwds.rest.services.cms.TickleService;
 
 /**
  * @author CWDS API Team
+ *
  */
 public class R04631ReferralInvestigationContactDueTest {
 
@@ -60,6 +61,7 @@ public class R04631ReferralInvestigationContactDueTest {
   private static final String DEFAULT_COUNTY_SPECIFIC_CODE = "62";
   private static final String DEFAULT_STAFF_PERSON_ID = "0X5";
 
+  @SuppressWarnings("javadoc")
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
@@ -80,7 +82,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
   /**
    * Test if the allegation disposition type is Entered in Error(5918) CrossReport reminder is not
-   * created.
+   * created
    * 
    * @throws Exception - exception
    */
@@ -233,7 +235,7 @@ public class R04631ReferralInvestigationContactDueTest {
   }
 
   /**
-   * Test for No reminders created
+   * Test for No remiders created
    * 
    * @throws Exception - exception
    */
