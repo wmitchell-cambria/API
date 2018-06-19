@@ -59,7 +59,7 @@ public class Client extends BaseClient {
   @Fetch(FetchMode.SELECT)
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "ESTBLSH_ID", referencedColumnName = "IDENTIFIER", nullable = false,
-      updatable = false)
+      updatable = false, insertable = false)
   private Set<ClientScpEthnicity> clientScpEthnicities = new HashSet<>();
 
   /**
