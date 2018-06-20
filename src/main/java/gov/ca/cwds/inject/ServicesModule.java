@@ -295,7 +295,7 @@ public class ServicesModule extends AbstractModule {
       SystemMetaDao systemMetaDao, ApiConfiguration config) {
     LOGGER.debug("provide syscode service");
 
-    boolean preLoad = Boolean.TRUE; // default is true
+    boolean preLoad = true; // default is true
     long secondsToRefreshCache = 365L * 24 * 60 * 60; // default is 365 days
 
     SystemCodeCacheConfiguration systemCodeCacheConfig =
