@@ -55,6 +55,7 @@ cmsDataSourceFactory:
       hibernate.use_sql_comments: false
       hibernate.default_schema: cwsint
       hibernate.connection.autocommit: false
+      hibernate.current_session_context_class: thread
 
 rsDataSourceFactory:
   autoCommitByDefault: false
