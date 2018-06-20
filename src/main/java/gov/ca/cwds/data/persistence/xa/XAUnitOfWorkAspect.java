@@ -151,10 +151,11 @@ public class XAUnitOfWorkAspect implements ApiMarker {
     if (sessions.containsKey(key)) {
       session = sessions.get(key);
     } else {
-      LOGGER.trace("XA grabSession()!");
+      LOGGER.debug("XA grabSession()!");
       try {
         session = sessionFactory.getCurrentSession();
       } catch (HibernateException e) {
+        LOGGER.debug("No current session. Open a new one. {}", e.getMessage());
         LOGGER.trace("No current session. Open a new one. {}", e.getMessage(), e);
         session = sessionFactory.openSession();
       }

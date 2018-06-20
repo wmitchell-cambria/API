@@ -478,9 +478,9 @@ public class DataAccessModule extends AbstractModule {
   // HIBERNATE BUNDLES
   // ==========================
 
-  // --------------------------
+  // ==========================
   // NON-XA Hibernate bundles
-  // --------------------------
+  // ==========================
 
   @Provides
   @CmsHibernateBundle
@@ -523,37 +523,12 @@ public class DataAccessModule extends AbstractModule {
   }
 
   // ==========================
-  // SESSION FACTORIES
-  // ==========================
-
-  // --------------------------
-  // XA session factories
-  // --------------------------
-
-  @Provides
-  @XaNsSessionFactory
-  public SessionFactory xaNsSessionFactory() {
-    return xaNsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
-  @XaCmsSessionFactory
-  public SessionFactory xaCmsSessionFactory() {
-    return xaCmsHibernateBundle.getSessionFactory();
-  }
-
-  @Provides
-  @XaCmsRsSessionFactory
-  public SessionFactory xaCmsRsSessionFactory() {
-    return xaCmsRsHibernateBundle.getSessionFactory();
-  }
-
-  // ==========================
-  // NON-XA session factories
+  // Smart session factories
   // ==========================
 
   @Provides
   @CmsSessionFactory
+  @XaCmsSessionFactory
   public SessionFactory cmsSessionFactory() {
     return new CandaceSessionFactoryImpl(cmsHibernateBundle.getSessionFactory(),
         xaCmsHibernateBundle.getSessionFactory());
@@ -561,6 +536,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @NsSessionFactory
+  @XaNsSessionFactory
   public SessionFactory nsSessionFactory() {
     return new CandaceSessionFactoryImpl(nsHibernateBundle.getSessionFactory(),
         xaNsHibernateBundle.getSessionFactory());
@@ -568,6 +544,7 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @CwsRsSessionFactory
+  @XaCmsRsSessionFactory
   public SessionFactory rsSessionFactory() {
     return new CandaceSessionFactoryImpl(rsHibernateBundle.getSessionFactory(),
         xaCmsRsHibernateBundle.getSessionFactory());

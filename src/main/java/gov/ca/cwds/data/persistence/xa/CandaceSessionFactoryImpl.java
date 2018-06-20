@@ -44,6 +44,7 @@ import gov.ca.cwds.rest.filters.RequestExecutionContext;
  * 
  * @author CWDS API Team
  */
+@SuppressWarnings({"deprecation", "rawtypes"}) // SessionFactory method signatures
 public class CandaceSessionFactoryImpl implements SessionFactory {
 
   private static final long serialVersionUID = 1L;
@@ -58,13 +59,18 @@ public class CandaceSessionFactoryImpl implements SessionFactory {
     this.xaSessionFactory = xaSessionFactory;
   }
 
+  /**
+   * Determine which type of transaction to use.
+   * 
+   * @return smart {@link SessionFactory}
+   */
   protected SessionFactory pick() {
     return RequestExecutionContext.instance().isXaTransaction() ? xaSessionFactory
         : normSessionFactory;
   }
 
   // ==================================
-  // SessionFactory delegate:
+  // SessionFactory delegates:
   // ==================================
 
   @Override
