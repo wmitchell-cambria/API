@@ -24,6 +24,7 @@ import org.mockito.stubbing.Answer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import gov.ca.cwds.data.cms.AddressDao;
 import gov.ca.cwds.data.cms.AllegationDao;
 import gov.ca.cwds.data.cms.AllegationPerpetratorHistoryDao;
@@ -130,6 +131,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+  private ClientRelationshipCoreService clientRelationshipService;
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -260,6 +262,8 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
     when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
+    clientRelationshipService = mock(ClientRelationshipCoreService.class);
+
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
     screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
 
@@ -269,7 +273,7 @@ public class R05559SetPrimaryContactStaffPersonIdTest {
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService, validator, referralDao, new MessageBuilder(),
+        crossReportService, participantService, clientRelationshipService, validator, referralDao, new MessageBuilder(),
         allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
         clientRelationshipDao, screeningSatefyAlertsService);
   }

@@ -4,10 +4,11 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +73,6 @@ import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
-import gov.ca.cwds.rest.services.ScreeningSatefyAlertService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -123,6 +123,7 @@ public class LastUpdatedTimeIsUniqueTest {
   private LongTextService longTextService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+  private ClientRelationshipCoreService clientRelationshipService;
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -164,7 +165,6 @@ public class LastUpdatedTimeIsUniqueTest {
   private MessageBuilder messageBuilder;
   private CaseDao caseDao;
   private ClientRelationshipDao clientRelationshipDao;
-  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private Validator validator;
 
@@ -284,16 +284,18 @@ public class LastUpdatedTimeIsUniqueTest {
         reporterService, childClientService, clientAddressService, validator,
         clientScpEthnicityService, caseDao, referralClientDao);
 
+    clientRelationshipService = mock(ClientRelationshipCoreService.class);
+
     referralService =
         new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService,
-        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
-        clientRelationshipDao, screeningSatefyAlertsService);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, clientRelationshipService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

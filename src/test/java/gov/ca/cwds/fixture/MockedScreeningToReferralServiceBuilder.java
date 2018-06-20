@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import javax.validation.Validation;
 
 import gov.ca.cwds.data.cms.ClientRelationshipDao;
@@ -60,6 +61,7 @@ public class MockedScreeningToReferralServiceBuilder {
   private ChildClientService childClientService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+  private ClientRelationshipCoreService clientRelationshipService;
   private AllegationPerpetratorHistoryService allegationPerpetratorHistoryService;
   private Reminders reminders;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
@@ -451,6 +453,11 @@ public class MockedScreeningToReferralServiceBuilder {
     return this;
   }
 
+  public MockedScreeningToReferralServiceBuilder addClientRelationshipService(
+      ClientRelationshipCoreService clientRelationshipService) {
+    this.clientRelationshipService = clientRelationshipService;
+    return this;
+  }
   /**
    * @param referralDao - referralDao
    * @return the referralDao
@@ -474,7 +481,7 @@ public class MockedScreeningToReferralServiceBuilder {
    */
   public ScreeningToReferralService createScreeningToReferralService() {
     return new ScreeningToReferralService(getReferralService(), getAllegationService(),
-        getCrossReportService(), getParticipantService(),
+        getCrossReportService(), getParticipantService(), clientRelationshipService,
         Validation.buildDefaultValidatorFactory().getValidator(), getReferralDao(),
         getMessageBuilder(), getAllegationPerpetratorHistoryService(), getReminders(),
         getGovernmentOrganizationCrossReportService(), getClientRelationshipDao(),

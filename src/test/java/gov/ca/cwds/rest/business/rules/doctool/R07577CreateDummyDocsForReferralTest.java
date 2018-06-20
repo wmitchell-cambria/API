@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import java.util.Date;
 import java.util.Set;
 
@@ -82,7 +83,6 @@ import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ClientParticipants;
 import gov.ca.cwds.rest.services.ParticipantService;
-import gov.ca.cwds.rest.services.ScreeningSatefyAlertService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -132,6 +132,7 @@ public class R07577CreateDummyDocsForReferralTest {
   private LongTextService longTextService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+  private ClientRelationshipCoreService clientRelationshipService;
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -141,7 +142,6 @@ public class R07577CreateDummyDocsForReferralTest {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
-  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private ReferralDao referralDao;
   private ClientDao clientDao;
@@ -274,19 +274,19 @@ public class R07577CreateDummyDocsForReferralTest {
     when(triggerTablesDao.getLaCountySpecificCode()).thenReturn("52");
 
     participantService = mock(ParticipantService.class);
+    clientRelationshipService = mock(ClientRelationshipCoreService.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-    screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
 
     referralService =
         new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
-    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService,
-        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
-        clientRelationshipDao, screeningSatefyAlertsService);
+    screeningToReferralService =
+        new ScreeningToReferralService(referralService, allegationService, crossReportService,
+            participantService, clientRelationshipService, Validation.buildDefaultValidatorFactory().getValidator(),
+            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
+            governmentOrganizationCrossReportService, clientRelationshipDao);
   }
 
   /**

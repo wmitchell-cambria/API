@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import gov.ca.cwds.cms.data.access.service.impl.clientrelationship.ClientRelationshipCoreService;
 import java.util.Date;
 import java.util.Set;
 
@@ -133,6 +134,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
   private DrmsDocumentTemplateService drmsDocumentTemplateService;
   private AssignmentService assignmentService;
   private ParticipantService participantService;
+  private ClientRelationshipCoreService clientRelationshipService;
   private RIChildClient riChildClient;
   private RIAllegationPerpetratorHistory riAllegationPerpetratorHistory;
   private RIClientAddress riClientAddress;
@@ -276,6 +278,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
     when(participantService.saveParticipants(any(), any(), any(), any(), any()))
         .thenReturn(referralParticipants);
 
+    clientRelationshipService = mock(ClientRelationshipCoreService.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
     screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
 
@@ -285,7 +288,7 @@ public class R04537FirstResponseDeterminedByStaffPersonIdTest {
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
-        crossReportService, participantService, validator, referralDao, new MessageBuilder(),
+        crossReportService, participantService, clientRelationshipService, validator, referralDao, new MessageBuilder(),
         allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
         clientRelationshipDao, screeningSatefyAlertsService);
   }
