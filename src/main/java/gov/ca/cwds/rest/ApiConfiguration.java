@@ -12,7 +12,7 @@ import io.dropwizard.db.DataSourceFactory;
  */
 public class ApiConfiguration extends BaseApiConfiguration {
 
-  private XADataSourceFactory xaRsDataSourceFactory;
+  private XADataSourceFactory xaCmsRsDataSourceFactory;
   private DataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
@@ -46,12 +46,13 @@ public class ApiConfiguration extends BaseApiConfiguration {
   }
 
   @JsonProperty
-  public XADataSourceFactory getXaRsDataSourceFactory() {
-    return xaRsDataSourceFactory;
+  public XADataSourceFactory getXaCmsRsDataSourceFactory() {
+    return xaCmsRsDataSourceFactory;
   }
 
-  public void setXaRsDataSourceFactory(XADataSourceFactory xaRsDataSourceFactory) {
-    this.xaRsDataSourceFactory = xaRsDataSourceFactory;
+  @JsonProperty
+  public void setXaCmsRsDataSourceFactory(XADataSourceFactory xaCmsRsDataSourceFactory) {
+    this.xaCmsRsDataSourceFactory = xaCmsRsDataSourceFactory;
   }
 
 }
