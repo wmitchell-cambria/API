@@ -295,7 +295,7 @@ public class ServicesModule extends AbstractModule {
     LOGGER.debug("provide syscode service");
     final long secondsToRefreshCache = 365L * 24 * 60 * 60; // 365 days
     return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache,
-        config.isLoadSystemCodesAtStartup());
+        config != null ? config.isLoadSystemCodesAtStartup() : true);
   }
 
   /**
