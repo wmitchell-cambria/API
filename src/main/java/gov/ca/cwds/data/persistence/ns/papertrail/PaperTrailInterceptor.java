@@ -63,13 +63,16 @@ import gov.ca.cwds.rest.filters.RequestExecutionContextRegistry;
 public class PaperTrailInterceptor extends EmptyInterceptor
     implements RequestExecutionContextCallback {
 
+  private static final long serialVersionUID = 1L;
+
   private static final Logger LOGGER = LoggerFactory.getLogger(PaperTrailInterceptor.class);
 
   public static final String STR_ARROW = "->";
-  private static final long serialVersionUID = 1L;
+
   private static final String CREATE = "create";
   private static final String UPDATE = "update";
   private static final String DESTROY = "destroy";
+
   private static final ThreadLocal<Set<String>> insertsTlSet =
       ThreadLocal.withInitial(HashSet::new);
   private static final ThreadLocal<Set<String>> updatesTlSet =
@@ -147,12 +150,15 @@ public class PaperTrailInterceptor extends EmptyInterceptor
   @SuppressWarnings("rawtypes")
   @Override
   public void preFlush(Iterator entities) {
+    LOGGER.debug("PaperTrailInterceptor.preFlush");
     processPaperTrail();
     super.preFlush(entities);
   }
 
   protected void processPaperTrail() {
     try {
+      LOGGER.debug("PaperTrailInterceptor.processPaperTrail: inserts: {}, updates: {}, deletes: {}",
+          insertsTlSet.get().size(), updatesTlSet.get().size(), deletesTlSet.get().size());
       insertsTlSet.get()
           .forEach(typeAndId -> paperTrailDao.create(createPaperTrail(typeAndId, CREATE)));
       updatesTlSet.get()

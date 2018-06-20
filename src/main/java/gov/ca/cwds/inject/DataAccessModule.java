@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
@@ -128,6 +130,8 @@ import io.dropwizard.setup.Bootstrap;
  * @see ApiSessionFactoryFactory
  */
 public class DataAccessModule extends AbstractModule {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataAccessModule.class);
 
   private Map<String, Client> clients;
 
@@ -369,7 +373,7 @@ public class DataAccessModule extends AbstractModule {
    */
   @Override
   protected void configure() {
-    // CMS:
+    LOGGER.debug("configure: CMS DAO's");
     bind(AddressUcDao.class);
     bind(AllegationDao.class);
     bind(AllegationPerpetratorHistoryDao.class);
@@ -416,7 +420,7 @@ public class DataAccessModule extends AbstractModule {
     bind(TickleDao.class);
     bind(XaCmsAddressDao.class);
 
-    // NS:
+    LOGGER.debug("configure: NS DAO's");
     bind(AddressDao.class);
     bind(AddressesDao.class);
     bind(AgencyDao.class);
@@ -442,7 +446,7 @@ public class DataAccessModule extends AbstractModule {
     bind(ScreeningDao.class);
     bind(XaNsAddressDao.class);
 
-    // Trigger Tables:
+    LOGGER.debug("configure: Trigger Table DAO's");
     bind(CountyOwnershipDao.class);
     bind(CountyTriggerDao.class);
     bind(CountyTriggerEmbeddable.class);
@@ -456,7 +460,7 @@ public class DataAccessModule extends AbstractModule {
     // System code loader DAO:
     bind(ApiSystemCodeDao.class).to(SystemCodeDaoFileImpl.class);
 
-    // Referential integrity:
+    LOGGER.debug("configure: Referential integrity");
     bind(RIClientCollateral.class);
     bind(RIChildClient.class);
     bind(RIAllegationPerpetratorHistory.class);
