@@ -169,6 +169,8 @@ testConfig:
 triggertables:
   laCountySpecificCode: 19
  
+loadSystemCodesAtStartup: ${LOAD_SYSTEM_CODES_AT_STATUP:-true}
+ 
 webSecurity:
   httpResponseSecurityHeaders:
     # Prevent MIMI sniffing
