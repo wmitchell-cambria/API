@@ -67,6 +67,7 @@ public class ScreeningToReferralService implements CrudsService {
 
   private ReferralDao referralDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   /**
    * Constructor
@@ -90,7 +91,8 @@ public class ScreeningToReferralService implements CrudsService {
       MessageBuilder messageBuilder,
       AllegationPerpetratorHistoryService allegationPerpetratorHistoryService, Reminders reminders,
       GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService,
-      ClientRelationshipDao clientRelationshipDao) {
+      ClientRelationshipDao clientRelationshipDao,
+      ScreeningSatefyAlertService screeningSatefyAlertsService) {
 
     super();
     this.clientRelationshipDao = clientRelationshipDao;
@@ -104,6 +106,7 @@ public class ScreeningToReferralService implements CrudsService {
     this.allegationPerpetratorHistoryService = allegationPerpetratorHistoryService;
     this.reminders = reminders;
     this.governmentOrganizationCrossReportService = governmentOrganizationCrossReportService;
+    this.screeningSatefyAlertsService = screeningSatefyAlertsService;
   }
 
   @UnitOfWork(value = "cms")
@@ -137,6 +140,7 @@ public class ScreeningToReferralService implements CrudsService {
     Set<Allegation> resultAllegations = createAllegations(screeningToReferral, referralId,
         clientParticipants.getVictimIds(), clientParticipants.getPerpetratorIds());
 
+    screeningSatefyAlertsService.create(screeningToReferral, referralId, clientParticipants);
     PostedScreeningToReferral pstr =
         PostedScreeningToReferral.createWithDefaults(referralId, screeningToReferral,
             clientParticipants.getParticipants(), resultCrossReports, resultAllegations);

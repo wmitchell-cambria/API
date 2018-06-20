@@ -6,8 +6,6 @@ import static org.mockito.Mockito.mock;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import gov.ca.cwds.rest.services.cms.CmsDocumentService;
-import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,6 +39,7 @@ import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
+import gov.ca.cwds.rest.services.ScreeningSatefyAlertService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -49,11 +48,12 @@ import gov.ca.cwds.rest.services.cms.AssignmentService;
 import gov.ca.cwds.rest.services.cms.ChildClientService;
 import gov.ca.cwds.rest.services.cms.ClientAddressService;
 import gov.ca.cwds.rest.services.cms.ClientService;
+import gov.ca.cwds.rest.services.cms.CmsDocumentService;
 import gov.ca.cwds.rest.services.cms.CrossReportService;
 import gov.ca.cwds.rest.services.cms.DrmsDocumentService;
+import gov.ca.cwds.rest.services.cms.DrmsDocumentTemplateService;
 import gov.ca.cwds.rest.services.cms.GovernmentOrganizationCrossReportService;
 import gov.ca.cwds.rest.services.cms.LongTextService;
-import gov.ca.cwds.rest.services.cms.OtherCaseReferralDrmsDocumentService;
 import gov.ca.cwds.rest.services.cms.ReferralClientService;
 import gov.ca.cwds.rest.services.cms.ReferralService;
 import gov.ca.cwds.rest.services.cms.ReporterService;
@@ -99,6 +99,7 @@ public class R00796ScreeningToReferralDeleteTest {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private ReferralDao referralDao;
   private ClientDao clientDao;
@@ -143,9 +144,10 @@ public class R00796ScreeningToReferralDeleteTest {
     staffpersonDao = mock(StaffPersonDao.class);
     riReferral = mock(RIReferral.class);
     clientRelationshipDao = mock(ClientRelationshipDao.class);
-    referralService = new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger,
-        triggerTablesDao, staffpersonDao, assignmentService, validator,cmsDocumentService, drmsDocumentService,
-        drmsDocumentTemplateService, addressService, longTextService, riReferral);
+    referralService =
+        new ReferralService(referralDao, nonLACountyTriggers, laCountyTrigger, triggerTablesDao,
+            staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
+            drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
     clientDao = mock(ClientDao.class);
     staffpersonDao = mock(StaffPersonDao.class);
@@ -219,12 +221,14 @@ public class R00796ScreeningToReferralDeleteTest {
 
     participantService = mock(ParticipantService.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+    screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
     reminders = mock(Reminders.class);
 
     screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
         crossReportService, participantService,
         Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
-        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService, clientRelationshipDao);
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
+        clientRelationshipDao, screeningSatefyAlertsService);
   }
 
   /**

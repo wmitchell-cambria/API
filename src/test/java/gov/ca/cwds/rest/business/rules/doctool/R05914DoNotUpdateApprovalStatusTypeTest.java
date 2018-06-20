@@ -52,6 +52,7 @@ import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
+import gov.ca.cwds.rest.services.ScreeningSatefyAlertService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -110,6 +111,7 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
   private RIReferral riReferral;
   private RIReferralClient riReferralClient;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private ReferralDao referralDao;
   private ClientDao clientDao;
@@ -242,13 +244,14 @@ public class R05914DoNotUpdateApprovalStatusTypeTest {
 
     reminders = mock(Reminders.class);
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
+    screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
     participantService = mock(ParticipantService.class);
 
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
+        clientRelationshipDao, screeningSatefyAlertsService);
 
   }
 

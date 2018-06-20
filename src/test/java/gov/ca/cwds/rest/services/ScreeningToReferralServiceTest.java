@@ -52,6 +52,7 @@ import gov.ca.cwds.data.cms.ReferralDao;
 import gov.ca.cwds.data.cms.ReporterDao;
 import gov.ca.cwds.data.cms.SsaName3Dao;
 import gov.ca.cwds.data.cms.StaffPersonDao;
+import gov.ca.cwds.data.cms.TestIntakeCodeCache;
 import gov.ca.cwds.data.cms.TestSystemCodeCache;
 import gov.ca.cwds.data.persistence.cms.ClientRelationship;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
@@ -179,6 +180,7 @@ public class ScreeningToReferralServiceTest {
   private Validator validator;
   private ExternalInterfaceTables externalInterfaceTables;
   private GovernmentOrganizationCrossReportService governmentOrganizationCrossReportService;
+  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private Participant defaultVictim;
   private Participant defaultReporter;
@@ -197,6 +199,7 @@ public class ScreeningToReferralServiceTest {
    * Initialize system code cache
    */
   private TestSystemCodeCache testSystemCodeCache = new TestSystemCodeCache();
+  private TestIntakeCodeCache testIntakeCodeCache = new TestIntakeCodeCache();
 
   @SuppressWarnings("javadoc")
   @Rule
@@ -296,11 +299,12 @@ public class ScreeningToReferralServiceTest {
     messageBuilder = new MessageBuilder();
 
     governmentOrganizationCrossReportService = mock(GovernmentOrganizationCrossReportService.class);
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, messageBuilder, allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningSatefyAlertsService = mock(ScreeningSatefyAlertService.class);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, messageBuilder,
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
+        clientRelationshipDao, screeningSatefyAlertsService);
 
   }
 
@@ -1150,11 +1154,11 @@ public class ScreeningToReferralServiceTest {
     when(clientAddressService.findByAddressAndClient(eq(victimAddress), any())).thenReturn(null);
     when(clientAddressService.findByAddressAndClient(eq(perpAddress), any())).thenReturn(null);
 
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
+        clientRelationshipDao, screeningSatefyAlertsService);
 
     mockParticipantService(screeningToReferral);
 

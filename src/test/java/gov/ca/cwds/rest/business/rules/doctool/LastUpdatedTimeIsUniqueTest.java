@@ -4,7 +4,7 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -72,6 +72,7 @@ import gov.ca.cwds.rest.business.rules.UpperCaseTables;
 import gov.ca.cwds.rest.filters.TestingRequestExecutionContext;
 import gov.ca.cwds.rest.messages.MessageBuilder;
 import gov.ca.cwds.rest.services.ParticipantService;
+import gov.ca.cwds.rest.services.ScreeningSatefyAlertService;
 import gov.ca.cwds.rest.services.ScreeningToReferralService;
 import gov.ca.cwds.rest.services.cms.AddressService;
 import gov.ca.cwds.rest.services.cms.AllegationPerpetratorHistoryService;
@@ -163,6 +164,7 @@ public class LastUpdatedTimeIsUniqueTest {
   private MessageBuilder messageBuilder;
   private CaseDao caseDao;
   private ClientRelationshipDao clientRelationshipDao;
+  private ScreeningSatefyAlertService screeningSatefyAlertsService;
 
   private Validator validator;
 
@@ -287,11 +289,11 @@ public class LastUpdatedTimeIsUniqueTest {
             staffpersonDao, assignmentService, validator, cmsDocumentService, drmsDocumentService,
             drmsDocumentTemplateService, addressService, longTextService, riReferral);
 
-    screeningToReferralService =
-        new ScreeningToReferralService(referralService, allegationService, crossReportService,
-            participantService, Validation.buildDefaultValidatorFactory().getValidator(),
-            referralDao, new MessageBuilder(), allegationPerpetratorHistoryService, reminders,
-            governmentOrganizationCrossReportService, clientRelationshipDao);
+    screeningToReferralService = new ScreeningToReferralService(referralService, allegationService,
+        crossReportService, participantService,
+        Validation.buildDefaultValidatorFactory().getValidator(), referralDao, new MessageBuilder(),
+        allegationPerpetratorHistoryService, reminders, governmentOrganizationCrossReportService,
+        clientRelationshipDao, screeningSatefyAlertsService);
   }
 
   /**
