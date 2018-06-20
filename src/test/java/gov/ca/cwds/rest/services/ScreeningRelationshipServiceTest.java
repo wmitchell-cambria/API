@@ -33,7 +33,7 @@ public class ScreeningRelationshipServiceTest {
     service = new ScreeningRelationshipService(relationshipDao, relationshipMapper);
     relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(),
         new Date(), true, false);
-    relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190);
+    relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190, false, true);
   }
 
   @Test
@@ -71,7 +71,8 @@ public class ScreeningRelationshipServiceTest {
     Date updatedDate = new Date();
     relationshipEntity = new Relationship(newId, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        savedDate, updatedDate, null, false);
+        savedDate, updatedDate, relationship.isAbsentParentIndicator(),
+        relationship.getSameHomeStatus());
 
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
     ScreeningRelationship saved = (ScreeningRelationship) service.create(relationship);
@@ -82,8 +83,8 @@ public class ScreeningRelationshipServiceTest {
     assertEquals(relationshipEntity.getRelationshipType(), saved.getRelationshipType());
     assertEquals(relationshipEntity.getCreatedAt(), savedDate);
     assertEquals(relationshipEntity.getUpdatedAt(), updatedDate);
-    assertEquals(relationshipEntity.getAbsentParentIndicator(), saved.getAbsentParentIndicator());
-    assertEquals(relationshipEntity.isSameHomeStatus(), saved.isSameHomeStatus());
+    assertEquals(relationshipEntity.isAbsentParentIndicator(), saved.isAbsentParentIndicator());
+    assertEquals(relationshipEntity.getSameHomeStatus(), saved.getSameHomeStatus());
   }
 
   @Test

@@ -46,8 +46,8 @@ public class ScreeningRelationshipService implements CrudsService {
     ScreeningRelationship relationship = (ScreeningRelationship) request;
     Relationship entity = new Relationship(null, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        new Date(), new Date(), relationship.getAbsentParentIndicator(),
-        relationship.isSameHomeStatus());
+        new Date(), new Date(), relationship.isAbsentParentIndicator(),
+        relationship.getSameHomeStatus());
     entity = relationshipDao.create(entity);
     relationship.setId(entity.getId());
     LOGGER.debug("saved relationship {}", relationship);

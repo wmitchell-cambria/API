@@ -40,16 +40,16 @@ public class Relationship implements PersistentObject {
   private Date updatedAt;
 
   @Column(name = "absent_parent_indicator")
-  private Boolean absentParentIndicator;
+  private boolean absentParentIndicator;
 
   @Column(name = "same_home_status")
-  private boolean sameHomeStatus;
+  private Boolean sameHomeStatus;
 
   public Relationship() {
   }
 
   public Relationship(String id, String clientId, String relativeId, int relationshipType,
-      Date createdAt, Date updatedAt, Boolean absentParentIndicator, boolean sameHomeStatus) {
+      Date createdAt, Date updatedAt, boolean absentParentIndicator, Boolean sameHomeStatus) {
     this.id = id;
     this.clientId = clientId;
     this.relativeId = relativeId;
@@ -113,19 +113,19 @@ public class Relationship implements PersistentObject {
     this.updatedAt = updatedAt;
   }
 
-  public Boolean getAbsentParentIndicator() {
+  public boolean isAbsentParentIndicator() {
     return absentParentIndicator;
   }
 
-  public void setAbsentParentIndicator(Boolean absentParentIndicator) {
+  public void setAbsentParentIndicator(boolean absentParentIndicator) {
     this.absentParentIndicator = absentParentIndicator;
   }
 
-  public boolean isSameHomeStatus() {
+  public Boolean getSameHomeStatus() {
     return sameHomeStatus;
   }
 
-  public void setSameHomeStatus(boolean sameHomeStatus) {
+  public void setSameHomeStatus(Boolean sameHomeStatus) {
     this.sameHomeStatus = sameHomeStatus;
   }
 }

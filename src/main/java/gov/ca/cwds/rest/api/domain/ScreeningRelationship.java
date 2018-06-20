@@ -32,22 +32,24 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
   @JsonProperty("absent_parent_indicator")
   @ApiModelProperty(required = true, readOnly = false,
       value = "This indicates if the parent CLIENT is absent for the child with whom the relationship is being defined", example = "N")
-  private Boolean absentParentIndicator;
+  private boolean absentParentIndicator;
 
   @JsonProperty("same_home_status")
   @ApiModelProperty(required = true, readOnly = false,
       value = "Indicates whether the two CLIENTs live in the same home.", example = "Y")
-  private boolean sameHomeStatus;
+  private Boolean sameHomeStatus;
 
   public ScreeningRelationship() {
   }
 
   public ScreeningRelationship(String id, String personId, String relationId,
-      int relationshipType) {
+      int relationshipType, Boolean sameHomeStatus, boolean absentParentIndicator) {
     this.id = id;
     this.clientId = personId;
     this.relativeId = relationId;
     this.relationshipType = relationshipType;
+    this.sameHomeStatus = sameHomeStatus;
+    this.absentParentIndicator = absentParentIndicator;
   }
 
   public String getId() {
@@ -82,19 +84,19 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     this.relationshipType = relationshipType;
   }
 
-  public Boolean getAbsentParentIndicator() {
+  public boolean isAbsentParentIndicator() {
     return absentParentIndicator;
   }
 
-  public void setAbsentParentIndicator(Boolean absentParentIndicator) {
+  public void setAbsentParentIndicator(boolean absentParentIndicator) {
     this.absentParentIndicator = absentParentIndicator;
   }
 
-  public boolean isSameHomeStatus() {
+  public Boolean getSameHomeStatus() {
     return sameHomeStatus;
   }
 
-  public void setSameHomeStatus(boolean sameHomeStatus) {
+  public void setSameHomeStatus(Boolean sameHomeStatus) {
     this.sameHomeStatus = sameHomeStatus;
   }
 

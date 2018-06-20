@@ -21,8 +21,8 @@ public class RelationshipTest {
     assertEquals(relationship.getRelationshipType(), RELATIONSHIP_TYPE);
     assertTrue(relationship.getCreatedAt().equals(anHourAgo));
     assertTrue(relationship.getUpdatedAt().equals(now));
-    assertFalse(relationship.isSameHomeStatus());
-    assertTrue(relationship.getAbsentParentIndicator());
+    assertFalse(relationship.getSameHomeStatus());
+    assertTrue(relationship.isAbsentParentIndicator());
   }
 
 }

@@ -43,7 +43,6 @@ import gov.ca.cwds.rest.services.cms.TickleService;
 
 /**
  * @author CWDS API Team
- *
  */
 public class R04631ReferralInvestigationContactDueTest {
 
@@ -83,7 +82,7 @@ public class R04631ReferralInvestigationContactDueTest {
   /**
    * Test if the allegation depsotion type is Entered in Error(5918) CrossReport reminder is not
    * created
-   * 
+   *
    * @throws Exception - exception
    */
   @Test
@@ -145,7 +144,8 @@ public class R04631ReferralInvestigationContactDueTest {
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
     R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
-        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao,
+            tickleService);
     R04631ReferralInvestigationContactDue r04631ReferralInvestigationContactDue =
         new R04631ReferralInvestigationContactDue(clientDao, referralDao, tickleService);
 
@@ -157,7 +157,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
   /**
    * Test for the Client DateOfBirth below 19 years referral Investigation Reminder is created
-   * 
+   *
    * @throws Exception - exception
    */
   @Test
@@ -220,7 +220,8 @@ public class R04631ReferralInvestigationContactDueTest {
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
     R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
-        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao,
+            tickleService);
     R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue =
         new R04464CrossReportLawEnforcementDue(referralDao, allegationDao, reporterDao,
             crossReportDao, tickleService);
@@ -236,7 +237,7 @@ public class R04631ReferralInvestigationContactDueTest {
 
   /**
    * Test for No remiders created
-   * 
+   *
    * @throws Exception - exception
    */
   @Test
@@ -299,7 +300,8 @@ public class R04631ReferralInvestigationContactDueTest {
     when(reporterDao.find(any(String.class))).thenReturn(savedReporter);
     when(crossReportDao.find(any(String.class))).thenReturn(savedCrossReport);
     R05443AndR03341StateIdMissing r05443AndR03341StateIdMissing =
-        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao, tickleService);
+        new R05443AndR03341StateIdMissing(clientDao, referralDao, referralClientDao, stateIdDao,
+            tickleService);
     R04464CrossReportLawEnforcementDue r04464CrossReportLawEnforcementDue =
         new R04464CrossReportLawEnforcementDue(referralDao, allegationDao, reporterDao,
             crossReportDao, tickleService);
