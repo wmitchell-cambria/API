@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import gov.ca.cwds.data.cms.AddressUcDao;
@@ -61,7 +62,6 @@ import gov.ca.cwds.data.cms.StateIdDao;
 import gov.ca.cwds.data.cms.SystemCodeDao;
 import gov.ca.cwds.data.cms.SystemMetaDao;
 import gov.ca.cwds.data.cms.TickleDao;
-import gov.ca.cwds.data.cms.XaCmsAddressDao;
 import gov.ca.cwds.data.dao.contact.ContactPartyDeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.DeliveredServiceDao;
 import gov.ca.cwds.data.dao.contact.IndividualDeliveredServiceDao;
@@ -91,14 +91,12 @@ import gov.ca.cwds.data.ns.PhoneNumberDao;
 import gov.ca.cwds.data.ns.RaceDao;
 import gov.ca.cwds.data.ns.ScreeningAddressDao;
 import gov.ca.cwds.data.ns.ScreeningDao;
-import gov.ca.cwds.data.ns.XaNsAddressDao;
 import gov.ca.cwds.data.persistence.cms.ApiSystemCodeDao;
 import gov.ca.cwds.data.persistence.cms.CountyTriggerEmbeddable;
 import gov.ca.cwds.data.persistence.cms.SystemCodeDaoFileImpl;
 import gov.ca.cwds.data.persistence.ns.papertrail.PaperTrailInterceptor;
 import gov.ca.cwds.data.persistence.xa.CandaceSessionFactoryImpl;
 import gov.ca.cwds.data.persistence.xa.XaCmsRsHibernateBundle;
-import gov.ca.cwds.data.persistence.xa.XaCmsRsSessionFactory;
 import gov.ca.cwds.data.rules.TriggerTablesDao;
 import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.ElasticUtils;
@@ -418,7 +416,7 @@ public class DataAccessModule extends AbstractModule {
     bind(SystemCodeDao.class);
     bind(SystemMetaDao.class);
     bind(TickleDao.class);
-    bind(XaCmsAddressDao.class);
+    // bind(XaCmsAddressDao.class);
 
     LOGGER.debug("configure: NS DAO's");
     bind(AddressDao.class);
@@ -444,7 +442,7 @@ public class DataAccessModule extends AbstractModule {
     bind(RaceDao.class);
     bind(ScreeningAddressDao.class);
     bind(ScreeningDao.class);
-    bind(XaNsAddressDao.class);
+    // bind(XaNsAddressDao.class);
 
     LOGGER.debug("configure: Trigger Table DAO's");
     bind(CountyOwnershipDao.class);
@@ -528,24 +526,27 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @CmsSessionFactory
-  @XaCmsSessionFactory
-  public SessionFactory cmsSessionFactory() {
+  @Singleton
+  public SessionFactory cmsSessionFactory(
+      @XaCmsHibernateBundle FerbHibernateBundle xaCmsHibernateBundle) {
     return new CandaceSessionFactoryImpl(cmsHibernateBundle.getSessionFactory(),
         xaCmsHibernateBundle.getSessionFactory());
   }
 
   @Provides
   @NsSessionFactory
-  @XaNsSessionFactory
-  public SessionFactory nsSessionFactory() {
+  @Singleton
+  public SessionFactory nsSessionFactory(
+      @XaNsHibernateBundle FerbHibernateBundle xaNsHibernateBundle) {
     return new CandaceSessionFactoryImpl(nsHibernateBundle.getSessionFactory(),
         xaNsHibernateBundle.getSessionFactory());
   }
 
   @Provides
   @CwsRsSessionFactory
-  @XaCmsRsSessionFactory
-  public SessionFactory rsSessionFactory() {
+  @Singleton
+  public SessionFactory rsSessionFactory(
+      @XaCmsRsHibernateBundle FerbHibernateBundle xaCmsRsHibernateBundle) {
     return new CandaceSessionFactoryImpl(rsHibernateBundle.getSessionFactory(),
         xaCmsRsHibernateBundle.getSessionFactory());
   }
