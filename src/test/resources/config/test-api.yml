@@ -54,7 +54,7 @@ cmsDataSourceFactory:
       hibernate.format_sql: true
       hibernate.use_sql_comments: false
       hibernate.default_schema: cwsint
-      hibernate.connection.autocommit: false
+      hibernate.connection.autocommit: false      
 
 rsDataSourceFactory:
   autoCommitByDefault: false
@@ -157,6 +157,8 @@ elasticsearch:
 
 triggertables:
   laCountySpecificCode: 19
+  
+loadSystemCodesAtStartup: false
 
 webSecurity:
   httpResponseSecurityHeaders:
