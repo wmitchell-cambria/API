@@ -169,7 +169,7 @@ testConfig:
 triggertables:
   laCountySpecificCode: 19
  
-loadSystemCodesAtStartup: ${LOAD_SYSTEM_CODES_AT_STATUP:-true}
+loadSystemCodesAtStartup: ${LOAD_SYSTEM_CODES_AT_STARTUP:-true}
  
 webSecurity:
   httpResponseSecurityHeaders:
