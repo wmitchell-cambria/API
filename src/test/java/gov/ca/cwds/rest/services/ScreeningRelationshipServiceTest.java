@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import gov.ca.cwds.data.ns.RelationshipDao;
 import gov.ca.cwds.data.persistence.ns.Relationship;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
+import gov.ca.cwds.rest.api.domain.enums.SameHomeStatus;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,8 +33,8 @@ public class ScreeningRelationshipServiceTest {
     relationshipMapper = RelationshipMapper.INSTANCE;
     service = new ScreeningRelationshipService(relationshipDao, relationshipMapper);
     relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(),
-        new Date(), true, false);
-    relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190);
+        new Date(), true, null);
+    relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190, true, "U");
   }
 
   @Test
@@ -71,7 +72,7 @@ public class ScreeningRelationshipServiceTest {
     Date updatedDate = new Date();
     relationshipEntity = new Relationship(newId, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        savedDate, updatedDate, null, false);
+        savedDate, updatedDate, true, null);
 
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
     ScreeningRelationship saved = (ScreeningRelationship) service.create(relationship);
@@ -82,8 +83,8 @@ public class ScreeningRelationshipServiceTest {
     assertEquals(relationshipEntity.getRelationshipType(), saved.getRelationshipType());
     assertEquals(relationshipEntity.getCreatedAt(), savedDate);
     assertEquals(relationshipEntity.getUpdatedAt(), updatedDate);
-    assertEquals(relationshipEntity.getAbsentParentIndicator(), saved.getAbsentParentIndicator());
-    assertEquals(relationshipEntity.isSameHomeStatus(), saved.isSameHomeStatus());
+    assertEquals(relationshipEntity.isAbsentParentIndicator(), saved.isAbsentParentIndicator());
+    assertEquals(relationshipEntity.getSameHomeStatus(), SameHomeStatus.toValue(relationship.getSameHomeStatus()));
   }
 
   @Test

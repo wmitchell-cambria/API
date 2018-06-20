@@ -6,6 +6,7 @@ import gov.ca.cwds.data.persistence.ns.Relationship;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.ScreeningRelationship;
+import gov.ca.cwds.rest.api.domain.enums.SameHomeStatus;
 import java.io.Serializable;
 import java.util.Date;
 import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
@@ -46,8 +47,8 @@ public class ScreeningRelationshipService implements CrudsService {
     ScreeningRelationship relationship = (ScreeningRelationship) request;
     Relationship entity = new Relationship(null, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        new Date(), new Date(), relationship.getAbsentParentIndicator(),
-        relationship.isSameHomeStatus());
+        new Date(), new Date(), relationship.isAbsentParentIndicator(),
+        SameHomeStatus.toValue(relationship.getSameHomeStatus()));
     entity = relationshipDao.create(entity);
     relationship.setId(entity.getId());
     LOGGER.debug("saved relationship {}", relationship);

@@ -2,9 +2,11 @@ package gov.ca.cwds.rest.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gov.ca.cwds.rest.api.Request;
+import io.dropwizard.validation.OneOf;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Objects;
+import javax.ws.rs.DefaultValue;
 
 public class ScreeningRelationship extends ReportingDomain implements Request {
 
@@ -31,23 +33,27 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
 
   @JsonProperty("absent_parent_indicator")
   @ApiModelProperty(required = true, readOnly = false,
-      value = "This indicates if the parent CLIENT is absent for the child with whom the relationship is being defined", example = "N")
-  private Boolean absentParentIndicator;
+      value = "This indicates if the parent CLIENT is absent for the child with whom the relationship is being defined", example = "true" )
+  private boolean absentParentIndicator;
 
   @JsonProperty("same_home_status")
+  @OneOf({"Y", "N", "U"})
+  @DefaultValue(value = "U")
   @ApiModelProperty(required = true, readOnly = false,
       value = "Indicates whether the two CLIENTs live in the same home.", example = "Y")
-  private boolean sameHomeStatus;
+  private String sameHomeStatus;
 
   public ScreeningRelationship() {
   }
 
   public ScreeningRelationship(String id, String personId, String relationId,
-      int relationshipType) {
+      int relationshipType, boolean absentParentIndicator, String sameHomeStatus) {
     this.id = id;
     this.clientId = personId;
     this.relativeId = relationId;
     this.relationshipType = relationshipType;
+    this.absentParentIndicator = absentParentIndicator;
+    this.sameHomeStatus = sameHomeStatus;
   }
 
   public String getId() {
@@ -82,19 +88,19 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     this.relationshipType = relationshipType;
   }
 
-  public Boolean getAbsentParentIndicator() {
+  public boolean isAbsentParentIndicator() {
     return absentParentIndicator;
   }
 
-  public void setAbsentParentIndicator(Boolean absentParentIndicator) {
+  public void setAbsentParentIndicator(boolean absentParentIndicator) {
     this.absentParentIndicator = absentParentIndicator;
   }
 
-  public boolean isSameHomeStatus() {
+  public String getSameHomeStatus() {
     return sameHomeStatus;
   }
 
-  public void setSameHomeStatus(boolean sameHomeStatus) {
+  public void setSameHomeStatus(String sameHomeStatus) {
     this.sameHomeStatus = sameHomeStatus;
   }
 
