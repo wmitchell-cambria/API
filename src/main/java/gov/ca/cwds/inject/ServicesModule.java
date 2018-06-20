@@ -286,14 +286,16 @@ public class ServicesModule extends AbstractModule {
   /**
    * @param systemCodeDao - systemCodeDao
    * @param systemMetaDao - systemMetaDao
+   * @param config
    * @return the systemCodes
    */
   @Provides
   public SystemCodeService provideSystemCodeService(SystemCodeDao systemCodeDao,
-      SystemMetaDao systemMetaDao) {
+      SystemMetaDao systemMetaDao, ApiConfiguration config) {
     LOGGER.debug("provide syscode service");
     final long secondsToRefreshCache = 365L * 24 * 60 * 60; // 365 days
-    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache, true);
+    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache,
+        config.isLoadSystemCodesAtStartup());
   }
 
   /**

@@ -14,6 +14,7 @@ public class ApiConfiguration extends BaseApiConfiguration {
   private DataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
+  private boolean loadSystemCodesAtStartup = true;
 
   public void setRsDataSourceFactory(DataSourceFactory rsDataSourceFactory) {
     this.rsDataSourceFactory = rsDataSourceFactory;
@@ -43,4 +44,13 @@ public class ApiConfiguration extends BaseApiConfiguration {
     this.upgradeDbOnStart = upgradeDbOnStart;
   }
 
+  @JsonProperty
+  public boolean isLoadSystemCodesAtStartup() {
+    return loadSystemCodesAtStartup;
+  }
+
+  @JsonProperty
+  public void setLoadSystemCodesAtStartup(boolean loadSystemCodesAtStartup) {
+    this.loadSystemCodesAtStartup = loadSystemCodesAtStartup;
+  }
 }
