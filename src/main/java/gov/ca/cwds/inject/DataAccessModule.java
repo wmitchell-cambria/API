@@ -541,8 +541,7 @@ public class DataAccessModule extends AbstractModule {
       @CmsHibernateBundle HibernateBundle<ApiConfiguration> cmsHibernateBundle,
       @XaCmsHibernateBundle FerbHibernateBundle xaCmsHibernateBundle) {
     LOGGER.info("DataAccessModule.cmsSessionFactory()");
-    return new CandaceSessionFactoryImpl(cmsHibernateBundle.getSessionFactory(),
-        xaCmsHibernateBundle.getSessionFactory());
+    return new CandaceSessionFactoryImpl(cmsHibernateBundle, xaCmsHibernateBundle);
   }
 
   @Provides
@@ -552,8 +551,7 @@ public class DataAccessModule extends AbstractModule {
       @NsHibernateBundle HibernateBundle<ApiConfiguration> nsHibernateBundle,
       @XaNsHibernateBundle FerbHibernateBundle xaNsHibernateBundle) {
     LOGGER.info("DataAccessModule.nsSessionFactory()");
-    return new CandaceSessionFactoryImpl(nsHibernateBundle.getSessionFactory(),
-        xaNsHibernateBundle.getSessionFactory());
+    return new CandaceSessionFactoryImpl(nsHibernateBundle, xaNsHibernateBundle);
   }
 
   @Provides
@@ -563,8 +561,7 @@ public class DataAccessModule extends AbstractModule {
       @CwsRsHibernateBundle HibernateBundle<ApiConfiguration> cmsRsHibernateBundle,
       @XaCmsRsHibernateBundle FerbHibernateBundle xaCmsRsHibernateBundle) {
     LOGGER.info("DataAccessModule.rsSessionFactory()");
-    return new CandaceSessionFactoryImpl(cmsRsHibernateBundle.getSessionFactory(),
-        xaCmsRsHibernateBundle.getSessionFactory());
+    return new CandaceSessionFactoryImpl(cmsRsHibernateBundle, xaCmsRsHibernateBundle);
   }
 
   // ==========================
