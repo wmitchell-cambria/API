@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Objects;
 
 public class ScreeningRelationship extends ReportingDomain implements Request {
+
   @JsonProperty("id")
   @ApiModelProperty(required = true, readOnly = false, value = "Screening Relationship Id",
       example = "12345")
@@ -28,9 +29,21 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
       value = "The relationship type code", example = "190")
   private int relationshipType;
 
-  public ScreeningRelationship() { }
+  @JsonProperty("absent_parent_indicator")
+  @ApiModelProperty(required = true, readOnly = false,
+      value = "This indicates if the parent CLIENT is absent for the child with whom the relationship is being defined", example = "N")
+  private Boolean absentParentIndicator;
 
-  public ScreeningRelationship(String id, String personId, String relationId, int relationshipType) {
+  @JsonProperty("same_home_status")
+  @ApiModelProperty(required = true, readOnly = false,
+      value = "Indicates whether the two CLIENTs live in the same home.", example = "Y")
+  private boolean sameHomeStatus;
+
+  public ScreeningRelationship() {
+  }
+
+  public ScreeningRelationship(String id, String personId, String relationId,
+      int relationshipType) {
     this.id = id;
     this.clientId = personId;
     this.relativeId = relationId;
@@ -69,6 +82,22 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
     this.relationshipType = relationshipType;
   }
 
+  public Boolean getAbsentParentIndicator() {
+    return absentParentIndicator;
+  }
+
+  public void setAbsentParentIndicator(Boolean absentParentIndicator) {
+    this.absentParentIndicator = absentParentIndicator;
+  }
+
+  public boolean isSameHomeStatus() {
+    return sameHomeStatus;
+  }
+
+  public void setSameHomeStatus(boolean sameHomeStatus) {
+    this.sameHomeStatus = sameHomeStatus;
+  }
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
@@ -91,10 +120,12 @@ public class ScreeningRelationship extends ReportingDomain implements Request {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
     ScreeningRelationship that = (ScreeningRelationship) o;
     return relationshipType == that.relationshipType
         && Objects.equals(id, that.id)

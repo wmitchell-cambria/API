@@ -13,12 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ScreeningRelationshipService implements CrudsService {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(ScreeningRelationshipService.class);
   private RelationshipDao relationshipDao;
   private RelationshipMapper relationshipMapper;
 
   @Inject
-  public ScreeningRelationshipService(RelationshipDao relationshipDao, RelationshipMapper relationshipMapper){
+  public ScreeningRelationshipService(RelationshipDao relationshipDao,
+      RelationshipMapper relationshipMapper) {
     super();
     this.relationshipDao = relationshipDao;
     this.relationshipMapper = relationshipMapper;
@@ -28,7 +30,7 @@ public class ScreeningRelationshipService implements CrudsService {
   public Response find(Serializable serializable) {
     assert serializable instanceof String;
     Relationship entity = relationshipDao.find(serializable);
-    if (entity != null){
+    if (entity != null) {
       return relationshipMapper.map(entity);
     }
     return null;
@@ -44,8 +46,9 @@ public class ScreeningRelationshipService implements CrudsService {
     ScreeningRelationship relationship = (ScreeningRelationship) request;
     Relationship entity = new Relationship(null, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        new Date(), new Date());
-        entity = relationshipDao.create(entity);
+        new Date(), new Date(), relationship.getAbsentParentIndicator(),
+        relationship.isSameHomeStatus());
+    entity = relationshipDao.create(entity);
     relationship.setId(entity.getId());
     LOGGER.debug("saved relationship {}", relationship);
     return relationship;

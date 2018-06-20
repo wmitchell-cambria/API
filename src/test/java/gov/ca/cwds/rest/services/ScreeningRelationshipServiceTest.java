@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ScreeningRelationshipServiceTest {
+
   private ScreeningRelationshipService service;
   private ScreeningRelationship relationship;
   private Relationship relationshipEntity;
@@ -26,16 +27,17 @@ public class ScreeningRelationshipServiceTest {
   private RelationshipMapper relationshipMapper;
 
   @Before
-  public void setup(){
+  public void setup() {
     relationshipDao = mock(RelationshipDao.class);
     relationshipMapper = RelationshipMapper.INSTANCE;
     service = new ScreeningRelationshipService(relationshipDao, relationshipMapper);
-    relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(), new Date());
+    relationshipEntity = new Relationship("123", "ClientID", "RelationId", 190, new Date(),
+        new Date(), true, false);
     relationship = new ScreeningRelationship("123", "ClientID", "RelationId", 190);
   }
 
   @Test
-  public void shouldReturnScreeningRelationshipWhenFindIsCalled(){
+  public void shouldReturnScreeningRelationshipWhenFindIsCalled() {
     when(relationshipDao.find(any())).thenReturn(relationshipEntity);
     String id = "123";
     assertEquals(service.find(id), relationship);
@@ -43,7 +45,7 @@ public class ScreeningRelationshipServiceTest {
   }
 
   @Test
-  public void shouldReturnNullWhenNotFound(){
+  public void shouldReturnNullWhenNotFound() {
     when(relationshipDao.find(any())).thenReturn(null);
     String id = "123";
     assertNull(service.find(id));
@@ -51,28 +53,28 @@ public class ScreeningRelationshipServiceTest {
   }
 
   @Test
-  public void shouldReturnNullWhenDeleteIsCalled(){
+  public void shouldReturnNullWhenDeleteIsCalled() {
     assertNull(service.delete(serialized));
   }
 
   @Test
-  public void shouldSaveRelationshipWhenCreateIsCalled(){
+  public void shouldSaveRelationshipWhenCreateIsCalled() {
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
     service.create(relationship);
     verify(relationshipDao).create(isA(Relationship.class));
   }
 
   @Test
-  public void shouldReturnSavedRelationWhenCreateIsCalled(){
+  public void shouldReturnSavedRelationWhenCreateIsCalled() {
     String newId = "123";
     Date savedDate = new Date();
     Date updatedDate = new Date();
     relationshipEntity = new Relationship(newId, relationship.getClientId(),
         relationship.getRelativeId(), relationship.getRelationshipType(),
-        savedDate, updatedDate );
+        savedDate, updatedDate, null, false);
 
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
-    ScreeningRelationship saved = (ScreeningRelationship)service.create(relationship);
+    ScreeningRelationship saved = (ScreeningRelationship) service.create(relationship);
     assertEquals(newId, saved.getId());
     assertEquals(relationshipEntity.getId(), saved.getId());
     assertEquals(relationshipEntity.getClientId(), saved.getClientId());
@@ -80,17 +82,19 @@ public class ScreeningRelationshipServiceTest {
     assertEquals(relationshipEntity.getRelationshipType(), saved.getRelationshipType());
     assertEquals(relationshipEntity.getCreatedAt(), savedDate);
     assertEquals(relationshipEntity.getUpdatedAt(), updatedDate);
+    assertEquals(relationshipEntity.getAbsentParentIndicator(), saved.getAbsentParentIndicator());
+    assertEquals(relationshipEntity.isSameHomeStatus(), saved.isSameHomeStatus());
   }
 
   @Test
-  public void shouldUpdateTimeStampsWhenCreateIsCalled(){
+  public void shouldUpdateTimeStampsWhenCreateIsCalled() {
     Date beforeTestTime = new Date();
     when(relationshipDao.create(any())).thenReturn(relationshipEntity);
-    ScreeningRelationship saved = (ScreeningRelationship)service.create(relationship);
+    ScreeningRelationship saved = (ScreeningRelationship) service.create(relationship);
   }
 
   @Test
-  public void shouldReturnNullWhenUpdateIsCalled(){
-    assertNull(service.update(serialized, relationship ));
+  public void shouldReturnNullWhenUpdateIsCalled() {
+    assertNull(service.update(serialized, relationship));
   }
 }
