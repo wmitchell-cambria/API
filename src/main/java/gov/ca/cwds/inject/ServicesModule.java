@@ -298,7 +298,8 @@ public class ServicesModule extends AbstractModule {
     boolean preLoad = Boolean.TRUE; // default is true
     long secondsToRefreshCache = 365L * 24 * 60 * 60; // default is 365 days
 
-    SystemCodeCacheConfiguration systemCodeCacheConfig = config.getSystemCodeCacheConfiguration();
+    SystemCodeCacheConfiguration systemCodeCacheConfig =
+        config != null ? config.getSystemCodeCacheConfiguration() : null;
     if (systemCodeCacheConfig != null) {
       preLoad = systemCodeCacheConfig.getPreLoad(preLoad);
       secondsToRefreshCache = systemCodeCacheConfig.getRefreshAfter(secondsToRefreshCache);
