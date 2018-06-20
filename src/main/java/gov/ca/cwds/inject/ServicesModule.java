@@ -137,9 +137,11 @@ public class ServicesModule extends AbstractModule {
 
     private void collectAndProvideHibernateStatistics(String bundleTag) {
       if (CMS_BUNDLE_TAG.equals(bundleTag)) {
-        provideHibernateStatistics(bundleTag, cmsHibernateBundle.getSessionFactory().getStatistics());
+        provideHibernateStatistics(bundleTag,
+            cmsHibernateBundle.getSessionFactory().getStatistics());
       } else if (NS_BUNDLE_TAG.equals(bundleTag)) {
-        provideHibernateStatistics(bundleTag, nsHibernateBundle.getSessionFactory().getStatistics());
+        provideHibernateStatistics(bundleTag,
+            nsHibernateBundle.getSessionFactory().getStatistics());
       }
     }
   }
@@ -284,14 +286,16 @@ public class ServicesModule extends AbstractModule {
   /**
    * @param systemCodeDao - systemCodeDao
    * @param systemMetaDao - systemMetaDao
+   * @param config
    * @return the systemCodes
    */
   @Provides
   public SystemCodeService provideSystemCodeService(SystemCodeDao systemCodeDao,
-      SystemMetaDao systemMetaDao) {
+      SystemMetaDao systemMetaDao, ApiConfiguration config) {
     LOGGER.debug("provide syscode service");
-    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
-    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache, false);
+    final long secondsToRefreshCache = 365L * 24 * 60 * 60; // 365 days
+    return new CachingSystemCodeService(systemCodeDao, systemMetaDao, secondsToRefreshCache,
+        config != null ? config.isLoadSystemCodesAtStartup() : true);
   }
 
   /**
@@ -313,7 +317,7 @@ public class ServicesModule extends AbstractModule {
   @Provides
   public IntakeLovService provideIntakeLovService(IntakeLovDao intakeLovDao) {
     LOGGER.debug("provide intakeCode service");
-    final long secondsToRefreshCache = 15L * 24 * 60 * 60; // 15 days
+    final long secondsToRefreshCache = 365L * 24 * 60 * 60; // 365 days
     return new CachingIntakeCodeService(intakeLovDao, secondsToRefreshCache);
   }
 
