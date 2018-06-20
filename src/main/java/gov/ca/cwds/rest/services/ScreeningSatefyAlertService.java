@@ -50,33 +50,39 @@ public class ScreeningSatefyAlertService {
       ClientParticipants clientParticipants) {
     Referral referrral = referralDao.find(referralId);
 
-    List<Participant> participants =
-        (List<Participant>) ParticipantUtils.getVictims(clientParticipants.getParticipants());
-    Participant victimParticipant = participants.isEmpty() ? null : participants.get(0);
+    Participant victimParticipant = getValidVictim(clientParticipants);
     List<SafetyAlert> safetyAlerts = new ArrayList<>();
     if (screeningToReferral.getAlerts() != null && !screeningToReferral.getAlerts().isEmpty()
         && victimParticipant != null) {
       for (String intakeCode : screeningToReferral.getAlerts()) {
         SafetyAlert alert = new SafetyAlert();
-        alert.setFkClientId(victimParticipant.getLegacyDescriptor().getId());
-        alert.setActivationDate(LocalDate.now());
-        SystemCode systemCode =
-            SystemCodeCache.global().getSystemCode(referrral.getGovtEntityType());
-        alert.setActivationGovernmentEntityType(
-            countiesDao.findByLogicalId(systemCode.getLogicalId()));
-        LongText longText = new LongText();
-        longText.setIdentifier(referrral.getScreenerNoteText());
-        alert.setActivationExplanationText(longText);
-        Short reasonType = IntakeCodeCache.global()
-            .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.SAFETY_ALERTS, intakeCode);
-        alert
-            .setActivationReasonType(safetyAlertActivationReasonTypeDao.findBySystemId(reasonType));
+        setSafetAlertFields(referrral, victimParticipant, intakeCode, alert);
         safetyAlerts.add(alert);
       }
       safetyAlertService.updateSafetyAlertsByClientId(
           victimParticipant.getLegacyDescriptor().getId(), safetyAlerts);
     }
     return safetyAlerts;
+  }
+
+  private void setSafetAlertFields(Referral referrral, Participant victimParticipant,
+      String intakeCode, SafetyAlert alert) {
+    alert.setFkClientId(victimParticipant.getLegacyDescriptor().getId());
+    alert.setActivationDate(LocalDate.now());
+    SystemCode systemCode = SystemCodeCache.global().getSystemCode(referrral.getGovtEntityType());
+    alert.setActivationGovernmentEntityType(countiesDao.findByLogicalId(systemCode.getLogicalId()));
+    LongText longText = new LongText();
+    longText.setIdentifier(referrral.getScreenerNoteText());
+    alert.setActivationExplanationText(longText);
+    Short reasonType = IntakeCodeCache.global()
+        .getLegacySystemCodeForIntakeCode(SystemCodeCategoryId.SAFETY_ALERTS, intakeCode);
+    alert.setActivationReasonType(safetyAlertActivationReasonTypeDao.findBySystemId(reasonType));
+  }
+
+  private Participant getValidVictim(ClientParticipants clientParticipants) {
+    List<Participant> participants =
+        (List<Participant>) ParticipantUtils.getVictims(clientParticipants.getParticipants());
+    return participants.isEmpty() ? null : participants.get(0);
   }
 
 }
