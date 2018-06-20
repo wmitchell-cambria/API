@@ -504,18 +504,21 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @XaCmsHibernateBundle
+  @Singleton
   public FerbHibernateBundle getXaCmsHibernateBundle() {
     return xaCmsHibernateBundle;
   }
 
   @Provides
   @XaCmsRsHibernateBundle
+  @Singleton
   public FerbHibernateBundle getXaCmsRsHibernateBundle() {
     return xaCmsRsHibernateBundle;
   }
 
   @Provides
   @XaNsHibernateBundle
+  @Singleton
   public FerbHibernateBundle getXaNsHibernateBundle() {
     return xaNsHibernateBundle;
   }
@@ -528,7 +531,9 @@ public class DataAccessModule extends AbstractModule {
   @CmsSessionFactory
   @Singleton
   public SessionFactory cmsSessionFactory(
+      @CmsHibernateBundle HibernateBundle<ApiConfiguration> cmsHibernateBundle,
       @XaCmsHibernateBundle FerbHibernateBundle xaCmsHibernateBundle) {
+    LOGGER.info("DataAccessModule.cmsSessionFactory()");
     return new CandaceSessionFactoryImpl(cmsHibernateBundle.getSessionFactory(),
         xaCmsHibernateBundle.getSessionFactory());
   }
@@ -537,7 +542,9 @@ public class DataAccessModule extends AbstractModule {
   @NsSessionFactory
   @Singleton
   public SessionFactory nsSessionFactory(
+      @NsHibernateBundle HibernateBundle<ApiConfiguration> nsHibernateBundle,
       @XaNsHibernateBundle FerbHibernateBundle xaNsHibernateBundle) {
+    LOGGER.info("DataAccessModule.nsSessionFactory()");
     return new CandaceSessionFactoryImpl(nsHibernateBundle.getSessionFactory(),
         xaNsHibernateBundle.getSessionFactory());
   }
@@ -546,8 +553,10 @@ public class DataAccessModule extends AbstractModule {
   @CwsRsSessionFactory
   @Singleton
   public SessionFactory rsSessionFactory(
+      @CwsRsHibernateBundle HibernateBundle<ApiConfiguration> cmsRsHibernateBundle,
       @XaCmsRsHibernateBundle FerbHibernateBundle xaCmsRsHibernateBundle) {
-    return new CandaceSessionFactoryImpl(rsHibernateBundle.getSessionFactory(),
+    LOGGER.info("DataAccessModule.rsSessionFactory()");
+    return new CandaceSessionFactoryImpl(cmsRsHibernateBundle.getSessionFactory(),
         xaCmsRsHibernateBundle.getSessionFactory());
   }
 

@@ -77,21 +77,21 @@ public class DataAccessModuleTest {
 
   @Test
   public void cmsSessionFactory_A$() throws Exception {
-    SessionFactory actual = target.cmsSessionFactory(null);
+    SessionFactory actual = target.cmsSessionFactory(null, null);
     SessionFactory expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void nsSessionFactory_A$() throws Exception {
-    SessionFactory actual = target.nsSessionFactory(null);
+    SessionFactory actual = target.nsSessionFactory(null, null);
     SessionFactory expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
 
   @Test
   public void rsSessionFactory_A$() throws Exception {
-    SessionFactory actual = target.rsSessionFactory(null);
+    SessionFactory actual = target.rsSessionFactory(null, null);
     SessionFactory expected = null;
     assertThat(actual, is(equalTo(expected)));
   }
