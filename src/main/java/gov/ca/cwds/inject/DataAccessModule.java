@@ -482,18 +482,21 @@ public class DataAccessModule extends AbstractModule {
 
   @Provides
   @CmsHibernateBundle
+  @Singleton
   public HibernateBundle<ApiConfiguration> cmsHibernateBundle() {
     return cmsHibernateBundle;
   }
 
   @Provides
   @NsHibernateBundle
+  @Singleton
   public HibernateBundle<ApiConfiguration> nsHibernateBundle() {
     return nsHibernateBundle;
   }
 
   @Provides
   @CwsRsHibernateBundle
+  @Singleton
   public HibernateBundle<ApiConfiguration> rsHibernateBundle() {
     return rsHibernateBundle;
   }
@@ -506,6 +509,7 @@ public class DataAccessModule extends AbstractModule {
   @XaCmsHibernateBundle
   @Singleton
   public FerbHibernateBundle getXaCmsHibernateBundle() {
+    LOGGER.info("DataAccessModule.getXaCmsHibernateBundle()");
     return xaCmsHibernateBundle;
   }
 
@@ -513,6 +517,8 @@ public class DataAccessModule extends AbstractModule {
   @XaCmsRsHibernateBundle
   @Singleton
   public FerbHibernateBundle getXaCmsRsHibernateBundle() {
+    LOGGER.info("DataAccessModule.getXaCmsRsHibernateBundle()");
+    // xaCmsRsHibernateBundle.run(configuration, environment);
     return xaCmsRsHibernateBundle;
   }
 
@@ -520,6 +526,7 @@ public class DataAccessModule extends AbstractModule {
   @XaNsHibernateBundle
   @Singleton
   public FerbHibernateBundle getXaNsHibernateBundle() {
+    LOGGER.info("DataAccessModule.getXaNsHibernateBundle()");
     return xaNsHibernateBundle;
   }
 
@@ -600,7 +607,7 @@ public class DataAccessModule extends AbstractModule {
     return esDaos.get("screeningsIndex");
   }
 
-  private synchronized Map<String, Client> makeElasticsearchClients(
+  protected synchronized Map<String, Client> makeElasticsearchClients(
       ApiConfiguration apiConfiguration) {
     if (clients == null) {
       clients = new ConcurrentHashMap<>();

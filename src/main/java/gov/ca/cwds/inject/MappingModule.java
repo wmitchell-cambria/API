@@ -9,9 +9,9 @@ import gov.ca.cwds.rest.services.mapper.AllegationTypeMapper;
 import gov.ca.cwds.rest.services.mapper.CrossReportMapper;
 import gov.ca.cwds.rest.services.mapper.CsecMapper;
 import gov.ca.cwds.rest.services.mapper.LegacyDescriptorMapper;
+import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
 import gov.ca.cwds.rest.services.mapper.SafelySurrenderedBabiesMapper;
 import gov.ca.cwds.rest.services.mapper.ScreeningMapper;
-import gov.ca.cwds.rest.services.mapper.RelationshipMapper;
 
 /**
  * CWDS API Team
@@ -32,7 +32,7 @@ public class MappingModule extends AbstractModule {
     bind(CsecMapper.class).to(CsecMapper.INSTANCE.getClass()).asEagerSingleton();
     bind(SafelySurrenderedBabiesMapper.class).to(SafelySurrenderedBabiesMapper.INSTANCE.getClass())
         .asEagerSingleton();
-    bind(RelationshipMapper.class).to(RelationshipMapper.INSTANCE.getClass())
-        .asEagerSingleton();
+    bind(RelationshipMapper.class).to(RelationshipMapper.INSTANCE.getClass()).asEagerSingleton();
   }
+
 }

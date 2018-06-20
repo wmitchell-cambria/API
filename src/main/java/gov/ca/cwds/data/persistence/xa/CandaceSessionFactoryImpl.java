@@ -30,7 +30,10 @@ import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.Statistics;
 
+import gov.ca.cwds.inject.FerbHibernateBundle;
+import gov.ca.cwds.rest.ApiConfiguration;
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
+import io.dropwizard.hibernate.HibernateBundle;
 
 /**
  * Ferb {@link SessionFactory} facade.
@@ -49,8 +52,11 @@ public class CandaceSessionFactoryImpl implements SessionFactory {
 
   private static final long serialVersionUID = 1L;
 
-  private final SessionFactory normSessionFactory;
-  private final SessionFactory xaSessionFactory;
+  private SessionFactory normSessionFactory;
+  private SessionFactory xaSessionFactory;
+
+  private HibernateBundle<ApiConfiguration> hibernateBundle;
+  private FerbHibernateBundle xaHibernateBundle;
 
   public CandaceSessionFactoryImpl(SessionFactory normSessionFactory,
       SessionFactory xaSessionFactory) {
@@ -59,14 +65,31 @@ public class CandaceSessionFactoryImpl implements SessionFactory {
     this.xaSessionFactory = xaSessionFactory;
   }
 
+  public CandaceSessionFactoryImpl(HibernateBundle<ApiConfiguration> hibernateBundle,
+      FerbHibernateBundle xaHibernateBundle) {
+    super();
+    this.hibernateBundle = hibernateBundle;
+    this.xaHibernateBundle = xaHibernateBundle;
+  }
+
   /**
    * Determine which type of transaction to use.
    * 
    * @return smart {@link SessionFactory}
    */
   protected SessionFactory pick() {
+    if (normSessionFactory == null) {
+      init();
+    }
     return RequestExecutionContext.instance().isXaTransaction() ? xaSessionFactory
         : normSessionFactory;
+  }
+
+  protected synchronized void init() {
+    if (normSessionFactory == null || xaSessionFactory == null) {
+      this.normSessionFactory = hibernateBundle.getSessionFactory();
+      this.xaSessionFactory = xaHibernateBundle.getSessionFactory();
+    }
   }
 
   // ==================================
