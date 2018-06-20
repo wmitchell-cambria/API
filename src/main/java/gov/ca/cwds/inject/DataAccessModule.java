@@ -4,7 +4,7 @@ import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS;
 import static gov.ca.cwds.rest.core.Api.DATASOURCE_CMS_REP;
 import static gov.ca.cwds.rest.core.Api.DATASOURCE_NS;
 import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS;
-import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS_RS;
+import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_CMS_REP;
 import static gov.ca.cwds.rest.core.Api.DATASOURCE_XA_NS;
 
 import java.util.HashMap;
@@ -323,12 +323,12 @@ public class DataAccessModule extends AbstractModule {
       new FerbHibernateBundle(ImmutableList.of(), new ApiSessionFactoryFactory()) {
         @Override
         public PooledDataSourceFactory getDataSourceFactory(ApiConfiguration configuration) {
-          return configuration.getXaCmsDataSourceFactory();
+          return configuration.getXaRsDataSourceFactory();
         }
 
         @Override
         public String name() {
-          return DATASOURCE_XA_CMS_RS;
+          return DATASOURCE_XA_CMS_REP;
         }
       };
 

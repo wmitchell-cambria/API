@@ -2,15 +2,17 @@ package gov.ca.cwds.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import gov.ca.cwds.data.persistence.XADataSourceFactory;
 import io.dropwizard.db.DataSourceFactory;
 
 /**
- * 
+ * Add datasources for CMS replicated schemas.
  * 
  * @author CWDS API Team
  */
 public class ApiConfiguration extends BaseApiConfiguration {
 
+  private XADataSourceFactory xaRsDataSourceFactory;
   private DataSourceFactory rsDataSourceFactory;
   private TestingConfiguration testConfig;
   private boolean upgradeDbOnStart = false;
@@ -41,6 +43,15 @@ public class ApiConfiguration extends BaseApiConfiguration {
 
   public void setUpgradeDbOnStart(boolean upgradeDbOnStart) {
     this.upgradeDbOnStart = upgradeDbOnStart;
+  }
+
+  @JsonProperty
+  public XADataSourceFactory getXaRsDataSourceFactory() {
+    return xaRsDataSourceFactory;
+  }
+
+  public void setXaRsDataSourceFactory(XADataSourceFactory xaRsDataSourceFactory) {
+    this.xaRsDataSourceFactory = xaRsDataSourceFactory;
   }
 
 }

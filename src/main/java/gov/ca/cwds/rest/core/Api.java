@@ -145,7 +145,7 @@ public final class Api {
   /**
    * Identifer for CMS DB2 datasources for XA, replicated schema.
    */
-  public static final String DATASOURCE_XA_CMS_RS = "xa_cms_rs";
+  public static final String DATASOURCE_XA_CMS_REP = "xa_cms_rs";
 
   /**
    * Identifer for NS Postgres datasources.

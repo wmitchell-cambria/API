@@ -1,8 +1,8 @@
 package gov.ca.cwds.rest;
 
 import java.util.EnumSet;
-
 import java.util.Map;
+
 import javax.servlet.DispatcherType;
 
 import org.slf4j.Logger;
@@ -130,9 +130,9 @@ public class ApiApplication extends BaseApiApplication<ApiConfiguration> {
         applicationModule.getDataAccessModule().getPaperTrailInterceptor());
 
     Map<String, String> env = System.getenv();
-    for (Map.Entry entry : env.entrySet()) {
+    for (Map.Entry<String, String> entry : env.entrySet()) {
       LOGGER.info("******************* environment variables ***********************************");
-      LOGGER.info("{}={}",entry.getKey(), entry.getValue());
+      LOGGER.info("{}={}", entry.getKey(), entry.getValue());
     }
   }
 
