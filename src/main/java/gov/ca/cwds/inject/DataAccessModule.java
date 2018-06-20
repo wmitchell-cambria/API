@@ -471,33 +471,12 @@ public class DataAccessModule extends AbstractModule {
   }
 
   // ==========================
-  // NON-XA session factories
+  // HIBERNATE BUNDLES
   // ==========================
 
-  @Provides
-  @CmsSessionFactory
-  public SessionFactory cmsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        cmsHibernateBundle.getSessionFactory(), xaCmsHibernateBundle.getSessionFactory());
-  }
-
-  @Provides
-  @NsSessionFactory
-  public SessionFactory nsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        nsHibernateBundle.getSessionFactory(), xaNsHibernateBundle.getSessionFactory());
-  }
-
-  @Provides
-  @CwsRsSessionFactory
-  public SessionFactory rsSessionFactory() {
-    return new CandaceSessionFactoryImpl<SessionFactory, SessionFactory>(
-        rsHibernateBundle.getSessionFactory(), xaCmsRsHibernateBundle.getSessionFactory());
-  }
-
-  // ==========================
+  // --------------------------
   // NON-XA Hibernate bundles
-  // ==========================
+  // --------------------------
 
   @Provides
   @CmsHibernateBundle
@@ -540,8 +519,12 @@ public class DataAccessModule extends AbstractModule {
   }
 
   // ==========================
-  // XA session factories
+  // SESSION FACTORIES
   // ==========================
+
+  // --------------------------
+  // XA session factories
+  // --------------------------
 
   @Provides
   @XaNsSessionFactory
@@ -559,6 +542,31 @@ public class DataAccessModule extends AbstractModule {
   @XaCmsRsSessionFactory
   public SessionFactory xaCmsRsSessionFactory() {
     return xaCmsRsHibernateBundle.getSessionFactory();
+  }
+
+  // ==========================
+  // NON-XA session factories
+  // ==========================
+
+  @Provides
+  @CmsSessionFactory
+  public SessionFactory cmsSessionFactory() {
+    return new CandaceSessionFactoryImpl(cmsHibernateBundle.getSessionFactory(),
+        xaCmsHibernateBundle.getSessionFactory());
+  }
+
+  @Provides
+  @NsSessionFactory
+  public SessionFactory nsSessionFactory() {
+    return new CandaceSessionFactoryImpl(nsHibernateBundle.getSessionFactory(),
+        xaNsHibernateBundle.getSessionFactory());
+  }
+
+  @Provides
+  @CwsRsSessionFactory
+  public SessionFactory rsSessionFactory() {
+    return new CandaceSessionFactoryImpl(rsHibernateBundle.getSessionFactory(),
+        xaCmsRsHibernateBundle.getSessionFactory());
   }
 
   // ==========================

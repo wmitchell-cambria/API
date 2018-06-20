@@ -31,7 +31,6 @@ import org.hibernate.metadata.CollectionMetadata;
 import org.hibernate.stat.Statistics;
 
 import gov.ca.cwds.rest.filters.RequestExecutionContext;
-import io.dropwizard.hibernate.UnitOfWork;
 
 /**
  * Ferb {@link SessionFactory} facade.
@@ -43,12 +42,9 @@ import io.dropwizard.hibernate.UnitOfWork;
  * <a href="https://www.youtube.com/watch?v=0ZzN83mWpUo">More Phineas, less Candace.</a>
  * </p>
  * 
- * @param <N> normal session factory ({@link UnitOfWork}
- * @param <X> XA session factory ({@link XAUnitOfWork}
  * @author CWDS API Team
  */
-public class CandaceSessionFactoryImpl<N extends SessionFactory, X extends SessionFactory>
-    implements SessionFactory {
+public class CandaceSessionFactoryImpl implements SessionFactory {
 
   private static final long serialVersionUID = 1L;
 
